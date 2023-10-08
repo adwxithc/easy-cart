@@ -1,0 +1,45 @@
+<%- include('../layouts/header.ejs') -%>
+<link rel="stylesheet" href="static/css/logstyle.css">
+<div class="container centerDiv py-5">
+  <div class="login-box1 mt-5">
+<form action="/login" method="POST" novalidate>
+  <h2 class="text-center">Login</h2>
+  <div>
+    <%if(locals.message){%>
+      <div class="text-center alert-danger" id="alertMessage"> 
+      <%=message%>
+      </div>
+      <%}%>
+  </div>
+    <!-- Email input -->
+    <div class="form-outline mb-3" >
+      <input type="email" id="email" class="form-control" name="email">
+      <label class="form-label" for="email">Email address</label>
+      <div id="emailError" class="text-danger"></div>
+    </div>
+    
+  
+    <!-- Password input -->
+    <div class="form-outline mb-3">
+      <input type="password" id="passwd" class="form-control" name="password">
+      <label class="form-label" for="passwd">Password</label>
+      <div id="passwordError" class="text-danger"></div>
+    </div>
+  
+    <!-- 2 column grid layout for inline styling -->
+    
+  
+    <!-- Submit button -->
+    <div class="centerDiv">
+    <button type="submit" class="btn btn-dark btn-block mb-4">Sign in</button>
+    </div>
+  
+    <!-- Register buttons -->
+    <div class="text-center">
+      <p>Not a member? <a href="/register">Register</a></p>
+    </div>
+  </form>
+</div>
+</div>
+
+  <%- include('../layouts/footer.ejs') -%>

@@ -1,0 +1,28 @@
+.signUpSection{
+    height:100vh;
+    background-color: rgb(234,233,229);
+}
+.signUpBackground{
+    background-image: url("/static/assets/images/bck2.jpg");
+
+}
+
+/* login,signup,op button */
+.btn-them{
+    background-color: rgb(113, 127, 224);
+    color:white;
+    font-size: 1rem;
+    font-weight: 500;
+
+}
+#resendInfo{
+    font-size: 0.9rem;
+    
+}
+
+/* admin */
+@media (min-width:992px){
+    .adminLoginDiv{
+        padding-top: 10%;
+    }
+}

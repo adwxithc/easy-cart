@@ -1,0 +1,69 @@
+<%- include('../layouts/header.ejs') -%>
+<link rel="stylesheet" href="static/css/logstyle.css">
+
+<div class="container centerDiv py-5">
+  <div class="login-box1 mt-5">
+<form action="/verifyOtp" method="POST" novalidate>
+  <h2 class="text-center">Verify Email</h2>
+  <div>
+    <%if(locals.message){%>
+      <div class="text-center alert-danger" id="alertMessage"> 
+      <%=message%>
+      </div>
+      <%}%>
+  </div>
+  <p style=" font-size: medium" class="pt-3"> Please enter the  OTP number  send to the email <%if(locals.email){%><strong><%=email%></strong><%}%></p>
+    <!-- Email input -->
+    <div class="d-flex justify-content-end"><small><a href="" style="color: blue; font-style: normal;" id="resendOtp">Resend OTp</a></small></div>
+    
+    <div class="form-outline mb-3" >
+      
+      <input type="text" id="otp" class="form-control" name="otp">
+      <label class="form-label" for="otp">OTP</label>
+      <div id="otpError" class="text-danger"></div>
+    </div>
+    
+
+  
+    <!-- Submit button -->
+    <div class="centerDiv">
+    <button type="submit" class="btn btn-them btn-block mb-4">Submit</button>
+    </div>
+
+    <div class="d-flex justify-content-center"><p id="resendInfo"></p></div>
+
+  </form>
+</div>
+</div>
+
+<!-- <script>
+  $(function(){
+    $('#resendOtp').on('click',function(e){
+      e.preventDefault()
+      $('#resendOtp').css('color','rgba(78, 71, 70, 0.707)')
+      $('#resendOtp').prop('disabled',true)
+
+      setTimeout(()=>{
+        $('#resendOtp').css('color','blue')
+        $('#resendOtp').prop('disabled',false)
+        $("#resendInfo").html("")
+      },30000)
+
+      console.log("hellow")
+      $.ajax({
+        url:'/reSendOtp',
+        method:"GET",
+        success:function(res){
+          $("#resendInfo").html(res.message)
+          console.log(res)
+        },
+        error:function(){
+          $("#resendInfo").html("Some error occured please try again after some time")
+
+
+        }
+      })
+    })
+  })
+</script> -->
+  <%- include('../layouts/footer.ejs') -%>

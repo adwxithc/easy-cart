@@ -1,5 +1,5 @@
 body{
-    background-image: url('/static/assets/images/bck.jpg');
+    background-image: url('/static/assets/bckImages/bck.jpg');
 }
 .wrap{
     box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.15);

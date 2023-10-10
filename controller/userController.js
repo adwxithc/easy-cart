@@ -4,6 +4,7 @@ const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
 const otpGenerator = require('otp-generator');
 
+
 //creating hashing function with bcrypt
 const securePassword=async(password)=>{
     try {

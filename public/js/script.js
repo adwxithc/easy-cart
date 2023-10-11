@@ -35,3 +35,10 @@ $(function(){
       })
     })
   })
+
+  function clearAlert(){
+    if(document.getElementById("alertMessage")){
+        setTimeout(()=>{
+            document.getElementById("alertMessage").innerHTML='';
+        },3000)
+    }}

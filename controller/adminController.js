@@ -44,6 +44,72 @@ const verifyLogin=async(req,res)=>{
 
 }
 
+// load view category
+
+const loadViewCategory=async(req,res)=>{
+    try {
+
+        const page=req.query.page||1// specifies which page
+        
+        const pagesize=req.query.pageSize||5//specifies how much data page contains
+
+        const offset=(page-1)*pagesize//specifies how much data to be skipped
+        const limit=pagesize//specifies how much data needed
+
+        
+        const categories=await Category.find({}).skip(offset).limit(limit)
+
+        
+
+        const totalCategories=await Category.countDocuments()
+        const totalpages=Math.ceil(totalCategories/pagesize)
+        
+        res.render('viewCategory',{admin:true,categories:categories,currentPage:page,totalpages:totalpages})
+        
+        
+    } catch (error) { 
+        console.log(error.message)
+        
+    }
+
+}
+const listOrUnlistCategory=async(req,res)=>{
+    try {
+        
+    const categoryId=req.body.categoryID
+
+    const categoryData=await Category.findById(categoryId)
+
+    if(categoryData){
+
+        if(categoryData.status){
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false}})
+            if(statusUpdate){
+                res.json({"message":"category unlisted","status":"unlisted"})
+            }else{
+                res.json({"message":"category unlisting failed"})
+            }
+        }else{
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true}})
+            if(statusUpdate){
+                res.json({"message":"category listed","status":"listed"})
+            }else{
+                res.json({"message":"category listing failed"})
+            }
+        }
+
+       
+    }else{
+        res.json({"message":"This category doest'n exist"})
+
+    }
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+
+}
+
 const addCategory=(req,res)=>{
     try {
         res.render('addCategory',{admin:true})
@@ -66,7 +132,7 @@ const insertCategory=async(req,res)=>{
         const keyword=req.body.keywords
         if(name&&description){
             const check=await Category.findOne({name:{$regex:new RegExp(req.body.categoryName,'i')}})
-            console.log(check)
+            
             if(!check){
                 const categor=new Category({
                     name:name,
@@ -99,6 +165,8 @@ const insertCategory=async(req,res)=>{
 module.exports={
     loadLogin,
     verifyLogin,
+    loadViewCategory,
+    listOrUnlistCategory,
     addCategory,
     insertCategory
     

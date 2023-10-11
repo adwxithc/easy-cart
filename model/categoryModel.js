@@ -12,15 +12,15 @@ const categorySchema=mongoose.Schema({
     },
     metaTitle:{
         type:String,
-        required:true
+        
     },
     metaDescription:{
         type:String,
-        required:true
+        
     },
     keywords:{
         type:String,
-        required:true
+        
     },
     status:{
         type:Boolean,

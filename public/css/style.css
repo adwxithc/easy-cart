@@ -26,3 +26,13 @@
         padding-top: 10%;
     }
 }
+
+/* view category  */
+
+  /* Define a custom CSS class to limit the maximum width */
+  .description-limit {
+    max-width: 700px; /* Adjust the value as needed */
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

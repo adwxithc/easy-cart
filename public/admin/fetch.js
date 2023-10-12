@@ -44,6 +44,13 @@ viewCategory.addEventListener('click', () => {
 });
 
 
+//view users 
+
+
+
+
+
+
 
 
 
@@ -88,3 +95,47 @@ loadPageButton.addEventListener('click', () => {
         });
 });
 
+
+
+//view users
+
+function viewUsers(){
+    
+
+const loadPageButton = document.getElementById('users');
+
+
+loadPageButton.addEventListener('click', () => {
+    // Specify the URL of the page you want to load
+    const pageUrl = '/admin/loadUsers';
+
+    fetch(pageUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            // Update the pageContent div with the loaded HTML
+            pageContent.innerHTML = html;
+            
+            const scriptSrc='/static/admin/viewUsers.js'
+            const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
+
+            if(scriptexist){
+                scriptexist.parentNode.removeChild(scriptexist);
+            }
+
+            const script=document.createElement('script');
+            script.src=scriptSrc;
+            document.body.appendChild(script);
+
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+});
+
+}
+viewUsers()

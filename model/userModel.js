@@ -15,7 +15,7 @@ const userSchema=mongoose.Schema({
         required:true,
     },
     status:{
-        type:Number,
+        type:Boolean,
         default:1
     },
     email:{

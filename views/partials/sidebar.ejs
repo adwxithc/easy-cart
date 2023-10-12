@@ -5,7 +5,7 @@
     <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/static/assets/images/logo-mini.svg" alt="logo" /></a>
   </div>
   
-  <ul class="nav"  style="position: fixed;">
+  <ul class="nav" id="sideNavBar"  style="position: fixed;">
     <li class="nav-item profile">
       <div class="profile-desc">
         <div class="profile-pic">
@@ -69,7 +69,7 @@
     </li>
 
     <li class="nav-item menu-items" id="users">
-      <a class="nav-link" href="#">
+      <a class="nav-link adminOption" href="#" id="view-userAnchor">
         <span class="menu-icon">
           <i class="mdi mdi-account-multiple"></i>
         </span>
@@ -78,7 +78,7 @@
     </li>
 
     <li class="nav-item menu-items">
-      <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="ui-basic">
+      <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="ui-basic" >
         <span class="menu-icon">
           <i class="mdi mdi-archive"></i>
         </span>
@@ -103,8 +103,8 @@
       </a>
       <div class="collapse" id="categories">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item" id="view-category"> <a class="nav-link" href="#">View Categories</a></li>
-          <li class="nav-item" id="add-category"> <a class="nav-link" href="#">Add Categories</a></li>
+          <li class="nav-item" id="view-category "> <a class="nav-link adminOption" href="#" id="view-categoryAnchor">View Categories</a></li>
+          <li class="nav-item" id="add-category "> <a class="nav-link adminOption" href="#" id="add-categoryAnchor">Add Categories</a></li>
         </ul>
       </div>
     </li>

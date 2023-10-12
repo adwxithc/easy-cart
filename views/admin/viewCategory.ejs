@@ -1,8 +1,18 @@
  
-            <div class=" grid-margin stretch-card">
+            <div class=" grid-margin stretch-card p-4">
                 <div class="card">
                   <div class="card-body">
+                    <% if(locals.key){%>
+                      <h4 class="card-title">Search result for <%=key%></h4>
+                      <%}else{%>
                     <h4 class="card-title">Categories</h4>
+                    <%}%>
+
+                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="categorySearch">
+                      <input type="text" class="form-control" placeholder="Search Categories" id="searchKey">
+                      <button class="btn btn-dark p-2" type="submit">Search</button>
+                    </form>
+
                     <p class="card-description" id="alertMessage">
                    
                     </p>
@@ -50,8 +60,10 @@
                                 
                                   <button class="btn btn-sm btn-dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                   <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Edit</a>
-                                    <a class="dropdown-item status" href="#"  categoryId="<%=categories[i]._id%>">
+                                    <!-- <button type="button" class="btn btn-outline-secondary btn-icon-text edit" categoryId="<%=categories[i]._id%>"> Edit <i class="mdi mdi-file-check btn-icon-append"></i>
+                                    </button> -->
+                                    <a class="dropdown-item edit" href="#" categoryId="<%=categories[i]._id%>">Edit</a>
+                                    <a class="dropdown-item status" href="#"  categoryId="<%=categories[i]._id%>" onclick="return confirm('Are you sure ')">
                                     <%if(categories[i].status){%> 
                                       unlist
                                     <%}else{%>
@@ -72,7 +84,7 @@
                         </tbody>
                       </table>
 
-
+                      <%if(locals.pagination){%>
                       <nav aria-label="Page navigation example" id="pagination">
                         <ul class="pagination">
                           <li class="page-item" id="prev">
@@ -93,7 +105,7 @@
                           </li>
                         </ul>
                       </nav>
-
+                      <%}%>
                     </div>
                   </div>
                 </div>

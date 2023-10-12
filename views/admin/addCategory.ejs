@@ -19,9 +19,7 @@
                 <textarea class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" name="categoryDescription"></textarea>
             </div>
 
-            <!-- <button type="submit" class="btn btn-primary mr-2">Submit</button>
-            <button class="btn btn-dark">Cancel</button>
-            </form> -->
+
         </div>
         </div>
     </div>
@@ -62,32 +60,8 @@
         </div>
     </div>
 </form>
-<button class="btn btn-dark">Cancel</button>
 
-<!-- <script>
-    
-//post new categor to server
-document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    alert("hello")
-    // Create a FormData object to collect form data
-    const formData = new FormData(this);
 
-    // Send a POST request to the server using the Fetch API
-    fetch('/admin/addCategory', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert("fetch entered")
-        // Handle the response from the server
-        document.getElementById('addCategoryalert').textContent = data.message;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-</script> -->
+
 
 

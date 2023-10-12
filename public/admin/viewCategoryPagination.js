@@ -1,6 +1,7 @@
 
 
 // pagination
+if(document.getElementById("current")){
 
 var prev=document.getElementById('prev')
 var currentBtn=document.getElementById("current")
@@ -20,6 +21,8 @@ function updatepagination(){
 }
 
 updatepagination()
+
+
 
 
 
@@ -79,9 +82,9 @@ updatepagination()
             console.error('Fetch error:', error);
         });
     }
+  }
 
-
-
+//listing and unlisting
 function listUnlist(){
 // unlist and list
 const statusButtons = document.querySelectorAll('.status');
@@ -89,11 +92,11 @@ const statusButtons = document.querySelectorAll('.status');
 statusButtons.forEach(button => {
     button.addEventListener('click', function () {
       const categoryID = this.getAttribute('categoryId');
-      unlistCategory(categoryID);
+      listUnlistCategory(categoryID);
     });
   });
 
-  function unlistCategory(categoryID) {
+  function listUnlistCategory(categoryID) {
     
     fetch('/admin/listOrUnlistCategory', {
       method: 'POST',
@@ -146,10 +149,126 @@ statusButtons.forEach(button => {
     .catch(error => {
       // Handle errors
       document.getElementById("alertMessage").innerHTML="Unable to change status"
-      clearAlert
+      clearAlert()
       console.error(error.message);
     });
   }
 
 }
 listUnlist()
+
+
+
+//load edit category
+
+function loadeditCategory(){
+  const editButtons=document.querySelectorAll(".edit")
+  editButtons.forEach(editBtn=>{
+    editBtn.addEventListener('click',function(){
+      const categoryId=this.getAttribute("categoryId")
+
+      editCategory(categoryId)
+    })
+  })
+
+  function editCategory(id){
+    fetch(`/admin/loadeditCategory?id=${id}`)
+    .then(response =>{
+      if(!response){
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const contentType = response.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        return response.json(); // Parse JSON response
+      } else {
+        return response.text(); // Assume HTML content
+      }
+    })
+    .then((data) => {
+
+      // Check if the response is JSON or HTML
+      if (typeof data === 'object') {
+        // Handle JSON response (e.g., error)
+        
+        document.getElementById("alertMessage").innerHTML=data.message
+        document.getElementById("alertMessage").classList.add("text-info")
+        clearAlert()
+        // You can handle the JSON data here, e.g., display an error message
+      } else {
+        // Handle HTML response
+        document.getElementById('pageContent').innerHTML = data;
+
+        const script=document.createElement('script');
+        script.src='/static/admin/editCategory.js';
+        document.body.appendChild(script);
+      }
+    })
+    .catch((error) => {
+      console.log("Fetch error", error);
+    });
+
+  }
+
+}
+loadeditCategory()
+
+
+//categorySearch
+function categorySearch(){
+  
+  document.getElementById("categorySearch").addEventListener('submit',function(e){
+    alert("hellow")
+    
+    e.preventDefault()
+    const searchKey=document.getElementById("searchKey").value
+    
+    fetch(`/admin/categorySearch?key=${searchKey}`)
+    .then(response =>{
+      console.log(response)
+      if(!response.ok){
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const contentType = response.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        return response.json(); // Parse JSON response
+      } else {
+        return response.text(); // Assume HTML content
+      }
+    })
+    .then((data) => {
+
+      // Check if the response is JSON or HTML
+      if (typeof data === 'object') {
+        // Handle JSON response (e.g., error)
+        
+        document.getElementById("alertMessage").innerHTML=data.message
+        document.getElementById("alertMessage").classList.add("text-info")
+        clearAlert()
+        // You can handle the JSON data here, e.g., display an error message
+      } else {
+        // Handle HTML response
+        document.getElementById('pageContent').innerHTML = data;
+
+        const scriptSrc='/static/admin/viewCategoryPagination.js'
+        const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
+
+        if(scriptexist){
+            scriptexist.parentNode.removeChild(scriptexist);
+        }
+
+
+        const script2=document.createElement('script');
+        script2.src=scriptSrc;
+        document.body.appendChild(script2);
+
+      }
+    })
+    .catch((error) => {
+      console.log("Fetch error", error.message);
+    });
+  })
+
+}
+categorySearch()

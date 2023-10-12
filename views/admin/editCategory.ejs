@@ -1,0 +1,28 @@
+<form class="forms-sample"  method="POST" id="editCategoryForm" >
+    <div class="grid-margin stretch-card">
+        <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Category</h4>
+            <p class="card-description" id="alertMessage"></p>
+
+            <%if(locals.categoryData){%>
+                <input type="hidden" value="<%=categoryData._id %>" name="id" id="Cid">
+            <div class="form-group mt-4">
+                <label for="categoryName">Category Name</label>
+                <input type="text" class="form-control" id="ctegoryName" placeholder="Category Name" name="categoryName" value="<%=categoryData.name %>">
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="categoryDescription">Description</label>
+                <textarea class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" name="categoryDescription" >  <%=categoryData.description %> </textarea>
+            </div>
+
+
+        </div>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-primary mr-2" value="Submit">
+    <%}%>
+            
+</form>

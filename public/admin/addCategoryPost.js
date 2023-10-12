@@ -22,7 +22,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
     };
     
     const jsonData=JSON.stringify(formData)
-    console.log(formData)
+    
 
     console.log(formData)
     // Send a POST request to the server using the Fetch API

@@ -180,7 +180,7 @@ const categorySearch=async(req,res)=>{
         const categories=await Category.find({name:{$regex:new RegExp(`${req.query.key}`,'i')}})
 
         
-        res.render('viewCategory',{categories:categories,key:req.query.key}) 
+        res.render('viewCategory',{categories:categories,key:req.query.key})
 
         
     } catch (error) {

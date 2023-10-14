@@ -1,14 +1,25 @@
-<div class=" grid-margin stretch-card">
+<div class=" grid-margin stretch-card ">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Users</h4>
+        
+
+        <% if(locals.key){%>
+          <h4 class="card-title">Search result for <%=key%></h4>
+          <%}else{%>
+            <h4 class="card-title">Users</h4>
+        <%}%>
         <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
         <!-- </p> -->
         <input type="hidden" value="<%=locals.currentPage%>" id="cur">
         <input type="hidden" value="<%=locals.totalpages%>" id="totp">
 
-        <div class="table-responsive">
+        <div class="table-responsive ">
 
+
+          <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="userSearch">
+            <input type="text" class="form-control" placeholder="Search Categories" id="searchKey">
+            <button class="btn btn-dark p-2" type="submit">Search</button>
+          </form>
 
             <p class="card-description" id="alertMessage"></p>
           <table class="table table-hover">
@@ -32,7 +43,7 @@
                 <td><%= users[i].mobile %></td>
                 <td><%=users[i].email %></td>
                 <td><%= users[i].joinDate %></td>
-                <td><button type="button" class="btn <%= users[i].status ? 'btn-outline-danger' : 'btn-outline-success' %> btn-fw status" userId="<%= users[i]._id %>" onclick="return confirm('Are You sure..?')">
+                <td><button type="button" class="btn <%= users[i].status ? 'btn-outline-danger' : 'btn-outline-success' %> btn-fw status" userId="<%= users[i]._id %>">
 
                     <%
                     if(users[i].status){
@@ -55,8 +66,17 @@
             </tbody>
           </table>
 
+          <div id="myModal" class="modal">
+            <div class="modal-content " >
+              <span class="close" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
+              <p>Are you sure you want to block/unblock this user?</p>
+              <button id="confirmBtn">Confirm</button>
+            </div>
+          </div>
+          
 
 
+          <%if(locals.pagination){%>
           <nav aria-label="Page navigation example" id="pagination">
             <ul class="pagination">
               <li class="page-item" id="prev">
@@ -77,6 +97,7 @@
               </li>
             </ul>
           </nav>
+          <%}%>
 
         </div>
       </div>

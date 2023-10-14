@@ -1,0 +1,84 @@
+const mongoose=require('mongoose')
+
+const ratingSchema=mongoose.Schema({
+    value:{
+        type:Number,
+        required:true,
+        min:1,
+        max:5
+    },
+    review:String,
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+    },
+    timeStamp:{
+        type:Date,
+        default:Date.now
+    }
+    
+});
+
+
+const productSchema=mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+    },
+    size:{
+        type:String,
+        required:true,
+    },
+   
+    description:{
+        type:String,
+        required:true
+    },
+    category:{
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category' // Reference to another model (assuming a "Category" model)
+        }],
+        required:true
+    },
+    stock:{
+        type:Number,
+        required:true
+    },
+    images:{
+        type:Array
+    },
+    color:{
+        type:String,
+        required:true
+    },
+    price:{
+        type:Number,
+        required:true
+    },
+    rating:{
+        type:[ratingSchema]
+    },
+    addedDate:{
+        type:Date,
+        required:true,
+        default:Date.now()
+    },
+    brand:{
+        type:String,
+        required:true
+    },
+    careInstructions:String,
+    material:String,
+    specifications: String,
+      status:{
+        type:Boolean,
+        default:true
+      },
+      unlistdate:{
+        type:Date,
+      }
+
+})
+
+module.exports=mongoose.model('Product',productSchema)

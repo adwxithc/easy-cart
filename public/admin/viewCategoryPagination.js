@@ -1,5 +1,7 @@
 
 
+
+
 // pagination
 if(document.getElementById("current")){
 
@@ -9,12 +11,12 @@ var next=document.getElementById("next")
 
 var totalpages=document.getElementById("totp").value
 var currentPage = document.getElementById("cur").value
-console.log("currentPage",currentPage)
+
 
 
 function updatepagination(){
     
-    console.log("updatepagination",currentPage)
+    
     prev.disabled= currentPage==1 ;
     next.disabled= currentPage == totalpages;
     currentBtn.textContent=currentPage;
@@ -30,7 +32,7 @@ updatepagination()
     prev.addEventListener('click', function(e) {
         
         if (currentPage > 1) {
-            console.log(currentPage,"prev",e.target)
+            
             
             currentPage--;
             updatepagination();
@@ -39,7 +41,7 @@ updatepagination()
     });
     
     next.addEventListener('click', function(e) {
-        console.log(currentPage,"next",e.target)
+        
         
         if (currentPage < totalpages) {
             currentPage++;
@@ -50,7 +52,7 @@ updatepagination()
     });
     
     function fetchDataForPage(Page){
-        console.log("fetchDataForPage",Page)
+       
         const url = `/admin/viewCategory?page=${Page}`;
 
         // Make a GET request to the server
@@ -92,9 +94,35 @@ const statusButtons = document.querySelectorAll('.status');
 statusButtons.forEach(button => {
     button.addEventListener('click', function () {
       const categoryID = this.getAttribute('categoryId');
-      listUnlistCategory(categoryID);
+
+      const modal = document.getElementById('myModal');
+      modal.style.display = 'block';
+      modal.setAttribute('data-user-id', categoryID);
+
+      // listUnlistCategory(categoryID);
     });
   });
+
+
+  
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    const modal = document.getElementById('myModal');
+    modal.style.display = 'none';
+  });
+
+
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+        
+        
+    const categoryID = document.getElementById('myModal').getAttribute('data-user-id');
+    
+    listUnlistCategory(categoryID)
+    
+    // Close the modal after handling the action
+    document.getElementById('myModal').style.display = 'none';
+  });
+
+
 
   function listUnlistCategory(categoryID) {
     
@@ -214,11 +242,12 @@ function loadeditCategory(){
 loadeditCategory()
 
 
+
 //categorySearch
 function categorySearch(){
   
   document.getElementById("categorySearch").addEventListener('submit',function(e){
-    alert("hellow")
+   
     
     e.preventDefault()
     const searchKey=document.getElementById("searchKey").value

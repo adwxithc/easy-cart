@@ -6,9 +6,9 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
 
     const categoryName= document.getElementById('addCategoryForm').categoryName.value
     const categoryDescription= document.getElementById('addCategoryForm').categoryDescription.value
-    const metaTitle= document.getElementById('addCategoryForm').metaTitle.value
-    const metaDescription= document.getElementById('addCategoryForm').metaDescription.value
-    const keywords= document.getElementById('addCategoryForm').keywords.value
+    // const metaTitle= document.getElementById('addCategoryForm').metaTitle.value
+    // const metaDescription= document.getElementById('addCategoryForm').metaDescription.value
+    // const keywords= document.getElementById('addCategoryForm').keywords.value
 
     
     
@@ -16,9 +16,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
     const formData = {
         categoryName,
         categoryDescription,
-        metaTitle,
-        metaDescription,
-        keywords
+      
     };
     
     const jsonData=JSON.stringify(formData)

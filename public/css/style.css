@@ -21,6 +21,16 @@
 }
 
 /* admin */
+
+/*alert message from server*/
+
+.alertmsg{
+  background-color:rgb(5, 5, 5);
+  color: white;
+  height: 5%;
+}
+
+
 @media (min-width:992px){
     .adminLoginDiv{
         padding-top: 10%;
@@ -36,3 +46,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  
+  .modal-content{
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    max-width: 50%;
+    padding: 20px;
+  }
+
+  #searchKey{
+    max-width: 40%;
+  }
+
+/* add product */
+
+
+  

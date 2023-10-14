@@ -1,5 +1,5 @@
  
-            <div class=" grid-margin stretch-card p-4">
+            <div class=" grid-margin stretch-card p-4" id="categ">
                 <div class="card">
                   <div class="card-body">
                     <% if(locals.key){%>
@@ -63,7 +63,7 @@
                                     <!-- <button type="button" class="btn btn-outline-secondary btn-icon-text edit" categoryId="<%=categories[i]._id%>"> Edit <i class="mdi mdi-file-check btn-icon-append"></i>
                                     </button> -->
                                     <a class="dropdown-item edit" href="#" categoryId="<%=categories[i]._id%>">Edit</a>
-                                    <a class="dropdown-item status" href="#"  categoryId="<%=categories[i]._id%>" onclick="return confirm('Are you sure ')">
+                                    <a class="dropdown-item status" href="#"  categoryId="<%=categories[i]._id%>">
                                     <%if(categories[i].status){%> 
                                       unlist
                                     <%}else{%>
@@ -84,11 +84,22 @@
                         </tbody>
                       </table>
 
+
+                      <div id="myModal" class="modal">
+                        <div class="modal-content " >
+                          <span class="close" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
+                          <p>Are you sure you want to list/unlist this Category ?</p>
+                          <button id="confirmBtn">Confirm</button>
+                         
+                        </div>
+                      </div>
+
+
                       <%if(locals.pagination){%>
                       <nav aria-label="Page navigation example" id="pagination">
-                        <ul class="pagination">
-                          <li class="page-item" id="prev">
-                            <a class="page-link" href="#" aria-label="Previous">
+                        <ul class="pagination ">
+                          <li class="page-item viewCategoryOptions" id="prev">
+                            <a class="page-link " href="#" aria-label="Previous">
                               <span aria-hidden="true" >&laquo;</span>
                               <span class="sr-only" >Previous</span>
                             </a>
@@ -97,7 +108,7 @@
                           <li class="page-item" ><a class="page-link" href="#" id="current">1</a></li>
                           
                           <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-                          <li class="page-item" id="next">
+                          <li class="page-item viewCategoryOptions" id="next">
                             <a class="page-link" href="#" aria-label="Next">
                               <span aria-hidden="true" >&raquo;</span>
                               <span class="sr-only">Next</span>
@@ -106,6 +117,7 @@
                         </ul>
                       </nav>
                       <%}%>
+
                     </div>
                   </div>
                 </div>

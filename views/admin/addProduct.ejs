@@ -1,0 +1,277 @@
+
+   <style>
+      /*admin  add product multi select dropdown*/
+  
+
+
+      .multiselect {
+            width: 70%;
+            position: relative;
+        }
+
+        .select-box {
+            
+            padding: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .options-container {
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            border: 1px solid #555;
+            background-color: #444;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .option {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #555;
+        }
+
+        .option:last-child {
+            border-bottom: none;
+        }
+
+        .option:hover {
+            background-color: #666;
+        }
+
+        .selected-options {
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .arrow {
+            color: #ccc;
+        }
+
+        .checkbox-label {
+            display: block;
+            
+            width: 100%;
+        }
+
+
+        /* color */
+
+        .form-control-color{
+            max-width: 40px;
+           
+            border:0.5px solid white;
+            border-radius: 50%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+
+
+        /* multiple image uploader */
+
+        .upload-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: white;
+  border: 2px dashed rgb(0, 135, 247);
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.upload-input {
+  display: none;
+}
+
+.custom-button {
+  display: block;
+  background: #007BFF;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background: #0056b3;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-preview img {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+   </style>   
+
+<div class="">
+       
+    <form class="forms-sample " id="addProductForm" >
+        <h3 class="card-title">Add Product</h3>
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">General</h4>
+                    <p class="card-description" id="addproductalert"></p>
+                   
+                    <div class="d-flex justify-content-between">
+
+                    <div class="form-group w-50 mx-3">
+                        <label for="name">Product Name</label>
+                        <input type="text" class="form-control"  placeholder="Product Name" id="name">
+                    </div>
+
+
+                    <div class="multiselect py-4 w-50 mx-3">
+                        <div class="select-box d-flex justify-content-between" onclick="showOptions()">
+                            
+                            <div class="selected-options" id="categorylist">Select Category</div>
+                            <div class="arrow">&#9660;</div>
+                        </div>
+                        <div class="options-container" id="options-container">
+                            <div class="option">
+                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="Option 1"> Option 1</label>
+                            </div>
+                            <div class="option">
+                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="Option 2"> Option 2</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    </div>
+
+
+
+
+                      <div class="form-group mx-3">
+                        <label for="description">Description</label>
+                        <textarea class="form-control"  placeholder="Description" rows="4" id="description"></textarea>
+                      </div>
+
+
+                
+                     
+
+
+         
+
+                      <div class="d-flex justify-content-between">
+
+    
+                        <div class="form-group w-50 mx-3">
+                            <label for="name">Brand</label>
+                            <input type="text" class="form-control"  placeholder="Brand" id="brand">
+                          </div>
+
+                          <div class="form-group w-50 mx-3">
+                            <label for="name">Stock</label>
+                            <input type="text" class="form-control"  placeholder="Stock" id="stock">
+                          </div>
+
+
+
+                      </div>
+
+                      
+                      <div class="d-flex justify-content-between">
+
+    
+                        <div class="form-group  w-50 mx-3">
+                            <label for="name">Price</label>
+                            <input type="text" class="form-control"  placeholder="Price" id="price">
+                          </div>
+
+                          <div class="form-group  w-50 mx-3">
+                            <label for="name">Size</label>
+                            <input type="text" class="form-control"  placeholder="Size" id="stock">
+                          </div>
+
+
+
+                      </div>
+
+                      <div class="form-group py-4 mx-3">
+                        <label for="description">Color</label>
+                        <input type="color" class="form-control form-control-color"  value="#EE1111" title="Choose product color" id="color">
+                    </div>
+
+                    
+                <div class="upload-container">
+                    <label for="image-upload" class="custom-button">Select Images</label>
+
+                    <input type="file" id="image-upload" class="upload-input" accept="image/*" multiple>
+                    <div id="image-preview" class="image-preview"></div>
+                </div>
+
+
+                    
+                  </div>
+                </div>
+            </div>
+
+        <h4 class="card-title">Additional</h4>
+
+
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    
+
+            <div class="d-flex justify-content-between">
+                    
+                    <div class="form-group w-50 mx-3">
+                        <label for="name">Care Instructions</label>
+                        <input type="text" class="form-control"  placeholder="Care Instructions" id="careInstructions">
+                      </div>
+
+
+                      <div class="form-group w-50 mx-3">
+                        <label for="name">Material</label>
+                        <input type="text" class="form-control"  placeholder="Material" id="material">
+                      </div>
+
+            </div>
+
+                </div>
+            </div>
+        </div>
+
+ <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+
+        <div class="form-group mx-3">
+            <label for="description">Additional Specifications</label>
+            <textarea class="form-control" placeholder="Additional Specifications"  rows="4" id="additionalSpecifications"></textarea>
+          </div>
+
+          </div>
+        </div>
+    </div>
+
+            <button type="button" class="btn btn-primary ml-3 " id="addProduct" >Submit</button>
+
+
+    </form>
+</div>
+
+
+
+    
+
+

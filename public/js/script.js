@@ -3,6 +3,7 @@ const alertMessage=document.getElementById('alertMessage')
 if(alertMessage){
     setTimeout(()=>{
         alertMessage.style.display='none';
+        alertMessage.classList.remove('alertmsg');
     },3000)
 }
 

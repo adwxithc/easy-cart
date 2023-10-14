@@ -10,18 +10,7 @@ const categorySchema=mongoose.Schema({
         type:String,
         required:true
     },
-    metaTitle:{
-        type:String,
-        
-    },
-    metaDescription:{
-        type:String,
-        
-    },
-    keywords:{
-        type:String,
-        
-    },
+
     status:{
         type:Boolean,
         default:1

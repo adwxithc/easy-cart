@@ -28,6 +28,11 @@ admin_route.post('/',adminController.verifyLogin);
 
 admin_route.get('/loadUsers',adminController.loadUsers)
 admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser)
+admin_route.get('/searchUser',adminController.searchUser)
+
+admin_route.get('/addProduct',adminController.addProduct)
+admin_route.post('/addProduct',adminController.insertProduct)
+
 
 admin_route.get('/viewCategory',adminController.loadViewCategory)
 admin_route.get('/categorySearch',adminController.categorySearch)

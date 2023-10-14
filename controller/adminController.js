@@ -64,7 +64,7 @@ const loadUsers =async(req,res)=>{
         const totaluserss=await User.countDocuments()
         const totalpages=Math.ceil(totaluserss/pagesize)
         
-        res.render('users',{users:users,currentPage:page,totalpages:totalpages}) 
+        res.render('users',{users:users,currentPage:page,totalpages:totalpages,pagination:true}) 
         
         
     } catch (error) {
@@ -105,6 +105,50 @@ const blockOrUnblockUser=async(req,res)=>{
     }
 
 }
+
+
+//user Search
+
+const searchUser=async(req,res)=>{
+    try {
+        console.log(req.query.key)
+        const users=await User.find({fname:{$regex:new RegExp(`^${req.query.key}`,'i')}})
+
+        if(users.length>0){
+        res.render('users',{users:users,key:req.query.key})
+        }else{
+            res.json({message:`No user exist with name ${req.query.key}`})
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
+
+//add product
+
+const addProduct=(req,res)=>{
+    try {
+        res.render('addProduct')
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
+
+const insertProduct=(req,res)=>{
+    try {
+        console.log(req.body)
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
+
+
 
 // load view category
 
@@ -177,10 +221,14 @@ const listOrUnlistCategory=async(req,res)=>{
 const categorySearch=async(req,res)=>{
     try {
         
-        const categories=await Category.find({name:{$regex:new RegExp(`${req.query.key}`,'i')}})
-
+        const categories=await Category.find({name:{$regex:new RegExp(`^${req.query.key}`,'i')}})
         
+        if(categories.length>0){
         res.render('viewCategory',{categories:categories,key:req.query.key})
+        }else{
+            
+            res.json({"message":`No Category Exist with name ${req.query.key}`})
+        }
 
         
     } catch (error) {
@@ -262,9 +310,7 @@ const insertCategory=async(req,res)=>{
         console.log(req.body)
         const name=req.body.categoryName
         const description=req.body.categoryDescription
-        const title=req.body.metaTitle
-        const metaDescription=req.body.metaDescription
-        const keyword=req.body.keywords
+
         if(name&&description){
             const check=await Category.findOne({name:{$regex:new RegExp(req.body.categoryName,'i')}})
             
@@ -272,9 +318,7 @@ const insertCategory=async(req,res)=>{
                 const categor=new Category({
                     name:name,
                     description:description,
-                    metaTitle:title,
-                    metaDescription:metaDescription,
-                    keywords:keyword
+
                 })
                 const categoryData=await categor.save()
                 if(categoryData){
@@ -288,7 +332,7 @@ const insertCategory=async(req,res)=>{
             }
         
     }else{
-        res.json({"message":"Please enter atleast name and description of category"})
+        res.json({"message":"Please enter  name and description of the category"})
     }
     } catch (error) {
         console.log(error.message)
@@ -302,6 +346,9 @@ module.exports={
     verifyLogin,
     loadUsers,
     blockOrUnblockUser,
+    searchUser,
+    addProduct,
+    insertProduct,
     loadViewCategory,
     categorySearch,
     listOrUnlistCategory,

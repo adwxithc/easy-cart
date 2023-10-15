@@ -1,8 +1,10 @@
 const express=require('express')
 const admin_route=express()
 const adminController=require('../controller/adminController')
+const path=require('path')
 
 const session=require('express-session')
+const multer=require('multer')
 
 
 //configuring view engin
@@ -16,6 +18,21 @@ admin_route.use(session({
     resave:false,
     saveUninitialized:true
 }))
+
+//
+//seting up storage engine
+const storage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,path.join(__dirname,'../public/productImages'))
+
+    },
+    filename:function(req,file,cb){
+        const name=Date.now()+'-'+file.originalname
+        cb(null,name)
+    }
+})
+
+const update=multer({storage:storage})
 
 
 
@@ -31,7 +48,7 @@ admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser)
 admin_route.get('/searchUser',adminController.searchUser)
 
 admin_route.get('/addProduct',adminController.addProduct)
-admin_route.post('/addProduct',adminController.insertProduct)
+admin_route.post('/addProduct',update.array('images',4),adminController.insertProduct)
 
 
 admin_route.get('/viewCategory',adminController.loadViewCategory)

@@ -2,6 +2,7 @@ const Admin=require('../model/adminModel')
 const Category=require('../model/categoryModel')
 const User=require('../model/userModel')
 const bcrypt=require('bcrypt')
+const Product=require('../model/productModel')
 
 const loadLogin=(req,res)=>{
     try {
@@ -128,9 +129,14 @@ const searchUser=async(req,res)=>{
 
 //add product
 
-const addProduct=(req,res)=>{
+const addProduct=async(req,res)=>{
     try {
-        res.render('addProduct')
+        const categories=await Category.find({})
+        if(categories.length>0){
+        res.render('addProduct',{categories})
+        }else{
+            res.render('addProduct')
+        }
         
     } catch (error) {
         console.log(error.message)
@@ -138,9 +144,64 @@ const addProduct=(req,res)=>{
     }
 }
 
-const insertProduct=(req,res)=>{
+const insertProduct=async(req,res)=>{
     try {
-        console.log(req.body)
+       
+
+        const name=req.body.name
+        const description=req.body.description
+        const category=req.body.category
+        const brand=req.body.brand
+        const stock=req.body.stock
+        const price=req.body.price
+        const size=req.body.size
+        const color=req.body.color
+        const careInstructions=req.body.careInstructions
+        const material=req.body.material
+        const additionalSpecifications=req.body.additionalSpecifications
+        const imageArray=req?.files
+        const images=[]
+        for(let image of imageArray){
+            images.push(image.filename)
+        }
+        
+        if(!(name&&description&&category&&brand&&stock&&price&&size&&color&&(images.length>0))){
+            
+            res.json({message:"please fill all general informations"})
+        }else if(isNaN(price)){
+            res.json({message:"price should be a number"})
+
+        }else{
+
+
+            const check=await Product.findOne({name:name})
+            console.log("check",check)
+            if(check){
+                res.json({message:"This product already exist"})
+            }else{
+                const product=new Product({
+                    name:name,
+                    description:description,
+                    category:category,
+                    brand:brand,
+                    stock:stock,
+                    price:price,
+                    size:size,
+                    color:color,
+                    careInstructions:careInstructions,
+                    material:material,
+                    additionalSpecifications:additionalSpecifications,
+                    images:images
+                })
+                const inserted=await product.save()
+                if(inserted){
+                    res.json({message:"product Successfully Created"})
+
+                }else{
+                    res.json({message:"Unable to store data"})
+                }
+            }
+        }
         
     } catch (error) {
         console.log(error.message)

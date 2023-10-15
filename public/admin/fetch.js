@@ -151,25 +151,19 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     // Update the pageContent div with the loaded HTML
                     pageContent.innerHTML = html;
 
+                    const categorySelect=document.getElementById('categorySelect')
+                    categorySelect.addEventListener('click',()=>{
 
-                    // const scriptSrc='/static/admin/multi.js'
-                    // const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
-
-                    // if(!scriptexist){
-            
-                    // const script=document.createElement('script');
-                    // script.src=scriptSrc;
-                    // document.body.appendChild(script);
-                    // }
-
-                    function showOptions() {
                         const optionsContainer = document.getElementById('options-container');
                         if (optionsContainer.style.display === 'block') {
                             optionsContainer.style.display = 'none';
                         } else {
                             optionsContainer.style.display = 'block';
                         }
-                    }
+
+                    })
+
+
                     
                     const optionInputs = document.querySelectorAll('.option-input');
                     const selectedOptions = document.querySelector('.selected-options');
@@ -213,33 +207,69 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     document.getElementById("addProduct").addEventListener('click',()=>{
 
                              // Create a FormData object to collect form data
-                                const formData = {
 
-                                    name:(document.getElementById("name").value),
-                                    description:(document.getElementById("description").value),
-                                    category:((document.getElementById("categorylist").innerHTML).split(',')),
-                                    brand:(document.getElementById("brand").value),
-                                    stock:(document.getElementById("stock").value),
-                                    price:(document.getElementById("price").value),
-                                    stock:(document.getElementById("stock").value),
-                                    color:(document.getElementById("color").value),
-                                    careInstructions:(document.getElementById("careInstructions").value),
-                                    material:(document.getElementById("material").value),
-                                    additionalSpecifications:(document.getElementById("additionalSpecifications").value)
-                                };
-                                console.log(formData)
+                             const name=document.getElementById("name").value
+                             const description=document.getElementById("description").value
+                            //  const category=((document.getElementById("categorylist").innerHTML).split(','))
+                             const brand=document.getElementById("brand").value
+                             const stock=document.getElementById("stock").value
+                             const price=document.getElementById("price").value
+                            const color=document.getElementById("color").value
+                            const careInstructions=document.getElementById("careInstructions").value
+                            const material=document.getElementById("material").value
+                            const additionalSpecifications=document.getElementById("additionalSpecifications").value
+                            const size=document.getElementById('size').value
+
+                            const images=document.getElementById('image-upload').files
+                            
+                            const formData = new FormData();
+    
+                            
+
+                            const categoryCheckboxes = document.querySelectorAll('.option-input:checked');
+                            const categoryIds=[]
+
+                            categoryCheckboxes.forEach((categotyItem)=>{
+                                categoryIds.push(categotyItem.getAttribute('catgoryId'))
+
+                            })
+                            
+
+
+                            formData.append('name', name);
+                            formData.append('description', description);
+
+                            for (let i = 0; i < categoryIds.length; i++) {
+                                formData.append('category', categoryIds[i]);
+                            }
+
+
+                            
+                            formData.append('brand', brand);
+                            formData.append('stock', stock);
+                            formData.append('price', price);
+                            formData.append('size', size);
+                            formData.append('color', color);
+                            formData.append('careInstructions', careInstructions);
+                            formData.append('material', material);
+                            formData.append('additionalSpecifications', additionalSpecifications);
+                        
+                            for (let i = 0; i < images.length; i++) {
+                                formData.append('images', images[i]);
+                            }
+
+
                                 
-                                const jsonData=JSON.stringify(formData)
+                                
+                               
                                 
 
-                                console.log(formData)
+                              
                                 // Send a POST request to the server using the Fetch API
                                 fetch('/admin/addProduct', {
                                     method: 'POST',
-                                    body: jsonData,
-                                    headers: {
-                                        'Content-Type': 'application/json' // Set the Content-Type header
-                                    }
+                                    body: formData,
+
                                 })
                                 .then(response => response.json())
                                 .then(data => {

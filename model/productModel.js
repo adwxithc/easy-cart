@@ -46,7 +46,8 @@ const productSchema=mongoose.Schema({
         required:true
     },
     images:{
-        type:Array
+        type:Array,
+        required:true
     },
     color:{
         type:String,
@@ -61,7 +62,6 @@ const productSchema=mongoose.Schema({
     },
     addedDate:{
         type:Date,
-        required:true,
         default:Date.now()
     },
     brand:{
@@ -70,7 +70,7 @@ const productSchema=mongoose.Schema({
     },
     careInstructions:String,
     material:String,
-    specifications: String,
+    additionalSpecifications: String,
       status:{
         type:Boolean,
         default:true

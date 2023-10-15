@@ -77,13 +77,13 @@
 
         /* multiple image uploader */
 
-        .upload-container {
+.upload-container {
   max-width: 500px;
   margin: 0 auto;
-  background: white;
-  border: 2px dashed rgb(0, 135, 247);
+  background: #2A3038;
+  border: 1px dashed rgb(237, 240, 243);
   border-radius: 5px;
-  padding: 20px;
+  
 }
 
 .upload-input {
@@ -91,18 +91,20 @@
 }
 
 .custom-button {
-  display: block;
-  background: #007BFF;
+  display: flex;
+  justify-content: center;
+  background: #2A3038;
   color: #fff;
-  padding: 10px 20px;
+  margin: 0;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .custom-button:hover {
-  background: #0056b3;
+  background: #191919;
 }
+
 
 .image-preview {
   display: flex;
@@ -116,6 +118,7 @@
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
    </style>   
 
 <div class="">
@@ -128,7 +131,9 @@
                     <h4 class="card-title">General</h4>
                     <p class="card-description" id="addproductalert"></p>
                    
-                    <div class="d-flex justify-content-between">
+
+
+                  <div class="d-flex justify-content-between">
 
                     <div class="form-group w-50 mx-3">
                         <label for="name">Product Name</label>
@@ -136,24 +141,25 @@
                     </div>
 
 
-                    <div class="multiselect py-4 w-50 mx-3">
-                        <div class="select-box d-flex justify-content-between" onclick="showOptions()">
+                    <%if(locals.categories){%>
+                    <div class="multiselect pt-4 w-50 mx-3">
+                        <div class="select-box d-flex justify-content-between " id="categorySelect" >
                             
                             <div class="selected-options" id="categorylist">Select Category</div>
                             <div class="arrow">&#9660;</div>
                         </div>
-                        <div class="options-container" id="options-container">
+                        <div class="options-container " id="options-container">
+                          <%for(let i=0;i< categories.length ;i++){%>
                             <div class="option">
-                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="Option 1"> Option 1</label>
+                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="<%= categories[i].name%>" catgoryId="<%=categories[i]._id%>"> <%= categories[i].name%></label>
                             </div>
-                            <div class="option">
-                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="Option 2"> Option 2</label>
-                            </div>
+                          <%}%>
 
                         </div>
                     </div>
+                    <%}%>
 
-                    </div>
+                  </div>
 
 
 
@@ -198,7 +204,7 @@
 
                           <div class="form-group  w-50 mx-3">
                             <label for="name">Size</label>
-                            <input type="text" class="form-control"  placeholder="Size" id="stock">
+                            <input type="text" class="form-control"  placeholder="Size" id="size">
                           </div>
 
 
@@ -210,12 +216,14 @@
                         <input type="color" class="form-control form-control-color"  value="#EE1111" title="Choose product color" id="color">
                     </div>
 
-                    
-                <div class="upload-container">
-                    <label for="image-upload" class="custom-button">Select Images</label>
+                <div class="form-group py-4 mx-3 ">
+                  <label for="description" >Upload Images</label>
+                  <div class="upload-container">
+                      <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
 
-                    <input type="file" id="image-upload" class="upload-input" accept="image/*" multiple>
-                    <div id="image-preview" class="image-preview"></div>
+                      <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
+                      <div id="image-preview" class="image-preview"></div>
+                  </div>
                 </div>
 
 

@@ -159,7 +159,7 @@ const insertProduct=async(req,res)=>{
         const careInstructions=req.body.careInstructions
         const material=req.body.material
         const additionalSpecifications=req.body.additionalSpecifications
-        const imageArray=req?.files
+        const imageArray=req.files
         const images=[]
         for(let image of imageArray){
             images.push(image.filename)
@@ -169,14 +169,17 @@ const insertProduct=async(req,res)=>{
             
             res.json({message:"please fill all general informations"})
         }else if(isNaN(price)){
-            res.json({message:"price should be a number"})
+            res.json({message:"price should be in number"})
+
+        }else if(isNaN(stock)){
+            res.json({message:"stocks should be in number"})
 
         }else{
 
 
             const check=await Product.findOne({name:name})
-            console.log("check",check)
-            if(check){
+            
+            if(check&&(check.color==color)&&(check.size==size)&&(check.brand==brand)){
                 res.json({message:"This product already exist"})
             }else{
                 const product=new Product({
@@ -195,7 +198,7 @@ const insertProduct=async(req,res)=>{
                 })
                 const inserted=await product.save()
                 if(inserted){
-                    res.json({message:"product Successfully Created"})
+                    res.json({message:"product Successfully Created",success:true})
 
                 }else{
                     res.json({message:"Unable to store data"})
@@ -207,6 +210,41 @@ const insertProduct=async(req,res)=>{
         console.log(error.message)
         
     }
+}
+
+// load view products
+
+const loadProducts=async(req,res)=>{
+try {
+
+
+        const page=req.query.page||1// specifies which page
+        
+        const pagesize=req.query.pageSize||5//specifies how much data page contains
+
+        const offset=(page-1)*pagesize//specifies how much data to be skipped
+        const limit=pagesize//specifies how much data needed
+        
+        
+        const products=await Product.find({}).skip(offset).limit(limit)
+
+        
+
+        const totalCategories=await Product.countDocuments()
+        const totalpages=Math.ceil(totalCategories/pagesize)
+        
+        
+        
+        res.render('viewProducts',{products:products,currentPage:page,totalpages:totalpages,pagination:true})
+        
+
+
+
+    
+} catch (error) {
+    console.log(error.message);
+    
+}
 }
 
 
@@ -410,6 +448,7 @@ module.exports={
     searchUser,
     addProduct,
     insertProduct,
+    loadProducts,
     loadViewCategory,
     categorySearch,
     listOrUnlistCategory,

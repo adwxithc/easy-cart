@@ -16,7 +16,6 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
     const formData = {
         categoryName,
         categoryDescription,
-      
     };
     
     const jsonData=JSON.stringify(formData)
@@ -33,7 +32,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
     })
     .then(response => response.json())
     .then(data => {
-        alert("fetch entered")
+        
         if(data.success) document.getElementById('addCategoryForm').reset();
 
         // Handle the response from the server

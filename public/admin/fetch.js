@@ -137,7 +137,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
         }else if(e.target.id =='add-productAnchor'){
 
-//load add product 
+        //load add product 
             const pageUrl = '/admin/addProduct';
 
             fetch(pageUrl)
@@ -148,9 +148,11 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     return response.text();
                 })
                 .then(html => {
+
                     // Update the pageContent div with the loaded HTML
                     pageContent.innerHTML = html;
 
+                    //implementing multiselect dropdown for category selection
                     const categorySelect=document.getElementById('categorySelect')
                     categorySelect.addEventListener('click',()=>{
 
@@ -173,12 +175,12 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             const selected = Array.from(optionInputs)
                                 .filter((input) => input.checked)
                                 .map((input) => input.value);
-                            selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select options';
+                            selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select Categories';
                         });
                     });
                     
                     
-                    //imge upload
+                    //multiple imge upload
                     
                     const imageUploadInput = document.getElementById('image-upload');
                     const imagePreviewContainer = document.getElementById('image-preview');
@@ -203,14 +205,14 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     
 
                     
-
+                    //sending data to server on submit 
                     document.getElementById("addProduct").addEventListener('click',()=>{
 
                              // Create a FormData object to collect form data
 
                              const name=document.getElementById("name").value
                              const description=document.getElementById("description").value
-                            //  const category=((document.getElementById("categorylist").innerHTML).split(','))
+                            
                              const brand=document.getElementById("brand").value
                              const stock=document.getElementById("stock").value
                              const price=document.getElementById("price").value
@@ -273,11 +275,19 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 })
                                 .then(response => response.json())
                                 .then(data => {
-                                    alert("fetch entered")
-                                    if(data.success) document.getElementById('addProductForm').reset();
+                                   
+                                    
+                                    if(data.success){
+                                        //resetting form
+                                     document.getElementById('addProductForm').reset();
+                                     imagePreviewContainer.innerHTML = '';
+                                     document.getElementById("categorylist").innerHTML='Select Categories';
+
+                                    }
 
                                     // Handle the response from the server
-                                    document.getElementById('addproductalert').textContent = data.message;
+                                    document.getElementById('alertMessage').textContent = data.message;
+                                    clearAlert()
 
                                     document.getElementById('addProductForm').scrollIntoView({
                                         behavior: 'smooth', // You can use 'auto' for instant scrolling
@@ -300,6 +310,101 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 });
                 
 
+
+
+        }else if(e.target.id == 'viewProducts'){
+            //loading products
+            fetch('admin/viewProducts')
+            .then(response=>{
+                if(!response.ok){
+                    throw new Error("Unable to get response from server")
+                }
+                return response.text()
+            })
+            .then(html=>{
+
+                    pageContent.innerHTML=html
+
+                    function pagination(){
+                    const prev=document.getElementById('prevProduct')
+                    const currentBtn=document.getElementById("currentProduct")
+                    const next=document.getElementById("nextProduct")
+
+                    var totalpages=document.getElementById("totp").value
+                   
+                    var currentPage = document.getElementById("cur").value
+                   
+
+                    function updatepagination(){
+        
+        
+                        prev.disabled= currentPage==1 ;
+                        next.disabled= currentPage == totalpages;
+                        currentBtn.textContent=currentPage;
+                    }
+
+                    updatepagination()
+
+                            
+                prev.addEventListener('click', function(e) {
+                    
+                    if (currentPage > 1) {
+                        
+                        
+                        currentPage--;
+                        updatepagination();
+                        fetchDataForPage(currentPage);
+                    }
+                });
+                
+                next.addEventListener('click', function(e) {
+                    
+                    
+                    if (currentPage < totalpages) {
+                        currentPage++;
+                        updatepagination();
+
+                        fetchDataForPage(currentPage);
+                    }
+                });
+                function fetchDataForPage(Page){
+       
+                    const url = `/admin/viewProducts?page=${Page}`;
+                    
+            
+                    // Make a GET request to the server
+                    fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Update the pageContent div with the loaded HTML
+                        pageContent.innerHTML = html;
+                        pagination()
+            
+                        // const scriptSrc='/static/admin/viewCategoryPagination.js'
+                        // const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
+            
+                        // if(scriptexist){
+                        //     scriptexist.parentNode.removeChild(scriptexist);
+                        // }
+            
+            
+                        // const script2=document.createElement('script');
+                        // script2.src=scriptSrc;
+                        // document.body.appendChild(script2);
+                
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                }
+                }
+                pagination()
+            })
 
 
         }

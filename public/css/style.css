@@ -39,7 +39,7 @@
 
 /* view category  */
 
-  /* Define a custom CSS class to limit the maximum width */
+  /* Define a custom CSS class to limit the maximum width  */
   .description-limit {
     max-width: 700px; /* Adjust the value as needed */
     white-space: wrap;
@@ -61,7 +61,13 @@
     max-width: 40%;
   }
 
-/* add product */
+/* view product */
 
-
+  /* Define a custom CSS class to limit the maximum width */
   
+  .limit200 {
+    max-width: 200px;   /* Adjust the value as needed */
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

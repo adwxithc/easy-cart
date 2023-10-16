@@ -1,0 +1,105 @@
+ <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Products</h4>
+                    <p class="card-description" id="alertMessage"></p>
+                    <div class="table-responsive">
+                      <input type="hidden" id="totp" value="<%= locals.totalpages%>">
+                      <input type="hidden" id="cur" value="<%= locals.currentPage%>">
+                        
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th> # </th>
+                            <th colspan="2"> Product</th>
+                            <th> Stock </th>
+                            <th> Price </th>
+                            <th> Rating </th>
+                            <th> Status </th>
+                            <th> Actions </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          
+                            <%
+                            if(locals.products){
+                                for(let i=0;i< products.length;i++){
+                            %>
+                        <tr>
+                            <td><%= (currentPage-1)*5+(i+1) %></td>
+                            <td> <img src="/static/productImages/<%= products[i].images[0]%>" alt="Product Image"></td>
+                            <td class="limit200"> <%=products[i].name%></td>
+                            <td><%=products[i].stock%></td>
+                            <td><%= products[i].price %></td>
+                            <td><%= products[i].rating%></td>
+                            <td>
+                                <% if(products[i].status){%>
+                                    <span class="text-success"> active</span>
+                                <%}else{%>
+                                    <span class="text-danger"> inactive</span>
+                                <%}%>
+                            </td>
+                            <td>
+                                
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    
+                                      <button class="btn btn-sm btn-dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                      <div class="dropdown-menu">
+                                        <a class="dropdown-item edit" href="#"productId="<%=products[i]._id%>">Edit</a>
+                                        <a class="dropdown-item status" href="#"  productId="<%=products[i]._id%>">
+                                        <%if(products[i].status){%> 
+                                          inactivate
+                                        <%}else{%>
+                                          activate
+                                        <%}%>
+                                        </a>
+                                    </div>
+                                  </div>
+
+                            </td>
+                        </tr>
+                            <%
+                                }
+                            }else{
+
+                            %>
+                            <tr>
+                                <p>No products are available..!</p>
+                            </tr>
+
+                            <%}%>
+              
+
+                          
+                        
+                        </tbody>
+                      </table>
+
+                      <%if(locals.pagination){%>
+                        <nav aria-label="Page navigation example" id="productPagination">
+                          <ul class="pagination ">
+                            <li class="page-item viewProductOptions" id="prevProduct">
+                              <a class="page-link " href="#" aria-label="Previous">
+                                <span aria-hidden="true" >&laquo;</span>
+                                <span class="sr-only" >Previous</span>
+                              </a>
+                            </li>
+                            <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+                            <li class="page-item" ><a class="page-link" href="#" id="currentProduct">1</a></li>
+                            
+                            <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                            <li class="page-item viewProductOptions" id="nextProduct">
+                              <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true" >&raquo;</span>
+                                <span class="sr-only">Next</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                        <%}%>
+                    </div>
+                  </div>
+                </div>
+              </div>

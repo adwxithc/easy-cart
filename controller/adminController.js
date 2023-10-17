@@ -247,6 +247,47 @@ try {
 }
 }
 
+//activate or inactivate product 
+const changeProductStatus=async(req,res)=>{
+    try{
+        const id=req.body.productId
+        const productData=await Product.findById(id)
+        if(productData){
+            console.log(productData)
+            if(productData.status){
+                const updated=await Product.updateOne({_id:id},{$set:{status:false}})
+                if(updated){
+                    res.json({message:"Product has inactivated" ,status:"inactivated"})
+
+                }else{
+                    res.json({message:"failed to inactivate product"})
+
+                }
+
+            }else{
+                const updated=await Product.updateOne({_id:id},{$set:{status:true}})
+                if(updated){
+                    res.json({message:"Product has activated",status:"activated"})
+
+                }else{
+                    res.json({message:"failed to activate product"})
+
+                }
+
+            }
+
+        }else{
+            res.json({message:"This product doesn't exist"})
+        }
+        
+
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
+
 
 
 // load view category
@@ -449,6 +490,7 @@ module.exports={
     addProduct,
     insertProduct,
     loadProducts,
+    changeProductStatus,
     loadViewCategory,
     categorySearch,
     listOrUnlistCategory,

@@ -50,6 +50,8 @@ admin_route.get('/searchUser',adminController.searchUser)
 admin_route.get('/addProduct',adminController.addProduct)
 admin_route.post('/addProduct',update.array('images',4),adminController.insertProduct)
 admin_route.get('/viewProducts',adminController.loadProducts)
+admin_route.patch('/changeProductStatus',adminController.changeProductStatus)
+
 
 
 admin_route.get('/viewCategory',adminController.loadViewCategory)

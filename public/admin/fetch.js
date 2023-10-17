@@ -260,12 +260,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 formData.append('images', images[i]);
                             }
 
-
-                                
-                                
-                               
-                                
-
+                
                               
                                 // Send a POST request to the server using the Fetch API
                                 fetch('/admin/addProduct', {
@@ -325,6 +320,89 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                     pageContent.innerHTML=html
 
+                    //adding event listner to each action in the displayed product detains using event deligation
+                function activateOrInactivateProduct(){
+                    document.getElementById("productTable").addEventListener('click',function(e){
+                            
+                        if(e.target.classList.contains('dropdown-item')){
+                            
+                            if(e.target.classList.contains('status')){
+
+                            //script code to activate or in activate product 
+                                
+                                const productId=e.target.getAttribute('productId')
+                                
+                                fetch('/admin/changeProductStatus',{
+                                    method:"PATCH",
+                                    headers:{'Content-Type':'application/json'},
+                                    body:JSON.stringify({productId:productId})
+                                })
+                                .then(response=>{
+                                    if(response.ok){
+                                        return response.json()
+                                    }
+                                    throw new Error("Connection to server failed")
+                                   
+                                })
+                                .then(data=>{
+                                    
+                                    document.getElementById('alertMessage').textContent = data.message;
+                                    clearAlert()
+
+                                    const product=document.getElementById(productId)
+                                    
+
+                                    const statusChanger=product.querySelector('.status')
+                                    const statusInfo=product.querySelector('.text-success,.text-danger')
+
+                                    if(data.status==='activated'){
+                                        
+                                        statusChanger.textContent="inactivate"
+                                        statusInfo.textContent='active'
+                                        statusInfo.classList.remove('text-danger')
+                                        statusInfo.classList.add('text-success')
+                                    }else{
+                                        
+                                        statusChanger.textContent="activate"
+
+                                        statusInfo.textContent="inactive"
+                                        statusInfo.classList.remove('text-success')
+                                        statusInfo.classList.add('text-danger')
+
+                                    }
+
+                                })
+                                .catch((error)=>{
+                                    console.log(error.message)
+                                })
+                                
+                            }else if(e.target.classList.contains('edit')){
+                                fetch('/admin/editProduct')
+                                .then(response=>{
+                                    if(response.ok){
+                                        return response.text()
+                                    }
+                                    throw new Error("Unable to connect to server")
+                                })
+                                .then(html=>{
+                                    pageContent.innerHTML=html
+
+                                })
+                                .catch((error)=>{
+                                    console.log(error.message)
+                                })
+
+                            }
+
+
+
+                        }
+
+                    })
+                }
+                activateOrInactivateProduct()
+                    //activation/inactivation end
+
                     function pagination(){
                     const prev=document.getElementById('prevProduct')
                     const currentBtn=document.getElementById("currentProduct")
@@ -383,7 +461,15 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     .then(html => {
                         // Update the pageContent div with the loaded HTML
                         pageContent.innerHTML = html;
+
                         pagination()
+                        activateOrInactivateProduct()
+                        //
+                        
+                       
+
+
+                        
             
                         // const scriptSrc='/static/admin/viewCategoryPagination.js'
                         // const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)

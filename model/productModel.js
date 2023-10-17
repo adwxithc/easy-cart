@@ -35,10 +35,7 @@ const productSchema=mongoose.Schema({
         required:true
     },
     category:{
-        type: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Category' // Reference to another model (assuming a "Category" model)
-        }],
+        type: Array,
         required:true
     },
     stock:{

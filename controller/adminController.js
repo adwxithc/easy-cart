@@ -131,7 +131,7 @@ const searchUser=async(req,res)=>{
 
 const addProduct=async(req,res)=>{
     try {
-        const categories=await Category.find({})
+        const categories=await Category.find({status:true})
         if(categories.length>0){
         res.render('addProduct',{categories})
         }else{
@@ -220,7 +220,7 @@ try {
 
         const page=req.query.page||1// specifies which page
         
-        const pagesize=req.query.pageSize||5//specifies how much data page contains
+        const pagesize=req.query.pageSize||7//specifies how much data page contains
 
         const offset=(page-1)*pagesize//specifies how much data to be skipped
         const limit=pagesize//specifies how much data needed
@@ -253,7 +253,7 @@ const changeProductStatus=async(req,res)=>{
         const id=req.body.productId
         const productData=await Product.findById(id)
         if(productData){
-            console.log(productData)
+            
             if(productData.status){
                 const updated=await Product.updateOne({_id:id},{$set:{status:false}})
                 if(updated){
@@ -288,6 +288,40 @@ const changeProductStatus=async(req,res)=>{
     }
 }
 
+
+const viewMoreProductInfo= async(req,res)=>{
+    try {
+
+        const id=req.query.productId
+        const productData=await Product.findById(id)
+
+        res.render('productInfo',{productData:productData}) 
+
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
+
+//load edit product
+const loadEditProduct=async(req,res)=>{
+    try {
+        const id=req.query.id
+        console.log(id)
+        const productData=await Product.findById(id)
+        if(productData){
+
+            res.render('editProduct',{productData:productData})
+        }else{
+            res.status(404).json({message:"This product doesn't exist"})
+        }
+        
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
 
 
 // load view category
@@ -484,13 +518,18 @@ const insertCategory=async(req,res)=>{
 module.exports={
     loadLogin,
     verifyLogin,
+
     loadUsers,
     blockOrUnblockUser,
     searchUser,
+
     addProduct,
     insertProduct,
     loadProducts,
     changeProductStatus,
+    viewMoreProductInfo,
+    loadEditProduct,
+
     loadViewCategory,
     categorySearch,
     listOrUnlistCategory,

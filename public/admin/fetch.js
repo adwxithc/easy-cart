@@ -232,7 +232,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             const categoryIds=[]
 
                             categoryCheckboxes.forEach((categotyItem)=>{
-                                categoryIds.push(categotyItem.getAttribute('catgoryId'))
+                                categoryIds.push(categotyItem.value)
 
                             })
                             
@@ -260,7 +260,6 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 formData.append('images', images[i]);
                             }
 
-                
                               
                                 // Send a POST request to the server using the Fetch API
                                 fetch('/admin/addProduct', {
@@ -321,7 +320,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     pageContent.innerHTML=html
 
                     //adding event listner to each action in the displayed product detains using event deligation
-                function activateOrInactivateProduct(){
+                function viewProduct(){
                     document.getElementById("productTable").addEventListener('click',function(e){
                             
                         if(e.target.classList.contains('dropdown-item')){
@@ -331,53 +330,78 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             //script code to activate or in activate product 
                                 
                                 const productId=e.target.getAttribute('productId')
+
+                                const modal=document.getElementById('myModal')
+                                modal.style.display='block'
+                                modal.setAttribute('product-id',productId)
                                 
-                                fetch('/admin/changeProductStatus',{
-                                    method:"PATCH",
-                                    headers:{'Content-Type':'application/json'},
-                                    body:JSON.stringify({productId:productId})
+                                
+
+                                document.getElementById('closeBtn').addEventListener('click',()=>{
+                                    modal.style.display='none'
                                 })
-                                .then(response=>{
-                                    if(response.ok){
-                                        return response.json()
-                                    }
-                                    throw new Error("Connection to server failed")
-                                   
-                                })
-                                .then(data=>{
+
+                                document.getElementById('confirmBtn').addEventListener('click',(e)=>{
+                                    e.stopImmediatePropagation()
                                     
-                                    document.getElementById('alertMessage').textContent = data.message;
-                                    clearAlert()
-
-                                    const product=document.getElementById(productId)
+                                    const productId=document.getElementById('myModal').getAttribute('product-id')
                                     
-
-                                    const statusChanger=product.querySelector('.status')
-                                    const statusInfo=product.querySelector('.text-success,.text-danger')
-
-                                    if(data.status==='activated'){
+                                    
+                                    document.getElementById('myModal').style.display='none'
+                                    
+                                    
+                                        fetch('/admin/changeProductStatus',{
+                                            method:"PATCH",
+                                            headers:{'Content-Type':'application/json'},
+                                            body:JSON.stringify({productId:productId})
+                                        })
+                                        .then(response=>{
+                                            if(response.ok){
+                                                return response.json()
+                                            }
+                                            throw new Error("Connection to server failed")
                                         
-                                        statusChanger.textContent="inactivate"
-                                        statusInfo.textContent='active'
-                                        statusInfo.classList.remove('text-danger')
-                                        statusInfo.classList.add('text-success')
-                                    }else{
-                                        
-                                        statusChanger.textContent="activate"
-
-                                        statusInfo.textContent="inactive"
-                                        statusInfo.classList.remove('text-success')
-                                        statusInfo.classList.add('text-danger')
-
-                                    }
-
+                                        })
+                                        .then(data=>{
+                                            
+                                            document.getElementById('alertMessage').textContent = data.message;
+                                            clearAlert()
+        
+                                            const product=document.getElementById(productId)
+                                            
+        
+                                            const statusChanger=product.querySelector('.status')
+                                            const statusInfo=product.querySelector('.text-success,.text-danger')
+        
+                                            if(data.status==='activated'){
+                                                
+                                                statusChanger.textContent="inactivate"
+                                                statusInfo.textContent='active'
+                                                statusInfo.classList.remove('text-danger')
+                                                statusInfo.classList.add('text-success')
+                                            }else{
+                                                
+                                                statusChanger.textContent="activate"
+        
+                                                statusInfo.textContent="inactive"
+                                                statusInfo.classList.remove('text-success')
+                                                statusInfo.classList.add('text-danger')
+        
+                                            }
+        
+                                        })
+                                        .catch((error)=>{
+                                            console.log(error.message)
+                                        })
+                                    
                                 })
-                                .catch((error)=>{
-                                    console.log(error.message)
-                                })
+                                
+                               
                                 
                             }else if(e.target.classList.contains('edit')){
-                                fetch('/admin/editProduct')
+                                const productId=e.target.getAttribute('productId')
+
+                                fetch(`/admin/editProduct?id=${productId}`)
                                 .then(response=>{
                                     if(response.ok){
                                         return response.text()
@@ -396,11 +420,35 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
 
 
+                        }else if(e.target.classList.contains('viewMore')){
+                            const productId=e.target.getAttribute('productId')
+                           
+                            
+                            fetch(`/admin/viewMoreProductInfo?productId=${productId}`)
+                            .then(response=>{
+                                if(response.ok){
+                                    return response.text()
+                                }
+                                throw new Error("Unable to get more info")
+                            })
+                            .then(html=>{
+                                
+                                document.getElementById('viewModalClose').addEventListener('click',()=>{
+                                    
+                                    
+                                    document.getElementById('viewModal').style.display='none'
+                                })
+
+                                document.getElementById('viewModal').style.display='block'
+                                document.getElementById('viewModal-content').innerHTML=html
+
+                            })
+
                         }
 
                     })
                 }
-                activateOrInactivateProduct()
+                viewProduct()
                     //activation/inactivation end
 
                     function pagination(){
@@ -463,7 +511,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         pageContent.innerHTML = html;
 
                         pagination()
-                        activateOrInactivateProduct()
+                        viewProduct()
                         //
                         
                        

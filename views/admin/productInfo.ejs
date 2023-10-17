@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="card">
+        <%if(locals.productData){%>
+        <div class="card-body">
+            <h4 class="card-title font-weight-bold"><%=productData.name%></h4>
+
+    <div class="row justify-content-center">
+        
+        <img class="col-lg-4 col-sm-12 m-2" src="/static/productImages/<%=productData.images[0]%>"  width="50px" alt="product image">
+        <img class="col-lg-4 col-sm-12 m-2" src="/static/productImages/<%=productData.images[1]%>" width="50px" alt="product image">
+        <img class="col-lg-4 col-sm-12 m-2" src="/static/productImages/<%=productData.images[2]%>"  width="50px" alt="product image">
+        <img class="col-lg-4 col-sm-12 m-2" src="/static/productImages/<%=productData.images[3]%>"  width="50px" alt="product image">
+    </div>
+    <strong>Description</strong> 
+    <p><%=productData.description%></p>
+    <ul class="list-ticked">
+        <li><span class="font-weight-bold">Categories:</span><%=productData.category%></li>
+        <li><span class="font-weight-bold">Size : </span><%=productData.size%></li>
+        <li><span class="font-weight-bold">Stock : </span><%=productData.stock%></li>
+        <li>
+            <span class="font-weight-bold">Color : </span><input type="color" class="form-control form-control-color"  value="<%=productData.color%>" title="Choose product color" id="color">
+
+        
+        </li>
+        <li><span class="font-weight-bold">Price : </span><%=productData.price%></li>
+        <li><span class="font-weight-bold">Rating : </span>
+            <span class="rating" style="color: rgb(255, 217, 0);">
+                <%
+                const rating=productData.rating[0]?.value;
+                const wholeStares=Math.floor(rating);
+                const halfStar=rating%1>=0.5
+                %>
+                
+           <% for(let i= 0;i< wholeStares; i++){%>
+            <i class="mdi mdi-star"></i>
+            <%}%>
+            <%if(halfStar){%>
+                <i class="mdi mdi-star-half"></i>
+                <%}%>
+        </span>
+            
+        </li>
+        <li><span class="font-weight-bold">Added Date : </span><%=productData.addedDate%></li>
+        <li><span class="font-weight-bold">Brand : </span><%=productData.brand%></li>
+        <li><span class="font-weight-bold">careInstructions : </span><%=productData.careInstructions%></li>
+        <li><span class="font-weight-bold">Material : </span><%=productData.material%></li>
+        <li><span class="font-weight-bold">Status : </span><%=productData.status%></li>
+        <li><span class="font-weight-bold">Un listed Date : </span><%=productData.unlistdate%></li>
+
+    </ul>
+
+    </div>
+    <%}%>
+    </div>
+
+</div>

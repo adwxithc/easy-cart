@@ -57,6 +57,32 @@
     padding: 20px;
   }
 
+  .viewProductDetailsModal{
+    height: 100vh;
+    overflow: scroll;
+    
+  }
+
+  /* Hide the default scrollbar */
+.viewProductDetailsModal::-webkit-scrollbar {
+  width: 0.2em; /* Set the width to a very small value */
+}
+
+/* Track */
+.viewProductDetailsModal::-webkit-scrollbar-track {
+  background: transparent; /* Make the track transparent */
+}
+
+/* Handle */
+.viewProductDetailsModal::-webkit-scrollbar-thumb {
+  background: transparent; /* Make the scroll handle (thumb) transparent */
+}
+
+.rating{
+  color: rgb(255, 225, 2);
+}
+
+
   #searchKey{
     max-width: 40%;
   }
@@ -67,7 +93,131 @@
   
   .limit200 {
     max-width: 200px;   /* Adjust the value as needed */
-    white-space: normal;
+    white-space: wrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+
+
+
+
+  /* add product */
+        /*admin  add product multi select dropdown*/
+  
+
+
+      .multiselect {
+            width: 70%;
+            position: relative;
+        }
+
+        .select-box {
+            
+            padding: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .options-container {
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            border: 1px solid #555;
+            background-color: #444;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .option {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #555;
+        }
+
+        .option:last-child {
+            border-bottom: none;
+        }
+
+        .option:hover {
+            background-color: #666;
+        }
+
+        .selected-options {
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .arrow {
+            color: #ccc;
+        }
+
+        .checkbox-label {
+            display: block;
+            
+            width: 100%;
+        }
+
+
+        /* color */
+
+        .form-control-color{
+            max-width: 40px;
+           
+            border:0.5px solid white;
+            border-radius: 50%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+
+
+        /* multiple image uploader */
+
+.upload-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #2A3038;
+  border: 1px dashed rgb(237, 240, 243);
+  border-radius: 5px;
+  
+}
+
+.upload-input {
+  display: none;
+}
+
+.custom-button {
+  display: flex;
+  justify-content: center;
+  background: #2A3038;
+  color: #fff;
+  margin: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background: #191919;
+}
+
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-preview img {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}

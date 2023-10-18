@@ -331,8 +331,8 @@ const updateProductInfo=async(req,res)=>{
     try {
         const id=req.body.id 
         console.log(req.body)
-        const proguctData=await Product.findById(id)
-        if(proguctData){
+        const productData=await Product.findById(id)
+        if(productData){
             console.log("---------product exist------")
 
             
@@ -361,32 +361,42 @@ const updateProductInfo=async(req,res)=>{
 
                 const replacedImg=[]
                 const imagesName=[req.files['image0'],req.files['image1'],req.files['image2'],req.files['image3']]
-                imagesName.forEach(async(v,i)=>{
-                if(v){
-                    if( proguctData && proguctData.images[i] )  replacedImg.push(proguctData.images[i]);
+                for(let i=0;i<imagesName.length;i++){
+
+                // for(let v of imagesName){
+                if(imagesName[i]){
+                    if( productData && productData.images[i] )  replacedImg.push(proguctData.images[i]);
 
                     
                         const ImgUpdate = await Product.updateOne(
                             { _id: id},
                             {
                                 $set: {
-                                        [`images.${i}`]: v[0].filename,
+                                        [`images.${i}`]: imagesName[i][0].filename,
                                     },
                             }
                         );
-                    }
-                })
-                replacedImg.forEach((v,i)=>{
-                    const path=`./public/productImages/${v}`
-                    fs.unlink(path,(err)=>{
-                        if(err){
-                            console.log(err.message)
-                        }else{
-                            console.log("old image removed")
-                        }
-                    })
-                })
 
+
+                    }
+                }
+
+
+                    replacedImg.forEach((v,i)=>{
+                        const path=`./public/productImages/${v}`
+                        fs.unlink(path,(err)=>{
+                            if(err){
+                                console.log(err.message)
+                            }else{
+                                console.log("old image removed")
+                            }
+                        })
+                    })
+
+
+
+            }else{
+                res.json({message:"This product updation failed"})
             }
             
 

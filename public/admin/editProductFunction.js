@@ -131,7 +131,14 @@ function updateProduct(){
             throw new Error("Unable to Update product")
         })
         .then(data=>{
-            alert(data)
+            
+            document.getElementById('alertMessage').innerHTML=data.message
+            clearAlert()
+
+            document.getElementById('editProductForm').scrollIntoView({
+                behavior: 'smooth', // You can use 'auto' for instant scrolling
+                block: 'start' // Scroll to the top of the form
+            });
         })
     })
 }

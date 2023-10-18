@@ -226,3 +226,26 @@
 .hide{
   display: none;
 }
+
+
+/*--------------------------------------- search feature input box---------------------------------- */
+#searchKey{
+  max-width: 250px;
+  
+  margin-right: 0.3rem;
+  border-radius:6px ;
+  box-shadow: 5px 5px 15px 10px rgba(0,0,0,0.1);
+}
+.searchField{
+  margin-left: auto;
+  max-width: 200px;
+  margin-right: 0.3rem;
+  border-radius:6px ;
+  box-shadow: 5px 5px 15px 10px rgba(0,0,0,0.1);
+  
+
+}
+.selectf{
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+}

@@ -27,7 +27,7 @@ const verifyLogin=async(req,res)=>{
             const passwordCheck=await bcrypt.compare(password,hashedPassword)
             if(passwordCheck){
                 req.session.adminId=Admin._id
-                res.render('adminDashboard',{admin:true})
+                res.redirect('/admin/adminDashboard')
 
             }else{
                 res.render('adminLogin',{message:"invalid email or password combination"})
@@ -43,6 +43,17 @@ const verifyLogin=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+    }
+
+}
+
+const adminDashboard=async(req,res)=>{
+    try {
+        res.render('adminDashboard',{admin:true})
+        
+    } catch (error) {
+        res.status(500).render('adminLogin',{message:"internal server error"})
+        
     }
 
 }
@@ -231,8 +242,8 @@ try {
 
         
 
-        const totalCategories=await Product.countDocuments()
-        const totalpages=Math.ceil(totalCategories/pagesize)
+        const totalProducts=await Product.countDocuments()
+        const totalpages=Math.ceil(totalProducts/pagesize)
         
         
         
@@ -304,6 +315,74 @@ const viewMoreProductInfo= async(req,res)=>{
         
     }
 }
+//-------------------searchProduct-----------
+const searchProduct=async(req,res)=>{
+
+    try {
+
+        // const page=req.query.page||1// specifies which page
+        
+        // const pagesize=req.query.pageSize||7//specifies how much data page contains
+
+        // const offset=(page-1)*pagesize//specifies how much data to be skipped
+        // const limit=pagesize//specifies how much data needed
+        
+        
+        
+
+        const field=req.query.field;
+        const key=req.query.key;
+
+        if(field=='category'){
+            const productData=await Product.find({category:{
+                $elemMatch:{
+                    $regex:new RegExp(`^${key}`,'i')
+                }
+            }})
+            console.log(productData.length)
+            if(productData.length>0){
+              
+                
+                res.render('viewProducts',{products:productData})
+            }else{
+                res.json({message:"No product found"})
+            }
+
+        }else if(field=='brand'){
+            const productData=await Product.find({brand:{$regex:new RegExp(`^${key}`,'i')}})
+            console.log(productData.length)
+            if(productData.length>0){
+
+             
+                
+                res.render('viewProducts',{products:productData})
+            }else{
+                res.json({message:"No product found"})
+            }
+        }else{
+            const productData=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+            console.log(productData.length)
+            if(productData.length>0){
+             
+                
+                res.render('viewProducts',{products:productData})
+            }else{
+                res.json({message:"No product found"})
+            }
+
+        }
+        
+        
+        console.log(key,field)
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).render('viewProducts.ejs',{message:"internal server error"})
+        
+    }
+}
+
+
 
 //load edit product
 const loadEditProduct=async(req,res)=>{
@@ -313,7 +392,7 @@ const loadEditProduct=async(req,res)=>{
         const productData=await Product.findById(id)
         const categories=await Category.find()
         if(productData){
-
+            
             res.render('editProduct',{productData:productData,categories:categories})
         }else{
             res.status(404).json({message:"This product doesn't exist"})
@@ -330,77 +409,129 @@ const loadEditProduct=async(req,res)=>{
 const updateProductInfo=async(req,res)=>{
     try {
         const id=req.body.id 
-        console.log(req.body)
-        const productData=await Product.findById(id)
-        if(productData){
-            console.log("---------product exist------")
+        const name=req.body.name;
+        const description=req.body.description;
+        const category=req.body.category;
+        const brand=req.body.brand;
+        const stock=req.body.stock;
+        const price=req.body.price;
+        const size=req.body.size;
+        const color=req.body.color;
+        const careInstructions=req.body.careInstructions;
+        const material=req.body.material;
+        const additionalSpecifications=req.body.additionalSpecifications;
 
-            
-            const dataUpdated=await Product.updateOne(
-                {_id:id},
-                {
-                    $set:{
+        if(!(name&&description&&category&&brand&&stock&&price&&size&&color)){
+            res.json({message:"You must provide all general informations"})
 
-                        name:req.body.name,
-                        description:req.body.description,
-                        category:req.body.category,
-                        brand:req.body.brand,
-                        stock:req.body.stock,
-                        price:req.body.price,
-                        size:req.body.size,
-                        color:req.body.color,
-                        careInstructions:req.body.careInstructions,
-                        material:req.body.material,
-                        additionalSpecifications:req.body.additionalSpecifications
+        }else if(isNaN(stock)){
+            res.json({message:"stock must be in number"})
+        }else if(isNaN(price)){
+            res.json({message:"price must be in number"})
+        }else{
+
+
+            const productData=await Product.findById(id)
+            if(productData){
+
+                const originalProductData = { ...productData._doc };
+
+                
+                
+                const dataUpdated=await Product.updateOne(
+                    {_id:id},
+                    {
+                        $set:{
+
+                            name:name,
+                            description:description,
+                            category:category,
+                            brand:brand,
+                            stock:stock,
+                            price:price,
+                            size:size,
+                            color:color,
+                            careInstructions:careInstructions,
+                            material:material,
+                            additionalSpecifications:additionalSpecifications
+                        }
                     }
-                }
-                )
+                    )
 
 
-            if(dataUpdated){
+                if(dataUpdated){
 
-                const replacedImg=[]
-                const imagesName=[req.files['image0'],req.files['image1'],req.files['image2'],req.files['image3']]
-                for(let i=0;i<imagesName.length;i++){
+                    const replacedImg=[] //old images
+                    const newImges=[]  //new images
 
-                // for(let v of imagesName){
-                if(imagesName[i]){
-                    if( productData && productData.images[i] )  replacedImg.push(proguctData.images[i]);
+                    const imagesName=[req.files['image0'],req.files['image1'],req.files['image2'],req.files['image3']]
+                    for(let i=0;i<imagesName.length;i++){
 
-                    
-                        const ImgUpdate = await Product.updateOne(
-                            { _id: id},
-                            {
-                                $set: {
-                                        [`images.${i}`]: imagesName[i][0].filename,
-                                    },
+                    if(imagesName[i]){
+                        
+                        newImges.push(imagesName[i][0])
+                        if( productData && productData.images[i] )  replacedImg.push(productData.images[i]);
+
+
+                        
+                            const ImgUpdate = await Product.updateOne(
+                                { _id: id},
+                                {
+                                    $set: {
+                                            [`images.${i}`]: imagesName[i][0].filename,
+                                        },
+                                }
+                            );
+
+                            if(!ImgUpdate){
+                                await Product.updateOne({ _id: id }, { $set: originalProductData });
+
+                                newImges.forEach((v,i)=>{
+                                    const path=`./public/productImages/${v}`
+                                    fs.unlink(path,(err)=>{
+                                        if(err){
+                                            console.log(err.message)
+                                        }else{
+                                            console.log("old image removed")
+                                        }
+                                    })
+
+                                })
+
+
+                                res.status(500).json({message:"failed to update product image"})
+
                             }
-                        );
 
 
+                        }
                     }
-                }
 
 
-                    replacedImg.forEach((v,i)=>{
-                        const path=`./public/productImages/${v}`
-                        fs.unlink(path,(err)=>{
-                            if(err){
-                                console.log(err.message)
-                            }else{
-                                console.log("old image removed")
-                            }
+                        replacedImg.forEach((v,i)=>{
+                            const path=`./public/productImages/${v}`
+                            fs.unlink(path,(err)=>{
+                                if(err){
+                                    console.log(err.message)
+                                }else{
+                                    console.log("old image removed")
+                                }
+                            })
                         })
-                    })
 
+                        res.json({message:"Product updated successfully"})
+
+
+
+                }else{
+                    res.status(500).json({message:"This product updation failed"})
+                }
+                
 
 
             }else{
-                res.json({message:"This product updation failed"})
+                res.status(404).json({message:"this product doesn't exist"})
             }
-            
-
-
         }
         
        
@@ -408,6 +539,7 @@ const updateProductInfo=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -607,6 +739,8 @@ const insertCategory=async(req,res)=>{
 module.exports={
     loadLogin,
     verifyLogin,
+    adminDashboard,
+    
 
     loadUsers,
     blockOrUnblockUser,
@@ -617,6 +751,7 @@ module.exports={
     loadProducts,
     changeProductStatus,
     viewMoreProductInfo,
+    searchProduct,
     loadEditProduct,
     updateProductInfo,
 

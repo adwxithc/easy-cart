@@ -45,27 +45,30 @@ admin_route.use(express.json())
 
 admin_route.get('/',adminController.loadLogin);
 admin_route.post('/',adminController.verifyLogin);
-
-admin_route.get('/loadUsers',adminController.loadUsers)
-admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser)
-admin_route.get('/searchUser',adminController.searchUser)
-
-admin_route.get('/addProduct',adminController.addProduct)
-admin_route.post('/addProduct',update.array('images',4),adminController.insertProduct)
-admin_route.get('/viewProducts',adminController.loadProducts)
-admin_route.patch('/changeProductStatus',adminController.changeProductStatus)
-admin_route.get('/viewMoreProductInfo',adminController.viewMoreProductInfo)
-admin_route.get('/editProduct',adminController.loadEditProduct)
-admin_route.put('/updateProduct',update.fields([{name:'image0'},{name:'image1'},{name:'image2'},{name:'image3'}]),adminController.updateProductInfo)
+admin_route.get('/adminDashboard',adminController.adminDashboard);
 
 
+admin_route.get('/loadUsers',adminController.loadUsers);
+admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser);
+admin_route.get('/searchUser',adminController.searchUser);
 
-admin_route.get('/viewCategory',adminController.loadViewCategory)
-admin_route.get('/categorySearch',adminController.categorySearch)
+admin_route.get('/addProduct',adminController.addProduct);
+admin_route.post('/addProduct',update.array('images',4),adminController.insertProduct);
+admin_route.get('/viewProducts',adminController.loadProducts);
+admin_route.patch('/changeProductStatus',adminController.changeProductStatus);
+admin_route.get('/viewMoreProductInfo',adminController.viewMoreProductInfo);
+admin_route.get('/searchProduct',adminController.searchProduct);
+admin_route.get('/editProduct',adminController.loadEditProduct);
+admin_route.put('/updateProduct',update.fields([{name:'image0'},{name:'image1'},{name:'image2'},{name:'image3'}]),adminController.updateProductInfo);
+
+
+
+admin_route.get('/viewCategory',adminController.loadViewCategory);
+admin_route.get('/categorySearch',adminController.categorySearch);
 
 admin_route.post('/listOrUnlistCategory',adminController.listOrUnlistCategory);
 admin_route.get('/loadeditCategory',adminController.loadeditCategory);
-admin_route.put("/editCategory",adminController.editCategory)
+admin_route.put("/editCategory",adminController.editCategory);
 
 
 admin_route.get('/addCategory',adminController.addCategory);

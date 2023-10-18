@@ -410,6 +410,8 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 })
                                 .then(html=>{
                                     pageContent.innerHTML=html
+                                    multiSelectDropdown()
+                                    updateProduct()
 
                                 })
                                 .catch((error)=>{

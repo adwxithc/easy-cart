@@ -3,6 +3,7 @@ const Category=require('../model/categoryModel')
 const User=require('../model/userModel')
 const bcrypt=require('bcrypt')
 const Product=require('../model/productModel')
+const fs=require('fs')
 
 const loadLogin=(req,res)=>{
     try {
@@ -255,7 +256,8 @@ const changeProductStatus=async(req,res)=>{
         if(productData){
             
             if(productData.status){
-                const updated=await Product.updateOne({_id:id},{$set:{status:false}})
+                
+                const updated=await Product.updateOne({_id:id},{$set:{status:false,inactivatedate:Date.now()}})
                 if(updated){
                     res.json({message:"Product has inactivated" ,status:"inactivated"})
 
@@ -265,7 +267,7 @@ const changeProductStatus=async(req,res)=>{
                 }
 
             }else{
-                const updated=await Product.updateOne({_id:id},{$set:{status:true}})
+                const updated=await Product.updateOne({_id:id},{$set:{status:true,inactivatedate:null}})
                 if(updated){
                     res.json({message:"Product has activated",status:"activated"})
 
@@ -307,15 +309,92 @@ const viewMoreProductInfo= async(req,res)=>{
 const loadEditProduct=async(req,res)=>{
     try {
         const id=req.query.id
-        console.log(id)
+        
         const productData=await Product.findById(id)
+        const categories=await Category.find()
         if(productData){
 
-            res.render('editProduct',{productData:productData})
+            res.render('editProduct',{productData:productData,categories:categories})
         }else{
             res.status(404).json({message:"This product doesn't exist"})
         }
         
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+}
+
+//update edited product info
+const updateProductInfo=async(req,res)=>{
+    try {
+        const id=req.body.id 
+        console.log(req.body)
+        const proguctData=await Product.findById(id)
+        if(proguctData){
+            console.log("---------product exist------")
+
+            
+            const dataUpdated=await Product.updateOne(
+                {_id:id},
+                {
+                    $set:{
+
+                        name:req.body.name,
+                        description:req.body.description,
+                        category:req.body.category,
+                        brand:req.body.brand,
+                        stock:req.body.stock,
+                        price:req.body.price,
+                        size:req.body.size,
+                        color:req.body.color,
+                        careInstructions:req.body.careInstructions,
+                        material:req.body.material,
+                        additionalSpecifications:req.body.additionalSpecifications
+                    }
+                }
+                )
+
+
+            if(dataUpdated){
+
+                const replacedImg=[]
+                const imagesName=[req.files['image0'],req.files['image1'],req.files['image2'],req.files['image3']]
+                imagesName.forEach(async(v,i)=>{
+                if(v){
+                    if( proguctData && proguctData.images[i] )  replacedImg.push(proguctData.images[i]);
+
+                    
+                        const ImgUpdate = await Product.updateOne(
+                            { _id: id},
+                            {
+                                $set: {
+                                        [`images.${i}`]: v[0].filename,
+                                    },
+                            }
+                        );
+                    }
+                })
+                replacedImg.forEach((v,i)=>{
+                    const path=`./public/productImages/${v}`
+                    fs.unlink(path,(err)=>{
+                        if(err){
+                            console.log(err.message)
+                        }else{
+                            console.log("old image removed")
+                        }
+                    })
+                })
+
+            }
+            
+
+
+        }
+        
+       
+
         
     } catch (error) {
         console.log(error.message)
@@ -363,14 +442,14 @@ const listOrUnlistCategory=async(req,res)=>{
     if(categoryData){
 
         if(categoryData.status){
-            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false}})
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false,unlistDate:Date.now()}})
             if(statusUpdate){
                 res.json({"message":"category unlisted","status":"unlisted"})
             }else{
                 res.json({"message":"category unlisting failed"})
             }
         }else{
-            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true}})
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true,unlistDate:null}})
             if(statusUpdate){
                 res.json({"message":"category listed","status":"listed"})
             }else{
@@ -529,6 +608,7 @@ module.exports={
     changeProductStatus,
     viewMoreProductInfo,
     loadEditProduct,
+    updateProductInfo,
 
     loadViewCategory,
     categorySearch,

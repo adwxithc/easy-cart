@@ -3,11 +3,14 @@
 
 <div class="">
        
-    <form class="forms-sample " id="addProductForm" >
-        <h3 class="card-title">Add Product</h3>
+    <form class="forms-sample " id="editProductForm" >
+        <h3 class="card-title">Edit Product</h3>
+        <%if(locals.productData){%>
+          <input type="hidden" value="<%=productData._id %>" name="id" id="id">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                    
                     <h4 class="card-title">General</h4>
                     <p class="card-description" id="alertMessage"></p>
                    
@@ -17,7 +20,7 @@
 
                     <div class="form-group w-50 mx-3">
                         <label for="name">Product Name</label>
-                        <input type="text" class="form-control"  placeholder="Product Name" id="name">
+                        <input type="text" class="form-control"  placeholder="Product Name" id="name" value="<%=productData.name%>">
                     </div>
 
 
@@ -25,13 +28,14 @@
                     <div class="multiselect pt-4 w-50 mx-3">
                         <div class="select-box d-flex justify-content-between " id="categorySelect" >
                             
-                            <div class="selected-options" id="categorylist">Select Category</div>
+                            <div class="selected-options" id="categorylist"><%if(productData.category.length>0){%>   <%=productData.category%>  <%}else{%>Select Category<%}%></div>
                             <div class="arrow">&#9660;</div>
                         </div>
                         <div class="options-container " id="options-container">
+                          
                           <%for(let i=0;i< categories.length ;i++){%>
                             <div class="option">
-                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="<%= categories[i].name%>" catgoryId="<%=categories[i]._id%>"> <%= categories[i].name%></label>
+                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="<%= categories[i].name%>" catgoryId="<%=categories[i]._id%>" <% if(productData.category.includes(categories[i].name)){%>checked<%}%> > <%= categories[i].name%></label>
                             </div>
                           <%}%>
 
@@ -46,7 +50,7 @@
 
                       <div class="form-group mx-3">
                         <label for="description">Description</label>
-                        <textarea class="form-control"  placeholder="Description" rows="4" id="description"></textarea>
+                        <textarea class="form-control"  placeholder="Description" rows="4" id="description" ><%=productData.description%></textarea>
                       </div>
 
 
@@ -61,12 +65,12 @@
     
                         <div class="form-group w-50 mx-3">
                             <label for="name">Brand</label>
-                            <input type="text" class="form-control"  placeholder="Brand" id="brand">
+                            <input type="text" class="form-control"  placeholder="Brand" id="brand" value="<%=productData.brand%>">
                           </div>
 
                           <div class="form-group w-50 mx-3">
                             <label for="name">Stock</label>
-                            <input type="text" class="form-control"  placeholder="Stock" id="stock">
+                            <input type="text" class="form-control"  placeholder="Stock" id="stock" value="<%=productData.stock%>">
                           </div>
 
 
@@ -79,12 +83,12 @@
     
                         <div class="form-group  w-50 mx-3">
                             <label for="name">Price</label>
-                            <input type="text" class="form-control"  placeholder="Price" id="price">
+                            <input type="text" class="form-control"  placeholder="Price" id="price" value="<%=productData.price%>">
                           </div>
 
                           <div class="form-group  w-50 mx-3">
                             <label for="name">Size</label>
-                            <input type="text" class="form-control"  placeholder="Size" id="size">
+                            <input type="text" class="form-control"  placeholder="Size" id="size" value="<%=productData.size%>">
                           </div>
 
 
@@ -93,18 +97,39 @@
 
                       <div class="form-group py-4 mx-3">
                         <label for="description">Color</label>
-                        <input type="color" class="form-control form-control-color"  value="#EE1111" title="Choose product color" id="color">
+                        <input type="color" class="form-control form-control-color"  value="<%=productData.color%>" title="Choose product color" id="color">
                     </div>
 
-                <div class="form-group py-4 mx-3 ">
-                  <label for="description" >Upload Images</label>
-                  <div class="upload-container">
-                      <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
 
-                      <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
-                      <div id="image-preview" class="image-preview"></div>
+                    <div class="row justify-content-center">
+
+                      <div class="col-lg-4 col-sm-12 m-2">
+                        <img  src="/static/productImages/<%=productData.images[0]%>"  width="60%" alt="product image" id="imgePreview1">
+                        <input type="file" id="img1" class="hide" onchange="showImgPreview('img1','imgePreview1')"><br>
+                        <label for="img1" class="btn btn-dark mt-1">Change Image</label>
+                      </div>
+
+                      <div class="col-lg-4 col-sm-12 m-2">
+                        <img  src="/static/productImages/<%=productData.images[1]%>"  width="60%" alt="product image" id="imgePreview2">
+                        <input type="file" id="img2" class="hide" onchange="showImgPreview('img2','imgePreview2')"><br>
+                        <label for="img2" class="btn btn-dark mt-1">Change Image</label>
+                      </div>
+
+                      <div class="col-lg-4 col-sm-12 m-2">
+                        <img  src="/static/productImages/<%=productData.images[2]%>"  width="60%" alt="product image" id="imgePreview3">
+                        <input type="file" id="img3" class="hide" onchange="showImgPreview('img3','imgePreview3')"><br>
+                        <label for="img3" class="btn btn-dark mt-1">Change Image</label>
+                      </div>
+
+                      <div class="col-lg-4 col-sm-12 m-2">
+                        <img  src="/static/productImages/<%=productData.images[3]%>"  width="60%" alt="product image" id="imgePreview4">
+                        <input type="file" id="img4" class="hide" onchange="showImgPreview('img4','imgePreview4')"><br>
+                        <label for="img4" class="btn btn-dark mt-1">Change Image</label>
+                      </div>
+        
+                      
+                      
                   </div>
-                </div>
 
 
                     
@@ -124,13 +149,13 @@
                     
                     <div class="form-group w-50 mx-3">
                         <label for="name">Care Instructions</label>
-                        <input type="text" class="form-control"  placeholder="Care Instructions" id="careInstructions">
+                        <input type="text" class="form-control"  placeholder="Care Instructions" id="careInstructions" value="<%=productData.careInstructions%>">
                       </div>
 
 
                       <div class="form-group w-50 mx-3">
                         <label for="name">Material</label>
-                        <input type="text" class="form-control"  placeholder="Material" id="material">
+                        <input type="text" class="form-control"  placeholder="Material" id="material" value="<%=productData.material%>">
                       </div>
 
             </div>
@@ -145,15 +170,17 @@
 
         <div class="form-group mx-3">
             <label for="description">Additional Specifications</label>
-            <textarea class="form-control" placeholder="Additional Specifications"  rows="4" id="additionalSpecifications"></textarea>
+            <textarea class="form-control" placeholder="Additional Specifications"  rows="4" id="additionalSpecifications"><%=productData.additionalSpecifications%></textarea>
           </div>
 
           </div>
         </div>
     </div>
 
-            <button type="button" class="btn btn-primary ml-3 " id="addProduct" >Submit</button>
-
+            <button type="button" class="btn btn-primary ml-3 " id="editProduct" >Submit</button>
+<%}else{%>
+  <h1>No Product InFo...!</h1>
+  <%}%>
 
     </form>
 </div>

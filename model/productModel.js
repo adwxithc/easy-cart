@@ -72,7 +72,7 @@ const productSchema=mongoose.Schema({
         type:Boolean,
         default:true
       },
-      unlistdate:{
+      inactivatedate:{
         type:Date,
       }
 

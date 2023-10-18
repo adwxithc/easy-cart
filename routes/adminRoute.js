@@ -40,6 +40,9 @@ const update=multer({storage:storage})
 admin_route.use(express.urlencoded({extended:true}))
 admin_route.use(express.json())
 
+
+//routing
+
 admin_route.get('/',adminController.loadLogin);
 admin_route.post('/',adminController.verifyLogin);
 
@@ -53,6 +56,7 @@ admin_route.get('/viewProducts',adminController.loadProducts)
 admin_route.patch('/changeProductStatus',adminController.changeProductStatus)
 admin_route.get('/viewMoreProductInfo',adminController.viewMoreProductInfo)
 admin_route.get('/editProduct',adminController.loadEditProduct)
+admin_route.put('/updateProduct',update.fields([{name:'image0'},{name:'image1'},{name:'image2'},{name:'image3'}]),adminController.updateProductInfo)
 
 
 

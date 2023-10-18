@@ -15,7 +15,7 @@ const categorySchema=mongoose.Schema({
         type:Boolean,
         default:1
     },
-    delete:{
+    unlistDate:{
         type:Date,
     }
 })

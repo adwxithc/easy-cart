@@ -33,6 +33,7 @@ function postUpdation(){
                 
             } catch (error) {
                 console.log(error.message)
+                window.location.href='/admin/500'
                 
             }
 

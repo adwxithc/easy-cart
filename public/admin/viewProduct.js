@@ -70,6 +70,7 @@ function viewProduct(){
                         })
                         .catch((error)=>{
                             console.log(error.message)
+                            window.location.href='/admin/500'
                         })
                     
                 })
@@ -89,11 +90,12 @@ function viewProduct(){
                 .then(html=>{
                     pageContent.innerHTML=html
                     multiSelectDropdown()
-                    updateProduct()
+                    updateProduct() //this function is located at => public\admin\editProductFunction.js
 
                 })
                 .catch((error)=>{
                     console.log(error.message)
+                    window.location.href='/admin/500'
                 })
 
             }
@@ -122,6 +124,10 @@ function viewProduct(){
                 document.getElementById('viewModal').style.display='block'
                 document.getElementById('viewModal-content').innerHTML=html
 
+            })
+            .catch((er)=>{
+                console.log(er.message)
+                window.location.href='/admin/500'
             })
 
         }
@@ -264,9 +270,8 @@ function searchProduct(){
             
         })
         .catch((error)=>{
-            document.getElementById("alertMessage").innerHTML=data.message
-                
-            clearAlert()
+           console.log(er.message)
+           window.location.href='/admin/500'
 
         })
 

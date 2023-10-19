@@ -2,7 +2,11 @@
     <div class="card">
         <%if(locals.productData){%>
         <div class="card-body">
-            <h4 class="card-title font-weight-bold"><%=productData.name%></h4>
+            <div class="d-flex justify-content-center">
+                <h3 class="card-title">Product Information</h3>
+            </div>
+            
+            <h4 class="card-title mt-1"><%=productData.name%></h4>
 
     <div class="row justify-content-center">
         
@@ -14,16 +18,16 @@
     <strong>Description</strong> 
     <p><%=productData.description%></p>
     <ul class="list-ticked">
-        <li><span class="font-weight-bold">Categories:</span><%=productData.category%></li>
-        <li><span class="font-weight-bold">Size : </span><%=productData.size%></li>
-        <li><span class="font-weight-bold">Stock : </span><%=productData.stock%></li>
+        <li><span class="">Categories :</span><%=productData.category%></li>
+        <li><span class="">Size : </span><%=productData.size%></li>
+        <li><span class="">Stock : </span><%=productData.stock%></li>
         <li>
-            <span class="font-weight-bold">Color : </span><input type="color" class="form-control form-control-color"  value="<%=productData.color%>" title="Choose product color" id="color">
+            <span class="">Color : </span><input type="color" class="form-control form-control-color"  value="<%=productData.color%>" title="Choose product color" id="color">
 
         
         </li>
-        <li><span class="font-weight-bold">Price : </span><%=productData.price%></li>
-        <li><span class="font-weight-bold">Rating : </span>
+        <li><span class="">Price : </span><%=productData.price%></li>
+        <li><span class="">Rating : </span>
             <span class="rating" style="color: rgb(255, 217, 0);">
                 <%
                 const rating=productData.rating[0]?.value;
@@ -40,12 +44,12 @@
         </span>
             
         </li>
-        <li><span class="font-weight-bold">Added Date : </span><%=productData.addedDate%></li>
-        <li><span class="font-weight-bold">Brand : </span><%=productData.brand%></li>
-        <li><span class="font-weight-bold">careInstructions : </span><%=productData.careInstructions%></li>
-        <li><span class="font-weight-bold">Material : </span><%=productData.material%></li>
-        <li><span class="font-weight-bold">Status : </span><%=productData.status%></li>
-        <li><span class="font-weight-bold">Un listed Date : </span><%=productData.unlistdate%></li>
+        <li><span class="">Added Date : </span><%=productData.addedDate%></li>
+        <li><span class="">Brand : </span><%=productData.brand%></li>
+        <li><span class="">Care Instructions : </span><%=productData.careInstructions%></li>
+        <li><span class="">Material : </span><%=productData.material%></li>
+        <li><span class="">Status : </span><%=productData.status%></li>
+        <li><span class="">Un listed Date : </span><%=productData.unlistdate%></li>
 
     </ul>
 

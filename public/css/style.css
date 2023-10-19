@@ -134,6 +134,23 @@
             right: 0;
         }
 
+
+
+          /* Hide the default scrollbar */
+.options-container::-webkit-scrollbar {
+  width: 0.2em; /* Set the width to a very small value */
+}
+
+/* Track */
+.options-container::-webkit-scrollbar-track {
+  background: transparent; /* Make the track transparent */
+}
+
+/* Handle */
+.options-container::-webkit-scrollbar-thumb {
+  background: transparent; /* Make the scroll handle (thumb) transparent */
+}
+
         .option {
             padding: 10px;
             display: flex;
@@ -241,11 +258,16 @@
   max-width: 200px;
   margin-right: 0.3rem;
   border-radius:6px ;
-  box-shadow: 5px 5px 15px 10px rgba(0,0,0,0.1);
+ 
   
 
 }
 .selectf{
   padding: 0.3rem;
   border-radius: 0.3rem;
+  box-shadow: 5px 5px 15px 10px rgba(0,0,0,0.1);
+}
+
+#searchProduct{
+  height: 50%;
 }

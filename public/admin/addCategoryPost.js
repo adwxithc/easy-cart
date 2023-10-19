@@ -45,6 +45,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
     })
     .catch(error => {
         console.error('Error:', error);
+        window.location.href='/admin/500'
     });
 });
 

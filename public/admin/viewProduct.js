@@ -137,6 +137,7 @@ function viewProduct(){
 
 
 function pagination(){
+    
     const prev=document.getElementById('prevProduct')
     const currentBtn=document.getElementById("currentProduct")
     const next=document.getElementById("nextProduct")

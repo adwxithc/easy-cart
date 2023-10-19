@@ -13,7 +13,7 @@ function postUpdation(){
             console.log(obj)
             const jsonData=JSON.stringify(obj)
             try {
-                const response =await fetch('admin/editCategory',{
+                const response =await fetch('/admin/editCategory',{
                     method:'PUT',
                     headers: {
                         'Content-Type': 'application/json' // Set the Content-Type header
@@ -27,7 +27,7 @@ function postUpdation(){
                     clearAlert()
 
                 }else{
-                    alert("failed to update")
+                    throw new Error("failed to update")
 
                 }
                 

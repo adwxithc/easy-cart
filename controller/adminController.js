@@ -426,6 +426,8 @@ const loadEditProduct=async(req,res)=>{
 //update edited product info
 const updateProductInfo=async(req,res)=>{
     try {
+       
+
         const id=req.body.id 
         const name=req.body.name;
         const description=req.body.description;
@@ -476,7 +478,7 @@ const updateProductInfo=async(req,res)=>{
                     }
                     )
 
-
+                    
                 if(dataUpdated){
 
                     const replacedImg=[] //old images

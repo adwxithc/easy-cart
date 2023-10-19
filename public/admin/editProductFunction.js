@@ -120,7 +120,7 @@ function updateProduct(){
 
 
 
-        fetch('admin/updateProduct',{
+        fetch('/admin/updateProduct',{
             method:"PUT",
             body:formData
         })
@@ -142,6 +142,7 @@ function updateProduct(){
         })
         .catch((er)=>{
             console.log(er.message)
+            alert("eroor")
             window.location.href='/admin/500'
         })
     })

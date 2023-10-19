@@ -25,8 +25,9 @@ db.on('error', (err) => {
 app.use('/static',express.static('public'))
 
 //passing to appropriate route
-app.use('/',userRoute)
 app.use('/admin',adminRoute)
+app.use('/',userRoute)
+
 
 app.listen(PORT,()=>{
     console.log(`app runs at : http://localhost:${PORT}`)

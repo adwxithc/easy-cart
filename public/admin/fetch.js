@@ -45,6 +45,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
+                    window.location.href='/admin/500'
                 });
         
 
@@ -91,6 +92,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     })
                     .catch(error => {
                         console.error('Fetch error:', error);
+                        window.location.href='/admin/500'
                     });
             
 
@@ -129,7 +131,9 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 
                         })
                         .catch(error => {
-                            console.error('Fetch error:', error);
+                            console.error('Fetch error:', error.message);
+                            window.location.href='/admin/500'
+                            
                         });
                 
                 }
@@ -290,6 +294,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
+                                    window.location.href='/admin/500'
                                 });
 
                         
@@ -301,14 +306,16 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
+                    window.location.href='/admin/500'
                 });
                 
 
 
 
         }else if(e.target.id == 'viewProducts'){
+            
             //loading products
-            fetch('admin/viewProducts')
+            fetch('/admin/viewProducts')
             .then(response=>{
                 if(!response.ok){
                     throw new Error("Unable to get response from server")
@@ -329,6 +336,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                    
                 pagination()
+            })
+            .catch((er)=>{
+                console.log(error.message)
+                window.location.href='/admin/500'
             })
 
 

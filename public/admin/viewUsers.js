@@ -153,7 +153,8 @@ function blockOrUnblockUser(){
             }
         })
         .catch(error=>{
-            document.getElementById("alertMessage").innerHTML=error.message
+            console.log(error.message)
+            window.location.href='/admin/500'
         })
     }
 
@@ -217,6 +218,7 @@ function searchUser(){
       })
       .catch((error) => {
         console.log("Fetch error", error.message);
+        window.location.href='/admin/500'
       });
     })
   

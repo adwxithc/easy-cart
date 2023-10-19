@@ -176,9 +176,9 @@ statusButtons.forEach(button => {
 
     .catch(error => {
       // Handle errors
-      document.getElementById("alertMessage").innerHTML="Unable to change status"
-      clearAlert()
+
       console.error(error.message);
+      window.location.href='/admin/500'
     });
   }
 
@@ -234,6 +234,7 @@ function loadeditCategory(){
     })
     .catch((error) => {
       console.log("Fetch error", error);
+      window.location.href='/admin/500'
     });
 
   }
@@ -296,6 +297,7 @@ function categorySearch(){
     })
     .catch((error) => {
       console.log("Fetch error", error.message);
+      window.location.href='/admin/500'
     });
   })
 

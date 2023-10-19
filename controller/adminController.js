@@ -8,8 +8,10 @@ const fs=require('fs')
 const loadLogin=(req,res)=>{
     try {
         res.render('adminLogin')
+
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
+        res.status(500).render('errors/500.ejs',{hideRedirect:true})
 
         
     }
@@ -26,7 +28,7 @@ const verifyLogin=async(req,res)=>{
             const hashedPassword=adminData.password
             const passwordCheck=await bcrypt.compare(password,hashedPassword)
             if(passwordCheck){
-                req.session.adminId=Admin._id
+                req.session.adminId=adminData._id 
                 res.redirect('/admin/adminDashboard')
 
             }else{
@@ -43,6 +45,7 @@ const verifyLogin=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).render('errors/500.ejs',{hideRedirect:true})
     }
 
 }
@@ -52,16 +55,32 @@ const adminDashboard=async(req,res)=>{
         res.render('adminDashboard',{admin:true})
         
     } catch (error) {
-        res.status(500).render('adminLogin',{message:"internal server error"})
+        res.status(500)
         
     }
 
+}
+
+//adminlogout
+const logout=async(req,res)=>{
+    try {
+        console.log(req.session.adminId)
+        req.session.destroy((er)=>{
+            if(er) console.log(er.message)//send status
+            else res.redirect('/admin')
+        })
+        
+    } catch (error) {
+        res.status(500).render('errors/500.ejs',{redirect:true})
+    }
 }
 
 //load users
 
 const loadUsers =async(req,res)=>{
     try {
+        
+        
         const page=req.query.page||1// specifies which page
         
         const pagesize=req.query.pageSize||8//specifies how much data page contains
@@ -82,7 +101,7 @@ const loadUsers =async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
-        
+        res.status(500).json({message:"internal server Error"})
     }
 }
 
@@ -115,6 +134,7 @@ const blockOrUnblockUser=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
     }
 
 }
@@ -135,6 +155,7 @@ const searchUser=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
     }
 
 }
@@ -152,6 +173,7 @@ const addProduct=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -220,6 +242,7 @@ const insertProduct=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -228,7 +251,7 @@ const insertProduct=async(req,res)=>{
 
 const loadProducts=async(req,res)=>{
 try {
-
+    
 
         const page=req.query.page||1// specifies which page
         
@@ -255,6 +278,7 @@ try {
     
 } catch (error) {
     console.log(error.message);
+    res.status(500).json({message:"internal server error"})
     
 }
 }
@@ -297,6 +321,7 @@ const changeProductStatus=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -312,6 +337,7 @@ const viewMoreProductInfo= async(req,res)=>{
 
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -320,18 +346,9 @@ const searchProduct=async(req,res)=>{
 
     try {
 
-        // const page=req.query.page||1// specifies which page
-        
-        // const pagesize=req.query.pageSize||7//specifies how much data page contains
-
-        // const offset=(page-1)*pagesize//specifies how much data to be skipped
-        // const limit=pagesize//specifies how much data needed
-        
-        
-        
 
         const field=req.query.field;
-        const key=req.query.key;
+        const key=req.query.key||null;
 
         if(field=='category'){
             const productData=await Product.find({category:{
@@ -343,7 +360,7 @@ const searchProduct=async(req,res)=>{
             if(productData.length>0){
               
                 
-                res.render('viewProducts',{products:productData})
+                res.render('viewProducts',{products:productData,key:key})
             }else{
                 res.json({message:"No product found"})
             }
@@ -355,7 +372,7 @@ const searchProduct=async(req,res)=>{
 
              
                 
-                res.render('viewProducts',{products:productData})
+                res.render('viewProducts',{products:productData,key:key})
             }else{
                 res.json({message:"No product found"})
             }
@@ -365,7 +382,7 @@ const searchProduct=async(req,res)=>{
             if(productData.length>0){
              
                 
-                res.render('viewProducts',{products:productData})
+                res.render('viewProducts',{products:productData,key:key})
             }else{
                 res.json({message:"No product found"})
             }
@@ -377,7 +394,7 @@ const searchProduct=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
-        res.status(500).render('viewProducts.ejs',{message:"internal server error"})
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -401,6 +418,7 @@ const loadEditProduct=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -570,6 +588,7 @@ const loadViewCategory=async(req,res)=>{
         
     } catch (error) { 
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 
@@ -606,6 +625,7 @@ const listOrUnlistCategory=async(req,res)=>{
     }
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 
@@ -628,6 +648,7 @@ const categorySearch=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
     }
 
 }
@@ -646,6 +667,7 @@ const loadeditCategory=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -682,6 +704,7 @@ const editCategory=async(req,res)=>{
 
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -690,11 +713,13 @@ const editCategory=async(req,res)=>{
 
 const addCategory=(req,res)=>{
     try {
+        
         res.render('addCategory')
         
     } catch (error) {
 
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
 }
@@ -731,8 +756,19 @@ const insertCategory=async(req,res)=>{
     }
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({message:"internal server error"})
         
     }
+
+}
+
+const error404=(req,res)=>{
+    res.status(404).render('errors/404')
+
+}
+
+const error500=(req,res)=>{
+    res.status(500).render('errors/500')
 
 }
 
@@ -740,7 +776,7 @@ module.exports={
     loadLogin,
     verifyLogin,
     adminDashboard,
-    
+    logout,
 
     loadUsers,
     blockOrUnblockUser,
@@ -761,6 +797,9 @@ module.exports={
     loadeditCategory,
     editCategory,
     addCategory,
-    insertCategory
+    insertCategory,
+
+    error404,
+    error500
     
 }

@@ -46,7 +46,7 @@ admin_route.use(express.json())
 admin_route.get('/',adminController.loadLogin);
 admin_route.post('/',adminController.verifyLogin);
 admin_route.get('/adminDashboard',adminController.adminDashboard);
-
+admin_route.post('/logout',adminController.logout)
 
 admin_route.get('/loadUsers',adminController.loadUsers);
 admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser);
@@ -74,6 +74,13 @@ admin_route.put("/editCategory",adminController.editCategory);
 admin_route.get('/addCategory',adminController.addCategory);
 admin_route.post('/addCategory',adminController.insertCategory);
 
- 
+admin_route.get('/404',adminController.error404);
+admin_route.get('/500',adminController.error500);
+
+
+ admin_route.use('*',(req,res)=>{
+    res.status(404).render('errors/404')
+
+ })
 
 module.exports=admin_route

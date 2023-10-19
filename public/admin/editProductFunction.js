@@ -140,5 +140,9 @@ function updateProduct(){
                 block: 'start' // Scroll to the top of the form
             });
         })
+        .catch((er)=>{
+            console.log(er.message)
+            window.location.href='/admin/500'
+        })
     })
 }

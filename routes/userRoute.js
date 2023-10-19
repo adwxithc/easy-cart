@@ -18,6 +18,8 @@ user_route.use(session({
     saveUninitialized:true
 }))
 
+user_route.get('/',userController.guest)
+
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
 

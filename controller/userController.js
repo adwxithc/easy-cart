@@ -76,6 +76,16 @@ function verifyOTP(otp, maxAgeInSeconds =120) {
 
 }
 
+const guest=(req,res)=>{
+    try {
+        res.render('home')
+        
+    } catch (error) {
+        console,log(error.message)
+        
+    }
+}
+
 
 const loadLogin=(req,res)=>{
     try {
@@ -99,7 +109,7 @@ const verifyLogin=async(req,res)=>{
             if(passwordCheck){
                 if(userData.status==1){
                     req.session.userId=userData._id
-                    res.send("home")
+                    res.render('home')
 
                 }else{
                     res.render('login',{message:"This account is blocked by the admin"})
@@ -238,7 +248,7 @@ const otpVerification=async(req,res)=>{
                 const userData=await user.save()
                 if(userData){
                     console.log("data inserted to data base")
-                    res.send("home")
+                    res.render('home')
 
                 }else{
                     console.log("data insertion failed")
@@ -262,6 +272,7 @@ const otpVerification=async(req,res)=>{
 }
 
 module.exports={
+    guest,
     loadLogin,
     verifyLogin,
     loadRegister,

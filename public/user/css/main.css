@@ -1206,7 +1206,7 @@ h1, h2, h3, h4, h5, h6 {
 /* banner area css
 ============================================================================================ */
 .banner-area {
-  background: url(../img/banner/banner-bg.jpg) center no-repeat;
+  background: url(/static/assets/img/banner/banner-bg.jpg) center no-repeat;
   background-size: cover;
   position: relative; }
   @media (max-width: 768px) {
@@ -1590,7 +1590,7 @@ h1, h2, h3, h4, h5, h6 {
   background: #f9f9ff; }
   .exclusive-deal-area .exclusive-left {
     position: realtive;
-    background: url(../img/exclusive.jpg) center no-repeat;
+    background: url(/static/assets/img/exclusive.jpg) center no-repeat;
     background-size: cover;
     text-align: center;
     padding: 275px 0; }

@@ -19,6 +19,8 @@ user_route.use(session({
 }))
 
 user_route.get('/',userController.guest)
+user_route.get('/productDetails',userController.productDetails)
+user_route.post('/searchProduct',userController.searchProduct)
 
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)

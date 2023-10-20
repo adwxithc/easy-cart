@@ -335,7 +335,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     //activation/inactivation end
 
                    
-                pagination()
+                    productPagination()
             })
             .catch((er)=>{
                 console.log(error.message)

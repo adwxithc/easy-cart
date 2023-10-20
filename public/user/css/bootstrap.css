@@ -510,9 +510,16 @@ mark {
     content: "\2014 \00A0"
 }
 
+
 .img-fluid {
     max-width: 100%;
-    height: auto
+    height: auto;
+    
+}
+.img-fluidP {
+    height: 17rem;
+    width: auto;
+    
 }
 
 .img-thumbnail {

@@ -1,4 +1,5 @@
 const User=require('../model/userModel')
+const Product=require('../model/productModel')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -76,12 +77,53 @@ function verifyOTP(otp, maxAgeInSeconds =120) {
 
 }
 
-const guest=(req,res)=>{
+//rndering the site for all
+const guest=async(req,res)=>{
     try {
-        res.render('home')
+        
+        const latestProducts=await Product.find({}).sort({ addedDate: -1 }).limit(8)
+        const affordableProducts=await Product.find({}).sort({ price: 1 }).limit(8)
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts})
         
     } catch (error) {
-        console,log(error.message)
+        console.log(error.message)
+        res.status(500).render('errors/500.ejs',{hideRedirect:true})
+        
+    }
+}
+
+//view product details
+
+const productDetails=async(req,res)=>{
+    try {
+        const id=req.query.id
+        const product=await Product.findById(id)
+        if(product){
+            res.render('productDetails',{product:product})
+
+        }else{
+            res.status(404).render('errors/404.ejs')
+
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).render('errors/500.ejs')
+        
+    }
+
+}
+
+const searchProduct=async(req,res)=>{
+    try {
+        const key=req.body.searchKey||''
+        const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+        res.render('productShop',{products:products})
+        
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).render('errors/500.ejs') 
         
     }
 }
@@ -273,11 +315,14 @@ const otpVerification=async(req,res)=>{
 
 module.exports={
     guest,
+    productDetails,
+    searchProduct,
+
     loadLogin,
     verifyLogin,
     loadRegister,
     signUp,
     loadOtpForm,
     reSendOtp,
-    otpVerification
+    otpVerification 
 }

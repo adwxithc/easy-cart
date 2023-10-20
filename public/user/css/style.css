@@ -1,0 +1,43 @@
+.thumbnailImg{
+    height: 7rem;
+    width: auto;
+    object-fit: contain;
+    
+}
+.productPreView{
+    max-height: 35rem;
+    width: auto;
+    margin: 0 auto;
+}
+.thumbnailImgWrap{
+    display: inline-block;
+    transition: transform 0.3s;
+
+   box-shadow: 2px 2px 2px 1px rgba(50, 49, 49, 0.4);
+    width: 6rem;
+}
+
+.thumbnailImgWrap:hover{
+    transform: scale(1.08);
+}
+
+.size{
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding-left:0.7em ;
+    max-width:2.5rem ;
+    
+}
+
+@media (max-width:999px) {
+    .thambUl{
+        order: 1;
+    }
+    
+}
+.color{
+
+    
+    display: block;
+     height: 25px;
+   
+}

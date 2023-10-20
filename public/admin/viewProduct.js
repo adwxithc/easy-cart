@@ -136,7 +136,8 @@ function viewProduct(){
 }
 
 
-function pagination(){
+function productPagination(){
+    
     
     const prev=document.getElementById('prevProduct')
     const currentBtn=document.getElementById("currentProduct")
@@ -196,7 +197,7 @@ function fetchDataForPage(Page){
         // Update the pageContent div with the loaded HTML
         pageContent.innerHTML = html;
 
-        pagination()
+        productPagination()
         viewProduct()
         searchProduct()
         //

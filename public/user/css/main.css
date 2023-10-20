@@ -1206,7 +1206,7 @@ h1, h2, h3, h4, h5, h6 {
 /* banner area css
 ============================================================================================ */
 .banner-area {
-  background: url(/static/assets/img/banner/banner-bg.jpg) center no-repeat;
+  background: url(/static/assets/img/banner/banner.webp) center no-repeat;
   background-size: cover;
   position: relative; }
   @media (max-width: 768px) {
@@ -1282,7 +1282,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #222222; }
 
 .organic-breadcrumb {
-  background: url(../img/banner/common-banner.jpg) center no-repeat;
+  background: url(/static/assets/img/banner/banner-bg.webp) center no-repeat;
   background-size: cover;
   padding-top: 130px; }
   @media (max-width: 991px) {
@@ -1590,7 +1590,7 @@ h1, h2, h3, h4, h5, h6 {
   background: #f9f9ff; }
   .exclusive-deal-area .exclusive-left {
     position: realtive;
-    background: url(/static/assets/img/exclusive.jpg) center no-repeat;
+    background: url(/static/assets/img/category/cat.avif) center no-repeat;
     background-size: cover;
     text-align: center;
     padding: 275px 0; }

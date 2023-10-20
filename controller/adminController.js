@@ -734,7 +734,7 @@ const insertCategory=async(req,res)=>{
         const description=req.body.categoryDescription
 
         if(name&&description){
-            const check=await Category.findOne({name:{$regex:new RegExp(req.body.categoryName,'i')}})
+            const check=await Category.findOne({name:{$regex:new RegExp(`^${req.body.categoryName}`,'i')}})
             
             if(!check){
                 const categor=new Category({

@@ -81,8 +81,8 @@ function verifyOTP(otp, maxAgeInSeconds =120) {
 const guest=async(req,res)=>{
     try {
         
-        const latestProducts=await Product.find({}).sort({ addedDate: -1 }).limit(8)
-        const affordableProducts=await Product.find({}).sort({ price: 1 }).limit(8)
+        const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
+        const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
         res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts})
         
     } catch (error) {
@@ -117,7 +117,7 @@ const productDetails=async(req,res)=>{
 const searchProduct=async(req,res)=>{
     try {
         const key=req.body.searchKey||''
-        const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+        const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')},status:true})
         res.render('productShop',{products:products})
         
         

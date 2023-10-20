@@ -1,3 +1,5 @@
+/* ----------------------product image preview------- --------------*/
+
 .thumbnailImg{
     height: 7rem;
     width: auto;
@@ -21,6 +23,8 @@
     transform: scale(1.08);
 }
 
+
+
 .size{
     border: 2px solid rgba(0, 0, 0, 0.5);
     padding-left:0.7em ;
@@ -35,7 +39,6 @@
     
 }
 .color{
-
     
     display: block;
      height: 25px;

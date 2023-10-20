@@ -219,7 +219,7 @@
                             <h6><%=product.name%></h6>
                             <div class="price">
                                 <h6><%=product.price%></h6>
-                                <h6 class="l-through">$210.00</h6>
+                                <h6 class="l-through">$<%=product.price +500%></h6>
                             </div>
                             <div class="prd-bottom">
 
@@ -235,7 +235,7 @@
                                     <span class="lnr lnr-sync"></span>
                                     <p class="hover-text">compare</p>
                                 </a>
-                                <a href="" class="social-info">
+                                <a href="/productDetails?id=<%=product._id%>" class="social-info">
                                     <span class="lnr lnr-move"></span>
                                     <p class="hover-text">view more</p>
                                 </a>
@@ -288,7 +288,7 @@
                                     <span class="lnr lnr-sync"></span>
                                     <p class="hover-text">compare</p>
                                 </a>
-                                <a href="" class="social-info">
+                                <a href="/productDetails?id=<%=product._id%>" class="social-info">
                                     <span class="lnr lnr-move"></span>
                                     <p class="hover-text">view more</p>
                                 </a>

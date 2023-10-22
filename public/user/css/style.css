@@ -1,7 +1,7 @@
 /* ----------------------product image preview------- --------------*/
 
 .thumbnailImg{
-    height: 7rem;
+    /* height: 7rem; */
     width: auto;
     object-fit: contain;
     
@@ -11,6 +11,8 @@
     width: auto;
     margin: 0 auto;
 }
+
+
 .thumbnailImgWrap{
     display: inline-block;
     transition: transform 0.3s;

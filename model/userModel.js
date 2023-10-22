@@ -29,6 +29,10 @@ const userSchema=mongoose.Schema({
         default:Date.now(),
         required:true
     },
+    lastModified:{
+        type:Date,
+        default:Date.now()
+    },
     mobile:{
         type:String,
  

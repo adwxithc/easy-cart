@@ -61,6 +61,10 @@ const productSchema=mongoose.Schema({
         type:Date,
         default:Date.now()
     },
+    lastModified:{
+        type:Date,
+        default:Date.now()
+    },
     brand:{
         type:String,
         required:true

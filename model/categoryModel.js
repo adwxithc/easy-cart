@@ -10,6 +10,14 @@ const categorySchema=mongoose.Schema({
         type:String,
         required:true
     },
+    addedDate:{
+        type:Date,
+        default:Date.now()
+    },
+    lastModified:{
+        type:Date,
+        default:Date.now()
+    },
 
     status:{
         type:Boolean,

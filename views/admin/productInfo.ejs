@@ -18,7 +18,20 @@
     <strong>Description</strong> 
     <p><%=productData.description%></p>
     <ul class="list-ticked">
-        <li><span class="">Categories :</span><%=productData.category%></li>
+        <%if (locals.categories){%>
+        <li><span class="">Categories :</span>
+            <%
+            for(let category of categories){
+                if(productData.category.includes(category._id)){
+            %>
+           
+                    <%=category.name%>
+            <%
+                }
+            }
+            %>
+        </li>
+        <%}%>
         <li><span class="">Size : </span><%=productData.size%></li>
         <li><span class="">Stock : </span><%=productData.stock%></li>
         <li>

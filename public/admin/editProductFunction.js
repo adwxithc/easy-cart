@@ -84,7 +84,7 @@ function updateProduct(){
        const categoryIds=[]
 
        categoryCheckboxes.forEach((categotyItem)=>{
-           categoryIds.push(categotyItem.value)
+           categoryIds.push(categotyItem.getAttribute('catgoryId'))
 
        })
        

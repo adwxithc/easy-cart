@@ -16,8 +16,26 @@
         });
     });
 
-    
 
+    //image zoome on hover
+
+
+    var options2 = {
+        // width:500,
+        fillContainer: true,
+        zoomPosition:'original',
+        offset: {vertical: 0, horizontal: 10},
+        zoomWidth:500,
+        
+        
+        
+    };
+
+    // Create a new instance of ImageZoom
+    new ImageZoom(document.getElementById('img-container'), options2);
+
+
+    
     //registration
 function validateForm(){
     

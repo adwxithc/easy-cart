@@ -28,14 +28,33 @@
                     <div class="multiselect pt-4 w-50 mx-3">
                         <div class="select-box d-flex justify-content-between " id="categorySelect" >
                             
-                            <div class="selected-options" id="categorylist"><%if(productData.category.length>0){%>   <%=productData.category%>  <%}else{%>Select Category<%}%></div>
+                            <div class="selected-options" id="categorylist">
+                              <%
+                              if(productData.category.length>0){
+                                for(let i=0 ;i< categories.length;i++){
+                                  if(productData.category.includes(categories[i]._id)){
+                                %>
+
+                                  <%= categories[i].name %>
+                                   
+
+                                <%
+                                  }
+                                }
+                              }else{
+                                %>
+
+                                    Select Category
+
+                                    <%}%>
+                            </div>
                             <div class="arrow">&#9660;</div>
                         </div>
                         <div class="options-container " id="options-container">
                           
                           <%for(let i=0;i< categories.length ;i++){%>
                             <div class="option">
-                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="<%= categories[i].name%>" catgoryId="<%=categories[i]._id%>" <% if(productData.category.includes(categories[i].name)){%>checked<%}%> > <%= categories[i].name%></label>
+                                <label class="checkbox-label"><input type="checkbox" class="option-input" value="<%= categories[i].name%>" catgoryId="<%=categories[i]._id%>" <% if(productData.category.includes(categories[i]._id)){%>checked<%}%> > <%= categories[i].name%> </label>
                             </div>
                           <%}%>
 

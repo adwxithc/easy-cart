@@ -89,7 +89,7 @@ const loadUsers =async(req,res)=>{
         const limit=pagesize//specifies how much data needed
 
         
-        const users=await User.find({}).skip(offset).limit(limit)
+        const users=await User.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
 
         
 
@@ -112,14 +112,14 @@ const blockOrUnblockUser=async(req,res)=>{
         const userData=await User.findById(id)
         if(userData){
             if(userData.status){
-                const updation=await User.updateOne({_id:id},{$set:{status:false}})
+                const updation=await User.updateOne({_id:id},{$set:{status:false,lastModified:Date.now()}})
                 if(updation){
                     res.json({"message":`${userData.fname+' '+userData.lname} has blocked`,"status":"blocked"})
                 }else{
                     res.json({"message":"status updation failed"})
                 }
             }else{
-                const updation=await User.updateOne({_id:id},{$set:{status:true}})
+                const updation=await User.updateOne({_id:id},{$set:{status:true,lastModified:Date.now()}})
                 if(updation){
                     res.json({"message":`${userData.fname+' '+userData.lname} has unblocked`,"status":"unblocked"})
                 }else{
@@ -261,7 +261,7 @@ try {
         const limit=pagesize//specifies how much data needed
         
         
-        const products=await Product.find({}).skip(offset).limit(limit)
+        const products=await Product.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
 
         
 
@@ -292,7 +292,7 @@ const changeProductStatus=async(req,res)=>{
             
             if(productData.status){
                 
-                const updated=await Product.updateOne({_id:id},{$set:{status:false,inactivatedate:Date.now()}})
+                const updated=await Product.updateOne({_id:id},{$set:{status:false,inactivatedate:Date.now(),lastModified:Date.now()}})
                 if(updated){
                     res.json({message:"Product has inactivated" ,status:"inactivated"})
 
@@ -302,7 +302,7 @@ const changeProductStatus=async(req,res)=>{
                 }
 
             }else{
-                const updated=await Product.updateOne({_id:id},{$set:{status:true,inactivatedate:null}})
+                const updated=await Product.updateOne({_id:id},{$set:{status:true,inactivatedate:null,lastModified:Date.now()}})
                 if(updated){
                     res.json({message:"Product has activated",status:"activated"})
 
@@ -327,13 +327,14 @@ const changeProductStatus=async(req,res)=>{
 }
 
 
-const viewMoreProductInfo= async(req,res)=>{
+const viewMoreProductInfo= async(req,res)=>{ 
     try {
 
         const id=req.query.productId
+        const categories=await Category.find({},{name:1})
         const productData=await Product.findById(id)
 
-        res.render('productInfo',{productData:productData}) 
+        res.render('productInfo',{productData:productData,categories:categories}) 
 
     } catch (error) {
         console.log(error.message)
@@ -408,7 +409,7 @@ const loadEditProduct=async(req,res)=>{
         
         const productData=await Product.findById(id)
         const categories=await Category.find()
-        if(productData){
+        if(productData){ 
             
             res.render('editProduct',{productData:productData,categories:categories})
         }else{
@@ -473,7 +474,8 @@ const updateProductInfo=async(req,res)=>{
                             color:color,
                             careInstructions:careInstructions,
                             material:material,
-                            additionalSpecifications:additionalSpecifications
+                            additionalSpecifications:additionalSpecifications,
+                            lastModified:Date.now()
                         }
                     }
                     )
@@ -578,7 +580,7 @@ const loadViewCategory=async(req,res)=>{
         const limit=pagesize//specifies how much data needed
 
         
-        const categories=await Category.find({}).skip(offset).limit(limit)
+        const categories=await Category.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
 
         
 
@@ -605,14 +607,14 @@ const listOrUnlistCategory=async(req,res)=>{
     if(categoryData){
 
         if(categoryData.status){
-            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false,unlistDate:Date.now()}})
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false,unlistDate:Date.now(),lastModified:Date.now()}})
             if(statusUpdate){
                 res.json({"message":"category unlisted","status":"unlisted"})
             }else{
                 res.json({"message":"category unlisting failed"})
             }
         }else{
-            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true,unlistDate:null}})
+            const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true,unlistDate:null,lastModified:Date.now()}})
             if(statusUpdate){
                 res.json({"message":"category listed","status":"listed"})
             }else{
@@ -687,7 +689,7 @@ const editCategory=async(req,res)=>{
             
             const categoryData =await Category.findById(id)
             if(categoryData){
-                const update=await Category.updateOne({_id:id},{$set:{name:categoryName,description:categoryDescription}})
+                const update=await Category.updateOne({_id:id},{$set:{name:categoryName,description:categoryDescription,lastModified:Date.now()}})
                 if(update){
                     res.json({"message":"Category Updated"})
 

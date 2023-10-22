@@ -20,13 +20,13 @@ $(function(){
         $("#resendInfo").html("")
       },30000)
 
-      console.log("hellow")
+      
       $.ajax({
         url:'/reSendOtp',
         method:"GET",
         success:function(res){
           $("#resendInfo").html(res.message)
-          console.log(res)
+          
         },
         error:function(){
           $("#resendInfo").html("Some error occured please try again after some time")

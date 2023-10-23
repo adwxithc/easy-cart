@@ -206,6 +206,15 @@
   
 }
 
+.upload-logoContainer {
+  max-width: 150px;
+ 
+  background: #2A3038;
+  border: 1px dashed rgb(237, 240, 243);
+  border-radius: 5px;
+  
+}
+
 .upload-input {
   display: none;
 }

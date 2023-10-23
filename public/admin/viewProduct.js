@@ -205,20 +205,6 @@ function fetchDataForPage(Page){
        
 
 
-        
-
-        // const scriptSrc='/static/admin/viewCategoryPagination.js'
-        // const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
-
-        // if(scriptexist){
-        //     scriptexist.parentNode.removeChild(scriptexist);
-        // }
-
-
-        // const script2=document.createElement('script');
-        // script2.src=scriptSrc;
-        // document.body.appendChild(script2);
-
     })
     .catch(error => {
         console.error('Fetch error:', error);

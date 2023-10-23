@@ -262,7 +262,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         
                             for (let i = 0; i < images.length; i++) {
                                 formData.append('images', images[i]);
-                            }
+                            } 
 
                               
                                 // Send a POST request to the server using the Fetch API
@@ -329,20 +329,26 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     //calling searchProduct support function
                     searchProduct()
 
-                    //adding event listner to each action in the displayed product detains using event deligation
+                    
                
-                viewProduct()
-                    //activation/inactivation end
+                viewProduct()//this function is present in view product.js
+                   
 
                    
                     productPagination()
             })
             .catch((er)=>{
-                console.log(error.message)
+                console.log(er.message)
                 window.location.href='/admin/500'
             })
 
 
+        }else if(e.target.id=='add-brand'){
+            getAddBrand()
+        
+        }else if(e.target.id=='view-brands'){
+            viewBrands()
+            
         }
     }
 

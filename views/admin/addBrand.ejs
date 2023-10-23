@@ -1,0 +1,72 @@
+
+
+
+<form class="forms-sample"  method="POST" id="addBrandForm" >
+    <div class="grid-margin stretch-card">
+        <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add Brand</h4>
+            <p class="card-description" id="adCategoryalert"></p>
+
+            
+            <div class="form-group mt-4">
+                <label for="categoryName">Brand Name</label>
+                <input type="text" class="form-control" id="brandName" placeholder="Category Name" name="categoryName">
+            </div>
+            <div class="d-flex">
+
+                
+                <div class="form-group py-4 mr-3 col-2">
+                    <label for="description" >Upload Logo</label>
+                    <div class="upload-logoContainer ">
+                        <label for="logo-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
+
+                        <input type="file" id="logo-upload" class="upload-input" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+                </div>
+
+
+                <div class="form-group mt-4 col">
+                    <label for="categoryDescription">Description</label>
+                    <textarea class="form-control" id="brandDescription" rows="4" placeholder="Category Description" name="categoryDescription"></textarea>
+                </div>
+
+
+            </div>
+
+                                  
+            <div id="viewModal" class="modal ">
+                <div class="modal-content " >
+                  <!-- <span class="close d-flex justify-content-end" id="closeBtn" ><i class="mdi mdi-window-close "></i></span> -->
+                  <div id="viewModal-content" class="mb-2">
+                    
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary w-25" id="closeBtn" >Ok</button>
+                  </div>
+                  
+                </div>
+              </div>
+
+
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+            <input type="submit" class="btn btn-primary mr-2" value="Submit">
+            
+            
+            
+
+</form>
+
+
+
+
+

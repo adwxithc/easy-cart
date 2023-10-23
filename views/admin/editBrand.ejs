@@ -1,0 +1,86 @@
+
+
+
+<form class="forms-sample"  method="POST" id="editBrandForm" >
+    <div class="grid-margin stretch-card">
+        <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add Brand</h4>
+            <p class="card-description" id="adCategoryalert"></p>
+
+            <input type="hidden" value="<%=brand.logo%>" id="logo" >
+            
+            <input type="hidden" value="<%=brand._id%>" id="id" >
+
+            <div class="form-group mt-4">
+                <label for="categoryName">Brand Name</label>
+                <input type="text" class="form-control" id="brandName" placeholder="Category Name" name="categoryName" value="<%=brand.name%>">
+            </div>
+            <div class="d-flex align-items-center row">
+
+                <div class="col-lg-2 col-sm-12 pr-0">
+
+                    <img  src="/static/brandImages/<%=brand.logo%>"  width="60%" alt="product image" id="imgePreview1">
+                    <input type="file" id="logo-upload" class="hide" onchange="showlogoPreview('logo-upload','imgePreview1')"><br>
+                    <label for="logo-upload" class="btn btn-dark mt-1">Change Image</label>
+
+                </div>
+
+
+
+                <div class="form-group mt-4 col pl-0">
+                    <label for="categoryDescription">Description</label>
+                    <textarea class="form-control" id="brandDescription" rows="4" placeholder="Category Description" name="categoryDescription"><%= brand.description%></textarea>
+                </div>
+
+
+            </div>
+
+                                  
+            <div id="viewModal" class="modal ">
+                <div class="modal-content " >
+                  <!-- <span class="close d-flex justify-content-end" id="closeBtn" ><i class="mdi mdi-window-close "></i></span> -->
+                  <div id="viewModal-content" class="mb-2">
+                    
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary w-25" id="closeBrandAlert" >Ok</button>
+                  </div>
+                  
+                </div>
+              </div>
+
+
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+            <input type="submit" class="btn btn-primary mr-2" value="Submit">
+            
+            
+            
+
+</form>
+
+<div id="viewModal" class="modal ">
+    <div class="modal-content " >
+      <!-- <span class="close d-flex justify-content-end" id="closeBtn" ><i class="mdi mdi-window-close "></i></span> -->
+      <div id="viewModal-content" class="mb-2">
+        
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-secondary w-25" id="closeBrandAlert" >Ok</button>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+

@@ -81,6 +81,7 @@ updatepagination()
     
         })
         .catch(error => {
+          window.location.href='/admin/500'
             console.error('Fetch error:', error);
         });
     }

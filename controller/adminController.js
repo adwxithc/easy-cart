@@ -4,6 +4,7 @@ const User=require('../model/userModel')
 const bcrypt=require('bcrypt')
 const Product=require('../model/productModel')
 const fs=require('fs')
+const Brand =require('../model/brandModel')
 
 const loadLogin=(req,res)=>{
     try {
@@ -683,7 +684,7 @@ const editCategory=async(req,res)=>{
         const categoryName=req.body.categoryName
         const categoryDescription=req.body.categoryDescription
         const id=req.body.id
-        console.log(req.body)
+        
         if(categoryName&&categoryDescription){
             
             
@@ -766,6 +767,156 @@ const insertCategory=async(req,res)=>{
 
 }
 
+
+// load add brand
+
+const loadAddBrand=(req,res)=>{
+    try {
+
+        res.render('addBrand')
+        
+    } catch (error) {
+        res.status(500).json({message:"internal server error"}) 
+        console.log(error.message)
+        
+    }
+}
+
+const addBrand=async(req,res)=>{
+    try {
+        const brand=new Brand(req.brandData)
+        const added=await brand.save()
+        if(added){
+            res.json({message:"brand added successfully",success:true})
+        }else{
+            res.status(500).json({message:"Unable to add brand"})
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({message:"internal server error"})
+
+        
+    }
+}
+
+//load view brands
+const loadviewBrands=async(req,res)=>{
+
+    try {
+        
+        const page=req.query.page||1// specifies which page
+        const pagesize=req.query.pageSize||5//specifies how much data page contains
+
+        const offset=(page-1)*pagesize//specifies how much data to be skipped
+        const limit=pagesize//specifies how much data needed
+
+        
+        const brands=await Brand.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
+
+        
+
+        const totalBrands=await Brand.countDocuments()
+        const totalpages=Math.ceil(totalBrands/pagesize)
+        
+        res.render('viewBrands',{brands:brands,currentPage:page,totalpages:totalpages,pagination:true})        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({message:"internal server error"})
+
+        
+    }
+}
+
+//list or unlist brand
+
+const listUnlistBrand=async(req,res)=>{
+    try {
+        const id=req.body.id
+
+        const brand=await Brand.findOne({_id:id})
+        if(brand){
+            const message=brand.status?'The brand has been unlisted':'The brand has been listed'
+            
+            brand.status=!brand.status;
+            brand.lastModified=Date.now();
+            const updated=await brand.save()
+            if(updated){
+                res.json({message:message,brandStatus: brand.status})
+            }else{
+                res.json({message:"Unable to change the status of the brand"})
+            }
+
+        }else{
+            res.json({message:"This brand doesn't exist"})
+        }
+
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({message:"internal server error"})
+
+    }
+}
+
+//load editbrand
+
+const loadeditBrand=async(req,res)=>{
+    try {
+        const brand=await Brand.findById(req.query.id)
+        if(brand){
+            res.render('editBrand',{brand:brand})
+
+        }else{
+            res.json({message:"This brand doesn't exist"})
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({message:"internal server error"})
+    }
+
+}
+
+// update brand data
+
+const updateBrand=async(req,res)=>{
+    try {
+       
+        console.log(req.brandData)
+        const updated=await Brand.updateOne({id:req.body.id},{$set:req.brandData})
+        if(updated){
+
+            const path=`./public/brandImages/${ req.logo}`
+
+            fs.unlink(path,(err)=>{
+                if(err){
+                    console.log(err.message)
+                    res.status(500).json({message:"internal server error"})
+
+                }else{
+                    console.log('old logo deleted')
+                    res.json({message:"Brand datas updated successfully"})
+               }
+            })
+
+
+        }else{
+            res.json({message:"unable to update brand data"})
+        }
+
+
+        
+    } catch (error) {
+        console.log(error.message)
+        
+    }
+
+}
+
+
+//error page rendering route
+
 const error404=(req,res)=>{
     res.status(404).render('errors/404')
 
@@ -802,6 +953,13 @@ module.exports={
     editCategory,
     addCategory,
     insertCategory,
+
+    loadAddBrand,
+    addBrand,
+    loadviewBrands,
+    listUnlistBrand,
+    loadeditBrand,
+    updateBrand,
 
     error404,
     error500

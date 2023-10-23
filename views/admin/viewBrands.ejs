@@ -1,0 +1,147 @@
+ 
+            <div class=" grid-margin stretch-card p-4" id="categ">
+                <div class="card">
+                  <div class="card-body">
+                    <% if(locals.key){%>
+                      <h4 class="card-title">Search result for <%=key%></h4>
+                      <%}else{%>
+                    <h4 class="card-title">Brands</h4>
+                    <%}%>
+
+                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="brandSearch">
+                      <input type="text" class="form-control" placeholder="Search Brands" id="searchKey">
+                      <button class="btn btn-dark p-2" type="submit">Search</button>
+                    </form>
+
+                    <p class="card-description" id="alertMessage">
+                   
+                    </p>
+                    <div class="table-responsive">
+                        <input type="hidden" value="<%=locals.currentPage%>" id="cur">
+                        <input type="hidden" value="<%=locals.totalpages%>" id="totp">
+                      <table class="table table-hover" id="brandTable">
+                        <thead>
+                          <tr>
+                           
+                            <th>brand Name</th>
+                            <th>status</th>
+                            <th>Actions</th>
+
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                          
+                            <%
+                            if(locals.brands?.length>0){
+                                
+                                for(let i=0; i < brands.length; i++){
+                                %>
+                        <tr id="<%=brands[i]._id%>">
+
+                            <td>
+                              <div class="d-flex">
+                                <img src="/static/brandImages/<%=brands[i].logo%>" alt="">
+                                <h6 class="card-title m-2"><%=brands[i].name %></h6>
+                              </div>
+
+                              
+                              <span class=" description-limit"><%=brands[i].description%></span>
+                            </td>
+
+                            <td>
+                              <%if(brands[i].status){%> 
+                                <span class="text-success" >listed</span>
+                              <%}else{%>
+                                  <span class="text-danger" >unlisted</span>
+                              <%}%>
+                            </td>
+
+                            <td>
+
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                
+                                  <button class="btn btn-sm btn-dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item edit" href="#" brandId="<%=brands[i]._id%>">Edit</a>
+                                    <a class="dropdown-item status" href="#"  brandId="<%=brands[i]._id%>">
+                                    <%if(brands[i].status){%> 
+                                      unlist
+                                    <%}else{%>
+                                      list
+                                    <%}%>
+                                    </a>
+                                </div>
+                              </div>
+
+                            </td>
+                        </tr>
+                            <%
+                            }
+                        }else{
+                        %>
+                          <tr>No brands exist.....</tr>
+                        <%}%>
+                        </tbody>
+                      </table>
+
+
+
+                      <div id="myModal" class="modal">
+                        <div class="modal-content " >
+                          <span class="close" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
+                          <p>Are you sure you want to list/unlist this Brand ?</p>
+                          <button id="confirmBtn">Confirm</button>
+                         
+                        </div>
+                      </div>
+
+                      <div id="viewModal" class="modal ">
+                        <div class="modal-content " >
+                          <!-- <span class="close d-flex justify-content-end" id="closeBtn" ><i class="mdi mdi-window-close "></i></span> -->
+                          <div id="viewModal-content" class="mb-2">
+                            
+                          </div>
+                          <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary w-25" id="closeBrandAlert" >Ok</button>
+                          </div>
+                          
+                        </div>
+                      </div>
+
+
+                      <%if(locals.pagination){%>
+                      <nav aria-label="Page navigation example" id="pagination">
+                        <ul class="pagination ">
+                          <li class="page-item viewbrandOptions" id="prevBrand">
+                            <a class="page-link " href="#" aria-label="Previous">
+                              <span aria-hidden="true" >&laquo;</span>
+                              <span class="sr-only" >Previous</span>
+                            </a>
+                          </li>
+                          <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+                          <li class="page-item" ><a class="page-link" href="#" id="currentBrand">1</a></li>
+                          
+                          <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                          <li class="page-item viewbrandOptions" id="nextBrand">
+                            <a class="page-link" href="#" aria-label="Next">
+                              <span aria-hidden="true" >&raquo;</span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
+                      <%}%>
+
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+
+          
+
+
+              

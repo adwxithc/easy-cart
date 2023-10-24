@@ -1,5 +1,7 @@
 const User=require('../model/userModel')
 const Product=require('../model/productModel')
+const Category=require('../model/categoryModel')
+const Brand=require('../model/brandModel')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -97,12 +99,24 @@ const guest=async(req,res)=>{
 const productDetails=async(req,res)=>{
     try {
         const id=req.query.id
-        const product=await Product.findById(id)
-        if(product){
-            res.render('productDetails',{product:product})
+        
+        const productsWithCategories = await Product.findOne({_id:id}).populate('category')
+        console.log("---------------------------------",productsWithCategories)
+
+
+          
+          
+
+        const categories=await Category.find({})
+        
+        const brand=await Brand.findOne({_id:productsWithCategories.brand})
+        
+        if(productsWithCategories && productsWithCategories.category){
+
+            res.render('productDetails',{product:productsWithCategories ,categories:categories,brand:brand})
 
         }else{
-            res.status(404).render('errors/404.ejs')
+            res.status(404).render('errors/500.ejs')
 
         }
         

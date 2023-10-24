@@ -30,7 +30,7 @@
                             
                             <div class="selected-options" id="categorylist">
                               <%
-                              if(productData.category.length>0){
+                              if( productData.category && productData.category.length>0){
                                 for(let i=0 ;i< categories.length;i++){
                                   if(productData.category.includes(categories[i]._id)){
                                 %>

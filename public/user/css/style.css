@@ -7,9 +7,13 @@
     
 }
 .productPreView{
+    object-fit: contain;
     max-height: 35rem;
     width: auto;
     margin: 0 auto;
+}
+#img-container{
+    max-height: 35rem;
 }
 
 

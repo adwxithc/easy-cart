@@ -35,8 +35,12 @@ const productSchema=mongoose.Schema({
         required:true
     },
     category:{
-        type: Array,
+        type: [{
+            type:mongoose.Schema.ObjectId,
+            ref: 'Category'
+        }],
         required:true
+        
     },
     stock:{
         type:Number,

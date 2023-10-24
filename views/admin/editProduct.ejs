@@ -82,10 +82,17 @@
                       <div class="d-flex justify-content-between">
 
     
-                        <div class="form-group w-50 mx-3">
-                            <label for="name">Brand</label>
-                            <input type="text" class="form-control"  placeholder="Brand" id="brand" value="<%=productData.brand%>">
+                        <%if(locals.brands){%>
+                          <div class="form-group w-50 mx-3">
+                            <label>Select Brand</label>
+                            <select class="btn btn-dark selectf" style="width:100%" id="brand">
+                              <%for(let brand of brands){%>
+                              <option value="<%=brand._id%>"  <% if(brand._id.equals(productData.brand)){ %> selected <% } %> ><%= brand.name%></option>
+                                <%}%>
+    
+                            </select>
                           </div>
+                          <%}%>
 
                           <div class="form-group w-50 mx-3">
                             <label for="name">Stock</label>

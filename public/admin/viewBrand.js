@@ -193,8 +193,10 @@ function updateBrand(){
 
         const name=document.getElementById('brandName').value
         const description=document.getElementById('brandDescription').value
-        const logo=document.getElementById('logo-upload')?.files[0] || document.getElementById('logo').value
+        const logo= document.getElementById('logo-upload')?.files[0]
         const id=document.getElementById('id').value
+
+        console.log(logo)
         
         
         const formData=new FormData()
@@ -213,6 +215,7 @@ function updateBrand(){
             throw new Error('unable to connect to error')
         })
         .then(data=>{
+
             const modal=document.getElementById('viewModal')
             modal.style.display='block'
             document.getElementById('viewModal-content').innerHTML=data.message

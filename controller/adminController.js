@@ -5,6 +5,7 @@ const bcrypt=require('bcrypt')
 const Product=require('../model/productModel')
 const fs=require('fs')
 const Brand =require('../model/brandModel')
+const ObjectId = require('mongodb').ObjectId;
 
 const loadLogin=(req,res)=>{
     try {
@@ -166,8 +167,9 @@ const searchUser=async(req,res)=>{
 const addProduct=async(req,res)=>{
     try {
         const categories=await Category.find({status:true})
+        const brands=await Brand.find({status:true})
         if(categories.length>0){
-        res.render('addProduct',{categories})
+        res.render('addProduct',{categories,brands})
         }else{
             res.render('addProduct')
         }
@@ -334,8 +336,9 @@ const viewMoreProductInfo= async(req,res)=>{
         const id=req.query.productId
         const categories=await Category.find({},{name:1})
         const productData=await Product.findById(id)
+        const brand=await Brand.findById(productData.brand)
 
-        res.render('productInfo',{productData:productData,categories:categories}) 
+        res.render('productInfo',{productData:productData,categories:categories,brand:brand}) 
 
     } catch (error) {
         console.log(error.message)
@@ -410,9 +413,10 @@ const loadEditProduct=async(req,res)=>{
         
         const productData=await Product.findById(id)
         const categories=await Category.find()
+        const brands=await Brand.find()
         if(productData){ 
             
-            res.render('editProduct',{productData:productData,categories:categories})
+            res.render('editProduct',{productData:productData,categories:categories,brands:brands})
         }else{
             res.status(404).json({message:"This product doesn't exist"})
         }
@@ -882,26 +886,39 @@ const loadeditBrand=async(req,res)=>{
 
 const updateBrand=async(req,res)=>{
     try {
-       
-        console.log(req.brandData)
-        const updated=await Brand.updateOne({id:req.body.id},{$set:req.brandData})
+     
+        const updated=await Brand.updateOne({_id:req.body.id},{$set:req.brandData})
         if(updated){
+           
+            
+            if(req.originalbrandData){
+               
+                
+                const path=`./public/brandImages/${ req.originalbrandData.logo}`
 
-            const path=`./public/brandImages/${ req.logo}`
+                fs.unlink(path,async (err)=>{
+                    if(err){
 
-            fs.unlink(path,(err)=>{
-                if(err){
-                    console.log(err.message)
-                    res.status(500).json({message:"internal server error"})
+                        await Product.updateOne({ _id: id }, { $set: originalProductData });
 
-                }else{
-                    console.log('old logo deleted')
-                    res.json({message:"Brand datas updated successfully"})
-               }
-            })
+                        console.log(err.message)
+                        res.status(500).json({message:"internal server error"})
+    
+                    }else{
+                        console.log('old logo deleted')
+                        res.json({message:"Brand datas updated successfully"})
+                   }
+                })
+
+            }else{
+                res.json({message:"Brand datas updated successfully"})
+            }
+
+
 
 
         }else{
+            console.log('unable to update brand data')
             res.json({message:"unable to update brand data"})
         }
 

@@ -66,7 +66,7 @@ const productSchema=mongoose.Schema({
         default:Date.now()
     },
     brand:{
-        type:String,
+        type:mongoose.Schema.ObjectId,
         required:true
     },
     careInstructions:String,

@@ -3,10 +3,12 @@ const Brand=require('../model/brandModel')
 
 
 const validateBrandData =async(req,res,next)=>{
+    
 
     const name=req.body.name
     const description=req.body.description
-    const logo=req.file?.filename||req.body.logo
+    const logo=req.file?.filename
+    console.log(logo)
     
     if(name&& description&& logo){
         const check=await Brand.findOne({name:{$regex:new RegExp(`^${name}$`,'i')}})
@@ -32,19 +34,22 @@ const validateBrandData =async(req,res,next)=>{
 
 }
 
+
  const validateUpdatedBrandData=async(req,res,next)=>{
-
+    
     try {
-
+    
 
     const name=req.body.name;
     const description=req.body.description
-    const logo=req.body.logo || req.file.filename
+    const logo=req.file?.filename
     const id=req.body.id
 
     if(name&&description){
 
         const brand=await Brand.findById(id)
+        const originalbrandData = { ...brand._doc };
+
         const brandChechByName=await Brand.findOne({name:name})
     
 
@@ -56,7 +61,8 @@ const validateBrandData =async(req,res,next)=>{
             
         if(req.file?.filename){
 
-            req.logo=brand.logo
+            req.originalbrandData=originalbrandData
+           
 
                     req.brandData={
                         name:name,
@@ -68,6 +74,14 @@ const validateBrandData =async(req,res,next)=>{
 
                                 
         
+        }else{
+            
+            req.brandData={
+                name:name,
+                description:description,
+            }
+            next()
+
         }
 
 

@@ -71,7 +71,8 @@ const productSchema=mongoose.Schema({
     },
     brand:{
         type:mongoose.Schema.ObjectId,
-        required:true
+        required:true,
+        ref: 'Brand'
     },
     careInstructions:String,
     material:String,

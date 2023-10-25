@@ -66,8 +66,7 @@ const adminDashboard=async(req,res)=>{
 //adminlogout
 const logout=async(req,res)=>{
     try {
-        console.log(req.session.adminId)
-        req.session.destroy((er)=>{
+            req.session.destroy((er)=>{
             if(er) console.log(er.message)//send status
             else res.redirect('/admin')
         })

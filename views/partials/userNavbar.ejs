@@ -43,7 +43,19 @@
 									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
 								</ul>
 							</li>
-							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+							<%if(locals.user){%>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle  text-capitalize " data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false" ><span class="d-flex align-items-center setsize"><i class="mdi mdi-account-outline Icon-lg mr-1 "></i> <%= user.fname %></span></a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="#"><i class="mdi mdi-account-circle Icon-lg mr-1"></i>My Profile</a></li>
+									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-heart-outline  Icon-lg mr-1"></i> Wishlist</a></li>
+									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-shopping  Icon-lg mr-1"></i> Orders</a></li>
+
+									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/logout"><i class="mdi mdi-logout  Icon-lg mr-1"></i>logout</a></li>
+								</ul>
+							</li>
+							<%}%>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>

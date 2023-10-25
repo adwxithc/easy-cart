@@ -24,12 +24,14 @@ user_route.post('/searchProduct',userController.searchProduct)
 
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
+user_route.get('/userHome',userController.userHome)
 
 user_route.get('/register',userController.loadRegister)
 user_route.post('/register',userController.signUp)
 user_route.get('/loadOtpForm',userController.loadOtpForm)
 user_route.post('/verifyOtp',userController.otpVerification)
 user_route.get('/reSendOtp',userController.reSendOtp)
+user_route.get('/logout',userController.logout)
 
 
 module.exports=user_route

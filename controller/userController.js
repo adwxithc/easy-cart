@@ -85,7 +85,7 @@ const guest=async(req,res)=>{
         
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false})
         
     } catch (error) {
         console.log(error.message)
@@ -101,7 +101,7 @@ const productDetails=async(req,res)=>{
         const id=req.query.id
         
         const productsWithCategories = await Product.findOne({_id:id}).populate('category')
-        console.log("---------------------------------",productsWithCategories)
+        // console.log("---------------------------------",productsWithCategories)
 
 
           
@@ -165,8 +165,7 @@ const verifyLogin=async(req,res)=>{
             if(passwordCheck){
                 if(userData.status==1){
                     req.session.userId=userData._id
-                    res.render('home')
-
+                    res.redirect('/userHome')
                 }else{
                     res.render('login',{message:"This account is blocked by the admin"})
                 }
@@ -184,6 +183,27 @@ const verifyLogin=async(req,res)=>{
         console.log(error.message)
         
     }
+}
+
+const userHome=async(req,res)=>{
+
+    try {
+
+        const id=req.session.userId
+        const user=await User.findById(id)
+
+        const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
+        const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
+        
+
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:user})
+        
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).render('errors/500.ejs')
+        
+    }
+
 }
 
 const loadRegister=(req,res)=>{
@@ -304,7 +324,7 @@ const otpVerification=async(req,res)=>{
                 const userData=await user.save()
                 if(userData){
                     console.log("data inserted to data base")
-                    res.render('home')
+                    res.redirect('/userHome')
 
                 }else{
                     console.log("data insertion failed")
@@ -327,6 +347,20 @@ const otpVerification=async(req,res)=>{
     }
 }
 
+const logout=(req,res)=>{
+
+        req.session.destroy((er)=>{
+        if(er){
+
+         console.log(er.message)//send status
+         res.render('errors/500.ejs')
+
+        }
+
+        else res.redirect('/')
+        });
+}
+
 module.exports={
     guest,
     productDetails,
@@ -334,9 +368,11 @@ module.exports={
 
     loadLogin,
     verifyLogin,
+    userHome,
     loadRegister,
     signUp,
     loadOtpForm,
     reSendOtp,
-    otpVerification 
+    otpVerification,
+    logout
 }

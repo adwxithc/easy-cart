@@ -4,6 +4,7 @@ require('dotenv/config')
 const mongoose=require('mongoose')
 const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
+const cartRoute=require('./routes/cartRoute')
 
 
 
@@ -27,6 +28,7 @@ app.use('/static',express.static('public'))
 //passing to appropriate route
 app.use('/admin',adminRoute)
 app.use('/',userRoute)
+app.use('/api',cartRoute)
 
 
 app.listen(PORT,()=>{

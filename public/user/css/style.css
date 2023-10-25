@@ -50,3 +50,44 @@
      height: 25px;
    
 }
+
+.darkBtn{
+    padding: 0.7rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 35px;
+    background-color: black;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    
+}
+.yellowBtn{
+
+    padding: 0.7rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 35px;
+    background-color: rgb(252, 146, 7);
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+}
+
+.yellowBtn:hover{
+    
+    color: white;
+    background-color:rgb(246, 191, 40);
+}
+.darkBtn:hover{
+    
+    color: white;
+    background-color:rgb(68, 67, 67);
+}
+
+.Icon-lg{
+    font-size: large;
+}
+.setsize{
+    font-size: 0.9rem;
+}

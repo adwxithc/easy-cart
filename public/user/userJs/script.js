@@ -10,6 +10,19 @@
     
             // Update the source (src) of the product preview image
             productPreview.setAttribute('src', imageSource);
+
+            //image zoome on hover
+
+            var options2 = {
+       
+                fillContainer: true,
+                zoomPosition:'original',
+                offset: {vertical: 0, horizontal: 10},
+               
+            };
+        
+            // Create a new instance of ImageZoom
+            new ImageZoom(document.getElementById('img-container'), options2);
     
             // Optionally, you can also add a fade-in effect, or any other visual enhancements
             // to improve the user experience when the image changes.
@@ -19,17 +32,18 @@
 
     //image zoome on hover
 
-
     var options2 = {
        
         fillContainer: true,
         zoomPosition:'original',
         offset: {vertical: 0, horizontal: 10},
+    
        
     };
 
     // Create a new instance of ImageZoom
     new ImageZoom(document.getElementById('img-container'), options2);
+  
 
 
     

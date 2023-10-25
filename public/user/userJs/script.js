@@ -178,8 +178,37 @@ else if(rpassword.length>15)
 }
   
     
-console.log("hello")
+
 
   
     return isValid;
   }
+
+
+
+
+//  --------------------------------------------- modal----------------------------------
+
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
+    const modalContent = document.querySelector('.modal-content');
+
+    modalMessage.innerText = message;
+    modal.style.display = 'block'; // Show the modal
+
+    // Use a setTimeout to add the 'show' class after a slight delay
+    setTimeout(function () {
+        modalContent.classList.add('show');
+    }, 10); // 10ms delay
+
+
+
+}
+function closeModal() {
+    const modal = document.getElementById('modal');
+    const modalContent = document.querySelector('.modal-content');
+    modalContent.classList.remove('show'); // Remove the 'show' class
+    modal.style.display = 'none'; // Hide the modal
+}
+

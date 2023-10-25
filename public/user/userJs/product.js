@@ -1,10 +1,12 @@
 const addToCart=document.getElementById('addToCart').addEventListener('click',()=>{
     const productId=document.getElementById('ProductId').value
     const quantity=document.getElementById('qty').value
+    const price=document.getElementById('price').value
 
     const addToCartData={
         productId:productId,
-        quantity:quantity
+        quantity:quantity,
+        price:price
     }
 
    
@@ -29,12 +31,22 @@ const addToCart=document.getElementById('addToCart').addEventListener('click',()
     .then(data=>{
         if (typeof data === 'object') {
 
-                alert('cart added')
+            showModal(data.message)
+            setTimeout(()=>{
+                closeModal()
+            },1100)
+            if(data.added) changeToGoToCart()
+            
+            
 
 
         }else{
-            alert('logi')
-            window.location.href='/login'
+            showModal("Please login to add the product to cart")
+            setTimeout(()=>{
+                closeModal()
+                window.location.href='/login'
+            },1200)
+            
 
         }
 
@@ -46,3 +58,10 @@ const addToCart=document.getElementById('addToCart').addEventListener('click',()
 
     })
 })
+
+function changeToGoToCart() {
+    const addToCartButton = document.getElementById('addToCart');
+    addToCartButton.innerHTML = 'Go to Cart';
+    addToCartButton.id = 'goToCart';
+    addToCartButton.href = '/api/goToCart';
+}

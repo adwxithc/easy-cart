@@ -35,9 +35,9 @@
                         <li><a href="#"><span>Size</span> :   <span class="size"><%=product.size%></span></a></li>
                         <li><a href="#"><span>Color</span> :  <span class="color" style="background-color: <%= product.color %> ; ">  </span></a></li>
                         <li><a href="#"><span>Brand</span> : 
-                            <%if(locals.brand && brand){%>
-                              <%=brand.name%>  
-                              <%}%>
+                            
+                              <%=product.brand.name%>  
+                              
                             </a></li>   
                         <li><a href="#"><span>Material</span> : <%=product.material%></a></li>
 
@@ -54,8 +54,14 @@
                          class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                     </div>
                     <input type="hidden" name="" id="ProductId" value="<%=product._id%>">
+                    <input type="hidden" id="price" value='<%=product.price%>' >
                     <div class="card_area d-flex align-items-center">
-                        <a class="  darkBtn m-1" href="#" id="addToCart">Add to Cart</a>
+                        <%if(inCart){%>
+                            <a class="  darkBtn m-1" href="#" id="goToCart">Go to Cart</a>
+                        
+                        <%}else{%>
+                            <a class="  darkBtn m-1" href="#" id="addToCart">Add to Cart</a>
+                            <%}%>
                         <a class="  yellowBtn m-1"  href="#">But Now</a>
                         <!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a> -->
                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
@@ -528,6 +534,14 @@
     </div>
 </section>
 <!-- End related-product Area -->
+
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modal-message">Your message goes here.</p>
+    </div>
+</div>
 
 <%}%>
 

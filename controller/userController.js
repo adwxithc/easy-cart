@@ -2,6 +2,7 @@ const User=require('../model/userModel')
 const Product=require('../model/productModel')
 const Category=require('../model/categoryModel')
 const Brand=require('../model/brandModel')
+const Cart=require('../model/cartModel')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -100,20 +101,18 @@ const productDetails=async(req,res)=>{
     try {
         const id=req.query.id
         
-        const productsWithCategories = await Product.findOne({_id:id}).populate('category')
-        // console.log("---------------------------------",productsWithCategories)
+        const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
+        const cart=await Cart.findOne({user:req.session.userId})
 
-
-          
-          
-
-        const categories=await Category.find({})
+        const inCart=cart?.cartItems.find(item=>item.product.equals(id))
         
-        const brand=await Brand.findOne({_id:productsWithCategories.brand})
         
+
+
+                
         if(productsWithCategories && productsWithCategories.category){
 
-            res.render('productDetails',{product:productsWithCategories ,categories:categories,brand:brand})
+            res.render('productDetails',{product:productsWithCategories,inCart:inCart})
 
         }else{
             res.status(404).render('errors/500.ejs')

@@ -5157,9 +5157,14 @@ label {
   padding: 0px 30px;
   background: #fff; }
 
+  .cart-item{
+    border: 1.5px solid rgba(0, 0, 0, 0.09);
+    padding: 1rem;
+  }
+
 .blog_right_sidebar {
   border: 1px solid #eeeeee;
-  background: #fafaff;
+  background: white;
   padding: 30px; }
   .blog_right_sidebar .widget_title {
     font-size: 18px;

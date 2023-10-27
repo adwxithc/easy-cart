@@ -212,3 +212,27 @@ function closeModal() {
     modal.style.display = 'none'; // Hide the modal
 }
 
+
+// ----------------------------update cart count on cart icon badge in nav bar-------------------
+
+
+function updateCartBadge(numberOfItemsInCart){
+
+
+    const cartBadge= document.querySelector('.cBadge')
+   
+    cartBadge.style.display='flex'
+    cartBadge.textContent=numberOfItemsInCart
+}
+
+fetch('api/cartCount')
+.then(response=>{
+    if(response.ok) return response.json()
+    throw new Error('unable to get cart item count')
+})
+.then(data=>{
+    if(data.count) updateCartBadge(data.count)
+})
+.catch((er)=>{
+    console.log(er.message)
+})

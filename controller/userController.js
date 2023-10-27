@@ -112,7 +112,7 @@ const productDetails=async(req,res)=>{
                 
         if(productsWithCategories && productsWithCategories.category){
 
-            res.render('productDetails',{product:productsWithCategories,inCart:inCart})
+            res.render('productDetails',{product:productsWithCategories,inCart:inCart,user:req.session?.userId})
 
         }else{
             res.status(404).render('errors/500.ejs')
@@ -131,7 +131,7 @@ const searchProduct=async(req,res)=>{
     try {
         const key=req.body.searchKey||''
         const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')},status:true})
-        res.render('productShop',{products:products})
+        res.render('productShop',{products:products,user:req.session.userId})
         
         
     } catch (error) {
@@ -188,14 +188,14 @@ const userHome=async(req,res)=>{
 
     try {
 
-        const id=req.session.userId
-        const user=await User.findById(id)
+        const id=req.session?.userId
+       
 
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
         
 
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:user})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id})
         
     } catch (error) {
         console.log(error.message)

@@ -55,14 +55,29 @@
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/logout"><i class="mdi mdi-logout  Icon-lg mr-1"></i>logout</a></li>
 								</ul>
 							</li>
+
 							<%}%>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+
+							<li class="nav-item d-flex  align-items-center">
+							
+								<a href="/api/goToCart" class="cart position-relative">
+									<div class="cBadge">3</div>
+									<i class="mdi mdi-cart Icon-lg"></i>
+										
+									</a>
+								
+								
+								
+							</li>
+
+							
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
 						</ul>
+						
 					</div>
 				</div>
 			</nav>

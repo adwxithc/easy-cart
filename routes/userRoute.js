@@ -1,6 +1,7 @@
 const express=require('express')
 const user_route=express()
 const userController=require('../controller/userController')
+const auth=require('../middleware/userAuth')
 const session=require('express-session')
 
 
@@ -18,13 +19,13 @@ user_route.use(session({
     saveUninitialized:true
 }))
 
-user_route.get('/',userController.guest)
+user_route.get('/',auth.isLogout,userController.guest)
 user_route.get('/productDetails',userController.productDetails)
 user_route.post('/searchProduct',userController.searchProduct)
 
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
-user_route.get('/userHome',userController.userHome)
+user_route.get('/userHome',auth.isLogin,userController.userHome)
 
 user_route.get('/register',userController.loadRegister)
 user_route.post('/register',userController.signUp)

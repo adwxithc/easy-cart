@@ -1,0 +1,145 @@
+<%- include("../partials/userHeader.ejs") %>
+
+
+
+ <!--================Cart Area =================-->
+  <section class="cart_area" style="background-color: rgb(241,243,246);">
+    <div class="container">
+        <div class="cart_inner row">
+
+            <div class=" col-lg-8">
+            <div class="blog_right_sidebar">
+
+                <%
+                if(locals.cart && cart && cart.cartItems.length > 0 ){
+                   
+                    for( let cartItem of cart.cartItems){
+                    %>
+            
+                <div class="media post_item cart-item " id ='<%=cartItem.product._id%>'  >
+
+                <div class="">
+                    <a href="/productDetails?id=<%=cartItem.product._id%>">
+                    <div class="cartImg">
+                        <img src="/static/productImages/<%=cartItem.product.images[0]%>" alt="post">
+                    </div>
+                    </a>
+                    <div class="product_count mt-4 ml-5">
+                        <input type="text" name="qty" id="sst" maxlength="12" value="<%=cartItem.quantity%>" title="Quantity:"
+                            class="input-text qty">
+                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 0 ) result.value--;return false;"
+                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                    </div>
+
+                </div>
+
+                   
+                    <div class="media-body cart-info">
+                        <a href="#">
+                            <a href="/productDetails?id=<%=cartItem.product._id%>"><h4><%=cartItem.product.name%></h4></a>
+                        </a>
+                        <p><%=cartItem.product.brand.name%><br>
+                        Price :<span class="darkText"> <%=cartItem.price%></span></p>
+                        
+                        <h5>Total  :$1500</h5>
+                        
+                        
+                    </div>
+                    <a href="#" class="yellowBtn cartBtn" onclick="remove( '<%=cartItem.product._id%> ')">REMOVE</a>
+                   
+                </div>
+                
+
+                <%
+            }
+                }else{
+            %>
+            <div>
+                <h3>Empty Cart..!</h3>
+                <p>Currently, your shopping cart is empty, awaiting your selection. We invite you to explore our wide range of products and add items to your cart in order to continue with the checkout process. Feel free to browse and find the perfect items that meet your needs. Once you're ready, simply add them to your cart, and you can proceed with your purchase.</p>
+            </div>
+            
+                <%}%>
+   
+  
+                
+             
+
+            
+            </div>
+            </div>
+
+
+            <div class="col-lg-4 ">
+                <div class="blog_right_sidebar setPdding cartSummery">
+                <div class="d-flex justify-content-center cartSummeryHead">
+                    <h2>Cart Total</h2>
+                </div>
+
+                <div class="cartSummeryBody">
+                    <div class="">
+                        <span> Total(4 unit) :</span>
+                        <span class="text-dark">$40000</span>
+                    </div>
+                    <div class="">
+                        <span>Discount :</span>
+                        <span class="text-dark">$0</span>
+                    </div>
+                    <div class="mb-4">
+                        <span>Delivery Charge :</span>
+                        <span class="text-dark">$0</span>
+                    </div>
+                    <div class="borderTop font-weight-bold pt-2 mb-5">
+                        <span> Grand Total :</span>
+                        <span class="text-dark">$6000</span>
+                    </div>
+                    
+                   
+                    
+                    <a href="" class=" darkBtn mt-5">Place Order</a>
+                </div>
+                
+            </div>
+        </div>
+
+
+
+        </div>
+    </div>
+</section>
+
+
+<!------------------------ confirm model-------------------- -->
+<div id="confirmationModal" class="rmmodal">
+    <div class="rmmodal-content">
+        
+        <i class="mdi mdi-close rmclose" id="closeModalBtn"></i>
+        <div class="confirmHeader">
+            <h3>Remove item</h3>
+        </div>
+        <div class="confirmBody">
+            <p>Are you sure you want to remove this item?</p>
+        </div>
+        
+        <div>
+            <a id="confirmBtn" class="darkBtn">Confirm</a>
+            
+        </div>
+        
+    </div>
+</div>
+
+<!-- -----------------------------response model ------------------------->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modal-message">Your message goes here.</p>
+    </div>
+</div>
+
+<!--================End Cart Area =================-->
+
+
+<%- include("../partials/userFooter.ejs") %>

@@ -24,12 +24,13 @@
                         <img src="/static/productImages/<%=cartItem.product.images[0]%>" alt="post">
                     </div>
                     </a>
+                    <input type="hidden" name="" id="old<%=cartItem.product._id%>" value="<%=cartItem.quantity%>">
                     <div class="product_count mt-4 ml-5">
-                        <input type="text" name="qty" id="sst" maxlength="12" value="<%=cartItem.quantity%>" title="Quantity:"
-                            class="input-text qty">
-                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        <input type="text" name="qty" id="q<%=cartItem.product._id%>" maxlength="12" value="<%=cartItem.quantity%>" title="Quantity:"
+                            class="input-text qty" onchange="updateCart('<%=cartItem.product._id%>')">
+                        <button onclick="inc('q<%=cartItem.product._id%>')"
                             class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 0 ) result.value--;return false;"
+                        <button onclick="dec('q<%=cartItem.product._id%>')"
                             class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                     </div>
 
@@ -41,9 +42,9 @@
                             <a href="/productDetails?id=<%=cartItem.product._id%>"><h4><%=cartItem.product.name%></h4></a>
                         </a>
                         <p><%=cartItem.product.brand.name%><br>
-                        Price :<span class="darkText"> <%=cartItem.price%></span></p>
+                        Price :<span class="darkText amount" > <%=cartItem.price%></span></p>
                         
-                        <h5>Total  :$1500</h5>
+                        <h5 class="itemTotal">Total  :$1500</h5>
                         
                         
                     </div>
@@ -80,8 +81,8 @@
 
                 <div class="cartSummeryBody">
                     <div class="">
-                        <span> Total(4 unit) :</span>
-                        <span class="text-dark">$40000</span>
+                        <span class="total"> Total(4 unit) :</span>
+                        <span class="text-dark " id="cartTotal">$40000</span>
                     </div>
                     <div class="">
                         <span>Discount :</span>
@@ -93,7 +94,7 @@
                     </div>
                     <div class="borderTop font-weight-bold pt-2 mb-5">
                         <span> Grand Total :</span>
-                        <span class="text-dark">$6000</span>
+                        <span class="text-dark" id="grandTotal">$6000</span>
                     </div>
                     
                    

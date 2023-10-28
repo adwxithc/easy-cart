@@ -55,18 +55,112 @@ function removeFromCart(productId){
         setTimeout(()=>{
             closeModal()
         },1100)
-        productId=productId.toString()
-        console.log(productId)
+
         const id =productId.toString().trim()
+        document.getElementById(id).classList=''
         document.getElementById(id).style.display='none'
+        updateCartAmounts()
        
     })
     .catch((er)=>{
+ 
         console.log(er.message)
-        showModal('Some error occured')
-        setTimeout(()=>{
-            closeModal()
-        },1100)
 
     })
 }
+
+function inc(id){
+    const result = document.getElementById(id);
+     const sst = result.value; 
+     
+     
+     if( !isNaN( sst )){
+
+        const p_id=id.slice(1)
+
+        result.value++;
+        updateCart(p_id)
+         
+        
+     }
+     return false;
+}
+
+function dec(id){
+    const result = document.getElementById(id);
+    const sst = result.value; 
+    if( !isNaN( sst ) && sst > 0 ){
+
+        const p_id=id.slice(1)
+
+        result.value--;
+        updateCart(p_id)
+         
+         
+
+    }
+    return false;
+}
+
+function updateCart(productId){
+
+    const oldQuantity=document.getElementById('old'+productId).value
+    const newQuantity=document.getElementById('q'+productId).value
+    if(newQuantity<0){
+        document.getElementById('old'+productId).value=oldQuantity
+        document.getElementById('q'+productId).value=oldQuantity
+        return
+    }
+    let op
+    let diff=newQuantity-oldQuantity
+    if(diff>0) op='inc'
+    else{
+        diff=Math.abs(diff)
+         op='dec'
+        }
+    
+
+    fetch('/api/updateCart',{
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ productId:productId,quantity:diff,operation:op})
+    })
+    .then(response=>{
+        if(response.ok) return response.json()
+        throw new Error('unable to connect to server')
+    })
+    .then(data=>{
+        
+        document.getElementById('old'+productId).value=data.quantity
+        document.getElementById('q'+productId).value=data.quantity
+        updateCartAmounts()
+    })
+    .catch((er)=>{
+        console.log(er)
+    })
+  
+
+}
+
+function updateCartAmounts(){
+    const items=document.querySelectorAll('.cart-item')
+    document.querySelector('.total').innerHTML=`Total(${items.length}units)`
+
+    let grandTotal=0
+    for(let item of items){
+        console.log(item.querySelector('.amount'))
+        const price =parseFloat(item.querySelector('.amount').textContent.trim())
+        const quantity=parseFloat(item.querySelector('.qty').value.trim())
+       
+
+        const itemTotal=price*quantity
+        grandTotal+=itemTotal
+
+        item.querySelector('.itemTotal').innerHTML=`Total  :$ ${itemTotal}`
+    }
+    document.getElementById('cartTotal').innerHTML=grandTotal
+    document.getElementById('grandTotal').innerHTML=grandTotal
+}
+updateCartAmounts()
+
+

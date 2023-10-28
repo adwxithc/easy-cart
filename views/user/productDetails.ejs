@@ -26,12 +26,12 @@
                     <h3><%=product.name%></h3>
                     <h2>$ <%=product.price%></h2>
                     <ul class="list">
-                        <li><a class="active" href="#"><span>Categorys</span> :
+                        <li><a class="" href="#"><span>Categorys</span> :
                             <%for(let category of product.category){%>
                              <%=category.name%>
                              <%}%>
                             </a></li>
-                        <li><a href="#"><span>Availibility</span> : <%=product.stock%> In Stock</a></li>
+
                         <li><a href="#"><span>Size</span> :   <span class="size"><%=product.size%></span></a></li>
                         <li><a href="#"><span>Color</span> :  <span class="color" style="background-color: <%= product.color %> ; ">  </span></a></li>
                         <li><a href="#"><span>Brand</span> : 
@@ -40,6 +40,18 @@
                               
                             </a></li>   
                         <li><a href="#"><span>Material</span> : <%=product.material%></a></li>
+
+                        <li>
+                            <%if(product.stock>3){%>
+                                <span class="text-warning font-weight-bold">In stock</span>
+                                
+                                <%}else if(product.stock>0){%>
+                                    <span class="text-danger font-weight-bold">Only <%=product.stock%> items left</span>
+                                <%}else{%>
+                                    <span class="text-danger font-weight-bold">Out of stock</span>
+                                <%}%>
+                            
+                        </li>
 
 
                     </ul>

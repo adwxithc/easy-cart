@@ -24,7 +24,11 @@ const cartSchema=new mongoose.Schema({
                     required:true
                 }
             }
-        ]
-},{timestamp:true})
+        ],
+        cartExpiration: {
+            type: Date,
+            required: true,
+        },
+},{ timestamps: true })
 
 module.exports=mongoose.model('Cart',cartSchema)

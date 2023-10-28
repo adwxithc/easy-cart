@@ -1,15 +1,17 @@
 const Cart=require('../model/cartModel')
+const Product=require('../model/productModel')
+const StockManagemant=require('../middleware/stockManagement')
 
 const addToCart=async(req,res)=>{
     try {
-        
+       
 
             const newCart=req.newCart
 
             const existingCart=await Cart.findOne({user:newCart.user})
             if(existingCart){
                 if(existingCart.cartItems.length<7){
-
+                    
                     let productAlreadyExist=false
 
                     for(let item of existingCart.cartItems){
@@ -23,11 +25,19 @@ const addToCart=async(req,res)=>{
                     if(!productAlreadyExist){
                         existingCart.cartItems.push(newCart.cartItems[0])
                     }
-    
+
+
+
+                    
                    const cartUpdated=await  existingCart.save()
 
                    if(cartUpdated){
+                    
+
+                    stockUpdated=await StockManagemant.removeFromStock(newCart)
+
                     const count=cartUpdated.cartItems.length
+
                     res.json({message:"Product added to the cart",added:true,count:count})
     
                    }else{
@@ -44,6 +54,8 @@ const addToCart=async(req,res)=>{
                 const cart =new Cart(newCart);
                 const cartAdded=await cart.save()
                 if(cartAdded){
+                    stockUpdated=await StockManagemant.removeFromStock(newCart)
+
                     const count=cartAdded.cartItems.length
                     res.json({message:"Product added to the cart",added:true,count:count})
                 }else{
@@ -72,8 +84,6 @@ const goToCart=async(req,res)=>{
             select: 'name' // Optionally, you can specify which fields to select from the brand model
           }
         });
-
-        console.log('-------------------------------------------------------------------------------------',cart)
 
         res.render('cart',{cart:cart,user:req.session?.userId})
         
@@ -120,6 +130,10 @@ const removeFromCart=async(req,res)=>{
             })
            
             if(removed){
+                const productToRemove=cart.cartItems.find(item=>item.product==productId)
+                
+                await StockManagemant.addToStock(productId, productToRemove.quantity)
+
                 res.json({message:"Cart item successfully removed",removed:true})
 
             }else{
@@ -137,11 +151,96 @@ const removeFromCart=async(req,res)=>{
     }
 }
 
+const updateCartItemCount= async(req,res)=>{
+    try {
+        const change=req.item
+        let updatedCount
+
+        const product=await Product.findById(change.productId)
+        if(product){
+            // if(CartItem.quantity<=product.stock){
+
+                const cart=await Cart.findOne({user:req.session.userId})
+
+               
+                for(let item of cart.cartItems){
+
+                    if(item.product.equals(change.productId)){
+                        
+                        //incrementing case
+                        if(change.operation=='inc'){
+                            console.log('inc')
+
+                            //incrementing within the stock
+                            if(product.stock>=change.quantity){
+
+                                item.quantity+=change.quantity
+                                updatedCount=item.quantity
+                                item.price=product.price
+
+                                product.stock-=change.quantity
+                                product.reservedStock+=change.quantity
+
+                            }else{
+                       
+                                item.quantity+=product.stock
+                                updatedCount=item.quantity
+                                item.price=product.price
+
+                                product.reservedStock+=product.stock
+                                product.stock=0
+                            }
+
+                        //decrementing case
+                        }else{
+                            
+
+                            if(item.quantity-change.quantity>0){
+                            console.log('dec')
+                                item.quantity-=change.quantity
+                                updatedCount=item.quantity 
+                                item.price=product.price
+
+                                product.stock+=change.quantity
+                                product.reservedStock-=change.quantity
+                                console.log(updatedCount)
+                            }else{
+                                console.log('hewnuhuhbufwb')
+                                res.json({quantity:1})
+                                return
+                            }
+                            
+                            }
+                        
+                    }
+                }
+
+                await cart.save()
+                await product.save()
+
+                res.json({quantity:updatedCount})
+
+
+
+        }else{
+            res.json({message:"This product doesn't exist"})
+        }
+
+        
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({error:"Internam server error"}) 
+    }
+}
+
 
 
 module.exports={
     addToCart,
     goToCart,
     cartCount,
-    removeFromCart
+    removeFromCart,
+    updateCartItemCount
 }

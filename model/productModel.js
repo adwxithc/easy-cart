@@ -46,6 +46,10 @@ const productSchema=mongoose.Schema({
         type:Number,
         required:true
     },
+    reservedStock:{
+        type:Number,
+        default:0
+    },
     images:{
         type:Array,
         required:true

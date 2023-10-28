@@ -5,6 +5,8 @@ const mongoose=require('mongoose')
 const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const cartRoute=require('./routes/cartRoute')
+const cron=require('node-cron')
+const tasks=require('./tasks/tasks')
 
 
 
@@ -29,6 +31,12 @@ app.use('/static',express.static('public'))
 app.use('/admin',adminRoute)
 app.use('/',userRoute)
 app.use('/api',cartRoute)
+
+
+cron.schedule('0 * * * *',()=>{
+  tasks.expireCarts()
+  
+})
 
 
 app.listen(PORT,()=>{

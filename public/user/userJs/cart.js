@@ -1,4 +1,4 @@
-    const modal = document.getElementById("confirmationModal");
+    const confirmModal = document.getElementById("confirmationModal");
     const openModalBtn = document.getElementById("openModalBtn");
     const closeModalBtn = document.getElementById("closeModalBtn");
     const confirmBtn = document.getElementById("confirmBtn");
@@ -9,18 +9,18 @@
     // }
 
     function remove(productId){
-        modal.style.display = "block";
-        modal.setAttribute('product',productId)
+        confirmModal.style.display = "block";
+        confirmModal.setAttribute('product',productId)
 
             // Close the modal when the close button is clicked
     closeModalBtn.onclick = function() {
-        modal.style.display = "none";
+        confirmModal.style.display = "none";
     }
 
     // Close the modal when the user confirms
     confirmBtn.onclick = function() {
-        modal.style.display = "none";
-        const id=modal.getAttribute('product')
+        confirmModal.style.display = "none";
+        const id=confirmModal.getAttribute('product')
         removeFromCart(id)
        
         // You can add your confirmation logic here

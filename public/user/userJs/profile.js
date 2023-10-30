@@ -1,4 +1,5 @@
 let originalValues={}
+
 function editProfile(){
     const userInfos=document.querySelectorAll('.userInfo')
     for(let info of userInfos){
@@ -36,11 +37,17 @@ function updateUserInfo(data){
         throw new Error('unable to connect to server')
     })
     .then(data=>{
-        alert(data)
+        
+        showModal(data.message)
+
+        document.getElementById('save').style.display='none';
+        const cancel=document.getElementById('cancelEdit')
+        cancel.innerHTML='Edit'
+        cancel.id='editProfile'
     })
     .catch((error)=>{
         console.log(error)
-        alert('something went wrong')
+        showModal('something went wrong')
     })
 
 
@@ -90,4 +97,19 @@ function clearAfterThreeSec(element){
     setTimeout(()=>{
         element.innerHTML=''
     },3000)
+}
+
+function getManageAddress(){
+    fetch('/manageAddress')
+    .then(response=>{
+        if(!response.ok) return response.json()
+        throw new Error('unable to connect to server')
+    })
+    .then(data=>{
+        document.getElementById('profileSettingArea').innerHTML=data
+    })
+    .catch((error)=>{
+        console.log(error)
+        showModal('Something went wrong')
+    })
 }

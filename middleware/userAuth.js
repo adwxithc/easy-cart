@@ -1,9 +1,9 @@
 const isLogin=(req,res,next)=>{
     try {
         if(req.session.userId){
+            
             next()
         }else{
-            console.log('redirect')
             res.redirect('/login')
         }
         

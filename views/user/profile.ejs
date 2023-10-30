@@ -2,7 +2,7 @@
 
 
 
- <!--================Cart Area =================-->
+ <!--================profile Area =================-->
   <section class="cart_area" style="background-color: rgb(241,243,246);">
     <div class="container p-0">
         <div class=" row">
@@ -14,19 +14,21 @@
              <div class="blog_right_sidebar setPdding ">
                     <div><img src="/static/assets/profile/profilePic.jpg" alt="" class="profile-image"></div>
                     <div class="d-flex justify-content-center">
-                        <h4>Adwaith Janardhanan</h4>
+                        <%if(locals.user){%>
+                        <h4><%=user.fname+' '+user.lname%></h4>
+                        <%}%>
                     </div>
 
 
                 </div>
 
-                <div class="blog_right_sidebar profileOptionCard mt-2">
+                <div class="blog_right_sidebar profileOptionCard mt-2 ">
 
                     <div class=" d-flex  profileOption  py-3 px-4">
                         <a class="d-flex align-items-center profileMainOption"><i class="mdi mdi-shopping  Icon-lg mr-2"></i> MY ORDERS</a>
                     </div>
 
-                    <div class=" profileOption py-3">
+                    <div class=" profileOption py-3 ">
                         <div class="">
                             <a class="d-flex align-items-center  profileMainOption px-4"> <i class=" mdi mdi-settings Icon-lg mr-2"></i>ACCOUNT SETTINGS</a>
                         </div>
@@ -36,7 +38,7 @@
                         </div>
 
                         <div class="">
-                            <a href="" class="d-flex align-items-center p-2 profileSubOption px-5">Manage Address</a>
+                            <a href="" class="d-flex align-items-center p-2 profileSubOption px-5" id="manageAddress">Manage Address</a>
                         </div>
                     </div>
 
@@ -52,7 +54,7 @@
         </div>
 
             <div class=" col-lg-8">
-            <div class="blog_right_sidebar">
+            <div class="blog_right_sidebar" id="profileSettingArea">
 
           
                     <div class="d-flex justify-content-between">
@@ -115,7 +117,15 @@
 
 
 
-<!--================End Cart Area =================-->
+<!--================end of profileArea =================-->
 
+<!----------------------------------------------------------- response message  modal ---------------------------------------------- -->
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modal-message">Your message goes here.</p>
+    </div>
+</div>
 
 <%- include("../partials/userFooter.ejs") %>

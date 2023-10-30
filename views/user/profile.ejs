@@ -1,0 +1,121 @@
+<%- include("../partials/userHeader.ejs") %>
+
+
+
+ <!--================Cart Area =================-->
+  <section class="cart_area" style="background-color: rgb(241,243,246);">
+    <div class="container p-0">
+        <div class=" row">
+
+
+            
+        <div class="col-lg-4 ">
+
+             <div class="blog_right_sidebar setPdding ">
+                    <div><img src="/static/assets/profile/profilePic.jpg" alt="" class="profile-image"></div>
+                    <div class="d-flex justify-content-center">
+                        <h4>Adwaith Janardhanan</h4>
+                    </div>
+
+
+                </div>
+
+                <div class="blog_right_sidebar profileOptionCard mt-2">
+
+                    <div class=" d-flex  profileOption  py-3 px-4">
+                        <a class="d-flex align-items-center profileMainOption"><i class="mdi mdi-shopping  Icon-lg mr-2"></i> MY ORDERS</a>
+                    </div>
+
+                    <div class=" profileOption py-3">
+                        <div class="">
+                            <a class="d-flex align-items-center  profileMainOption px-4"> <i class=" mdi mdi-settings Icon-lg mr-2"></i>ACCOUNT SETTINGS</a>
+                        </div>
+                        
+                        <div class=" ">
+                            <a href="" class="d-flex align-items-center  p-2 profileSubOption selected px-5">Profile Informations</a>
+                        </div>
+
+                        <div class="">
+                            <a href="" class="d-flex align-items-center p-2 profileSubOption px-5">Manage Address</a>
+                        </div>
+                    </div>
+
+
+                    
+                <div class=" d-flex  profileOption py-3">
+                    <a class="d-flex align-items-center profileMainOption px-4"><i class="mdi mdi-logout  Icon-lg mr-2"></i>LOGOUT</a>
+                </div>
+
+            </div>
+
+
+        </div>
+
+            <div class=" col-lg-8">
+            <div class="blog_right_sidebar">
+
+          
+                    <div class="d-flex justify-content-between">
+                        <h5>Personal Informations</h5> <a href="#" class="" id="editProfile" >Edit</a>
+                    </div>
+                    <%if(locals.user){%>
+                    <div class="row">
+                        <div class="col-md-6 py-3">
+                            <label for="fname" >First Name</label>
+                            <input type="text" name="fname" id="fname" class="form-control userInfo " value="<%=user.fname%>" disabled>
+                            <div id="fnameError"></div>
+                        </div>
+                        
+                        <div class="col-md-6 py-3">
+                            <label for="lname">Last Name</label>
+                            <input type="text" name="lname" id="lname" class="form-control userInfo" value="<%=user.lname%>" disabled>
+                            <div id="lnameError"></div>
+                        </div>
+                        
+                    </div>
+                    <div class=" row">
+                        <div class="col-md-6 py-3">
+                            <label for="email" >Email</label>
+                            <input type="text" name="email" id="email" class="form-control userInfo" value="<%=user.email%>" disabled>
+                            <div id="emailError"></div>
+                        </div>
+                        
+                    
+                        
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 py-3">
+                            <label for="modile">Phone Number</label>
+                            <input type="text" name="mobile" id="mobile" class="form-control userInfo" value="<%=user.mobile%>" disabled>
+                            <div id="mobileError"></div>
+                        </div>
+                        
+                    </div>
+                    
+                    <%}%>
+
+                    <a href="#" class="darkBtn save" id="save">SAVE</a>
+
+            
+            </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<!--================End Cart Area =================-->
+
+
+<%- include("../partials/userFooter.ejs") %>

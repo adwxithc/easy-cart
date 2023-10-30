@@ -260,7 +260,7 @@
   
   margin-right: 0.3rem;
   border-radius:6px ;
-  box-shadow: 5px 5px 15px 10px rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.1);
 }
 .searchField{
   margin-left: auto;
@@ -280,3 +280,5 @@
 #searchProduct{
   height: 50%;
 }
+
+

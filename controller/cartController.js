@@ -34,7 +34,7 @@ const addToCart=async(req,res)=>{
                    if(cartUpdated){
                     
 
-                    stockUpdated=await StockManagemant.removeFromStock(newCart)
+                    // stockUpdated=await StockManagemant.removeFromStock(newCart)
 
                     const count=cartUpdated.cartItems.length
 
@@ -54,7 +54,7 @@ const addToCart=async(req,res)=>{
                 const cart =new Cart(newCart);
                 const cartAdded=await cart.save()
                 if(cartAdded){
-                    stockUpdated=await StockManagemant.removeFromStock(newCart)
+                    // stockUpdated=await StockManagemant.removeFromStock(newCart)
 
                     const count=cartAdded.cartItems.length
                     res.json({message:"Product added to the cart",added:true,count:count})
@@ -113,7 +113,7 @@ const cartCount=async(req,res)=>{
     }
 }
 
-//-------------remove item from cart
+//-------------remove item from cart--------------------
 const removeFromCart=async(req,res)=>{
     try {
         const productId=req.query.productId
@@ -130,9 +130,9 @@ const removeFromCart=async(req,res)=>{
             })
            
             if(removed){
-                const productToRemove=cart.cartItems.find(item=>item.product==productId)
+                // const productToRemove=cart.cartItems.find(item=>item.product==productId)
                 
-                await StockManagemant.addToStock(productId, productToRemove.quantity)
+                // await StockManagemant.addToStock(productId, productToRemove.quantity)
 
                 res.json({message:"Cart item successfully removed",removed:true})
 
@@ -158,7 +158,7 @@ const updateCartItemCount= async(req,res)=>{
 
         const product=await Product.findById(change.productId)
         if(product){
-            // if(CartItem.quantity<=product.stock){
+           
 
                 const cart=await Cart.findOne({user:req.session.userId})
 
@@ -169,26 +169,30 @@ const updateCartItemCount= async(req,res)=>{
                         
                         //incrementing case
                         if(change.operation=='inc'){
-                            console.log('inc')
 
                             //incrementing within the stock
-                            if(product.stock>=change.quantity){
+                            if(product.stock>=(change.quantity+item.quantity)){
 
                                 item.quantity+=change.quantity
                                 updatedCount=item.quantity
                                 item.price=product.price
 
-                                product.stock-=change.quantity
-                                product.reservedStock+=change.quantity
+                                // product.stock-=change.quantity
+                                // product.reservedStock+=change.quantity
 
                             }else{
-                       
-                                item.quantity+=product.stock
+                                item.quantity=product.stock
                                 updatedCount=item.quantity
                                 item.price=product.price
 
-                                product.reservedStock+=product.stock
-                                product.stock=0
+
+                       
+                                // item.quantity+=product.stock
+                                // updatedCount=item.quantity
+                                // item.price=product.price
+
+                                // product.reservedStock+=product.stock
+                                // product.stock=0
                             }
 
                         //decrementing case
@@ -196,18 +200,15 @@ const updateCartItemCount= async(req,res)=>{
                             
 
                             if(item.quantity-change.quantity>0){
-                            console.log('dec')
                                 item.quantity-=change.quantity
                                 updatedCount=item.quantity 
                                 item.price=product.price
 
-                                product.stock+=change.quantity
-                                product.reservedStock-=change.quantity
-                                console.log(updatedCount)
+                                // product.stock+=change.quantity
+                                // product.reservedStock-=change.quantity
+
                             }else{
-                                console.log('hewnuhuhbufwb')
-                                res.json({quantity:1})
-                                return
+                                updatedCount=1
                             }
                             
                             }
@@ -216,7 +217,7 @@ const updateCartItemCount= async(req,res)=>{
                 }
 
                 await cart.save()
-                await product.save()
+                // await product.save()
 
                 res.json({quantity:updatedCount})
 

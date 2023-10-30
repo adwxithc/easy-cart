@@ -47,19 +47,34 @@ function removeFromCart(productId){
 
     })
     .then(response=>{
-        if(response.ok) return response.json()
+        if(response.ok){
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+              return response.json(); // Parse JSON response
+            } else {
+              return response.text(); // Assume HTML content
+            }
+        }
         throw new Error('unable to connect to the server')
     })
     .then(data=>{
-        showModal(data.message)
-        setTimeout(()=>{
-            closeModal()
-        },1100)
+        if (typeof data === 'object') {
+            showModal(data.message)
+            setTimeout(()=>{
+                closeModal()
+            },1100)
+    
+            const id =productId.toString().trim()
+            document.getElementById(id).classList=''
+            document.getElementById(id).style.display='none'
+            updateCartBadge()
+            updateCartAmounts()
 
-        const id =productId.toString().trim()
-        document.getElementById(id).classList=''
-        document.getElementById(id).style.display='none'
-        updateCartAmounts()
+        }else{
+            window.location.href='/login'
+        }
+
        
     })
     .catch((er)=>{
@@ -143,12 +158,13 @@ function updateCart(productId){
 }
 
 function updateCartAmounts(){
+    if(!(document.querySelector('.total'))) return;
     const items=document.querySelectorAll('.cart-item')
     document.querySelector('.total').innerHTML=`Total(${items.length}units)`
 
     let grandTotal=0
     for(let item of items){
-        console.log(item.querySelector('.amount'))
+      
         const price =parseFloat(item.querySelector('.amount').textContent.trim())
         const quantity=parseFloat(item.querySelector('.qty').value.trim())
        

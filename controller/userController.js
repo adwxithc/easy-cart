@@ -144,7 +144,7 @@ const searchProduct=async(req,res)=>{
 
 const loadLogin=(req,res)=>{
     try {
-      
+      console.log('login rendered')
         res.render('login') 
     } catch (error) {
         console.log(error.message)
@@ -300,50 +300,59 @@ const reSendOtp=(req,res)=>{
 }
 
 const otpVerification=async(req,res)=>{
-    if(req.session.otpWithTimestamp){
-        const isNotExpired =verifyOTP(req.session.otpWithTimestamp)
-        if(isNotExpired){
-            const otp = req.session.otpWithTimestamp.split(':')[0];
-            if(otp==req.body.otp){
-                console.log('otp verified')
 
-                const user=new User({
-                    fname:req.session.fname,
-                    lname:req.session.lname,
-                    email:req.session.email,
-                    password:req.session.password,
-                })
-                req.session.fname=null
-                req.session.lname=null
-                req.session.email=null
-                req.session.password=null
-                req.session.otpWithTimestamp=null
+    try {
 
-            
-                const userData=await user.save()
-                if(userData){
-                    console.log("data inserted to data base")
-                    res.redirect('/userHome')
-
+        if(req.session.otpWithTimestamp){
+            const isNotExpired =verifyOTP(req.session.otpWithTimestamp)
+            if(isNotExpired){
+                const otp = req.session.otpWithTimestamp.split(':')[0];
+                if(otp==req.body.otp){
+                    console.log('otp verified')
+    
+                    const user=new User({
+                        fname:req.session.fname,
+                        lname:req.session.lname,
+                        email:req.session.email,
+                        password:req.session.password,
+                    })
+                    req.session.fname=null
+                    req.session.lname=null
+                    req.session.email=null
+                    req.session.password=null
+                    req.session.otpWithTimestamp=null
+    
+                
+                    const userData=await user.save()
+                    if(userData){
+                        console.log("data inserted to data base")
+                        res.redirect('/userHome')
+    
+                    }else{
+                        console.log("data insertion failed")
+                    }
+    
                 }else{
-                    console.log("data insertion failed")
+                    console.log("otp not verified")
+                    res.render('getOtp',{message:"Invalid OTP"})
                 }
-
+                
+    
             }else{
-                console.log("otp not verified")
-                res.render('getOtp',{message:"Invalid OTP"})
+                console.log("otp expired")
+                res.render('getOtp',{message:"OTP has expired please resend OTP"})
+    
             }
-            
-
         }else{
-            console.log("otp expired")
-            res.render('getOtp',{message:"OTP has expired please resend OTP"})
-
+            res.redirect('/register')
+    
         }
-    }else{
-        res.send('404')
-
+        
+    } catch (error) {
+        
     }
+    
+    
 }
 
 const logout=(req,res)=>{
@@ -360,6 +369,31 @@ const logout=(req,res)=>{
         });
 }
 
+const loadProfile=async(req,res)=>{
+    try {
+        const user=await User.findById(req.session.userId)
+        console.log(user)
+        res.render('profile',{user:user})
+        
+    } catch (error) {
+        console.log(error)
+        res.render('errors/500.ejs')
+        
+    }
+}
+
+//update user info
+const updateUserInfo=async(req,res)=>{
+    try {
+        console.log(req.body)
+        
+    } catch (error) {
+        console.log(error)
+
+    }
+
+}
+
 module.exports={
     guest,
     productDetails,
@@ -373,5 +407,8 @@ module.exports={
     loadOtpForm,
     reSendOtp,
     otpVerification,
-    logout
+    logout,
+
+    loadProfile,
+    updateUserInfo
 }

@@ -8605,7 +8605,7 @@ pre {
 
 .table-hover tbody tr:hover {
   color: #212529;
-  background-color: #000000; }
+  background-color: #F1EFEF; }
 
 .table-primary,
 .table-primary > th,
@@ -11399,7 +11399,8 @@ input[type="button"].btn-block {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #191c24;
+  background-color: white;
+  /* changed */
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem; }
@@ -15761,7 +15762,7 @@ code {
 
 /* Footer */
 .footer {
-  background: #000000;
+  background: white;
   padding: 20px 1rem;
   transition: all 0.25s ease;
   -moz-transition: all 0.25s ease;
@@ -15961,7 +15962,7 @@ code {
 
 .rounded-legend ul li {
   list-style-type: none;
-  color: #6c7293;
+  color: #000000;
   font-size: .75rem; }
   .rounded-legend ul li .legend-dots {
     width: 1rem;
@@ -16577,9 +16578,14 @@ code {
     .card .card-body + .card-body {
       padding-top: 1rem; }
   .card .card-title {
-    color: #ffffff;
+    color: #000000;
     margin-bottom: 1.125rem;
     text-transform: capitalize; }
+    .card-title{
+      color: #000000;
+    margin-bottom: 1.125rem;
+    text-transform: capitalize;
+    }
   .card .card-subtitle {
     font-weight: normal;
     margin-top: 0.625rem;
@@ -16923,12 +16929,12 @@ code {
 .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead,
 .tt-query,
 .tt-hint {
-  border: 1px solid #2c2e33;
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
   height: calc(2.25rem + 2px);
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
-  background-color: #2A3038;
+  background-color: rgb(247,247,247);
   border-radius: 2px;
   color: #ffffff; }
   .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
@@ -16936,7 +16942,7 @@ code {
   .tt-query:focus,
   .tt-hint:focus {
     border: 1px solid rgba(71, 164, 71, 0.5);
-    background-color: #2A3038; }
+    background-color: rgb(247,247,247); }
   .form-control.form-control-lg, .form-control-lg.asColorPicker-input, .dataTables_wrapper select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=number], .select2-container--default .form-control-lg.select2-selection--single, .select2-container--default .select2-selection--single .form-control-lg.select2-search__field, .form-control-lg.typeahead,
   .form-control-lg.tt-query,
@@ -20340,7 +20346,8 @@ div.tagsinput {
 /* Navbar */
 .navbar {
   font-weight: normal;
-  background: #191c24;
+  background: white;
+  /* changed */
   left: 244px;
   transition: left 0.25s ease;
   -webkit-transition: left 0.25s ease;
@@ -20387,9 +20394,9 @@ div.tagsinput {
     -webkit-transition: width 0.25s ease;
     -moz-transition: width 0.25s ease;
     -ms-transition: width 0.25s ease;
-    box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
+    box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.35);
     color: #ffffff;
     padding-left: 15px;
     padding-right: 15px;
@@ -20591,7 +20598,7 @@ div.tagsinput {
             margin-left: 0;
             margin-right: auto; } }
     .navbar .navbar-menu-wrapper .search input {
-      background: #191c24;
+      background: rgb(247,247,247);
       padding: 13px 20px 11px 20px;
       border: 1px solid #2c2e33; }
       .navbar .navbar-menu-wrapper .search input::placeholder {
@@ -20623,7 +20630,8 @@ div.tagsinput {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 70px);
-  background: #191c24;
+  background: white;
+  /* changed */
   font-weight: normal;
   padding: 0;
   width: 244px;
@@ -20637,7 +20645,8 @@ div.tagsinput {
     -webkit-transition: width 0.25s ease, background 0.25s ease;
     -moz-transition: width 0.25s ease, background 0.25s ease;
     -ms-transition: width 0.25s ease, background 0.25s ease;
-    background: #191c24;
+    background: white;
+    /* changed */
     width: 244px;
     height: 70px; }
     @media (max-width: 991px) {
@@ -21126,7 +21135,8 @@ div.tagsinput {
       width: 100%; } }
 
 .content-wrapper {
-  background: #000000;
+  background: #F7F7F7;
+  /* changed */
   padding: 1.875rem 1.75rem;
   width: 100%;
   -webkit-flex-grow: 1;

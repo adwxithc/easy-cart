@@ -8,10 +8,10 @@ const validateCartInputs=async (req,res,next)=>{
     const productQuantity=parseInt(req.body.quantity);
     const price=req.body.price
 
-    const expiryTime = 24 * 60 * 60 * 1000;  //24 hours in milliseconds
+    //const expiryTime = 24 * 60 * 60 * 1000;  //24 hours in milliseconds
     // const expiryTime = 60 *1000;  //24 hours in milliseconds 
 
-    const cartExpirationTime = new Date(Date.now() + expiryTime); // Set the cart expiration time
+   // const cartExpirationTime = new Date(Date.now() + expiryTime); // Set the cart expiration time
 
     if(!productId || isNaN(productQuantity) || isNaN(price) || parseInt(productQuantity)<1 || parseInt(price)<1 ){
         res.json({message:'Invalide Information'})
@@ -33,8 +33,10 @@ const validateCartInputs=async (req,res,next)=>{
                         
                     }
                 ],
-                cartExpiration:cartExpirationTime
+                
             }
+
+            //it also have   ->cartExpiration:cartExpirationTime
             next()
         }
 
@@ -62,6 +64,7 @@ try {
             req.item={
                 productId:productId,
                 quantity:quantity,
+            
                 operation:operation
             }
             next()

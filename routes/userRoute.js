@@ -34,6 +34,10 @@ user_route.post('/verifyOtp',userController.otpVerification)
 user_route.get('/reSendOtp',userController.reSendOtp)
 user_route.get('/logout',userController.logout)
 
+user_route.get('/profile',auth.isLogin,userController.loadProfile)
+user_route.put('/updateUserInfo',auth.isLogin,userController.updateUserInfo)
+
+
 
 module.exports=user_route
 

@@ -48,7 +48,7 @@
 								<a href="#" class="nav-link dropdown-toggle  text-capitalize " data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false" ><span class="d-flex align-items-center setsize"><i class="mdi mdi-account-outline Icon-lg mr-1 "></i> <%= user.fname %></span></a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="#"><i class="mdi mdi-account-circle Icon-lg mr-1"></i>My Profile</a></li>
+									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/profile"><i class="mdi mdi-account-circle Icon-lg mr-1"></i>My Profile</a></li>
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-heart-outline  Icon-lg mr-1"></i> Wishlist</a></li>
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-shopping  Icon-lg mr-1"></i> Orders</a></li>
 
@@ -56,7 +56,10 @@
 								</ul>
 							</li>
 
-							<%}%>
+							<%}else{%>
+
+								<li class="nav-item  d-flex  align-items-center"><a href="/login" class="d-flex  align-items-center"><i class=" mdi mdi-login Icon-lg ml-1"></i></a></li>
+								<%}%>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 

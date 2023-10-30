@@ -225,7 +225,7 @@ function updateCartBadge(numberOfItemsInCart){
     cartBadge.textContent=numberOfItemsInCart
 }
 
-fetch('api/cartCount')
+fetch('/api/cartCount')
 .then(response=>{
     if(response.ok) return response.json()
     throw new Error('unable to get cart item count')
@@ -236,3 +236,15 @@ fetch('api/cartCount')
 .catch((er)=>{
     console.log(er.message)
 })
+
+document.getElementById('mainContainer').addEventListener('click',(e)=>{
+
+    if(e.target.id=='cancelEdit'){
+        cancelEdit()
+    }else if(e.target.id=='editProfile'){
+        editProfile()
+    }else if(e.target.id=='save'){
+        validateEditUserInfo()
+    }
+
+},true)

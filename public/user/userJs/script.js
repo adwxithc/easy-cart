@@ -1,3 +1,7 @@
+    // global constands
+    const modal=document.getElementById('modal')
+    
+    
     // Get references to the images and the product preview element
     const thumbnailImages = document.querySelectorAll('.thumbnailImg');
     const productPreview = document.querySelector('.productPreView');
@@ -190,7 +194,7 @@ else if(rpassword.length>15)
 //  --------------------------------------------- modal----------------------------------
 
   function showModal(message) {
-    const modal = document.getElementById('modal');
+    // const modal = document.getElementById('modal');
     const modalMessage = document.getElementById('modal-message');
     const modalContent = document.querySelector('.modal-content');
 
@@ -205,12 +209,20 @@ else if(rpassword.length>15)
 
 
 }
+
 function closeModal() {
-    const modal = document.getElementById('modal');
+    // const modal = document.getElementById('modal');
     const modalContent = document.querySelector('.modal-content');
     modalContent.classList.remove('show'); // Remove the 'show' class
     modal.style.display = 'none'; // Hide the modal
 }
+
+//   Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
 
 // ----------------------------update cart count on cart icon badge in nav bar-------------------
@@ -245,6 +257,8 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
         editProfile()
     }else if(e.target.id=='save'){
         validateEditUserInfo()
+    }else if(e.target.id=='manageAddress'){
+        getManageAddress()
     }
 
 },true)

@@ -81,7 +81,34 @@ try {
    
 }}
 
+const validateEditedUserInfo=async(req,res,next)=>{
+    try {
+        
+        const emailRegx=/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        const mobileRegx=/^\d{10}$/;
+
+        if(req.body.fname==''||req.body.lname==''||req.body.email==''){
+            console.log(1)
+            res.json({message:'Please fill all necessary informations',updated:false})
+        }else if(!emailRegx.test(req.body.email.trim())){
+            console.log(2)
+            res.json({message:'Invalid email format',updated:false})
+        }else if(!mobileRegx.test(req.body.mobile.trim()) && req.body.mobile!='' ){
+            console.log(3)
+            res.json({message:'Invalid phone number format',updated:false})
+        }else{
+           
+            next()
+        }
+        
+    } catch (error) {
+        console.log('error')
+        res.status(500)
+    }
+}
+
 module.exports={
     validateCartInputs,
-    validateCartItemCount
+    validateCartItemCount,
+    validateEditedUserInfo
 }

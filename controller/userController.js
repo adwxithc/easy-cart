@@ -144,7 +144,7 @@ const searchProduct=async(req,res)=>{
 
 const loadLogin=(req,res)=>{
     try {
-      console.log('login rendered')
+      
         res.render('login') 
     } catch (error) {
         console.log(error.message)
@@ -372,7 +372,7 @@ const logout=(req,res)=>{
 const loadProfile=async(req,res)=>{
     try {
         const user=await User.findById(req.session.userId)
-        console.log(user)
+      
         res.render('profile',{user:user})
         
     } catch (error) {
@@ -385,13 +385,23 @@ const loadProfile=async(req,res)=>{
 //update user info
 const updateUserInfo=async(req,res)=>{
     try {
-        console.log(req.body)
+        const user=await User.updateOne({_id:req.session.userId},{$set:req.body})
+        if(user){
+            res.json({message:'profile update successfuly',updated:true})
+        }
         
     } catch (error) {
         console.log(error)
 
     }
 
+}
+const loadManageAddress=async()=>{
+    try {
+        
+    } catch (error) {
+        
+    }
 }
 
 module.exports={
@@ -410,5 +420,6 @@ module.exports={
     logout,
 
     loadProfile,
-    updateUserInfo
+    updateUserInfo,
+    loadManageAddress
 }

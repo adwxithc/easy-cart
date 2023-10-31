@@ -37,8 +37,12 @@ user_route.get('/logout',auth.isLogin,userController.logout)
 
 user_route.get('/profile',auth.isLogin,userController.loadProfile)
 user_route.put('/updateUserInfo',auth.isLogin,validateUserInputs.validateEditedUserInfo,userController.updateUserInfo)
-user_route.get('/manageAddress',auth.isLogin,userController.loadManageAddress)
 
+user_route.get('/manageAddress',auth.isLogin,userController.loadManageAddress)
+user_route.post('/addNewAddress',auth.isLogin,validateUserInputs.validateAddress,userController.addNewAddress)
+user_route.get('/editAddress',auth.isLogin,userController.loadEditAddress)
+user_route.post('/updateAddress',auth.isLogin,validateUserInputs.validateAddress,userController.updateAddress)
+user_route.delete('/deleteAddress',auth.isLogin,userController.deleteAddress)
 
 module.exports=user_route
 

@@ -167,6 +167,11 @@
                 margin: 0;
             }
         }
+        /*-------------------------------------------------------------------- error message------------------------------------------------- */
+
+        .errormsg{
+            color: red;
+        }
 
         /* -------------------------cart image------------------------- */
         .cartImg {
@@ -406,8 +411,37 @@
             display: none;
         }
         
-
+/* -----------------------------------------------------------------------------------------------------------------------find a way to make it responsive
         @media (max-width:991px) {
+
             
-            
+        } ----------------------------------------------------------------------------------------------------------------------------------||||||||||||||||*/
+
+        .addAddress{
+            border: 1px solid rgba(119,119,119,0.15);
+            color: #FFBA00;
+            font-weight: 500;
         }
+        .big{
+            font-size: 1.5rem;
+        }
+        .address{
+            border: 1px solid rgba(119,119,119,0.15);
+        }
+
+        #addressUpdateContainer{
+            display: none;
+        }
+        .infos{
+            max-width: 523px;
+        }
+       .opt-link{
+        text-decoration: none;
+        color: #000;
+        font-weight: 400;
+       }
+
+       .opt-link:hover{
+        color:red
+       }
+

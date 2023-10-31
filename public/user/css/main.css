@@ -952,7 +952,9 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 45px;
     padding-right: 40px;
     width: 100%; }
-    .form-select .nice-select .list {
+     .nice-select .list {
+      height: 200px;
+      overflow: scroll;
       margin-top: 0;
       border: none;
       border-radius: 0px;

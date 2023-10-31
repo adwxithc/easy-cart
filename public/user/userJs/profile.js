@@ -100,16 +100,335 @@ function clearAfterThreeSec(element){
 }
 
 function getManageAddress(){
+   
     fetch('/manageAddress')
     .then(response=>{
-        if(!response.ok) return response.json()
+        if(response.ok) return response.text()
         throw new Error('unable to connect to server')
     })
     .then(data=>{
+        
         document.getElementById('profileSettingArea').innerHTML=data
+        document.querySelector('.selected').classList.remove('selected')
+        document.getElementById('manageAddress').classList.add('selected')
+        
     })
     .catch((error)=>{
         console.log(error)
         showModal('Something went wrong')
     })
+}
+
+function removeErrorMessage(){
+    
+    document.getElementById('newAddress').addEventListener('click',(e)=>{
+       
+        if(e.target.id=='fname') document.getElementById('fnameError').innerHTML='';
+        else if(e.target.id=='lname') document.getElementById('lnameError').innerHTML='';
+        else if(e.target.id=='pin') document.getElementById('pinError').innerHTML='';
+        else if(e.target.id=='locality') document.getElementById('localityError').innerHTML='';
+        else if(e.target.id=='area') document.getElementById('areaError').innerHTML='';
+        else if(e.target.id=='CDT') document.getElementById('CDTError').innerHTML='';
+        else if(e.target.id=='state') document.getElementById('stateError').innerHTML='';
+        else if(e.target.id=='altPhone') document.getElementById('altPhoneError').innerHTML='';
+        
+    })
+}
+
+
+function validateAddress(){
+    removeErrorMessage()
+    const pinRegx=/^\d{6}$/;
+    const phoneRegx=/^[6789]\d{9}$/;
+    const nameRegx=/^[A-Za-z\s'-]+$/;
+
+
+    const fname=document.getElementById('fname')
+    const mobile=document.getElementById('mobile')
+    const pincode=document.getElementById('pin')
+    const locality=document.getElementById('locality')
+    const area=document.getElementById('area')
+    const CDT=document.getElementById('CDT')
+    const state=document.getElementById('state')
+   const landmark=document.getElementById('landmark')
+    const altPhone=document.getElementById('altPhone')
+    
+
+    const fnameError=document.getElementById('fnameError');
+    const mobileError=document.getElementById('mobileError');
+    const pinError=document.getElementById('pinError');
+    const localityError=document.getElementById('localityError');
+    const areaError=document.getElementById('areaError');
+    const CDTError=document.getElementById('CDTError');
+    const  stateError=document.getElementById('stateError');
+   
+    const  altPhoneError=document.getElementById('altPhoneError');
+
+    
+
+    if(fname.value.trim()==''){
+
+        fnameError.innerHTML="first name can't be null"
+
+    }else if(!nameRegx.test(fname.value.trim())){
+
+        fnameError.innerHTML="Invalid name format"
+
+    }else if(mobile.value.trim()==''){
+
+        mobileError.innerHTML="Mobile number can't be null"
+
+    }else if(!phoneRegx.test(mobile.value.trim())){
+
+        mobileError.innerHTML="Invalid mobile number"
+
+    }else if(pincode.value.trim()==''){
+
+        pinError.innerHTML="pincode can't be null"
+
+    }else if(!pinRegx.test(pincode.value.trim())){
+
+        pinError.innerHTML="Invalid pincode"
+
+    }else if(locality.value.trim()==''){
+
+        localityError.innerHTML="locality can't be null"
+
+    }else if(area.value.trim()==''){
+
+        areaError.innerHTML="Area/Street can't be null"
+
+    }else if(CDT.value.trim()==''){
+
+        CDTError.innerHTML="City/District/Town can't be null"
+
+    }else if(state.value.trim()=='Select State'||state.value.trim()==''){
+        
+
+        stateError.innerHTML="state can't be null"
+
+    }else if(altPhone.value.trim()!='' && !phoneRegx.test(altPhone.value.trim())){
+
+        altPhoneError.innerHTML='Invalid phone number format'
+
+    }else{
+        addNewAddress({
+            fname:fname.value,
+            mobile:mobile.value,
+            pincode:pincode.value,
+            locality:locality.value,
+            area:area.value,
+            cdt:CDT.value,
+            state:state.value,
+            altPhone:altPhone.value,
+            landmark:landmark.value
+        })
+    }
+
+}
+
+
+
+function addNewAddress(newAddress){
+    fetch('/addNewAddress',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(newAddress)
+
+    })
+    .then(response=>{
+        if(response.ok) return response.json()
+        throw new Error('unable to conect to the server')
+    })
+    .then(data=>{
+        if(data.added){
+            showModal(data.message)
+            unsetAddAddress()
+            const newAddressElement = createAddressElement(data.newAddress);
+            appendAddressToList(newAddressElement);
+        }else{
+            showModal(data.message)
+        }
+
+    })
+    .catch((er)=>{
+        console.log(er)
+        showModal('Something went wrong')
+    })
+}
+
+function setAddAddress(){
+    document.getElementById('addressUpdateContainer').style.display='block'
+    document.getElementById('addAddressContainer').style.display='none'
+}
+function unsetAddAddress(){
+    document.getElementById('addressUpdateContainer').style.display='none'
+    document.getElementById('addAddressContainer').style.display='block'
+}
+
+function createAddressElement(addressData) {
+ 
+    const addressElement = document.createElement('div');
+    addressElement.classList.add('address', 'p-3');
+    addressElement.id = addressData._id;
+    const innerHTML=` <div class="d-flex justify-content-end"><a href="#"><i class="mdi mdi-dots-vertical big"></i></a></div>
+    <div>
+        <div class="d-flex head"><h6 class="p-1 mr-1">${addressData.name}</h6><h6 class="p-1">${addressData.mobile}</h6></div>
+    </div>
+    <p class="p-1 infos">
+        ${ addressData.area}, ${ addressData.locality}, ${addressData.city}, ${addressData.state}-<span class="text-dark ">${addressData.pincode}</span> 
+    </p>
+    <div class="d-flex justify-content-end"><a href='/editAddress?id=${addressData._id}' class="px-2 opt-link editAddress" >Edit</a><a href="#" class="px-2 opt-link deletAddress" id="${addressData._id}">Remove</a></div>`
+  
+    addressElement.innerHTML=innerHTML
+    return addressElement;
+}
+
+function appendAddressToList(addressElement) {
+    // Append the addressElement to the list of addresses on the webpage.
+    const addressList = document.querySelector('#addressList');
+    addressList.insertBefore(addressElement, addressList.firstChild);
+}
+
+
+
+function removeAddress(productId){
+
+        const confirmModal=document.getElementById('confirmRemoveAddress')
+        confirmModal.style.display = "block";
+        confirmModal.setAttribute('product',productId)
+
+            // Close the modal when the close button is clicked
+    document.getElementById('closedeleteAddressConfirmation').onclick = function() {
+        document.getElementById('closeModalBtn').style.display = "none";
+    }
+
+    // Close the modal when the user confirms
+    document.getElementById('confirmAddressRemoval').onclick = function() {
+        const confirmModal=document.getElementById('confirmRemoveAddress')
+        confirmModal.style.display = "none";
+        const id=confirmModal.getAttribute('product')
+        deletAddress(id)
+    
+        // You can add your confirmation logic here
+    }
+
+}
+
+
+function deletAddress(id){
+    fetch('/deleteAddress',{
+        method:'DELETE',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id:id})
+    })
+    .then(response=>{
+        if(response.ok) return response.json()
+        throw new Error('unable to connect to server')
+    })
+    .then(data=>{
+        if(data.deleted){
+            showModal(data.message)
+            document.getElementById(id).style.display='none'
+        }else{
+            showModal(data.modal)
+        }
+        
+    })
+    .catch((error)=>{
+        console.log(error)
+        showModal('Something went wrong')
+    })
+}
+
+function validateUpdatedAddress(){
+   
+
+    removeErrorMessage()
+    const pinRegx=/^\d{6}$/;
+    const phoneRegx=/^[6789]\d{9}$/;
+    const nameRegx=/^[A-Za-z\s'-]+$/;
+
+
+    const fname=document.getElementById('fname')
+    const mobile=document.getElementById('mobile')
+    const pincode=document.getElementById('pin')
+    const locality=document.getElementById('locality')
+    const area=document.getElementById('area')
+    const CDT=document.getElementById('CDT')
+    const state=document.getElementById('state')
+  
+    const altPhone=document.getElementById('altPhone')
+   
+
+    const fnameError=document.getElementById('fnameError');
+    const mobileError=document.getElementById('mobileError');
+    const pinError=document.getElementById('pinError');
+    const localityError=document.getElementById('localityError');
+    const areaError=document.getElementById('areaError');
+    const CDTError=document.getElementById('CDTError');
+    const  stateError=document.getElementById('stateError');
+   
+    const  altPhoneError=document.getElementById('altPhoneError');
+
+    
+
+    if(fname.value.trim()==''){
+
+        fnameError.innerHTML="first name can't be null"
+        return false
+
+    }else if(!nameRegx.test(fname.value.trim())){
+
+        fnameError.innerHTML="Invalid name format"
+        return false
+
+    }else if(mobile.value.trim()==''){
+
+        mobileError.innerHTML="Mobile number can't be null"
+        return false
+
+    }else if(!phoneRegx.test(mobile.value.trim())){
+
+        mobileError.innerHTML="Invalid mobile number"
+        return false
+
+    }else if(pincode.value.trim()==''){
+
+        pinError.innerHTML="pincode can't be null"
+        return false
+
+    }else if(!pinRegx.test(pincode.value.trim())){
+
+        pinError.innerHTML="Invalid pincode"
+        return false
+
+    }else if(locality.value.trim()==''){
+
+        localityError.innerHTML="locality can't be null"
+        return false
+
+    }else if(area.value.trim()==''){
+
+        areaError.innerHTML="Area/Street can't be null"
+        return false
+
+    }else if(CDT.value.trim()==''){
+
+        CDTError.innerHTML="City/District/Town can't be null"
+        return false
+
+    }else if(state.value.trim()=='Select State'||state.value.trim()==''){
+        
+
+        stateError.innerHTML="state can't be null"
+        return false
+
+    }else if(altPhone.value.trim()!='' && !phoneRegx.test(altPhone.value.trim())){
+
+        altPhoneError.innerHTML='Invalid phone number format'
+        return false
+
+    }else{return true}
+
 }

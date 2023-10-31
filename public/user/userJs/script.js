@@ -249,16 +249,41 @@ fetch('/api/cartCount')
     console.log(er.message)
 })
 
+
+// --------------------------------------------------------remove error message-----------------------------------
+       
+
+
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
+    
 
     if(e.target.id=='cancelEdit'){
+
         cancelEdit()
+
     }else if(e.target.id=='editProfile'){
+
         editProfile()
+
     }else if(e.target.id=='save'){
+
         validateEditUserInfo()
+
     }else if(e.target.id=='manageAddress'){
+
         getManageAddress()
+
+    }else if(e.target.id =='saveAddress'){
+
+        validateAddress()
+
+    }else if(e.target.id =='addAddress'){
+
+        setAddAddress()
+    }else if(e.target.id=='cancelAddAddress'){
+        unsetAddAddress()
+    }else if(e.target.classList.contains('deletAddress')){
+        removeAddress(e.target.id)
     }
 
 },true)

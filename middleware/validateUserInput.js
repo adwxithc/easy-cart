@@ -1,5 +1,6 @@
 const Product=require('../model/productModel')
 const Cart=require('../model/cartModel')
+const User=require('../model/userModel')
 
 const validateCartInputs=async (req,res,next)=>{
     const userId=req.session.userId;
@@ -97,8 +98,14 @@ const validateEditedUserInfo=async(req,res,next)=>{
             console.log(3)
             res.json({message:'Invalid phone number format',updated:false})
         }else{
+            const user=User.findOne({_id:{$ne:req.session.userId},email:req.body.email})
+            if(user){
+                res.json({message:'This email is already in use',updated:false})
+            }else{
+                next()
+            }
            
-            next()
+            
         }
         
     } catch (error) {
@@ -107,8 +114,55 @@ const validateEditedUserInfo=async(req,res,next)=>{
     }
 }
 
+const validateAddress=(req,res,next)=>{
+    
+    const pinRegx=/^\d{6}$/;
+    const phoneRegx=/^[6789]\d{9}$/;
+    const nameRegx=/^[A-Za-z\s'-]+$/;
+    
+    if(!(req.body.fname&& req.body.mobile&&req.body.pincode&&req.body.locality&&req.body.area&&req.body.cdt&&req.body.state)){
+
+        res.json({message:'please fill all required fealds',added:false})
+
+    }else if(!pinRegx.test(req.body.pincode.trim())){
+
+        res.json({message:'Invalid pincode',added:false})
+
+    }else if(!phoneRegx.test(req.body.altPhone.trim()) && req.body.altPhone.trim()!=''){
+
+        res.json({message:'Invalid alternative phone number',added:false})
+        
+    }else if(!nameRegx.test(req.body.fname.trim())){
+
+        res.json({message:'Invalid  first name',added:false})
+
+    }else if(!phoneRegx.test(req.body.mobile.trim())){
+
+        res.json({message:'Invalid  mobile number',added:false})
+
+    }else{
+        req.address={
+            user:req.session.userId,
+            name:req.body.fname,
+            mobile:req.body.mobile,
+            pincode:req.body.pincode,
+            locality:req.body.locality,
+            area:req.body.area,
+            city:req.body.cdt,
+            state:req.body.state,
+            alternatePhone:req.body.altPhone,
+            landmark:req.body.landmark
+        }
+        next()
+    }
+
+}
+
+
 module.exports={
     validateCartInputs,
     validateCartItemCount,
-    validateEditedUserInfo
+    validateEditedUserInfo,
+    validateAddress,
+    
 }

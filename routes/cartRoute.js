@@ -24,4 +24,5 @@ cart_route.delete('/removeFromCart',auth.isLogin,cartController.removeFromCart)
 cart_route.patch('/updateCart',auth.isLogin,validateUserInput.validateCartItemCount,cartController.updateCartItemCount)
 
 
+
 module.exports=cart_route

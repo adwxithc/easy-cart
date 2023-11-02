@@ -1,0 +1,137 @@
+<%- include("../partials/userHeader.ejs") %>
+
+
+
+
+<section class="cart_area" style="background-color: rgb(241,243,246);">
+
+    <div class="container">
+        <div class=" row">
+            
+
+            <div class=" col-lg-12 mx-auto" id="">
+                
+                <div class="blog_right_sidebar acknowledge project my-2 d-flex justify-content-between selected-success" id="">
+
+                  <div class="d-flex">
+                    <i class="mdi mdi-check-all"></i>
+                    <h4 class="px-2">Order Placed SuccessFully..!</h4>
+
+                  </div>
+
+                    <div><i class="mdi  mdi-package-variant-closed"></i></div>
+                    
+                </div>
+            </div>
+        <%if(locals.orderData){%>
+            
+            <div class="col-lg-12 mx-auto">
+            <div class="blog_right_sidebar project my-2 ">
+                <div><h5>Delivery Address</h5></div>
+
+                <div class="address p-3 selected" id="">
+        
+                   
+                    <div>
+                        <div class="d-flex head"><h6 class="p-1 mr-1"><%=orderData.shippingAddress.name%></h6><h6 class="p-1"><%=orderData.shippingAddress.mobile%></h6></div>
+                    </div>
+                    <p class="p-1 infos">
+                        <%= orderData.shippingAddress.area%>, <%= orderData.shippingAddress.locality%>, <%=orderData.shippingAddress.city%>, <%=orderData.shippingAddress.state%>-<span class="text-dark "><%=orderData.shippingAddress.pincode%></span> 
+                    </p>
+                </div>
+
+            </div>
+            </div>
+
+            <div class="col-lg-8 mx-auto">
+                <div class="blog_right_sidebar project my-2 ">
+                    <div><h5>Product Details</h5></div>
+
+                    <%for(let item of orderData.items){%>
+
+                        <div class="media post_item cart-item "   >
+
+                         <div class="">
+                                <a href="/productDetails?id=<%=item.product._id%>">
+                                <div class="cartImg">
+                                    <img src="/static/productImages/<%=item.product.images[0]%>" alt="post">
+                                </div>
+                                </a>
+                               
+                                <div class="product_count mt-4 ml-5 mx-auto">
+                                    <label for="<%=item.product._id%>">Quantity</label>
+                                    <input type="text" id="<%=item.product._id%>" class="qty text-center"  maxlength="12" value="<%=item.quantity%>" title="Quantity:"class="input-text text-center" disabled>
+
+                                </div>
+            
+                            </div>
+            
+                               
+                                <div class="media-body cart-info">
+                                    <a href="#">
+                                        <a href="/productDetails?id=<%=item.product._id%>"><h4><%=item.product.name%></h4></a>
+                                    </a>
+                                    <p><%=item.product.brand.name%><br>
+                                    Price :<span class="darkText amount" > <%=item.price%></span></p>
+                                    <p>Color : <input type="color" value="<%=item.product.color%>" disabled> </p>
+                                    
+                                    <h5 class="itemTotal"></h5>
+                                    
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="font-weight-bold">Cancel</a>
+                                    </div>
+                                </div>
+                            
+
+
+                               
+                            </div>
+
+                    <%}%>
+    
+                </div>
+                </div>
+
+                <!-- total -->
+                <div class="col-lg-4 ">
+                    <div class="blog_right_sidebar setPdding cartSummery">
+                    <div class="d-flex justify-content-center cartSummeryHead">
+                        <h2>Grand Total</h2>
+                    </div>
+    
+                    <div class="cartSummeryBody">
+                        <div class="">
+                            <span class="total"> Total(4 unit) :</span>
+                            <span class="text-dark " id="cartTotal">$40000</span>
+                        </div>
+                        <div class="">
+                            <span>Discount :</span>
+                            <span class="text-dark">$0</span>
+                        </div>
+                        <div class="mb-4">
+                            <span>Delivery Charge :</span>
+                            <span class="text-dark">$0</span>
+                        </div>
+                        <div class="borderTop font-weight-bold pt-2 mb-5">
+                            <span> Grand Total :</span>
+                            <span class="text-dark" id="grandTotal">$6000</span>
+                        </div>
+                        
+                
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- total end -->
+
+        <%}%>
+
+</div>
+</div>
+</section>
+
+
+
+
+
+<%- include("../partials/userFooter.ejs") %>

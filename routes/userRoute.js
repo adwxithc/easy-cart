@@ -41,7 +41,7 @@ user_route.put('/updateUserInfo',auth.isLogin,validateUserInputs.validateEditedU
 user_route.get('/manageAddress',auth.isLogin,userController.loadManageAddress)
 user_route.post('/addNewAddress',auth.isLogin,validateUserInputs.validateAddress,userController.addNewAddress)
 user_route.get('/editAddress',auth.isLogin,userController.loadEditAddress)
-user_route.post('/updateAddress',auth.isLogin,validateUserInputs.validateAddress,userController.updateAddress)
+user_route.put('/updateAddress',auth.isLogin,validateUserInputs.validateAddress,userController.updateAddress)
 user_route.delete('/deleteAddress',auth.isLogin,userController.deleteAddress)
 
 module.exports=user_route

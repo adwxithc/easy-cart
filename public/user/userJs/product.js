@@ -1,7 +1,7 @@
 if(document.getElementById('addToCart')){
 const addToCart=document.getElementById('addToCart').addEventListener('click',()=>{
     const productId=document.getElementById('ProductId').value
-    const quantity=document.getElementById('qty').value
+    const quantity=document.getElementById('productDetailsquantity').value
     const price=document.getElementById('price').value
 
     const addToCartData={
@@ -76,3 +76,11 @@ function changeToGoToCart() {
     addToCartButton.href = '/api/goToCart';
 }
 }
+
+
+    function buyNow(){
+        const quantity=document.getElementById('productDetailsquantity').value
+        const productId=document.getElementById('ProductId').value
+
+        window.location.href=`/api/checkout?productId=${productId}&quantity=${quantity}`
+    }

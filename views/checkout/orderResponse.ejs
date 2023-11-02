@@ -24,6 +24,21 @@
                 </div>
             </div>
         <%if(locals.orderData){%>
+
+            <div class=" col-lg-12 mx-auto" id="">
+                <div class="blog_right_sidebar  project my-2 " id="">
+                    <div class="contain selected p-3">
+                        <p>Order Id :<span class="text-dark"><%=orderData.orderNumber%></span></p>
+                        <p>Payment Method :<span class="text-dark"><%=orderData.paymentMethod%></span></p>
+                        <p>Order Date :<span class="text-dark"><%=orderData.createdAt%></span></p>
+                        <p>Total amount :<span class="text-dark">Rs. <%=orderData.totalAmount%></span></p>
+                    </div>
+
+
+                 </div>
+            </div>
+
+
             
             <div class="col-lg-12 mx-auto">
             <div class="blog_right_sidebar project my-2 ">
@@ -33,7 +48,7 @@
         
                    
                     <div>
-                        <div class="d-flex head"><h6 class="p-1 mr-1"><%=orderData.shippingAddress.name%></h6><h6 class="p-1"><%=orderData.shippingAddress.mobile%></h6></div>
+                        <div class=" head"><span class="p-1 mr-1 text-dark"><%=orderData.shippingAddress.name%></span><span class="p-1 text-dark"><%=orderData.shippingAddress.mobile%></span></div>
                     </div>
                     <p class="p-1 infos">
                         <%= orderData.shippingAddress.area%>, <%= orderData.shippingAddress.locality%>, <%=orderData.shippingAddress.city%>, <%=orderData.shippingAddress.state%>-<span class="text-dark "><%=orderData.shippingAddress.pincode%></span> 

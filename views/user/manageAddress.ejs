@@ -8,128 +8,130 @@
 <div id="addressUpdateContainer">
     <div class="address p-3 mb-4" id="newAddress">
         <h4>ADD  NEW ADDRESS</h4>
-        <div>
+            <form action="" id="addressForm">
+            <div>
 
-            <div class="row">
-                <div class="col-md-6 py-3">
-                    <label for="fname" class="form-label">Name</label>
-                    <input type="text" id="fname" placeholder="Name" class="form-control">
-                    <div id="fnameError" class="errormsg"></div>
+                <div class="row">
+                    <div class="col-md-6 py-3">
+                        <label for="fname" class="form-label">Name</label>
+                        <input type="text" id="fname" placeholder="Name" class="form-control">
+                        <div id="fnameError" class="errormsg"></div>
+                    </div>
+                    
+                    <div class="col-md-6 py-3">
+                        <label for="mobile" class="form-label">Mobile number</label>
+                        <input type="text"  id="mobile" class="form-control" placeholder="10-digit mobile number">
+                        <div id="mobileError" class="errormsg"></div>
+                    </div>
+                    
                 </div>
-                
-                <div class="col-md-6 py-3">
-                    <label for="mobile" class="form-label">Mobile number</label>
-                    <input type="text"  id="mobile" class="form-control" placeholder="10-digit mobile number">
-                    <div id="mobileError" class="errormsg"></div>
+                <div class="row">
+                    <div class="col-md-6 py-3">
+                        <label for="pin" class="form-label">Pincode</label>
+                        <input type="text"  id="pin" class="form-control " placeholder="Pincode">
+                        <div id="pinError" class="errormsg"></div>
+                    </div>
+                    
+                    <div class="col-md-6 py-3">
+                        <label for="locality" class="form-label">Locality</label>
+                        <input type="text"  id="locality" class="form-control" placeholder="Locality">
+                        <div id="localityError" class="errormsg"></div>
+                    </div>
+                    
                 </div>
-                
-            </div>
-            <div class="row">
-                <div class="col-md-6 py-3">
-                    <label for="pin" class="form-label">Pincode</label>
-                    <input type="text"  id="pin" class="form-control " placeholder="Pincode">
-                    <div id="pinError" class="errormsg"></div>
-                </div>
-                
-                <div class="col-md-6 py-3">
-                    <label for="locality" class="form-label">Locality</label>
-                    <input type="text"  id="locality" class="form-control" placeholder="Locality">
-                    <div id="localityError" class="errormsg"></div>
-                </div>
-                
-            </div>
-            <div class="row">
+                <div class="row">
 
-                
-                <div class="col py-3">
-                    <label for="area" class="form-label">Address</label>
-                    <textarea name="" id="area"  rows="4" class="form-control" placeholder="Address(Area and Street)"></textarea>
-                    <div id="areaError" class="errormsg"></div>
+                    
+                    <div class="col py-3">
+                        <label for="area" class="form-label">Address</label>
+                        <textarea name="" id="area"  rows="4" class="form-control" placeholder="Address(Area and Street)"></textarea>
+                        <div id="areaError" class="errormsg"></div>
+                    </div>
+                    
                 </div>
-                
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 py-3">
-                    <label for="CDT" class="form-label">City/District/Town</label>
-                    <input type="text"  id="CDT" class="form-control " placeholder="City/District/Town">
-                    <div id="CDTError" class="errormsg"></div>
+                <div class="row">
+                    <div class="col-md-6 py-3">
+                        <label for="CDT" class="form-label">City/District/Town</label>
+                        <input type="text"  id="CDT" class="form-control " placeholder="City/District/Town">
+                        <div id="CDTError" class="errormsg"></div>
+                    </div>
+                    
+                    <div class="col-md-6 py-3">
+                        <label for="state" class="form-label">State</label>
+                        <div class="dropdown">
+                            <select class="form-select" aria-label="Select State" id="state">
+                            <option selected >Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                            <option value="Lakshadweep">Lakshadweep</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Puducherry">Puducherry</option>
+                            </select>
+                        </div>
+                        
+                        
+                        
+                        <div id="stateError" class="errormsg"></div>
+                    </div>
+                    
                 </div>
-                
-                <div class="col-md-6 py-3">
-                    <label for="state" class="form-label">State</label>
-                    <div class="dropdown">
-                        <select class="form-select" aria-label="Select State" id="state">
-                          <option selected >Select State</option>
-                          <option value="Andhra Pradesh">Andhra Pradesh</option>
-                          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                          <option value="Assam">Assam</option>
-                          <option value="Bihar">Bihar</option>
-                          <option value="Chhattisgarh">Chhattisgarh</option>
-                          <option value="Goa">Goa</option>
-                          <option value="Gujarat">Gujarat</option>
-                          <option value="Haryana">Haryana</option>
-                          <option value="Himachal Pradesh">Himachal Pradesh</option>
-                          <option value="Jharkhand">Jharkhand</option>
-                          <option value="Karnataka">Karnataka</option>
-                          <option value="Kerala">Kerala</option>
-                          <option value="Madhya Pradesh">Madhya Pradesh</option>
-                          <option value="Maharashtra">Maharashtra</option>
-                          <option value="Manipur">Manipur</option>
-                          <option value="Meghalaya">Meghalaya</option>
-                          <option value="Mizoram">Mizoram</option>
-                          <option value="Nagaland">Nagaland</option>
-                          <option value="Odisha">Odisha</option>
-                          <option value="Punjab">Punjab</option>
-                          <option value="Rajasthan">Rajasthan</option>
-                          <option value="Sikkim">Sikkim</option>
-                          <option value="Tamil Nadu">Tamil Nadu</option>
-                          <option value="Telangana">Telangana</option>
-                          <option value="Tripura">Tripura</option>
-                          <option value="Uttar Pradesh">Uttar Pradesh</option>
-                          <option value="Uttarakhand">Uttarakhand</option>
-                          <option value="West Bengal">West Bengal</option>
-                          <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                          <option value="Chandigarh">Chandigarh</option>
-                          <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-                          <option value="Lakshadweep">Lakshadweep</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Puducherry">Puducherry</option>
-                        </select>
-                      </div>
-                      
-                      
-                      
-                    <div id="stateError" class="errormsg"></div>
-                </div>
-                
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 py-3">
-                    <label for="landmark" class="form-label">Landmark</label>
-                    <input type="text"  id="landmark" class="form-control " placeholder="Landmark(Optional)">
-                    <div id="landmarkError" class="errormsg"></div>
+                <div class="row">
+                    <div class="col-md-6 py-3">
+                        <label for="landmark" class="form-label">Landmark</label>
+                        <input type="text"  id="landmark" class="form-control " placeholder="Landmark(Optional)">
+                        <div id="landmarkError" class="errormsg"></div>
+                    </div>
+                    
+                    <div class="col-md-6 py-3">
+                        <label for="altPhone" class="form-label">Alternate Phone</label>
+                        <input type="text"  id="altPhone" class="form-control" placeholder="Alternate Phone(Optional)">
+                        <div id="altPhoneError" class="errormsg"></div>
+                    </div>
+                    
                 </div>
-                
-                <div class="col-md-6 py-3">
-                    <label for="altPhone" class="form-label">Alternate Phone</label>
-                    <input type="text"  id="altPhone" class="form-control" placeholder="Alternate Phone(Optional)">
-                    <div id="altPhoneError" class="errormsg"></div>
+
+                <div class="p-3">
+                    <a href="#" class="darkBtn" id="saveAddress">SAVE</a>
+                    <a href="#" id="cancelAddAddress" class="btn"> Cancel</a>
+
                 </div>
-                
-            </div>
-
-            <div class="p-3">
-                <a href="#" class="darkBtn" id="saveAddress">SAVE</a>
-                <a href="#" id="cancelAddAddress" class="btn"> Cancel</a>
-
-            </div>
+                    
                 
             
-           
 
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 

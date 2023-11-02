@@ -255,6 +255,11 @@ fetch('/api/cartCount')
 
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
+    if(e.target.classList.contains('productDetails')){
+        if(e.target.id=='buyNow'){
+            buyNow()
+        }
+    }
     
 
     if(e.target.id=='cancelEdit'){
@@ -275,7 +280,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
 
     }else if(e.target.id =='saveAddress'){
 
-        validateAddress()
+        validateAddress(addNewAddress)
 
     }else if(e.target.id =='addAddress'){
 
@@ -284,6 +289,28 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
         unsetAddAddress()
     }else if(e.target.classList.contains('deletAddress')){
         removeAddress(e.target.id)
+    }else if(e.target.id=='updateAddress'){
+        validateAddress(updateAddress)
+    }
+//------------------checkout actions--------------------
+    if(e.target.classList.contains('checkoutActions')){
+        if(e.target.classList.contains('addressRadio')){
+            
+           setDeliveyHere(e.target)
+
+        }else if(e.target.id=='deliveyHere'){
+            showProductDetails()
+        }else if(e.target.id=='changeSelectedAddress'){
+            changeAddress()
+        }else if(e.target.id=='continueOrderSummery'){
+            
+            proceedToPaymentOptions()
+            
+        }else if(e.target.classList.contains('paymentMethod')){
+            allowPlaceOrder(e.target)
+        }else if(e.target.classList.contains('confirmOrder')){
+            confirmOrder(e.target.id)
+        }
     }
 
 },true)

@@ -5,6 +5,7 @@ const mongoose=require('mongoose')
 const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const cartRoute=require('./routes/cartRoute')
+const checkoutRoute=require('./routes/checkoutRoute')
 
 //cart reservation
 const cron=require('node-cron')
@@ -33,7 +34,7 @@ app.use('/static',express.static('public'))
 app.use('/admin',adminRoute)
 app.use('/',userRoute)
 app.use('/api',cartRoute)
-
+app.use('/api',checkoutRoute)
 
 // cron.schedule('0 * * * *',()=>{
 //   tasks.expireCarts()

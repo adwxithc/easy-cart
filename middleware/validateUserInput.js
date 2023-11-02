@@ -1,6 +1,9 @@
 const Product=require('../model/productModel')
 const Cart=require('../model/cartModel')
 const User=require('../model/userModel')
+const Address=require('../model/addressModel')
+const orderManagement=require('../middleware/orderManagement')
+const Order=require('../model/orderModel')
 
 const validateCartInputs=async (req,res,next)=>{
     const userId=req.session.userId;
@@ -89,17 +92,17 @@ const validateEditedUserInfo=async(req,res,next)=>{
         const mobileRegx=/^\d{10}$/;
 
         if(req.body.fname==''||req.body.lname==''||req.body.email==''){
-            console.log(1)
+            
             res.json({message:'Please fill all necessary informations',updated:false})
         }else if(!emailRegx.test(req.body.email.trim())){
-            console.log(2)
+            
             res.json({message:'Invalid email format',updated:false})
         }else if(!mobileRegx.test(req.body.mobile.trim()) && req.body.mobile!='' ){
-            console.log(3)
+            
             res.json({message:'Invalid phone number format',updated:false})
         }else{
             const user=User.findOne({_id:{$ne:req.session.userId},email:req.body.email})
-            if(user){
+            if(user && user.name){
                 res.json({message:'This email is already in use',updated:false})
             }else{
                 next()
@@ -115,6 +118,7 @@ const validateEditedUserInfo=async(req,res,next)=>{
 }
 
 const validateAddress=(req,res,next)=>{
+   
     
     const pinRegx=/^\d{6}$/;
     const phoneRegx=/^[6789]\d{9}$/;
@@ -158,11 +162,102 @@ const validateAddress=(req,res,next)=>{
 
 }
 
+const validateCheckoutData=async(req,res,next)=>{
+        try {
+         
+            const address=await Address.findById(req.body?.address)
+            if(address){
+                if(req.body.productId){
+                    const product=await Product.findById(req.body.productId)
+                    if(product){
+                        if(product.stock>=req.body.productQty){
+                            if(req.body.paymentMethod=='COD'){
+
+                                const lastOrderNumber= await orderManagement.getLastOrderNumber()
+
+                                const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
+                                    const totalAmount=product.price*req.body.productQty
+                                    req.order={
+                                        orderNumber:orderNumber,
+                                        customer:req.session.userId,
+                                        items:[{
+                                            product:product._id,
+                                            quantity:req.body.productQty,
+                                            price:product.price
+                                        }],
+                                        totalAmount:totalAmount,
+                                        paymentMethod:req.body.paymentMethod,
+                                        orderStatus:'Pending',
+                                        shippingAddress:address,
+                                    }
+                                    next()
+
+                            }else{
+                                res.json({message:"Invalid payment method",orderConfirmed:false})
+                            }
+
+
+                        }else{
+                            res.json({message:"Ths specified amount of quantity for this poduct is not available",orderConfirmed:false})
+                        }
+
+                    }else{
+                        res.json({message:"This product  doesn't exist",orderConfirmed:false})
+                    }
+                    //for confirm order for cart
+                }else{
+                    const cart=await Cart.findOne({user:req.session.userId})
+                    if(cart && cart?.cartItems?.length>0 ){
+
+                        let productInfos=[];
+                        let totalAmount=0
+                        for(let item of cart.cartItems){
+                            totalAmount+=item.quantity*item.price
+                            productInfos.push({
+                                product:item.product,
+                                quantity:item.quantity,
+                                price:item.price
+                            })
+                        }
+                        const lastOrderNumber= await orderManagement.getLastOrderNumber()
+                        const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
+                      
+                        req.cart=true
+                        req.order={
+                            orderNumber:orderNumber,
+                            customer:req.session.userId,
+                            items:productInfos,
+                            totalAmount:totalAmount,
+                            paymentMethod:req.body.paymentMethod,
+                            orderStatus:'Pending',
+                            shippingAddress:address,
+                        }
+                        next()
+
+                    }else{
+                        res.json({message:"The user has no active cart",orderConfirmed:false})
+                    }
+
+
+                }
+
+            }else{
+                res.json({message:"This address doesn't exist",orderConfirmed:false})
+            }
+             
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message:'internal server error'})
+            
+        }
+}
+
 
 module.exports={
     validateCartInputs,
     validateCartItemCount,
     validateEditedUserInfo,
     validateAddress,
+    validateCheckoutData
     
 }

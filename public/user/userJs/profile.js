@@ -44,6 +44,12 @@ function updateUserInfo(data){
         const cancel=document.getElementById('cancelEdit')
         cancel.innerHTML='Edit'
         cancel.id='editProfile'
+        const userInfos=document.querySelectorAll('.userInfo')
+        for(let info of userInfos){
+            
+            info.style.cursor='not-allowed'
+            info.setAttribute('disabled','disabled')
+        }
     })
     .catch((error)=>{
         console.log(error)
@@ -136,7 +142,7 @@ function removeErrorMessage(){
 }
 
 
-function validateAddress(){
+function validateAddress(cb){
     removeErrorMessage()
     const pinRegx=/^\d{6}$/;
     const phoneRegx=/^[6789]\d{9}$/;
@@ -212,7 +218,7 @@ function validateAddress(){
         altPhoneError.innerHTML='Invalid phone number format'
 
     }else{
-        addNewAddress({
+        cb({
             fname:fname.value,
             mobile:mobile.value,
             pincode:pincode.value,
@@ -243,9 +249,21 @@ function addNewAddress(newAddress){
     .then(data=>{
         if(data.added){
             showModal(data.message)
+            document.getElementById('addressForm').reset()
             unsetAddAddress()
-            const newAddressElement = createAddressElement(data.newAddress);
-            appendAddressToList(newAddressElement);
+            //checking from where the address is adding(at checkout or user profile)
+
+            if(document.getElementById('addAddress').classList.contains('atCheckout')){
+                const newAddressOption = createAddressOption(data.newAddress);//createAddressOption->this function will be at checkout.js files
+                appendAddressToList(newAddressOption);
+
+            }else{
+                const newAddressElement = createAddressElement(data.newAddress);
+                appendAddressToList(newAddressElement);
+            }
+            
+            
+
         }else{
             showModal(data.message)
         }
@@ -271,7 +289,7 @@ function createAddressElement(addressData) {
     const addressElement = document.createElement('div');
     addressElement.classList.add('address', 'p-3');
     addressElement.id = addressData._id;
-    const innerHTML=` <div class="d-flex justify-content-end"><a href="#"><i class="mdi mdi-dots-vertical big"></i></a></div>
+    const innerHTML=` 
     <div>
         <div class="d-flex head"><h6 class="p-1 mr-1">${addressData.name}</h6><h6 class="p-1">${addressData.mobile}</h6></div>
     </div>
@@ -283,6 +301,9 @@ function createAddressElement(addressData) {
     addressElement.innerHTML=innerHTML
     return addressElement;
 }
+
+
+
 
 function appendAddressToList(addressElement) {
     // Append the addressElement to the list of addresses on the webpage.
@@ -300,7 +321,7 @@ function removeAddress(productId){
 
             // Close the modal when the close button is clicked
     document.getElementById('closedeleteAddressConfirmation').onclick = function() {
-        document.getElementById('closeModalBtn').style.display = "none";
+        document.getElementById('confirmRemoveAddress').style.display = "none";
     }
 
     // Close the modal when the user confirms
@@ -431,4 +452,29 @@ function validateUpdatedAddress(){
 
     }else{return true}
 
+}
+
+function updateAddress(address){
+    address['addressId']=document.getElementById('addressId').value
+    
+    fetch('/updateAddress',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(address)
+    })
+    .then(response=>{
+        if(response.ok) return response.json()
+        throw new Error('unable to connect to server')
+    })
+    .then(data=>{
+        if(data.added){
+            showModal(data.message)
+        }else{
+            showModal(data.message)
+        }
+    })
+    .catch((er)=>{
+        console.log(er)
+        showModal('Something went wrong')
+    })
 }

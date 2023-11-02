@@ -5,7 +5,7 @@ const StockManagemant=require('../middleware/stockManagement')
 const addToCart=async(req,res)=>{
     try {
        
-
+            let outOfStock=false
             const newCart=req.newCart
 
             const existingCart=await Cart.findOne({user:newCart.user})
@@ -17,9 +17,18 @@ const addToCart=async(req,res)=>{
                     for(let item of existingCart.cartItems){
                         
                         if(item.product.toString()==newCart.cartItems[0].product){
-                            item.quantity+=newCart.cartItems[0].quantity
-                            productAlreadyExist=true
+                            const product=await Product.findById(item.product)
+                            if(item.quantity+newCart.cartItems[0].quantity<=product.stock){
+
+                                item.quantity+=newCart.cartItems[0].quantity
+                                productAlreadyExist=true
+                                
+                            }else{
+                                outOfStock=true;
+                                productAlreadyExist=true;
+                            }
                             break;
+
                         }
                     }
                     if(!productAlreadyExist){
@@ -31,7 +40,7 @@ const addToCart=async(req,res)=>{
                     
                    const cartUpdated=await  existingCart.save()
 
-                   if(cartUpdated){
+                   if(cartUpdated && !outOfStock){
                     
 
                     // stockUpdated=await StockManagemant.removeFromStock(newCart)
@@ -40,6 +49,8 @@ const addToCart=async(req,res)=>{
 
                     res.json({message:"Product added to the cart",added:true,count:count})
     
+                   }else if(outOfStock){
+                    res.json({message:"The specified amount of stock is currently not available"})
                    }else{
                     res.json({message:"Unable to  add the product to the cart"})
                    }

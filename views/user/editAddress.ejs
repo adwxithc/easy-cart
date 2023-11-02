@@ -20,8 +20,8 @@
                             
                             
                             <%if(locals.address){%>
-                            <form action="/updateAddress" method="POST" onsubmit="return validateUpdatedAddress()" >
-                            <input type="hidden" name="addressId" value="<%=address._id%>">
+                            <form action="#" method="POST" id="updateAddressForm" >
+                            <input type="hidden" id="addressId" value="<%=address._id%>">
                             
                                 <div class="address p-3 mb-4" id="newAddress">
                                     <div class="d-flex justify-content-center"><h3>EDIT ADDRESS</h3></div>
@@ -139,7 +139,7 @@
                                         </div>
                             
                                         <div class="p-3">
-                                            <input type="submit" class="darkBtn btn">
+                                            <input type="button" value="Save" class="darkBtn btn" id="updateAddress">
                                             <a href="/profile" id="" class="btn"> Cancel</a>
                             
                                         </div>
@@ -166,8 +166,15 @@
                </section>
                
                
-               
-               
+               <!----------------------------------------------------------- response message  modal ---------------------------------------------- -->
+
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <p id="modal-message">Your message goes here.</p>
+                </div>
+            </div>
+                        
                
                
           

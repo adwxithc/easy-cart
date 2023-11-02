@@ -446,17 +446,18 @@ const loadEditAddress=async(req,res)=>{
 
 const updateAddress=async(req,res)=>{
     try {
+        
         console.log(req.address,req.body.addressId)
         const updated=await Address.updateOne({_id:req.body.addressId},{$set:req.address})
         if(updated){
-            res.redirect('/profile')
+            res.json({message:'Address updated successfuly',added:true})
         }else{
-            res.render('errors/500.ejs')
+            res.json({message:'Address updation failed',added:false})
         }
         
     } catch (error) {
         console.log(error)
-        res.render('errors/500.ejs')
+        res.status(500)
         
     }
 }

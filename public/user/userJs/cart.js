@@ -70,6 +70,8 @@ function removeFromCart(productId){
             document.getElementById(id).style.display='none'
             updateCartBadge()
             updateCartAmounts()
+            // ---------finding total value at chechout
+            showCartOrderSummery()
 
         }else{
             window.location.href='/login'
@@ -149,6 +151,9 @@ function updateCart(productId){
         document.getElementById('old'+productId).value=data.quantity
         document.getElementById('q'+productId).value=data.quantity
         updateCartAmounts()
+
+        // finding total value at checkout
+        showCartOrderSummery()
     })
     .catch((er)=>{
         console.log(er)

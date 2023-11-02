@@ -58,11 +58,11 @@
                     <p><%=product.description%><br><%=product.additionalSpecifications%></p>
                     
                     <div class="product_count">
-                        <label for="qty">Quantity:</label>
-                        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-                        <button onclick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;"
+                        <label for="productDetailsquantity">Quantity:</label>
+                        <input type="text" name="qty" id="productDetailsquantity" maxlength="12" value="1" title="Quantity:" class="input-text qty" data="<%=product.stock%>" disabled>
+                        <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity)&& (productDetailsquantity<= Number(result.getAttribute('data')))) result.value++;return false;"
                          class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                        <button onclick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty ) && qty > 0 ) result.value--;return false;"
+                        <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity ) && productDetailsquantity>1 ) result.value--;return false;"
                          class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                     </div>
                     <input type="hidden" name="" id="ProductId" value="<%=product._id%>">
@@ -74,7 +74,9 @@
                         <%}else{%>
                             <a class="  darkBtn m-1" href="#" id="addToCart">Add to Cart</a>
                             <%}%>
-                        <a class="  yellowBtn m-1"  href="#">But Now</a>
+                            <%if(product.stock>0){%>
+                        <a class="  yellowBtn m-1 productDetails"  href="#" id="buyNow">Buy Now</a>
+                        <%}%>
                         <!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a> -->
                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
                     </div>

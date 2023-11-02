@@ -6,6 +6,7 @@ const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const cartRoute=require('./routes/cartRoute')
 const checkoutRoute=require('./routes/checkoutRoute')
+const orderRoute=require('./routes/orderRoute')
 
 //cart reservation
 const cron=require('node-cron')
@@ -35,6 +36,7 @@ app.use('/admin',adminRoute)
 app.use('/',userRoute)
 app.use('/api',cartRoute)
 app.use('/api',checkoutRoute)
+app.use('/api',orderRoute)
 
 // cron.schedule('0 * * * *',()=>{
 //   tasks.expireCarts()

@@ -7495,7 +7495,8 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #ffffff;
+  color: #000000;
+  /* changed */
   text-align: left;
   background-color: #fff; }
 
@@ -8834,7 +8835,8 @@ pre {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1;
-  color: #495057;
+  color: #000000 !important;
+  /* changed */
   background-color: #2A3038;
   background-clip: padding-box;
   border: 1px solid #2c2e33;
@@ -9347,11 +9349,13 @@ fieldset:disabled .wizard > .actions a,
   border-color: #e4eaec; }
   .btn-secondary:hover {
     color: #212529;
-    background-color: #ced9dc;
+    background-color: #f9f9f9;
+    /* changed */
     border-color: #c6d3d7; }
   .btn-secondary:focus, .btn-secondary.focus {
     color: #212529;
-    background-color: #ced9dc;
+    background-color: #f9f9f9;
+    /* changed */
     border-color: #c6d3d7;
     box-shadow: 0 0 0 0.2rem rgba(199, 204, 207, 0.5); }
   .btn-secondary.disabled, .btn-secondary:disabled {
@@ -12308,7 +12312,8 @@ a.close.disabled {
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #000000;
+  background-color: #f7f7f7;
+  /* changed */
   background-clip: padding-box;
   border: 1px solid #2c2e33;
   border-radius: 0.3rem;
@@ -20735,7 +20740,7 @@ div.tagsinput {
               font-size: inherit;
               color: inherit; }
         .sidebar .nav .nav-item .nav-link .menu-title {
-          color: inherit;
+          color:  inherit;
           display: inline-block;
           font-size: 0.9375rem;
           line-height: 1;
@@ -20914,12 +20919,17 @@ div.tagsinput {
             color: #ffffff;
             background: transparent; }
           .sidebar .nav.sub-menu .nav-item .nav-link:hover {
-            color: #ffffff; }
+            color: #000;
+          /* changed  */
+        }
         .sidebar .nav.sub-menu .nav-item:hover {
           background: transparent; }
     .sidebar .nav:not(.sub-menu) > .nav-item:hover:not(.nav-category):not(.account-dropdown) > .nav-link {
-      background: #0f1015;
-      color: #ffffff; }
+      background: #dcdcde;
+      /* changed */
+      color: #ffffff;
+      /* changed */
+     }
     .sidebar .nav .menu-items:nth-child(5n+1) .nav-link .menu-icon i {
       color: #0090e7; }
     .sidebar .nav .menu-items:nth-child(5n+2) .nav-link .menu-icon i {

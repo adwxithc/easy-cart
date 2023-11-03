@@ -87,7 +87,6 @@ const orderResponse=async(req,res)=>{
                 select: 'name',
               },
             });
-              
 
 
             res.render('orderResponse',{orderData:orderData,user:user})

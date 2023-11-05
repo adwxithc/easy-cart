@@ -9360,12 +9360,12 @@ fieldset:disabled .wizard > .actions a,
     box-shadow: 0 0 0 0.2rem rgba(199, 204, 207, 0.5); }
   .btn-secondary.disabled, .btn-secondary:disabled {
     color: #212529;
-    background-color: #e4eaec;
+    background-color: #f7f7f7;
     border-color: #e4eaec; }
   .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active,
   .show > .btn-secondary.dropdown-toggle {
     color: #212529;
-    background-color: #c6d3d7;
+    background-color: #dee4e6;
     border-color: #bfcdd2; }
     .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
     .show > .btn-secondary.dropdown-toggle:focus {

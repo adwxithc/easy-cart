@@ -142,6 +142,7 @@ function removeErrorMessage(){
 }
 
 
+
 function validateAddress(cb){
     removeErrorMessage()
     const pinRegx=/^\d{6}$/;
@@ -477,4 +478,113 @@ function updateAddress(address){
         console.log(er)
         showModal('Something went wrong')
     })
+}
+
+
+function changePassword(){
+    document.querySelector('.selected').classList.remove('selected')
+    document.getElementById('changePassword').classList.add('selected')
+    fetch('/changePassword')
+    .then(response=>{
+        if(response.ok) return response.text()
+        throw new Error('unable to connect to the server')
+    })
+    .then(html=>{
+        document.getElementById('profileSettingArea').innerHTML=html
+    })
+}
+
+function removePasswordErrorMessage(){
+    document.getElementById('changePasswordDiv').addEventListener('click',(e)=>{
+        
+        if(e.target.id=='cPassword') document.getElementById('cPasswordError').innerHTML='';
+        else if(e.target.id=='nPassword') document.getElementById('nPasswordError').innerHTML='';
+        else if(e.target.id=='rePassword') document.getElementById('rePasswordError').innerHTML='';
+    },true)
+}
+
+function validateChangePassword(data){
+    removePasswordErrorMessage()
+
+    const cPassword=data.get('cPassword')
+    const nPassword=data.get('nPassword')
+    const rePassword=data.get('rePassword')
+
+   
+
+    const cPasswordError=document.getElementById('cPasswordError')
+    const nPasswordError=document.getElementById('nPasswordError')
+    const rePasswordError=document.getElementById('rePasswordError')
+
+    if(cPassword.trim()==''){
+        cPasswordError.innerHTML="your current password can't be null"
+        return false
+    }else if(cPassword.trim().length<6){
+        cPasswordError.innerHTML="your current password should be in more than 6 character"
+        return false
+    }else if(nPassword.trim()==''){
+        nPasswordError.innerHTML="your new password can't be null"
+        return false
+    }else if(nPassword.trim().length<6){
+        nPasswordError.innerHTML="your new password should be in more than 6 character"
+        return false
+    }else if(rePassword.trim()==''){
+        rePasswordError.innerHTML="your re-entered password can't be null"
+        return false
+    }else if(rePassword.trim().length<6){
+        rePasswordError.innerHTML="your re-entered password should be in more than 6 character"
+        return false
+    }else if(!(rePassword.trim()==nPassword.trim())){
+        nPasswordError.innerHTML="your  entered two new diffrent password"
+        rePasswordError.innerHTML="your  entered two new diffrent password"
+        return false
+    }else{
+        return true
+    }
+
+}
+
+function updatePassword(){
+    const changePasswordForm=document.getElementById('changePasswordForm')
+    const formData=new FormData(changePasswordForm)
+    
+
+    const valid=validateChangePassword(formData)
+    if(valid){
+
+        fetch('/updatePassword',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: new URLSearchParams(formData).toString(),
+        })
+        .then(response=>{
+            if(response.ok){ 
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+              return response.json(); // Parse JSON response
+            } else {
+              return response.text(); // Assume HTML content
+            }
+            }
+            throw new Error('unable to connect to the server')
+        })
+        .then(data=>{
+            if (typeof data === 'object'){
+            showModal(data.message)
+            if(data.changed){
+                changePasswordForm.reset()
+            }
+        }else{
+            window.location.href='/login'
+        }
+        })
+
+        .catch((er)=>{
+            showModal("something went wrong")
+            console.log(er)
+        })
+    }
 }

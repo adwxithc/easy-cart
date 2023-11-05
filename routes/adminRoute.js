@@ -102,6 +102,11 @@ admin_route.patch('/listUnlistBrand',adminController.listUnlistBrand)
 admin_route.get('/editBrand',adminController.loadeditBrand);
 admin_route.put('/updateBrand',updateLogo.single('logo'),validateAdminInputs.validateUpdatedBrandData,adminController.updateBrand)
 
+//order management
+admin_route.get('/listOrders',adminController.listOrders);
+admin_route.get('/viewOrder',adminController.viewOrder)
+admin_route.patch('/updateOrderStatus',adminController.updateOrderStatus)
+
 //errors
 admin_route.get('/404',adminController.error404);
 admin_route.get('/500',adminController.error500);

@@ -16,9 +16,10 @@ const checkout=async(req,res)=>{
 
         const product=await Product.findById(req.query.productId).populate('brand')
         if(product.stock>=req.query.quantity){
+           
             res.render('checkout',{user:user,addresses:addresses,product:product,quantity:req.query.quantity})
         }else{
-            res.json({message:`Sorry, we can't provide the requested quantity of "${product.name}" as we have ${product.stock} units in stock.`})
+            res.json({message:`Sorry, we can't provide the requested quantity of "${product.name}" as we have ${product.stock} units in stock.`,byuNowAvailable:false})
         }
         
      }else{
@@ -42,6 +43,7 @@ const checkout=async(req,res)=>{
         res.status(500).render('errors/500.ejs')
     }
 }
+
 
 
 

@@ -145,8 +145,10 @@ const searchProduct=async(req,res)=>{
 
 const loadLogin=(req,res)=>{
     try {
+        
       
-        res.render('login') 
+        res.render('login');
+       
     } catch (error) {
         console.log(error.message)
         
@@ -165,7 +167,10 @@ const verifyLogin=async(req,res)=>{
             if(passwordCheck){
                 if(userData.status==1){
                     req.session.userId=userData._id
-                    res.redirect('/userHome')
+
+                
+                
+                res.redirect('/userHome');
                 }else{
                     res.render('login',{message:"This account is blocked by the admin"})
                 }
@@ -473,7 +478,46 @@ const deleteAddress=async(req,res)=>{
         
     } catch (error) {
         console.log(error)
-        res.status(500)
+        res.status(500).json({message:'Internal Server Error'})
+    }
+}
+const changePassword=(req,res)=>{
+    try {
+        res.render('changepassword')
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal Server Error'})
+
+    }
+}
+
+const updatePassword=async(req,res)=>{
+    try {
+        const password=req.body.cPassword
+        const user=await User.findById(req.session.userId)
+        const hashedPassword=user.password
+        const valid=await bcrypt.compare(password,hashedPassword)
+        if(!valid){
+            res.json({message:'invalid password'})
+        }else{
+            const newHashedPassword =await securePassword(req.body.nPassword);
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: req.session.userId },
+                { password: newHashedPassword },
+                { new: true }
+              );
+            if(updatedUser){
+                res.json({message:'password changed successfully',changed:true})
+            }else{
+                res.json({message:'password updation failed'})
+            }
+        }
+        console.log(req.body)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal Server Error'})
     }
 }
 
@@ -499,5 +543,7 @@ module.exports={
     addNewAddress,
     loadEditAddress,
     updateAddress,
-    deleteAddress
+    deleteAddress,
+    changePassword,
+    updatePassword
 }

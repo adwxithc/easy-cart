@@ -1,12 +1,12 @@
 <div class="mb-4">
     <h4>Manage Addresses</h4>
-    <div id="addAddressContainer"> <a href="#" ><div class="addAddress p-3 d-flex align-item-center" id="addAddress" > <span class="big mr-1">+ </span> ADD NEW ADDRESS</div></a></div>
+    <div id="addAddressContainer"> <a href="#" ><div class="addAddress p-3 d-flex align-item-center profileAction" id="addAddress" > <span class="big mr-1">+ </span> ADD NEW ADDRESS</div></a></div>
 </div>
 
 
 
 <div id="addressUpdateContainer">
-    <div class="address p-3 mb-4" id="newAddress">
+    <div class="address p-3 mb-4 " id="newAddress">
         <h4>ADD  NEW ADDRESS</h4>
             <form action="" id="addressForm">
             <div>
@@ -122,8 +122,8 @@
                 </div>
 
                 <div class="p-3">
-                    <a href="#" class="darkBtn" id="saveAddress">SAVE</a>
-                    <a href="#" id="cancelAddAddress" class="btn"> Cancel</a>
+                    <a href="#" class="darkBtn profileAction" id="saveAddress">SAVE</a>
+                    <a href="#" id="cancelAddAddress" class="btn profileAction"> Cancel</a>
 
                 </div>
                     
@@ -149,7 +149,7 @@
         <p class="p-1 infos">
             <%= address.area%>, <%= address.locality%>, <%=address.city%>, <%=address.state%>-<span class="text-dark "><%=address.pincode%></span> 
         </p>
-        <div class="d-flex justify-content-end"><a href='/editAddress?id=<%=address._id%>' class="px-2 opt-link editAddress" >Edit</a><a href="#" class="px-2 opt-link deletAddress" id="<%=address._id%>">Remove</a></div>
+        <div class="d-flex justify-content-end"><a href='/editAddress?id=<%=address._id%>' class="px-2 opt-link editAddress profileAction" >Edit</a><a href="#" class="px-2 opt-link deletAddress profileAction" id="<%=address._id%>">Remove</a></div>
     </div>
     <%
         }
@@ -170,7 +170,7 @@
         </div>
         
         <div>
-            <a id="confirmAddressRemoval" class="darkBtn">Confirm</a>
+            <a id="confirmAddressRemoval" class="darkBtn profileAction">Confirm</a>
             
         </div>
         

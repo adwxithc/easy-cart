@@ -187,7 +187,7 @@ const validateCheckoutData=async(req,res,next)=>{
                                         }],
                                         totalAmount:totalAmount,
                                         paymentMethod:req.body.paymentMethod,
-                                        orderStatus:'Pending',
+                                        // orderStatus:'Pending',
                                         shippingAddress:address,
                                     }
                                     next()
@@ -229,7 +229,7 @@ const validateCheckoutData=async(req,res,next)=>{
                             items:productInfos,
                             totalAmount:totalAmount,
                             paymentMethod:req.body.paymentMethod,
-                            orderStatus:'Pending',
+                            // orderStatus:'Pending',
                             shippingAddress:address,
                         }
                         next()
@@ -252,12 +252,35 @@ const validateCheckoutData=async(req,res,next)=>{
         }
 }
 
+const validateChangePassword=(req,res,next)=>{
+        try {
+            
+            const currentPassword=req.body.cPassword;
+            const newPassword=req.body.nPassword;
+            const rePassword=req.body.rePassword;
+        
+            if(!(currentPassword && newPassword&&rePassword) ){
+                res.json({message:'please provide all required informations'})
+            }else if(newPassword.length<6){
+                res.json({message:'Plese enter password with more than 6 characters'})
+            }else if(newPassword!=rePassword){
+                res.json({message:'you entered two diffrent new  passwords'})
+            }else{
+                next()
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message:'internal server error'})
+        }
+}
+
 
 module.exports={
     validateCartInputs,
     validateCartItemCount,
     validateEditedUserInfo,
     validateAddress,
-    validateCheckoutData
+    validateCheckoutData,
+    validateChangePassword
     
 }

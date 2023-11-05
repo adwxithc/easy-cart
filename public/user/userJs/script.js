@@ -255,43 +255,53 @@ fetch('/api/cartCount')
 
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
+
     if(e.target.classList.contains('productDetails')){
         if(e.target.id=='buyNow'){
             buyNow()
         }
     }
     
+    if(e.target.classList.contains('profileAction')){
 
-    if(e.target.id=='cancelEdit'){
+        if(e.target.id=='cancelEdit'){
 
-        cancelEdit()
+            cancelEdit()
+    
+        }else if(e.target.id=='editProfile'){
+    
+            editProfile()
+    
+        }else if(e.target.id=='save'){
+    
+            validateEditUserInfo()
+    
+        }else if(e.target.id=='manageAddress'){
+    
+            getManageAddress()
+    
+        }else if(e.target.id =='saveAddress'){
+    
+            validateAddress(addNewAddress)
+    
+        }else if(e.target.id =='addAddress'){
+    
+            setAddAddress()
+        }else if(e.target.id=='cancelAddAddress'){
+            unsetAddAddress()
+        }else if(e.target.classList.contains('deletAddress')){
+            removeAddress(e.target.id)
+        }else if(e.target.id=='updateAddress'){
+            validateAddress(updateAddress)
+        }else if(e.target.id=='changePassword'){
+            changePassword()
+        }else if(e.target.id=='updatePassword'){
+            updatePassword()
+        }
 
-    }else if(e.target.id=='editProfile'){
-
-        editProfile()
-
-    }else if(e.target.id=='save'){
-
-        validateEditUserInfo()
-
-    }else if(e.target.id=='manageAddress'){
-
-        getManageAddress()
-
-    }else if(e.target.id =='saveAddress'){
-
-        validateAddress(addNewAddress)
-
-    }else if(e.target.id =='addAddress'){
-
-        setAddAddress()
-    }else if(e.target.id=='cancelAddAddress'){
-        unsetAddAddress()
-    }else if(e.target.classList.contains('deletAddress')){
-        removeAddress(e.target.id)
-    }else if(e.target.id=='updateAddress'){
-        validateAddress(updateAddress)
     }
+
+    
 //------------------checkout actions--------------------
     if(e.target.classList.contains('checkoutActions')){
         if(e.target.classList.contains('addressRadio')){

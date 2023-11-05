@@ -4,7 +4,9 @@ const Product=require('../model/productModel')
 const loadOrders=async(req,res)=>{
     try {
         const user=await User.findById(req.session.userId)
+        
         const orderData = await Order.find()
+        .sort({updatedAt:-1})
         .populate({
           path: 'items.product',
           select: 'color images name size',

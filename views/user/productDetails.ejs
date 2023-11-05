@@ -60,7 +60,7 @@
                     <div class="product_count">
                         <label for="productDetailsquantity">Quantity:</label>
                         <input type="text" name="qty" id="productDetailsquantity" maxlength="12" value="1" title="Quantity:" class="input-text qty" data="<%=product.stock%>" disabled>
-                        <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity)&& (productDetailsquantity<= Number(result.getAttribute('data')))) result.value++;return false;"
+                        <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity)&& (productDetailsquantity< Number(result.getAttribute('data')))) result.value++;return false;"
                          class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
                         <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity ) && productDetailsquantity>1 ) result.value--;return false;"
                          class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>

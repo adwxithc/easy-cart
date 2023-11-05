@@ -11,7 +11,7 @@
 <!-- ---------------------------------------------address section---------------------------------------------------- -->
             <div class="blog_right_sidebar project my-2" id="addsessSection">
 
-                <div id="addAddressContainer" class="my-2"> <a href="#" ><div class="addAddress p-3 d-flex align-item-center atCheckout" id="addAddress" > <span class="big mr-1">+ </span> ADD NEW ADDRESS</div></a></div>
+                <div id="addAddressContainer" class="my-2"> <a href="#" ><div class="addAddress p-3 d-flex align-item-center atCheckout profileAction" id="addAddress" > <span class="big mr-1">+ </span> ADD NEW ADDRESS</div></a></div>
 
 
 
@@ -134,8 +134,8 @@
                                 </div>
                     
                                 <div class="p-3">
-                                    <a href="#" class="darkBtn" id="saveAddress">SAVE</a>
-                                    <a href="#" id="cancelAddAddress" class="btn"> Cancel</a>
+                                    <a href="#" class="darkBtn profileAction" id="saveAddress">SAVE</a>
+                                    <a href="#" id="cancelAddAddress" class="btn profileAction"> Cancel</a>
                     
                                 </div>
                                     
@@ -168,7 +168,7 @@
                             <p class="p-1 infos">
                                 <%= address.area%>, <%= address.locality%>, <%=address.city%>, <%=address.state%>-<span class="text-dark "><%=address.pincode%></span> 
                             </p>
-                            <div class="d-flex justify-content-end"><a href='/editAddress?id=<%=address._id%>' class="px-2 opt-link editAddress" >Edit</a></div>
+                            <div class="d-flex justify-content-end"><a href='/editAddress?id=<%=address._id%>' class="px-2 opt-link editAddress profileAction" >Edit</a></div>
                         </div>
 
                     </label>

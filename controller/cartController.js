@@ -145,7 +145,7 @@ const removeFromCart=async(req,res)=>{
                 
                 // await StockManagemant.addToStock(productId, productToRemove.quantity)
 
-                res.json({message:"Cart item successfully removed",removed:true})
+                res.json({message:"Cart item successfully removed",removed:true,cartLength:(cart.cartItems.length-1)})
 
             }else{
                 res.json({message:"Cart item removal failed"})

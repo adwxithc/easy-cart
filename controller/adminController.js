@@ -5,6 +5,7 @@ const bcrypt=require('bcrypt')
 const Product=require('../model/productModel')
 const fs=require('fs')
 const Brand =require('../model/brandModel')
+const Order=require('../model/orderModel')
 const ObjectId = require('mongodb').ObjectId;
 
 const loadLogin=(req,res)=>{
@@ -931,6 +932,131 @@ const updateBrand=async(req,res)=>{
 }
 
 
+//list orders
+
+const listOrders=async(req,res)=>{
+    try {
+        const page=req.query.page||1// specifies which page
+        const pagesize=req.query.pageSize||5//specifies how much data page contains
+
+        const offset=(page-1)*pagesize//specifies how much data to be skipped
+        const limit=pagesize//specifies how much data needed
+
+        
+        const orders=await Order.find({}).sort({updatedAt:-1}).skip(offset).limit(limit)
+        .populate({
+            path: 'items.product',
+            select: 'name',
+            })
+
+        
+
+        const totalOrdes=await Order.countDocuments()
+        const totalpages=Math.ceil(totalOrdes/pagesize)
+
+        
+        
+        res.render('listOrders',{orders:orders,currentPage:page,totalpages:totalpages,pagination:true})      
+
+        
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+        
+    }
+}
+const viewOrder=async(req,res)=>{
+    try {
+        
+        
+        const orderData = await Order.findOne({ _id: req.query.orderId })
+        .populate({
+          path: 'items.product',
+          select: 'color images name size',
+          populate: {
+            path: 'brand',
+            select: 'name',
+          },
+        })
+        .populate({
+          path: 'customer',
+          select: 'fname lname email mobile',
+        });
+        console.log(orderData)
+
+
+        res.render('orderDetails',{orderData:orderData})
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+// updateOrderStatus
+
+const updateOrderStatus=async(req,res)=>{
+    try {
+
+        const order=await Order.findById(req.body.orderId)
+        if(order){
+            let notCanceled=false,quantity;
+            for(let item of order.items){
+                if(item.product==req.body.productId){
+                    if(item.orderStatus!='Canceled'){
+                        item.orderStatus=req.body.newStatus
+                        notCanceled=true
+                        quantity=item.quantity
+                    }
+                }
+            }
+            if(notCanceled){
+                const updatedOrder=await order.save()
+                if(updatedOrder){
+                    if(req.body.newStatus=='Canceled'){
+                        await Product.updateOne({_id:req.body.productId},{$inc:{stock:quantity}})
+                    }
+                    res.json({message:'Order status  updated successfully',updated:true})
+                }else{
+                    res.json({message:'Order status  updation failed ',updated:false})
+                }
+                
+            }else{
+                res.json({message:'This is a canceled order ',updated:false})
+            }
+        }else{
+            res.json({message:"This order doesn't exist ",updated:false})
+        }
+ 
+        // const updatedOrder = await Order.findOneAndUpdate(
+        //     { _id: req.body.orderId, 'items.product': req.body.productId },
+        //     { $set: { 'items.$.orderStatus': req.body.newStatus } },
+        //     { new: true }
+        //   );
+        //   console.log(updatedOrder)
+        //   if(updatedOrder){
+        //     if(req.body.newStatus=='Canceled'){
+        //         for(let item of updatedOrder.items){
+        //             if(item.product==req.body.productId){
+        //                 await Product.updateOne({_id:req.body.productId},{$inc:{stock:item.quantity}})
+        //             }
+        //         }
+                
+        //       }
+        //      res.json({updated:true,message:'Order status updated successfully'})
+
+        //   }else{
+        //     res.json({message:'unable to update order status',updated:false})
+        //   }
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+
 //error page rendering route
 
 const error404=(req,res)=>{
@@ -976,6 +1102,10 @@ module.exports={
     listUnlistBrand,
     loadeditBrand,
     updateBrand,
+
+    listOrders,
+    viewOrder,
+    updateOrderStatus,
 
     error404,
     error500

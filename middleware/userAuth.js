@@ -1,10 +1,10 @@
 const isLogin=(req,res,next)=>{
     try {
         if(req.session.userId){
-            
             next()
         }else{
-            res.redirect('/login')
+
+            res.redirect('/login');
         }
         
     } catch (error) {

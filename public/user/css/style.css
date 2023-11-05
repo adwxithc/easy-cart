@@ -168,6 +168,19 @@
                 margin: 0;
             }
         }
+        .empty_cart{
+            height: auto;
+            max-width:70%;
+        }
+        .empty-cart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+           
+        }
+        
         /*-------------------------------------------------------------------- error message------------------------------------------------- */
 
         .errormsg{
@@ -180,7 +193,6 @@
             max-height: 150px; /* Set your desired maximum height */
             overflow: hidden; /* Clip the image if it exceeds the container size */
             
-           
         }
         
         /* Style for the image inside the container */
@@ -484,9 +496,7 @@
        #orderSummeryData{
         display: none;
        }
-       #orderSummeryPlaceholder{
-        
-       }
+       
        .mdi-wallet{
         color: rgb(2, 245, 2);
        }

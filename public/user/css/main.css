@@ -1208,7 +1208,8 @@ h1, h2, h3, h4, h5, h6 {
 /* banner area css
 ============================================================================================ */
 .banner-area {
-  background: url(/static/assets/img/banner/banner.webp) center no-repeat;
+  /* background: url(/static/assets/img/banner/banner2.jpg) center no-repeat; */
+  background-color: white;
   background-size: cover;
   position: relative; }
   @media (max-width: 768px) {
@@ -1240,6 +1241,7 @@ h1, h2, h3, h4, h5, h6 {
       .banner-area .active-banner-slider .owl-nav .owl-next:hover {
         opacity: 1; }
   .banner-area .banner-content {
+   
     padding-left: 10px; }
     @media (max-width: 991px) {
       .banner-area .banner-content {

@@ -282,4 +282,94 @@
   height: 50%;
 }
 
+.cartImg {
+  max-width: 150px; /* Set your desired maximum width */
+  max-height: 150px; /* Set your desired maximum height */
+  overflow: hidden; /* Clip the image if it exceeds the container size */
+  
+}
 
+/* Style for the image inside the container */
+.cartImg img {
+  max-width: 100%; /* Ensure the image doesn't exceed the container width */
+  max-height: 100%; /* Ensure the image doesn't exceed the container height */
+  height: auto; /* Maintain the image's aspect ratio */
+
+}
+.cart-info{
+  padding: 1rem;
+  height: 100%;
+  width: 100%;
+  
+}
+
+.cartSummeryHead{
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.09);
+  margin-bottom: 1rem;
+}
+
+.top-border{
+  border-top: 1px dashed rgba(0, 0, 0, 0.09);
+}
+
+.cartSummeryBody {
+  
+  text-align: center; /* Center content horizontally if needed */
+  font-size: 1rem;
+}
+
+@media (max-width: 500px) {
+  .cart-item {
+    flex-direction: column; /* Stack items vertically */
+}
+
+.cartImg {
+    text-align: center; /* Center the image */
+}
+
+.product_count {
+    text-align: center; /* Center quantity input and buttons */
+    margin-top: 10px; /* Add some spacing */
+}
+
+.media-body.cart-info {
+    text-align: center; /* Center the product information */
+    margin-top: 10px; /* Add some spacing */
+}
+}
+
+.cartSummeryBody > div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px; /* Adjust the value to control the spacing */
+}
+
+.borderTop{
+  border-top: 1px dashed rgba(0, 0, 0, 0.39);
+}
+.cartSummery{
+  position: sticky;
+  top: 5.5rem;
+}
+.qty{
+  max-width: 4rem ;
+}
+.contain{
+  border: 1px solid rgba(119,119,119,0.15);
+}
+
+.link-to-product{
+  text-decoration: none;
+  color: inherit;
+}
+.project-effect{
+  box-shadow: 2px 5px 5px 1px rgba(0, 0, 0, 0.05);
+ }
+
+ .link-to-product:hover{
+  color: inherit;
+  text-decoration: none;
+ }
+ .set-color{
+  color: black;
+ }

@@ -72,6 +72,29 @@ function removeFromCart(productId){
             updateCartAmounts()
             // ---------finding total value at chechout
             showCartOrderSummery()
+            if(!data.cartLength>0){
+                document.getElementById('cartDisplay').innerHTML=`<div class=" col-lg-9 mx-auto">
+                <div class="blog_right_sidebar">
+                <div style="width: 100%; height: 100%;" class="p-3">
+                    <div class="d-flex justify-content-center">
+                        <img src="/static/assets/bckImages/cart_empty.png" alt="Cart is empty..!" class="empty_cart" >
+                    </div>
+                   
+                   <div class="empty-cart-container">
+                    <div>
+                        <h5 class=""> Your cart is empty..!</h5>
+                       
+                    </div>
+                    <div class="p-3">
+                        <a class="darkBtn" href="/">shop now</a>
+                    </div>
+            
+                   </div>
+                   
+                </div>
+            </div>
+            </div>`
+            }
 
         }else{
             window.location.href='/login'

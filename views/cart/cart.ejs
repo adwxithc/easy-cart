@@ -5,15 +5,16 @@
  <!--================Cart Area =================-->
   <section class="cart_area" style="background-color: rgb(241,243,246);">
     <div class="container">
-        <div class="cart_inner row">
+        <div class="cart_inner row" id="cartDisplay">
 
-            <div class=" col-lg-8">
-            <div class="blog_right_sidebar">
+
 
                 <%
-                if(locals.cart && cart && cart.cartItems.length > 0 ){
+                if(locals.cart && cart && cart.cartItems.length > 0 ){%>
+                    <div class=" col-lg-8">
+                        <div class="blog_right_sidebar">
                    
-                    for( let cartItem of cart.cartItems){
+                   <% for( let cartItem of cart.cartItems){
                     %>
             
                 <div class="media post_item cart-item " id ='<%=cartItem.product._id%>'  >
@@ -54,12 +55,39 @@
                 
 
                 <%
-            }
+                   }%>
+
+                               
+            </div>
+        </div>
+
+                   <%
                 }else{
             %>
-            <div>
-                <h3>Empty Cart..!</h3>
-                <p>Currently, your shopping cart is empty, awaiting your selection. We invite you to explore our wide range of products and add items to your cart in order to continue with the checkout process. Feel free to browse and find the perfect items that meet your needs. Once you're ready, simply add them to your cart, and you can proceed with your purchase.</p>
+            <div class=" col-lg-9 mx-auto" >
+                <div class="blog_right_sidebar">
+
+
+            <div style="width: 100%; height: 100%;" class="p-3">
+                <div class="d-flex justify-content-center">
+                    <img src="/static/assets/bckImages/cart_empty.png" alt="Cart is empty..!" class="empty_cart" >
+                </div>
+               
+               <div class="empty-cart-container">
+                <div>
+                    <h5 class=""> Your cart is empty..!</h5>
+                   
+                </div>
+                <div class="p-3">
+                    <a class="darkBtn" href="/">shop now</a>
+                </div>
+
+               </div>
+               
+            </div>
+
+
+            </div>
             </div>
             
                 <%}%>
@@ -68,11 +96,9 @@
                 
              
 
-            
-            </div>
-            </div>
 
 
+            <%if(locals.cart && cart && cart.cartItems.length > 0 ){%>
             <div class="col-lg-4 ">
                 <div class="blog_right_sidebar setPdding cartSummery">
                 <div class="d-flex justify-content-center cartSummeryHead">
@@ -104,7 +130,7 @@
                 
             </div>
         </div>
-
+<%}%>
 
 
         </div>

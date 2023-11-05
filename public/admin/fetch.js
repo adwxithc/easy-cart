@@ -349,8 +349,34 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
         }else if(e.target.id=='view-brands'){
             viewBrands()
             
+        }else if(e.target.id=='listOrders'){
+            listOrders()
         }
     }
+
+},true)
+
+
+
+
+
+//action performed in the right block
+
+document.getElementById('pageContent').addEventListener('click',(e)=>{
+  
+    if(e.target.classList.contains('orderOption')){
+        if(e.target.id=='nextOrders'){
+           
+            nextOrders()
+        }else if(e.target.id=='prevOrders'){
+         
+            prevOrders()
+        }else if(e.target.classList.contains('manageOrder')){
+            viewOrder(e.target.getAttribute('orderId'))
+        }else if(e.target.classList.contains('updateOrderStatus')){
+            updateOrderStatus(e.target)
+        }
+    } 
 
 },true)
 

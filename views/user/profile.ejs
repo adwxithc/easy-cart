@@ -30,7 +30,7 @@
 
                     <div class=" profileOption py-3 ">
                         <div class="">
-                            <a class="d-flex align-items-center  profileMainOption px-4"> <i class=" mdi mdi-settings Icon-lg mr-2"></i>ACCOUNT SETTINGS</a>
+                            <a class="d-flex align-items-center  profileMainOption px-4"> <i class=" mdi mdi-settings Icon-lg mr-2 "></i>ACCOUNT SETTINGS</a>
                         </div>
                         
                         <div class=" ">
@@ -38,7 +38,10 @@
                         </div>
 
                         <div class="">
-                            <a href="#" class="d-flex align-items-center p-2 profileSubOption px-5" id="manageAddress">Manage Address</a>
+                            <a href="#" class="d-flex align-items-center p-2 profileSubOption px-5 profileAction" id="manageAddress">Manage Address</a>
+                        </div>
+                        <div class="">
+                            <a href="#" class="d-flex align-items-center p-2 profileSubOption px-5 profileAction" id="changePassword">Change Password</a>
                         </div>
                     </div>
 
@@ -58,7 +61,7 @@
 
           
                     <div class="d-flex justify-content-between">
-                        <h5>Personal Informations</h5> <a href="#" class="" id="editProfile" >Edit</a>
+                        <h5>Personal Informations</h5> <a href="#" class="profileAction" id="editProfile" >Edit</a>
                     </div>
                     <%if(locals.user){%>
                     <div class="row">
@@ -98,7 +101,7 @@
                     
                     <%}%>
 
-                    <a href="#" class="darkBtn save" id="save">SAVE</a>
+                    <a href="#" class="darkBtn save profileAction" id="save">SAVE</a>
 
             
             </div>

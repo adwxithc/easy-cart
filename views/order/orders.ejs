@@ -10,6 +10,12 @@
             <h4>My Orders</h4>
        <%
        if(locals.orderData){
+        %>
+
+        <input type="hidden" value="<%=totalpages%>" id="total">
+        <input type="hidden" value="<%=currentPage%>" id="cur">
+
+        <%
         for(let order of orderData){
             for(let item of order.items){
         %>
@@ -84,7 +90,29 @@
         }
     }
     %>
+
+
+
+
+
+
+
         </div>
+
+    <!-- pagination -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example" class="">
+            <ul class="pagination">
+              <li class="page-item "><a class="page-link w-100 orderAction"  href="#" id="prevOrder">Previous</a></li>
+              
+              <li class="page-item"><a class="page-link" href="#" disabled id="curOrder"><%=currentPage%></a></li>
+              
+              <li class="page-item"><a class="page-link w-100 orderAction" href="#" id="nextOrder">Next</a></li>
+            </ul>
+          </nav>
+
+    </div>
+
     </div>
 </section>
 

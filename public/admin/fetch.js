@@ -185,9 +185,9 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     
                     
                     //multiple imge upload
-                    
                     const imageUploadInput = document.getElementById('image-upload');
                     const imagePreviewContainer = document.getElementById('image-preview');
+                    const selectedImagesArray=[]
                     
                     imageUploadInput.addEventListener('change', (event) => {
                         imagePreviewContainer.innerHTML = ''; // Clear previous previews
@@ -200,12 +200,56 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         }
                     
                         for (let i = 0; i < selectedImages.length; i++) {
-                            const image = document.createElement('img');
-                            image.src = URL.createObjectURL(selectedImages[i]);
-                            image.classList.add('image-preview');
+                            selectedImagesArray.push(selectedImages[i]);
+
+                            const image = document.createElement('div');
+                            image.classList.add('image-preview-div');
+                    
+                            const imgElement = document.createElement('img');
+                            imgElement.src = URL.createObjectURL(selectedImages[i]);
+                            imgElement.classList.add('image-preview');
+
+                            // ----------------------------------crop image
+
+                            const cropButton = document.createElement('button');
+                            cropButton.innerHTML = '<i class="mdi mdi-crop-free"></i>';
+                            cropButton.classList.add('image-crop-button');
+
+                            cropButton.addEventListener('click', () => {
+                                // Initialize the Cropper.js instance for the image
+                                const cropper = new Cropper(imgElement, {
+                                    aspectRatio: 1, // Set the desired aspect ratio
+                                    viewMode: 1,    // Set the desired view mode
+                                    // Add more Cropper.js options as needed
+                                });
+                            });
+
+                            // -------------------------------crop part ends
+
+                            const removeButton = document.createElement('button');
+                            removeButton.innerHTML = '<i class="mdi mdi-close-circle"></i>';
+                            removeButton.classList.add('image-preview-remove-button');
+                            
+                    
+                            removeButton.addEventListener('click', () => {
+                                image.remove(); // Remove the image and button when clicked
+                                const removedImageIndex = selectedImagesArray.indexOf(selectedImages[i]);
+                                if (removedImageIndex !== -1) {
+                                    selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
+                                }
+                                 
+
+                                
+
+                            });
+                    
+                            image.appendChild(imgElement);
+                            image.appendChild(removeButton);
+                            image.appendChild(cropButton);
                             imagePreviewContainer.appendChild(image);
                         }
                     });
+                    
                     
 
                     
@@ -226,7 +270,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             const additionalSpecifications=document.getElementById("additionalSpecifications").value
                             const size=document.getElementById('size').value
 
-                            const images=document.getElementById('image-upload').files
+                            // const images=document.getElementById('image-upload').files
                             
                             const formData = new FormData();
     
@@ -260,8 +304,8 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             formData.append('material', material);
                             formData.append('additionalSpecifications', additionalSpecifications);
                         
-                            for (let i = 0; i < images.length; i++) {
-                                formData.append('images', images[i]);
+                            for (let i = 0; i < selectedImagesArray.length; i++) {
+                                formData.append('images', selectedImagesArray[i]);
                             } 
 
                               
@@ -374,7 +418,24 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
         }else if(e.target.classList.contains('manageOrder')){
             viewOrder(e.target.getAttribute('orderId'))
         }else if(e.target.classList.contains('updateOrderStatus')){
-            updateOrderStatus(e.target)
+
+            Swal.fire({
+                
+                text: "Are you sure? You want to change the status of this order",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change status",
+                coustomClass:{
+                    title:'set-color'
+                }
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    updateOrderStatusByAdmin(e.target)
+                }
+              });
+            
         }
     } 
 

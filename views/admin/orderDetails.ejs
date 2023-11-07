@@ -110,7 +110,7 @@
                                           
                                     </p>
                                     <p>
-                                        <button class="btn btn-rounded btn-warning p-2 updateOrderStatus orderOption" productId="<%=item.product._id%>" orderId="<%=orderData._id%>">Update Status</button>
+                                        <button class="btn btn-rounded btn-warning p-2 updateOrderStatus orderOption" productId="<%=item.product._id%>" orderId="<%=orderData._id%>" <% if(item.orderStatus=='Canceled') {%>disabled <%}%>>Update Status</button>
 
                                     </p>
                                 </div>

@@ -356,11 +356,15 @@ const searchProduct=async(req,res)=>{
         const key=req.query.key||null;
 
         if(field=='category'){
-            const productData=await Product.find({category:{
-                $elemMatch:{
-                    $regex:new RegExp(`^${key}`,'i')
-                }
-            }})
+            const matchingCategories=await Category.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+            const categoryIds = matchingCategories.map((category) => category._id);
+
+            // const productData=await Product.find({category:{
+            //     $elemMatch:{
+            //         $regex:new RegExp(`^${key}`,'i')
+            //     }
+            // }})
+            const productData = await Product.find({ category: { $in: categoryIds } });
             console.log(productData.length)
             if(productData.length>0){
               
@@ -371,7 +375,11 @@ const searchProduct=async(req,res)=>{
             }
 
         }else if(field=='brand'){
-            const productData=await Product.find({brand:{$regex:new RegExp(`^${key}`,'i')}})
+            const matchingBrands=await Brand.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+
+            const brandIds = matchingBrands.map((brand) => brand._id);
+            const productData = await Product.find({ brand: { $in: brandIds } });
+            // const productData=await Product.find({brand:{$regex:new RegExp(`^${key}`,'i')}})
             console.log(productData.length)
             if(productData.length>0){
 

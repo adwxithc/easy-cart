@@ -562,85 +562,119 @@
         /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         background: linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1))
         }
-        
-        #progressbar-1 {
-        color: #455A64;
-        }
-        
-        #progressbar-1 li {
-        list-style-type: none;
-        font-size: 13px;
-        width: 33.33%;
-        float: left;
-        position: relative;
-        }
-        
-        #progressbar-1 #step1:before {
-        content: "1";
-        color: #fff;
-        width: 29px;
-        margin-left: 22px;
-        padding-left: 11px;
-        }
-        
-        #progressbar-1 #step2:before {
-        content: "2";
-        color: #fff;
-        width: 29px;
-        }
-        
-        #progressbar-1 #step3:before {
-        content: "3";
-        color: #fff;
-        width: 29px;
-        margin-right: 22px;
-        text-align: center;
-        }
-        
-        #progressbar-1 li:before {
-        line-height: 29px;
-        display: block;
-        font-size: 12px;
-        background: #455A64;
-        border-radius: 50%;
-        margin: auto;
-        }
-        
-        #progressbar-1 li:after {
-        content: '';
-        width: 121%;
-        height: 2px;
-        background: #455A64;
-        position: absolute;
-        left: 0%;
-        right: 0%;
-        top: 15px;
-        z-index: -1;
-        }
-        
-        #progressbar-1 li:nth-child(2):after {
-        left: 50%
-        }
-        
-        #progressbar-1 li:nth-child(1):after {
-        left: 25%;
-        width: 121%
-        }
-        
-        #progressbar-1 li:nth-child(3):after {
-        left: 25%;
-        width: 50%;
-        }
-        
-        #progressbar-1 li.active:before,
-        #progressbar-1 li.active:after {
-        background: #1266f1;
-        }
-        
-        .card-stepper {
-        z-index: 0
-        }
 
 
+
+
+
+
+/* Progress bar */
+#progress-bar {
+    display: table;
+    width: 100%;
+    margin: 0;
+    padding: 15px 15px 0;
+    table-layout: fixed;
+    width: 100%;
+    counter-reset: step;
+}
+
+#progress-bar li {
+    list-style-type: none;
+    display: table-cell;
+    width: 20%;
+    float: left;
+    font-size: 16px;
+    position: relative;
+    text-align: center;
+}
+
+#progress-bar li:before {
+    width: 50px;
+    height: 50px;
+    color: #212121;
+    content: counter(step);
+    counter-increment: step;
+    line-height: 50px;
+    font-size: 18px;
+    border: 1px solid #CCCCCC;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: #ffffff;
+    position: relative;
+    z-index: 1; /* Ensure the circles are above the connecting lines */
+}
+
+#progress-bar li:after {
+    width: 100%;
+    height: 10px;
+    content: '';
+    position: absolute;
+    background-color: #CCCCCC;
+    top: 25px;
+    left: -50%;
+    z-index: 0; /* Set the z-index to ensure lines are behind the circles */
+}
+
+#progress-bar li:first-child:after {
+    content: none;
+}
+
+#progress-bar li.step-done {
+    color: #000000;
+}
+
+#progress-bar li.step-done:before {
+    border-color: #000000;
+    background-color: #000000;
+    color: #ffffff;
+    content: "\f00c";
+    font-family: "FontAwesome";
+}
+
+#progress-bar li.step-done + li:after {
+    background-color: #000000;
+}
+
+
+
+
+#progress-bar li.step-active {
+    color: #000000;
+}
+
+#progress-bar li.step-active:before {
+    border-color: #000000;
+    color: #000000;
+    font-weight: 700;
+}
+
+   
+/* ---------------------cancel case------------------------- */
+
+#progress-bar li.cancel-done {
+    color: #000000;
+}
+
+#progress-bar li.cancel-done:before {
+    border-color: #ff0000;
+    background-color: #ff0000;
+    color: #ffffff;
+    content: "\f00c";
+    font-family: "FontAwesome";
+}
+
+#progress-bar li.cancel-done + li:after {
+    background-color: #ff0000;
+}
+        
 
       /* ------------------------------------------------progrss bar eds---------------------------- */
+
+
+      
+
+
+

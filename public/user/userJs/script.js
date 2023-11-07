@@ -255,6 +255,7 @@ fetch('/api/cartCount')
 
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
+  
 
     if(e.target.classList.contains('productDetails')){
         if(e.target.id=='buyNow'){
@@ -320,6 +321,35 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             allowPlaceOrder(e.target)
         }else if(e.target.classList.contains('confirmOrder')){
             confirmOrder(e.target.id)
+        }
+    }
+
+
+    // ----------------------------------order actions------------------------------------
+    if(e.target.classList.contains('orderAction')){
+        
+        if(e.target.id=='prevOrder'){
+            prevOrder()
+        }else if(e.target.id=='nextOrder'){
+            
+            nextOrder()
+        }else if(e.target.id=='cancelOrder'){
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Remove it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    cancelOrder(document.getElementById('orderId')?.value,document.getElementById('productId')?.value)
+                }
+              });
+
+            // cancelOrder(document.getElementById('orderId')?.value,document.getElementById('productId')?.value)
         }
     }
 

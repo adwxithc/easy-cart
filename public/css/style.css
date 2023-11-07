@@ -188,7 +188,7 @@
             max-width: 40px;
            
             border:0.5px solid white;
-            border-radius: 50%;
+            
             padding: 0;
             overflow: hidden;
         }
@@ -200,7 +200,7 @@
 .upload-container {
   max-width: 500px;
   margin: 0 auto;
-  background: #2A3038;
+  background:  #e6e4e4;
   border: 1px dashed rgb(237, 240, 243);
   border-radius: 5px;
   
@@ -209,7 +209,7 @@
 .upload-logoContainer {
   max-width: 150px;
  
-  background: #2A3038;
+  background: #505356;
   border: 1px dashed rgb(237, 240, 243);
   border-radius: 5px;
   
@@ -237,18 +237,59 @@
 
 
 .image-preview {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  
 }
 
 .image-preview img {
-  max-width: 100px;
-  max-height: 100px;
-  margin: 5px;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
   border: 1px solid #ddd;
   border-radius: 5px;
 }
 
+.image-preview-div{
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  overflow: hidden;
+  /* border: 1px dashed black; */
+  text-align: center; 
+  margin: 0.75rem;
+  
+}
+.image-preview-remove-button{
+  position: absolute;
+  top: -5px;
+  right: -8px;
+ background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  font-size: large;
+}
+.image-crop-button{
+
+  position: absolute;
+  bottom: -5px;
+  right: 0px;
+ background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  font-size: large;
+
+}
 /* ----------------------------------------edit product------------------------------------ */
 .hide{
   display: none;

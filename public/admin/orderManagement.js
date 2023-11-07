@@ -104,7 +104,9 @@ function viewOrder(orderId){
 
 }
 
-function updateOrderStatus(elem){
+function updateOrderStatusByAdmin(elem){
+
+    
 
     const productId=elem.getAttribute('productId')
     const orderId=elem.getAttribute('orderId')

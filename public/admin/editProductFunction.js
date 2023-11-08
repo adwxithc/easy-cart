@@ -119,31 +119,34 @@ function updateProduct(){
 
 
 
+       if(validateProductData(formData,'editProductForm')){
+            fetch('/admin/updateProduct',{
+                method:"PUT",
+                body:formData
+            })
+            .then(response=>{
+                if(response.ok){
+                    return response.json()
+                }
+                throw new Error("Unable to Update product")
+            })
+            .then(data=>{
+                
+                document.getElementById('alertMessage').innerHTML=data.message
+                clearAlert()
 
-        fetch('/admin/updateProduct',{
-            method:"PUT",
-            body:formData
-        })
-        .then(response=>{
-            if(response.ok){
-                return response.json()
-            }
-            throw new Error("Unable to Update product")
-        })
-        .then(data=>{
-            
-            document.getElementById('alertMessage').innerHTML=data.message
-            clearAlert()
+                document.getElementById('editProductForm').scrollIntoView({
+                    behavior: 'smooth', // You can use 'auto' for instant scrolling
+                    block: 'start' // Scroll to the top of the form
+                });
+            })
+            .catch((er)=>{
+                console.log(er.message)
+                alert("eroor")
+                window.location.href='/admin/500'
+            })
+    }
 
-            document.getElementById('editProductForm').scrollIntoView({
-                behavior: 'smooth', // You can use 'auto' for instant scrolling
-                block: 'start' // Scroll to the top of the form
-            });
-        })
-        .catch((er)=>{
-            console.log(er.message)
-            alert("eroor")
-            window.location.href='/admin/500'
-        })
     })
+
 }

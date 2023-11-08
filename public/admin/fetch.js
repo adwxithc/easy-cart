@@ -392,6 +392,8 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 formData.append('images', selectedImagesArray[i]);
                             } 
 
+
+                            if(validateProductData(formData,'addProductForm')){
                               
                                 // Send a POST request to the server using the Fetch API
                                 fetch('/admin/addProduct', {
@@ -424,6 +426,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                     console.error('Error:', error);
                                     window.location.href='/admin/500'
                                 });
+                            }
 
                         
                     })

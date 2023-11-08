@@ -18,6 +18,7 @@
                     <div class="form-group w-50 mx-3">
                         <label for="name">Product Name</label>
                         <input type="text" class="form-control"  placeholder="Product Name" id="name">
+                        <div id="nameError" class="error"></div>
                     </div>
 
 
@@ -36,9 +37,10 @@
                           <%}%>
 
                         </div>
+                        <div id="categoryError" class="error"></div>
                     </div>
                     <%}%>
-
+                    
                   </div>
 
 
@@ -47,6 +49,7 @@
                       <div class="form-group mx-3">
                         <label for="description">Description</label>
                         <textarea class="form-control"  placeholder="Description" rows="4" id="description"></textarea>
+                        <div id="descriptionError" class="error"></div>
                       </div>
 
 
@@ -67,12 +70,14 @@
                               <%}%>
   
                           </select>
+                          <div id="brandError" class="error"></div>
                         </div>
                         <%}%>
 
                           <div class="form-group w-50 mx-3">
                             <label for="name">Stock</label>
                             <input type="text" class="form-control"  placeholder="Stock" id="stock">
+                            <div id="stockError" class="error"></div>
                           </div>
 
 
@@ -86,11 +91,13 @@
                         <div class="form-group  w-50 mx-3">
                             <label for="name">Price</label>
                             <input type="text" class="form-control"  placeholder="Price" id="price">
+                            <div id="priceError" class="error"></div>
                           </div>
 
                           <div class="form-group  w-50 mx-3">
                             <label for="name">Size</label>
                             <input type="text" class="form-control"  placeholder="Size" id="size">
+                            <div id="sizeError" class="error"></div>
                           </div>
 
 
@@ -100,6 +107,7 @@
                       <div class="form-group py-4 mx-3">
                         <label for="description">Color</label>
                         <input type="color" class="form-control form-control-color"  value="#EE1111" title="Choose product color" id="color">
+                        <div id="colorError" class="error"></div>
                     </div>
 
                 <div class="form-group py-4 mx-3 ">
@@ -108,8 +116,10 @@
                       <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
 
                       <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
-                      <div id="image-preview" class="image-preview"></div>
+                      <div id="image-preview" class="image-preview">
+                      </div>
                   </div>
+                  <div id="imagesError" class="error"></div>
                 </div>
 
 

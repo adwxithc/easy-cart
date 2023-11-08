@@ -21,6 +21,7 @@
                     <div class="form-group w-50 mx-3">
                         <label for="name">Product Name</label>
                         <input type="text" class="form-control"  placeholder="Product Name" id="name" value="<%=productData.name%>">
+                        <div id="nameError" class="error"></div>
                     </div>
 
 
@@ -59,6 +60,7 @@
                           <%}%>
 
                         </div>
+                        <div id="categoryError" class="error"></div>
                     </div>
                     <%}%>
 
@@ -70,6 +72,7 @@
                       <div class="form-group mx-3">
                         <label for="description">Description</label>
                         <textarea class="form-control"  placeholder="Description" rows="4" id="description" ><%=productData.description%></textarea>
+                        <div id="descriptionError" class="error"></div>
                       </div>
 
 
@@ -91,12 +94,14 @@
                                 <%}%>
     
                             </select>
+                            <div id="brandError" class="error"></div>
                           </div>
                           <%}%>
 
                           <div class="form-group w-50 mx-3">
                             <label for="name">Stock</label>
                             <input type="text" class="form-control"  placeholder="Stock" id="stock" value="<%=productData.stock%>">
+                            <div id="stockError" class="error"></div>
                           </div>
 
 
@@ -110,11 +115,13 @@
                         <div class="form-group  w-50 mx-3">
                             <label for="name">Price</label>
                             <input type="text" class="form-control"  placeholder="Price" id="price" value="<%=productData.price%>">
+                            <div id="priceError" class="error"></div>
                           </div>
 
                           <div class="form-group  w-50 mx-3">
                             <label for="name">Size</label>
                             <input type="text" class="form-control"  placeholder="Size" id="size" value="<%=productData.size%>">
+                            <div id="sizeError" class="error"></div>
                           </div>
 
 
@@ -127,7 +134,7 @@
                     </div>
 
 
-                    <div class="row justify-content-center">
+                    <!-- <div class="row justify-content-center">
 
                       <div class="col-lg-4 col-sm-12 m-2">
                         <img  src="/static/productImages/<%=productData.images[0]%>"  width="60%" alt="product image" id="imgePreview1">
@@ -155,6 +162,30 @@
         
                       
                       
+                  </div> -->
+
+
+                  <div class="form-group py-4 mx-3 ">
+                    <label for="description" >Upload Images</label>
+                    <div class="upload-container">
+                        <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
+  
+                        <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
+                        <div id="image-preview" class="image-preview">
+                          <%for(let i=0;i< productData.images.length;i++){%>
+                          <div class="image-preview-div">
+                            <img src="/static/productImages/<%=productData.images[i]%>" alt="" class="image-preview">
+                            <button class="image-view-button" id="<%= i%>"> 
+                              <i class="mdi mdi-crop-free cropProductImg"></i>
+                            </button>
+                            <button class="image-preview-remove-button">
+                              <i class="mdi mdi-close-circle"></i>
+                            </button>
+                          </div>
+                          <%}%>
+                        </div>
+                    </div>
+                    <div id="imagesError" class="error"></div>
                   </div>
 
 

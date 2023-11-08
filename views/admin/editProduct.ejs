@@ -163,24 +163,29 @@
                       
                       
                   </div> -->
+                  
 
 
                   <div class="form-group py-4 mx-3 ">
-                    <label for="description" >Upload Images</label>
+                    <label for="image-upload" >Upload Images</label>
                     <div class="upload-container">
                         <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
   
                         <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
                         <div id="image-preview" class="image-preview">
                           <%for(let i=0;i< productData.images.length;i++){%>
-                          <div class="image-preview-div">
-                            <img src="/static/productImages/<%=productData.images[i]%>" alt="" class="image-preview">
-                            <button class="image-view-button" id="<%= i%>"> 
+                          <div class="image-preview-div" id="<%= 'imgDiv'+i %>">
+                            <img src="/static/productImages/<%=productData.images[i]%>" alt="" class="image-preview" id="<%='img'+i %>">
+
+                            <a class="image-view-button" id="<%= i%>"  > 
                               <i class="mdi mdi-crop-free cropProductImg"></i>
-                            </button>
-                            <button class="image-preview-remove-button">
+                            </a>
+                           
+                            
+                            <a class="image-preview-remove-button" id="<%='removeImg'+i %>">
                               <i class="mdi mdi-close-circle"></i>
-                            </button>
+                            </a>
+                          
                           </div>
                           <%}%>
                         </div>
@@ -243,7 +248,18 @@
 </div>
 
 
+<!-- Modal HTML structure -->
+<div id="viewModal" class="img-modal">
+  
+  <div  class="img-modal-content">
+    <span class="img-close" id="viewModalClose" style="font-size: large;">&times;</span>
+    <div id="viewModal-content">
 
+    </div>
+ 
+      <!-- The cropped image will be displayed here -->
+  </div>
+</div>
     
 
 

@@ -54,13 +54,29 @@
     left: 50%; /* Center horizontally */
     transform: translate(-50%, -50%);
     max-width: 50%;
+    
     padding: 20px;
   }
+
 
   .viewProductDetailsModal{
     height: 100vh;
     overflow: scroll;
     
+  }
+
+
+  #viewModal {
+    transition: opacity 0.3s;
+    opacity: 1;
+    pointer-events: auto;
+  
+  }
+  
+  #viewModal.hidden {
+    opacity: 0;
+    pointer-events: none;
+ 
   }
 
   /* Hide the default scrollbar */
@@ -277,7 +293,7 @@
   z-index: 2;
   font-size: large;
 }
-.image-crop-button{
+.image-view-button{
 
   position: absolute;
   bottom: -5px;
@@ -414,3 +430,81 @@
  .set-color{
   color: black;
  }
+
+ /* ----------------------image crop-------------------- */
+
+ .cropperDiv{
+  display: flex;
+  flex-direction: column;
+
+ height: auto;
+ max-width:20rem ;
+ object-fit: contain;
+ }
+#cropBtn{
+  margin: 0px auto;
+  font-size: large;
+  padding: 1rem;
+}
+
+/* Modal styles */
+.img-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.img-modal-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-height: 35rem;
+  width: auto;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 2rem;
+  
+  border-radius: 5px;
+  object-fit: contain;
+}
+.img-modal-content img{
+
+  width: auto; /* Allow the image to scale while maintaining aspect ratio */
+  height: auto; /* Allow the image to scale while maintaining aspect ratio */
+  display: block;
+}
+
+
+/* Close button style */
+.img-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.saveCrop{
+  padding: 0.5rem 1.5rem;
+  background-color: #fff;
+  border: 1px solid black;
+  color: #000000;
+  margin: 0px auto;
+  margin-top: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s ,transform 0.3s;
+}
+
+.saveCrop:hover{
+  text-decoration: none;
+
+  background-color: #000;
+  border: 1px solid #fff;
+  color: #fff;
+}

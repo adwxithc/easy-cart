@@ -182,16 +182,25 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select Categories';
                         });
                     });
+
+                  
                     
                     
                     //multiple imge upload
                     const imageUploadInput = document.getElementById('image-upload');
                     const imagePreviewContainer = document.getElementById('image-preview');
-                    const selectedImagesArray=[]
-                    
+                    let selectedImagesArray=[]
+                    let  cropper;
+
+                    imageUploadInput.addEventListener('click',(e)=>{
+                        e.target.parentNode.querySelector('input').value=''
+                        selectedImagesArray=[]
+                    })
+
                     imageUploadInput.addEventListener('change', (event) => {
                         imagePreviewContainer.innerHTML = ''; // Clear previous previews
-                    
+
+
                         const selectedImages = event.target.files;
                         if (selectedImages.length > 4) {
                             alert('You can select a maximum of 4 images.');
@@ -199,6 +208,85 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             return;
                         }
                     
+                        document.getElementById('image-preview').addEventListener('click',(e)=>{
+                        
+                            if(e.target.classList.contains('cropProductImg')){
+                              
+                               
+                                    const cropBtn=e.target.parentNode
+                                    const index=cropBtn.id
+                                    
+                                    const imageElement=cropBtn.parentNode.querySelector('img')
+
+                                    
+                                   
+                                    const imgSrc=imageElement.src;
+    
+                                    //creating new imagepreview for image croping
+                                    const cropperDiv=document.createElement('div')
+                                    cropperDiv.classList.add('cropperDiv')
+
+                                    
+                                    const cropperImage=document.createElement('img')
+                                    cropperImage.src=imgSrc;
+
+                                    const saveCrop=document.createElement('a')
+                                    saveCrop.classList.add('saveCrop')
+                                    saveCrop.textContent='SAVE'
+                                    saveCrop.id='saveCrop'
+
+    
+                                    cropperDiv.appendChild(cropperImage)
+                                    cropperDiv.appendChild(saveCrop)
+                                   
+                                   
+
+                                    const modal=document.getElementById('viewModal')
+                                    modal.style.display='block';
+                                    document.getElementById('viewModal').classList.remove('hidden');
+                                    document.getElementById('viewModal-content').innerHTML=''
+                                    document.getElementById('viewModal-content').appendChild(cropperDiv)
+
+                                    document.getElementById('saveCrop').addEventListener('click',()=>{
+                                       
+                                        
+
+                                        // Capture the cropped image data
+                                        const croppedCanvas = cropper.getCroppedCanvas();
+                                        
+                                        // Convert the cropped canvas to a Blob
+                                        croppedCanvas.toBlob(function (blob) {
+                                            // Create a File object with a specified filename
+                                            const croppedFile = new File([blob], 'cropped_img'+Date.now()+'.png', { type: 'image/png' });
+                                            
+                            
+                                            imageElement.src = URL.createObjectURL(croppedFile);
+                                           
+                                            selectedImagesArray[index]=croppedFile
+                                            console.log('index at save ',index)
+                                            console.log('selectedImagesArray at save----------',selectedImagesArray)
+
+        
+                                        }, 'image/png');
+
+                                        document.getElementById('viewModal').classList.add('hidden');
+        
+        
+                                    });
+
+                                    // cropperImage.src=imgSrc
+
+                                     cropper=new Cropper(cropperImage,{
+                                        aspectRatio:0,
+                                        viewMode:0
+                                    })
+    
+    
+                              
+                            }
+                    },true)
+
+
                         for (let i = 0; i < selectedImages.length; i++) {
                             selectedImagesArray.push(selectedImages[i]);
 
@@ -206,23 +294,19 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             image.classList.add('image-preview-div');
                     
                             const imgElement = document.createElement('img');
-                            imgElement.src = URL.createObjectURL(selectedImages[i]);
+                            imgElement.src = URL.createObjectURL(selectedImages[i])
                             imgElement.classList.add('image-preview');
 
                             // ----------------------------------crop image
 
                             const cropButton = document.createElement('button');
-                            cropButton.innerHTML = '<i class="mdi mdi-crop-free"></i>';
-                            cropButton.classList.add('image-crop-button');
+                            cropButton.innerHTML = '<i class="mdi mdi-crop-free cropProductImg"></i>';
+                            cropButton.id=i
+                            cropButton.classList.add('image-view-button');
 
-                            cropButton.addEventListener('click', () => {
-                                // Initialize the Cropper.js instance for the image
-                                const cropper = new Cropper(imgElement, {
-                                    aspectRatio: 1, // Set the desired aspect ratio
-                                    viewMode: 1,    // Set the desired view mode
-                                    // Add more Cropper.js options as needed
-                                });
-                            });
+
+                           
+
 
                             // -------------------------------crop part ends
 
@@ -244,7 +328,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             });
                     
                             image.appendChild(imgElement);
-                            image.appendChild(removeButton);
+                            image.appendChild(removeButton)
                             image.appendChild(cropButton);
                             imagePreviewContainer.appendChild(image);
                         }
@@ -407,6 +491,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 //action performed in the right block
 
 document.getElementById('pageContent').addEventListener('click',(e)=>{
+    
   
     if(e.target.classList.contains('orderOption')){
         if(e.target.id=='nextOrders'){
@@ -437,7 +522,15 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
               });
             
         }
-    } 
+        
+    }
+    if(e.target.id=='viewModalClose'){
+        
+        
+        document.getElementById('viewModal').style.display='none'
+
+    }
+    
 
 },true)
 

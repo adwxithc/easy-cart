@@ -184,6 +184,7 @@ const addProduct=async(req,res)=>{
 const insertProduct=async(req,res)=>{
     try {
        
+        console.log(req.files)
 
         const name=req.body.name
         const description=req.body.description

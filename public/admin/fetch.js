@@ -195,6 +195,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     imageUploadInput.addEventListener('click',(e)=>{
                         e.target.parentNode.querySelector('input').value=''
                         selectedImagesArray=[]
+                        document.getElementById('image-preview').innerHTML=''
                     })
 
                     imageUploadInput.addEventListener('change', (event) => {
@@ -208,83 +209,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             return;
                         }
                     
-                        document.getElementById('image-preview').addEventListener('click',(e)=>{
                         
-                            if(e.target.classList.contains('cropProductImg')){
-                              
-                               
-                                    const cropBtn=e.target.parentNode
-                                    const index=cropBtn.id
-                                    
-                                    const imageElement=cropBtn.parentNode.querySelector('img')
-
-                                    
-                                   
-                                    const imgSrc=imageElement.src;
-    
-                                    //creating new imagepreview for image croping
-                                    const cropperDiv=document.createElement('div')
-                                    cropperDiv.classList.add('cropperDiv')
-
-                                    
-                                    const cropperImage=document.createElement('img')
-                                    cropperImage.src=imgSrc;
-
-                                    const saveCrop=document.createElement('a')
-                                    saveCrop.classList.add('saveCrop')
-                                    saveCrop.textContent='SAVE'
-                                    saveCrop.id='saveCrop'
-
-    
-                                    cropperDiv.appendChild(cropperImage)
-                                    cropperDiv.appendChild(saveCrop)
-                                   
-                                   
-
-                                    const modal=document.getElementById('viewModal')
-                                    modal.style.display='block';
-                                    document.getElementById('viewModal').classList.remove('hidden');
-                                    document.getElementById('viewModal-content').innerHTML=''
-                                    document.getElementById('viewModal-content').appendChild(cropperDiv)
-
-                                    document.getElementById('saveCrop').addEventListener('click',()=>{
-                                       
-                                        
-
-                                        // Capture the cropped image data
-                                        const croppedCanvas = cropper.getCroppedCanvas();
-                                        
-                                        // Convert the cropped canvas to a Blob
-                                        croppedCanvas.toBlob(function (blob) {
-                                            // Create a File object with a specified filename
-                                            const croppedFile = new File([blob], 'cropped_img'+Date.now()+'.png', { type: 'image/png' });
-                                            
-                            
-                                            imageElement.src = URL.createObjectURL(croppedFile);
-                                           
-                                            selectedImagesArray[index]=croppedFile
-                                            console.log('index at save ',index)
-                                            console.log('selectedImagesArray at save----------',selectedImagesArray)
-
-        
-                                        }, 'image/png');
-
-                                        document.getElementById('viewModal').classList.add('hidden');
-        
-        
-                                    });
-
-                                    // cropperImage.src=imgSrc
-
-                                     cropper=new Cropper(cropperImage,{
-                                        aspectRatio:0,
-                                        viewMode:0
-                                    })
-    
-    
-                              
-                            }
-                    },true)
 
 
                         for (let i = 0; i < selectedImages.length; i++) {
@@ -299,7 +224,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                             // ----------------------------------crop image
 
-                            const cropButton = document.createElement('button');
+                            const cropButton = document.createElement('a');
                             cropButton.innerHTML = '<i class="mdi mdi-crop-free cropProductImg"></i>';
                             cropButton.id=i
                             cropButton.classList.add('image-view-button');
@@ -310,9 +235,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                             // -------------------------------crop part ends
 
-                            const removeButton = document.createElement('button');
+                            const removeButton = document.createElement('a');
                             removeButton.innerHTML = '<i class="mdi mdi-close-circle"></i>';
                             removeButton.classList.add('image-preview-remove-button');
+                            // removeButton.setAttribute('index',i)
                             
                     
                             removeButton.addEventListener('click', () => {
@@ -321,11 +247,80 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 if (removedImageIndex !== -1) {
                                     selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
                                 }
-                                 
 
                                 
 
                             });
+
+
+                            cropButton.addEventListener('click',(e)=>{
+                        
+                                  
+                                    const index = selectedImagesArray.indexOf(selectedImages[i]);
+
+                                       
+                                        const imgSrc=imgElement.src;
+        
+                                        //creating new imagepreview for image croping
+                                        const cropperDiv=document.createElement('div')
+                                        cropperDiv.classList.add('cropperDiv')
+    
+                                        
+                                        const cropperImage=document.createElement('img')
+                                        cropperImage.src=imgSrc;
+    
+                                        const saveCrop=document.createElement('a')
+                                        saveCrop.classList.add('saveCrop')
+                                        saveCrop.textContent='SAVE'
+                                        saveCrop.id='saveCrop'
+    
+        
+                                        cropperDiv.appendChild(cropperImage)
+                                        cropperDiv.appendChild(saveCrop)
+                                       
+                                       
+    
+                                        const modal=document.getElementById('viewModal')
+                                        modal.style.display='block';
+                                        document.getElementById('viewModal').classList.remove('hidden');
+                                        document.getElementById('viewModal-content').innerHTML=''
+                                        document.getElementById('viewModal-content').appendChild(cropperDiv)
+    
+                                        document.getElementById('saveCrop').addEventListener('click',()=>{
+                                           
+                                            
+    
+                                            // Capture the cropped image data
+                                            const croppedCanvas = cropper.getCroppedCanvas();
+                                            
+                                            // Convert the cropped canvas to a Blob
+                                            croppedCanvas.toBlob(function (blob) {
+                                                // Create a File object with a specified filename
+                                                const croppedFile = new File([blob], 'cropped_img'+Date.now()+'.png', { type: 'image/png' });
+                                                
+                                
+                                                imgElement.src = URL.createObjectURL(croppedFile);
+                                               
+                                                selectedImagesArray[index]=croppedFile
+    
+    
+            
+                                            }, 'image/png');
+    
+                                            document.getElementById('viewModal').classList.add('hidden');
+            
+            
+                                        });
+    
+                                        // cropperImage.src=imgSrc
+    
+                                         cropper=new Cropper(cropperImage,{
+                                            aspectRatio:0,
+                                            viewMode:0
+                                        })
+          
+                        },true)
+
                     
                             image.appendChild(imgElement);
                             image.appendChild(removeButton)
@@ -354,7 +349,6 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             const additionalSpecifications=document.getElementById("additionalSpecifications").value
                             const size=document.getElementById('size').value
 
-                            // const images=document.getElementById('image-upload').files
                             
                             const formData = new FormData();
     
@@ -494,7 +488,6 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 //action performed in the right block
 
 document.getElementById('pageContent').addEventListener('click',(e)=>{
-    
   
     if(e.target.classList.contains('orderOption')){
         if(e.target.id=='nextOrders'){

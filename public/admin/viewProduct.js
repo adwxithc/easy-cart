@@ -90,6 +90,7 @@ function viewProduct(){
                 .then(html=>{
                     pageContent.innerHTML=html
                     multiSelectDropdown()
+                    // imageEditor()
                     updateProduct() //this function is located at => public\admin\editProductFunction.js
 
                 })

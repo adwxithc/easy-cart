@@ -67,12 +67,12 @@ function updateProduct(){
         const additionalSpecifications=document.getElementById("additionalSpecifications").value
         const size=document.getElementById('size').value
 
-        const image1=document.getElementById('img1').files[0]
-        const image2=document.getElementById('img2').files[0]
-        const image3=document.getElementById('img3').files[0]
-        const image4=document.getElementById('img4').files[0]
+        // const image1=document.getElementById('img1').files[0]
+        // const image2=document.getElementById('img2').files[0]
+        // const image3=document.getElementById('img3').files[0]
+        // const image4=document.getElementById('img4').files[0]
 
-        const imgs=[image1,image2,image3,image4]
+        // const imgs=[image1,image2,image3,image4]
 
 
        
@@ -109,13 +109,13 @@ function updateProduct(){
        formData.append('additionalSpecifications', additionalSpecifications);
        formData.append('id',id);
 
-       imgs.forEach((v,i)=>{
-        if(v){
-            formData.append('image'+i,v)
-        }else{
-            formData.append('image'+i,null)
-        }
-       })
+    //    imgs.forEach((v,i)=>{
+    //     if(v){
+    //         formData.append('image'+i,v)
+    //     }else{
+    //         formData.append('image'+i,null)
+    //     }
+    //    })
 
 
 
@@ -142,7 +142,7 @@ function updateProduct(){
             })
             .catch((er)=>{
                 console.log(er.message)
-                alert("eroor")
+                
                 window.location.href='/admin/500'
             })
     }
@@ -150,3 +150,94 @@ function updateProduct(){
     })
 
 }
+
+        //         function imageEditor(){
+                  
+        //             //multiple imge upload
+        //             const imageUploadInput = document.getElementById('image-upload');
+        //             const imagePreviewContainer = document.getElementById('image-preview');
+            
+        //             let selectedImagesArray=[]
+        //             let  imgCropper;
+
+        //             imageUploadInput.addEventListener('click',(e)=>{
+        //                 e.target.parentNode.querySelector('input').value=''
+        //                 selectedImagesArray=[]
+        //                 document.getElementById('image-preview').innerHTML=''
+        //             })
+
+        //             imageUploadInput.addEventListener('change', (event) => {
+        //                 imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+
+        //                 const selectedImages = event.target.files;
+        //                 if (selectedImages.length > 4) {
+        //                     alert('You can select a maximum of 4 images.');
+        //                     imageUploadInput.value = ''; // Clear the input field
+        //                     return;
+        //                 }
+                    
+                        
+
+
+        //                 for (let i = 0; i < selectedImages.length; i++) {
+        //                     selectedImagesArray.push(selectedImages[i]);
+
+        //                     const image = document.createElement('div');
+        //                     image.classList.add('image-preview-div');
+        //                     image.id='imgDiv'+i
+                    
+        //                     const imgElement = document.createElement('img');
+        //                     imgElement.id='img'+i
+        //                     imgElement.src = URL.createObjectURL(selectedImages[i])
+        //                     imgElement.classList.add('image-preview');
+
+        //                     // ----------------------------------crop image
+
+        //                     const cropButton = document.createElement('button');
+        //                     cropButton.innerHTML = '<i class="mdi mdi-crop-free cropProductImg"></i>';
+        //                     cropButton.id=i
+        //                     cropButton.classList.add('image-view-button');
+
+
+                           
+
+
+        //                     // -------------------------------crop part ends
+
+        //                     const removeButton = document.createElement('button');
+        //                     removeButton.innerHTML = '<i class="mdi mdi-close-circle"></i>';
+        //                     removeButton.id='removeImg'+i
+        //                     removeButton.classList.add('image-preview-remove-button');
+                            
+                    
+                    
+        //                     image.appendChild(imgElement);
+        //                     image.appendChild(removeButton)
+        //                     image.appendChild(cropButton);
+        //                     imagePreviewContainer.appendChild(image);
+        //                 }
+        //             });
+
+
+
+        //         document.getElementById('image-preview').addEventListener('click',(e)=>{
+                       
+        //            if(e.target.classList.contains('mdi-close-circle')){
+        //                 const index=e.target.parentNode.id.slice(9)
+                       
+                       
+        //                     document.getElementById('imgDiv'+index).remove();
+                            
+        //             // Remove the image and button when clicked
+        //             const removedImageIndex = index
+        //             if (selectedImagesArray.length) {
+        //                 selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
+        //             }
+        //             }
+        //     },true)
+
+
+     
+        // }
+                    

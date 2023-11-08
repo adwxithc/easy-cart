@@ -285,13 +285,16 @@
 .image-preview-remove-button{
   position: absolute;
   top: -5px;
-  right: -8px;
+  right: 0px;
  background-color: transparent;
   color: black;
   border: none;
   cursor: pointer;
   z-index: 2;
   font-size: large;
+}
+.image-preview-remove-button:hover{
+  color: #000;
 }
 .image-view-button{
 
@@ -505,7 +508,7 @@
   text-decoration: none;
 
   background-color: #000;
-  border: 1px solid #fff;
+  
   color: #fff;
 }
 .error{

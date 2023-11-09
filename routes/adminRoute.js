@@ -79,7 +79,7 @@ admin_route.patch('/changeProductStatus',adminController.changeProductStatus);
 admin_route.get('/viewMoreProductInfo',adminController.viewMoreProductInfo);
 admin_route.get('/searchProduct',adminController.searchProduct);
 admin_route.get('/editProduct',adminController.loadEditProduct);
-admin_route.put('/updateProduct',update.fields([{name:'image0'},{name:'image1'},{name:'image2'},{name:'image3'}]),adminController.updateProductInfo);
+admin_route.put('/updateProduct',update.array('images',4),validateAdminInputs.validateProductDatas,adminController.updateProductInfo);
 
 
 

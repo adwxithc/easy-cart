@@ -164,30 +164,15 @@
                       
                   </div> -->
                   
-
+                  <input type="hidden" name="" id="imagesArr" value="<%=productData.images%>">
 
                   <div class="form-group py-4 mx-3 ">
-                    <label for="image-upload" >Upload Images</label>
+                    <label for="description" >Upload Images</label>
                     <div class="upload-container">
                         <label for="image-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
   
                         <input type="file" id="image-upload" class="upload-input" accept="image/*"  multiple>
                         <div id="image-preview" class="image-preview">
-                          <%for(let i=0;i< productData.images.length;i++){%>
-                          <div class="image-preview-div" id="<%= 'imgDiv'+i %>">
-                            <img src="/static/productImages/<%=productData.images[i]%>" alt="" class="image-preview" id="<%='img'+i %>">
-
-                            <a class="image-view-button" id="<%= i%>"  > 
-                              <i class="mdi mdi-crop-free cropProductImg"></i>
-                            </a>
-                           
-                            
-                            <a class="image-preview-remove-button" id="<%='removeImg'+i %>">
-                              <i class="mdi mdi-close-circle"></i>
-                            </a>
-                          
-                          </div>
-                          <%}%>
                         </div>
                     </div>
                     <div id="imagesError" class="error"></div>

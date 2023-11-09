@@ -49,6 +49,7 @@ function multiSelectDropdown(){
 }
 
 //function to sent edited data to server
+let selectedImagesArray=[]
 
 function updateProduct(){
     const updateProduct=document.getElementById('editProduct')
@@ -67,12 +68,6 @@ function updateProduct(){
         const additionalSpecifications=document.getElementById("additionalSpecifications").value
         const size=document.getElementById('size').value
 
-        // const image1=document.getElementById('img1').files[0]
-        // const image2=document.getElementById('img2').files[0]
-        // const image3=document.getElementById('img3').files[0]
-        // const image4=document.getElementById('img4').files[0]
-
-        // const imgs=[image1,image2,image3,image4]
 
 
        
@@ -109,13 +104,11 @@ function updateProduct(){
        formData.append('additionalSpecifications', additionalSpecifications);
        formData.append('id',id);
 
-    //    imgs.forEach((v,i)=>{
-    //     if(v){
-    //         formData.append('image'+i,v)
-    //     }else{
-    //         formData.append('image'+i,null)
-    //     }
-    //    })
+
+
+    for (let i = 0; i < selectedImagesArray.length; i++) {
+        formData.append('images', selectedImagesArray[i].image);
+    } 
 
 
 
@@ -141,9 +134,9 @@ function updateProduct(){
                 });
             })
             .catch((er)=>{
-                console.log(er.message)
+                console.log(er)
                 
-                window.location.href='/admin/500'
+                // window.location.href='/admin/500'
             })
     }
 
@@ -151,93 +144,213 @@ function updateProduct(){
 
 }
 
-        //         function imageEditor(){
+                function imageEditor(existingImageURLs){
                   
-        //             //multiple imge upload
-        //             const imageUploadInput = document.getElementById('image-upload');
-        //             const imagePreviewContainer = document.getElementById('image-preview');
-            
-        //             let selectedImagesArray=[]
-        //             let  imgCropper;
-
-        //             imageUploadInput.addEventListener('click',(e)=>{
-        //                 e.target.parentNode.querySelector('input').value=''
-        //                 selectedImagesArray=[]
-        //                 document.getElementById('image-preview').innerHTML=''
-        //             })
-
-        //             imageUploadInput.addEventListener('change', (event) => {
-        //                 imagePreviewContainer.innerHTML = ''; // Clear previous previews
-
-
-        //                 const selectedImages = event.target.files;
-        //                 if (selectedImages.length > 4) {
-        //                     alert('You can select a maximum of 4 images.');
-        //                     imageUploadInput.value = ''; // Clear the input field
-        //                     return;
-        //                 }
+                     //multiple imge upload
+                     const imageUploadInput = document.getElementById('image-upload');
+                     const imagePreviewContainer = document.getElementById('image-preview');
                     
-                        
+                     let  cropper;
+               
+
+                     
+ 
+                     imageUploadInput.addEventListener('click',(e)=>{
+                         e.target.parentNode.querySelector('input').value=''
+                         selectedImagesArray=[]
+                         document.getElementById('image-preview').innerHTML=''
+                     })
+ 
+                     imageUploadInput.addEventListener('change', (event) => {
+                         imagePreviewContainer.innerHTML = ''; // Clear previous previews
+ 
+ 
+                         const selectedImages = event.target.files;
+                         if (selectedImages.length > 4) {
+                             alert('You can select a maximum of 4 images.');
+                             imageUploadInput.value = ''; // Clear the input field
+                             return;
+                         }
+                     
+
+                         setupEditableImages(selectedImages, existingImageURLs);
+ 
+ 
+                         
+                     });
+
+                        // Handle existing images on page load
+                    if (existingImageURLs && existingImageURLs.length > 0) {
+                        setupEditableImages([], existingImageURLs);
+                    }
 
 
-        //                 for (let i = 0; i < selectedImages.length; i++) {
-        //                     selectedImagesArray.push(selectedImages[i]);
 
-        //                     const image = document.createElement('div');
-        //                     image.classList.add('image-preview-div');
-        //                     image.id='imgDiv'+i
+                    function setupEditableImages(selectedImages, existingImageURLs){
+                        console.log('---selectedImages-------',selectedImages)
+                        console.log('----existingImageURLs---',existingImageURLs)
+
+                        const imagesToDisplay = selectedImages.length > 0 ? selectedImages : existingImageURLs;
+                        selectedImagesArray=[]
+                        for (let i = 0; i < imagesToDisplay.length; i++) {
+                           
+                            // selectedImagesArray.push(imagesToDisplay[i]);
+
+                            const image = document.createElement('div');
+                            image.classList.add('image-preview-div');
                     
-        //                     const imgElement = document.createElement('img');
-        //                     imgElement.id='img'+i
-        //                     imgElement.src = URL.createObjectURL(selectedImages[i])
-        //                     imgElement.classList.add('image-preview');
+                            const imgElement = document.createElement('img');
 
-        //                     // ----------------------------------crop image
+                            if (typeof imagesToDisplay[i] === 'string') {
+                                // It's an existing image URL
+                                const imageUrl = imagesToDisplay[i];
+                                convertUrlToFile(imageUrl, (file) => {
+                                    const identifier=`${Date.now()}${i}`
+                                    imgElement.src = URL.createObjectURL(file);
+                                    imgElement.setAttribute('identifier',identifier)
+                                    selectedImagesArray.push({image:file,identifier:identifier});
+                                });
+                            } else {
+                                // It's a newly added image as a Blob or File
+                                const identifier=`${Date.now()}${i}`
+                                imgElement.src = URL.createObjectURL(imagesToDisplay[i]);
+                                imgElement.setAttribute('identifier',identifier)
+                                selectedImagesArray.push({image:imagesToDisplay[i],identifier:identifier});
+                            }
+                            
+                            
 
-        //                     const cropButton = document.createElement('button');
-        //                     cropButton.innerHTML = '<i class="mdi mdi-crop-free cropProductImg"></i>';
-        //                     cropButton.id=i
-        //                     cropButton.classList.add('image-view-button');
+                            console.log('selectedImagesArray--------------after file conversion',selectedImagesArray)
+                    
+
+                            // ----------------------------------crop image
+
+                            const cropButton = document.createElement('a');
+                            cropButton.innerHTML = '<i class="mdi mdi-crop-free "></i>';
+                            cropButton.id=i
+                            cropButton.classList.add('image-view-button');
 
 
                            
 
 
-        //                     // -------------------------------crop part ends
+                            // -------------------------------crop part ends
 
-        //                     const removeButton = document.createElement('button');
-        //                     removeButton.innerHTML = '<i class="mdi mdi-close-circle"></i>';
-        //                     removeButton.id='removeImg'+i
-        //                     removeButton.classList.add('image-preview-remove-button');
+                            const removeButton = document.createElement('a');
+                            removeButton.innerHTML = '<i class="mdi mdi-close-circle"></i>';
+                            removeButton.classList.add('image-preview-remove-button');
+                            // removeButton.setAttribute('index',i)
                             
                     
+                            removeButton.addEventListener('click', () => {
+                                image.remove(); // Remove the image and button when clicked
+                                const key=imgElement.getAttribute('identifier')
+                                
+                                const removedImageIndex = selectedImagesArray.findIndex(imageData=>imageData.identifier==key);
+                                
+                                if (removedImageIndex !== -1) {
+                                    selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
+                                }
+
+                                console.log('at remove----',selectedImagesArray)
+
+                            });
+
+
+                            cropButton.addEventListener('click',(e)=>{
+                        
+                                    const key=imgElement.getAttribute('identifier')
+                                 
+                                    const index = selectedImagesArray.findIndex(imageData=>imageData.identifier==key);
+                                    
+               
+                                        const imgSrc=imgElement.src;
+        
+                                        //creating new imagepreview for image croping
+                                        const cropperDiv=document.createElement('div')
+                                        cropperDiv.classList.add('cropperDiv')
+    
+                                        
+                                        const cropperImage=document.createElement('img')
+                                        cropperImage.src=imgSrc;
+    
+                                        const saveCrop=document.createElement('a')
+                                        saveCrop.classList.add('saveCrop')
+                                        saveCrop.textContent='SAVE'
+                                        saveCrop.id='saveCrop'
+    
+        
+                                        cropperDiv.appendChild(cropperImage)
+                                        cropperDiv.appendChild(saveCrop)
+                                       
+                                       
+    
+                                        const modal=document.getElementById('viewModal')
+                                        modal.style.display='block';
+                                        document.getElementById('viewModal').classList.remove('hidden');
+                                        document.getElementById('viewModal-content').innerHTML=''
+                                        document.getElementById('viewModal-content').appendChild(cropperDiv)
+
+                                        
+    
+                                        document.getElementById('saveCrop').addEventListener('click',()=>{
+                                           
+                                            
+    
+                                            // Capture the cropped image data
+                                            const croppedCanvas = cropper.getCroppedCanvas();
+                                            
+                                            // Convert the cropped canvas to a Blob
+                                            croppedCanvas.toBlob(function (blob) {
+                                                // Create a File object with a specified filename
+                                                const croppedFile = new File([blob], 'cropped_img'+Date.now()+'.png', { type: 'image/png' });
+                                                
+                                
+                                                imgElement.src = URL.createObjectURL(croppedFile);
+                                               
+                                                selectedImagesArray[index].image=croppedFile
+                                               console.log('at save crop ----------',selectedImagesArray)
+    
+            
+                                            }, 'image/png');
+    
+                                            document.getElementById('viewModal').classList.add('hidden');
+            
+            
+                                        });
+    
+                                        // cropperImage.src=imgSrc
+    
+                                         cropper=new Cropper(cropperImage,{
+                                            aspectRatio:0,
+                                            viewMode:0
+                                        })
+          
+                        },true)
+
                     
-        //                     image.appendChild(imgElement);
-        //                     image.appendChild(removeButton)
-        //                     image.appendChild(cropButton);
-        //                     imagePreviewContainer.appendChild(image);
-        //                 }
-        //             });
+                            image.appendChild(imgElement);
+                            image.appendChild(removeButton)
+                            image.appendChild(cropButton);
+                            imagePreviewContainer.appendChild(image);
 
-
-
-        //         document.getElementById('image-preview').addEventListener('click',(e)=>{
-                       
-        //            if(e.target.classList.contains('mdi-close-circle')){
-        //                 const index=e.target.parentNode.id.slice(9)
-                       
-                       
-        //                     document.getElementById('imgDiv'+index).remove();
-                            
-        //             // Remove the image and button when clicked
-        //             const removedImageIndex = index
-        //             if (selectedImagesArray.length) {
-        //                 selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
-        //             }
-        //             }
-        //     },true)
-
+                           
+                        }
+                    }
+                    
 
      
-        // }
+            }
+
+            // Function to convert URL to File
+function convertUrlToFile(url, callback) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const filename = url.substring(url.lastIndexOf('/') + 1);
+            const file = new File([blob], filename, { type: blob.type });
+            callback(file);
+        })
+        .catch(error => console.error('Error converting URL to File:', error));
+}
                     

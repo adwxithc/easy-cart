@@ -88,15 +88,23 @@ function viewProduct(){
                     throw new Error("Unable to connect to server")
                 })
                 .then(html=>{
-                    pageContent.innerHTML=html
+                    pageContent.innerHTML=html;
+                    const imageBasePath = '/static/productImages/';
+                    const existingImages = document.getElementById('imagesArr').value.split(',').filter(Boolean);
+                
+                    // Convert image names to URLs
+                    const existingImageURLs = existingImages.map(imageName => `${imageBasePath}${imageName}`);
+                
+                    imageEditor(existingImageURLs); //this function is located at => public\admin\editProductFunction.js
+                    
                     multiSelectDropdown()
-                    // imageEditor()
+                   
                     updateProduct() //this function is located at => public\admin\editProductFunction.js
 
                 })
                 .catch((error)=>{
-                    console.log(error.message)
-                    window.location.href='/admin/500'
+                    console.log(error)
+                    // window.location.href='/admin/500'
                 })
 
             }

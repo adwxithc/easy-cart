@@ -432,7 +432,7 @@ const loadEditProduct=async(req,res)=>{
         
         
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         res.status(500).json({message:"internal server error"})
         
     }
@@ -440,144 +440,36 @@ const loadEditProduct=async(req,res)=>{
 
 //update edited product info
 const updateProductInfo=async(req,res)=>{
+    console.log(req.productData)
+
     try {
-       
-
-        const id=req.body.id 
-        const name=req.body.name;
-        const description=req.body.description;
-        const category=req.body.category;
-        const brand=req.body.brand;
-        const stock=req.body.stock;
-        const price=req.body.price;
-        const size=req.body.size;
-        const color=req.body.color;
-        const careInstructions=req.body.careInstructions;
-        const material=req.body.material;
-        const additionalSpecifications=req.body.additionalSpecifications;
-
-        if(!(name&&description&&category&&brand&&stock&&price&&size&&color)){
-            res.json({message:"You must provide all general informations"})
-
-        }else if(isNaN(stock)){
-            res.json({message:"stock must be in number"})
-        }else if(isNaN(price)){
-            res.json({message:"price must be in number"})
+        const productData=await Product.findById({_id:req.body.id})
+        const updateProduct=await Product.updateOne({_id:req.body.id},{$set:req.productData})
+        if(updateProduct){
+            productData.images.forEach((v)=>{
+                const path=`./public/productImages/${v}`
+                fs.unlink(path,(err)=>{
+                    if(err){
+                        console.log(err.message)
+                    }else{
+                        console.log("old image removed")
+                    }
+                })
+            })
+            res.json({message:'product updated successfully',updated:true})
+    
         }else{
-
-
-            const productData=await Product.findById(id)
-            if(productData){
-
-                const originalProductData = { ...productData._doc };
-
-                
-                
-                const dataUpdated=await Product.updateOne(
-                    {_id:id},
-                    {
-                        $set:{
-
-                            name:name,
-                            description:description,
-                            category:category,
-                            brand:brand,
-                            stock:stock,
-                            price:price,
-                            size:size,
-                            color:color,
-                            careInstructions:careInstructions,
-                            material:material,
-                            additionalSpecifications:additionalSpecifications,
-                            lastModified:Date.now()
-                        }
-                    }
-                    )
-
-                    
-                if(dataUpdated){
-
-                    const replacedImg=[] //old images
-                    const newImges=[]  //new images
-
-                    const imagesName=[req.files['image0'],req.files['image1'],req.files['image2'],req.files['image3']]
-                    for(let i=0;i<imagesName.length;i++){
-
-                    if(imagesName[i]){
-                        
-                        newImges.push(imagesName[i][0])
-                        if( productData && productData.images[i] )  replacedImg.push(productData.images[i]);
-
-
-                        
-                            const ImgUpdate = await Product.updateOne(
-                                { _id: id},
-                                {
-                                    $set: {
-                                            [`images.${i}`]: imagesName[i][0].filename,
-                                        },
-                                }
-                            );
-
-                            if(!ImgUpdate){
-                                await Product.updateOne({ _id: id }, { $set: originalProductData });
-
-                                newImges.forEach((v,i)=>{
-                                    const path=`./public/productImages/${v}`
-                                    fs.unlink(path,(err)=>{
-                                        if(err){
-                                            console.log(err.message)
-                                        }else{
-                                            console.log("old image removed")
-                                        }
-                                    })
-
-                                })
-
-
-                                res.status(500).json({message:"failed to update product image"})
-
-                            }
-
-
-                        }
-                    }
-
-
-                        replacedImg.forEach((v,i)=>{
-                            const path=`./public/productImages/${v}`
-                            fs.unlink(path,(err)=>{
-                                if(err){
-                                    console.log(err.message)
-                                }else{
-                                    console.log("old image removed")
-                                }
-                            })
-                        })
-
-                        res.json({message:"Product updated successfully"})
-
-
-
-                }else{
-                    res.status(500).json({message:"This product updation failed"})
-                }
-                
-
-
-            }else{
-                res.status(404).json({message:"this product doesn't exist"})
-            }
+            res.json({message:'product updation failed',updated:false})
         }
         
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:"internal server error"})
+    }
+   
+   
        
 
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message:"internal server error"})
-        
-    }
 }
 
 

@@ -213,19 +213,21 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
 
                         for (let i = 0; i < selectedImages.length; i++) {
-                            selectedImagesArray.push(selectedImages[i]);
+                            const identifier=`${Date.now()}${i}`
+                            selectedImagesArray.push({image:selectedImages[i],identifier:identifier});
 
                             const image = document.createElement('div');
                             image.classList.add('image-preview-div');
                     
                             const imgElement = document.createElement('img');
                             imgElement.src = URL.createObjectURL(selectedImages[i])
-                            imgElement.classList.add('image-preview');
+                            imgElement.setAttribute('identifier',identifier)
+                            // imgElement.classList.add('image-preview');
 
                             // ----------------------------------crop image
 
                             const cropButton = document.createElement('a');
-                            cropButton.innerHTML = '<i class="mdi mdi-crop-free cropProductImg"></i>';
+                            cropButton.innerHTML = '<i class="mdi mdi-crop-free "></i>';
                             cropButton.id=i
                             cropButton.classList.add('image-view-button');
 
@@ -243,20 +245,24 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     
                             removeButton.addEventListener('click', () => {
                                 image.remove(); // Remove the image and button when clicked
-                                const removedImageIndex = selectedImagesArray.indexOf(selectedImages[i]);
+                                const key=imgElement.getAttribute('identifier')
+                                
+                                const removedImageIndex = selectedImagesArray.findIndex(imageData=>imageData.identifier==key);
+                                
                                 if (removedImageIndex !== -1) {
                                     selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
                                 }
 
-                                
 
                             });
 
 
                             cropButton.addEventListener('click',(e)=>{
                         
-                                  
-                                    const index = selectedImagesArray.indexOf(selectedImages[i]);
+                                    const key=imgElement.getAttribute('identifier')
+                                    
+                                    const index = selectedImagesArray.findIndex(imageData=>imageData.identifier==key);
+                                        
 
                                        
                                         const imgSrc=imgElement.src;
@@ -301,7 +307,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 
                                                 imgElement.src = URL.createObjectURL(croppedFile);
                                                
-                                                selectedImagesArray[index]=croppedFile
+                                                selectedImagesArray[index].image=croppedFile
     
     
             
@@ -383,7 +389,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             formData.append('additionalSpecifications', additionalSpecifications);
                         
                             for (let i = 0; i < selectedImagesArray.length; i++) {
-                                formData.append('images', selectedImagesArray[i]);
+                                formData.append('images', selectedImagesArray[i].image);
                             } 
 
 

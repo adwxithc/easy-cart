@@ -1,6 +1,52 @@
 const Brand=require('../model/brandModel')
+const Product=require('../model/productModel')
 
 
+const validateProductDatas=async(req,res,next)=>{
+    try {
+
+        const images=[]
+        for(let image of req.files){
+            images.push(image.filename)
+        }
+
+        const productData=req.body
+        const product=await Product.findById(req.body.id)
+        if(!product){
+            res.json({message:"This product doesn't exist",updated:false})
+
+        }else if(!(productData.name&&productData.description&&productData.category.length&&productData.brand&&productData.stock&&productData.price&&productData.size&&productData.color)){
+            res.json({message:'please provide all general informations',updated:false})
+        }else if(isNaN(productData.stock) || Number(productData.stock)<0){
+                res.json({message:'Invalid stock information',updated:false})
+        }else if(isNaN(productData.price) || Number(productData.price)<0){
+            res.json({message:'Invalid price information',updated:false})
+        }else if(!images.length){
+            res.json({message:'Please provide atlease one image',updated:false})
+        }else{
+            req.productData={
+                name:productData.name,
+                size:productData.size,
+                description:productData.description,
+                category:productData.category,
+                stock:productData.stock,
+                color:productData.color,
+                price:productData.price,
+                lastModified:Date.now(),
+                brand:productData.brand,
+                careInstructions:productData?.careInstructions,
+                material:productData?.material,
+                additionalSpecifications:productData?.additionalSpecifications,
+                images:images
+            }
+            next()
+        }
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:"internal server error"})
+    }
+}
 
 const validateBrandData =async(req,res,next)=>{
     
@@ -102,6 +148,7 @@ const validateBrandData =async(req,res,next)=>{
 
 
 module.exports={
+validateProductDatas,
  validateBrandData,
  validateUpdatedBrandData
 }

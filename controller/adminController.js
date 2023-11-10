@@ -460,7 +460,7 @@ const updateProductInfo=async(req,res)=>{
     
         }else{
             res.json({message:'product updation failed',updated:false})
-        }
+        } 
         
     } catch (error) {
         console.log(error)

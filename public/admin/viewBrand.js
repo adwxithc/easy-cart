@@ -96,6 +96,7 @@ function brandPagination(){
         }
       
 }
+let logoToDisplay
 
 function brandOperations(){
     
@@ -174,11 +175,15 @@ function brandOperations(){
                     })
                     .then(html=>{
                         pageContent.innerHTML = html;
+                        const logoName=document.getElementById('logo').value;
+
+                        const existingImageURL=`/static/brandImages/${logoName}`
+                        editBrandlogo(existingImageURL)
                         updateBrand()
                     })
                     .catch(error => {
                 
-                        window.location.href='/admin/500'
+                        // window.location.href='/admin/500'
                         console.error('Fetch error:', error);
                     });
                 }
@@ -187,13 +192,154 @@ function brandOperations(){
     },true)
 }
 
+function editBrandlogo(existingImageURL){
+    
+
+    const imageUploadInput = document.getElementById('logo-upload');
+    const imagePreviewContainer = document.getElementById('image-preview');
+
+    let  cropper;
+
+
+    imageUploadInput.addEventListener('change', (event) => {
+        imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+
+        const selectedlogo = event.target.files[0];
+        console.log(selectedlogo)
+    
+
+        setupEditablelogo(selectedlogo, existingImageURL);
+
+
+        
+    });
+
+       // Handle existing images on page load
+   if (existingImageURL) {
+    
+       setupEditablelogo(null, existingImageURL);
+   }
+
+   
+function setupEditablelogo(selectedlogo, existingImageURL){
+
+     logoToDisplay = selectedlogo? selectedlogo : existingImageURL;
+
+    const image = document.createElement('div');
+    image.classList.add('image-preview-div');
+                    
+    const imgElement = document.createElement('img');
+
+    if (typeof logoToDisplay === 'string') {
+        // It's an existing image URL
+       
+        convertUrlToFile(logoToDisplay, (file) => {
+            console.log('------------',URL.createObjectURL(file))
+            imgElement.src = URL.createObjectURL(file);
+
+        });
+    } else {
+        // It's a newly added image as a Blob or File
+        imgElement.src = URL.createObjectURL(logoToDisplay);
+    }
+
+
+        // ----------------------------------crop image
+
+        const cropButton = document.createElement('a');
+        cropButton.innerHTML = '<i class="mdi mdi-crop-free "></i>';
+        cropButton.classList.add('image-view-button');
+
+        // -------------------------------crop part ends
+        cropButton.addEventListener('click',(e)=>{
+                        
+
+                const imgSrc=imgElement.src;
+
+                //creating new imagepreview for image croping
+                const cropperDiv=document.createElement('div')
+                cropperDiv.classList.add('cropperDiv')
+
+                
+                const cropperImage=document.createElement('img')
+                cropperImage.src=imgSrc;
+
+                const saveCrop=document.createElement('a')
+                saveCrop.classList.add('saveCrop')
+                saveCrop.textContent='SAVE'
+                saveCrop.id='saveCrop'
+
+
+                cropperDiv.appendChild(cropperImage)
+                cropperDiv.appendChild(saveCrop)
+               
+               
+
+                const modal=document.getElementById('brandImgCrop')
+                modal.style.display='block';
+                modal.classList.remove('hidden');
+                document.getElementById('brandImgCrop-content').innerHTML=''
+                document.getElementById('brandImgCrop-content').appendChild(cropperDiv)
+
+                
+
+                document.getElementById('saveCrop').addEventListener('click',()=>{
+                   
+                    
+
+                    // Capture the cropped image data
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                    
+                    // Convert the cropped canvas to a Blob
+                    croppedCanvas.toBlob(function (blob) {
+                        // Create a File object with a specified filename
+                        const croppedFile = new File([blob], 'cropped_img'+Date.now()+'.png', { type: 'image/png' });
+                        
+        
+                        imgElement.src = URL.createObjectURL(croppedFile);
+                       
+                        logoToDisplay=croppedFile
+                       
+
+
+                    }, 'image/png');
+
+                    document.getElementById('brandImgCrop').classList.add('hidden');
+
+
+                });
+
+                
+
+                 cropper=new Cropper(cropperImage,{
+                    aspectRatio:0,
+                    viewMode:0
+                })
+
+},true)
+
+
+
+        
+        image.appendChild(imgElement);
+        
+        image.appendChild(cropButton);
+        imagePreviewContainer.appendChild(image);
+
+}
+}
+
+
+
+
 function updateBrand(){
     document.getElementById('editBrandForm').addEventListener('submit',(e)=>{
         e.preventDefault()
 
         const name=document.getElementById('brandName').value
         const description=document.getElementById('brandDescription').value
-        const logo= document.getElementById('logo-upload')?.files[0]
+        const logo= logoToDisplay
         const id=document.getElementById('id').value
 
         console.log(logo)
@@ -247,3 +393,4 @@ function showlogoPreview(imgId,imgPreviewId){
     }
 
 }
+

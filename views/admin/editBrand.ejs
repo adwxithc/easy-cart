@@ -18,11 +18,18 @@
             </div>
             <div class="d-flex align-items-center row">
 
-                <div class="col-lg-2 col-sm-12 pr-0">
+                <div class="form-group py-4 mr-3 col-lg-2 col-sm-12 pr-0">
+                  
+                  
 
-                    <img  src="/static/brandImages/<%=brand.logo%>"  width="60%" alt="product image" id="imgePreview1">
-                    <input type="file" id="logo-upload" class="hide" onchange="showlogoPreview('logo-upload','imgePreview1')"><br>
-                    <label for="logo-upload" class="btn btn-dark mt-1">Change Image</label>
+                    <label for="description" >Upload Logo</label>
+                    <div class="upload-logoContainer ">
+                        <label for="logo-upload" class="custom-button"><i class="mdi mdi-upload icon-lg"></i></label>
+
+                        <input type="file" id="logo-upload" class="upload-input" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+              
 
                 </div>
 
@@ -82,5 +89,16 @@
 
 
 
+<!-- Modal HTML structure -->
+<div id="brandImgCrop" class="img-modal">
+  
+  <div  class="img-modal-content">
+    <span class="img-close" id="brandImgCropClose" style="font-size: large;">&times;</span>
+    <div id="brandImgCrop-content">
 
+    </div>
+ 
+      <!-- The cropped image will be displayed here -->
+  </div>
+</div>
 

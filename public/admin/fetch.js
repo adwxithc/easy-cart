@@ -469,7 +469,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     productPagination()
             })
             .catch((er)=>{
-                console.log(er.message)
+                console.log(er)
                 window.location.href='/admin/500'
             })
 
@@ -531,6 +531,8 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
         
         document.getElementById('viewModal').style.display='none'
 
+    }else if(e.target.id=='brandImgCropClose'){
+        document.getElementById('brandImgCrop').style.display='none'
     }
     
 

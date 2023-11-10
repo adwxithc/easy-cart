@@ -344,11 +344,13 @@ function updateProduct(){
 
             // Function to convert URL to File
 function convertUrlToFile(url, callback) {
+  
     fetch(url)
         .then(response => response.blob())
         .then(blob => {
             const filename = url.substring(url.lastIndexOf('/') + 1);
             const file = new File([blob], filename, { type: blob.type });
+            
             callback(file);
         })
         .catch(error => console.error('Error converting URL to File:', error));

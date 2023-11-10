@@ -79,6 +79,19 @@
  
   }
 
+  #brandImgCrop {
+    transition: opacity 0.3s;
+    opacity: 1;
+    pointer-events: auto;
+  
+  }
+  
+  #brandImgCrop.hidden {
+    opacity: 0;
+    pointer-events: none;
+ 
+  }
+
   /* Hide the default scrollbar */
 .viewProductDetailsModal::-webkit-scrollbar {
   width: 0.2em; /* Set the width to a very small value */

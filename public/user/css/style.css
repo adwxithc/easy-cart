@@ -503,7 +503,7 @@
        .mdi-credit-card{
         color: rgb(2, 2, 134);
        }
-       .mdi-bank{
+       .mdi-bank,.mdi-cellphone-android{
         color: rgb(50, 137, 231);
        }
        .mdi-cash-usd{
@@ -674,7 +674,189 @@
       /* ------------------------------------------------progrss bar eds---------------------------- */
 
 
-      
+      /* -------------------------------------------------------button---------------------------- */
+   
 
+
+/* CSS */
+.button-57 {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #18181a;
+  color: #18181a;
+  display: inline-block;
+  font-size: 15px;
+  line-height: 15px;
+  padding: 18px 18px 17px;
+  text-decoration: none;
+  cursor: pointer;
+  background: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-57 span:first-child {
+  position: relative;
+  transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
+  z-index: 10;
+}
+
+.button-57 span:last-child {
+  color: white;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  transition: all 500ms cubic-bezier(0.48, 0, 0.12, 1);
+  z-index: 100;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  transform: translateY(225%) translateX(-50%);
+  height: 14px;
+  line-height: 13px;
+}
+
+.button-57:after {
+  content: "";
+  position: absolute;
+  bottom: -50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  transform-origin: bottom center;
+  transition: transform 600ms cubic-bezier(0.48, 0, 0.12, 1);
+  transform: skewY(9.3deg) scaleY(0);
+  z-index: 50;
+}
+
+.button-57:hover:after {
+  transform-origin: bottom center;
+  transform: skewY(9.3deg) scaleY(2);
+}
+
+.button-57:hover span:last-child {
+  transform: translateX(-50%) translateY(-100%);
+  opacity: 1;
+  transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
+}
+      /*------------------------------------------------------- button ends------------------------------------------------------- */
+
+      
+/* -----------------------------------------------------wallet------------------------ */
+
+.card {
+    width: 100%;
+    max-width: 336px;
+    height: 209.32px;
+    background: linear-gradient(240deg, #999898 0%, #0e0e0e 100%);
+    border-radius: 11.20px;
+    border: 1.87px #959797 solid;
+    position: relative;
+  }
+  
+  .card-content {
+    position: absolute;
+    left: 24.38px;
+    top: 20.53px;
+    max-width: 120px;
+    height: 18.67px;
+    color: #FCFDFF;
+    font-size: 28px;
+    font-family: Poppins;
+    font-weight: 400;
+    line-height: 18.67px;
+    word-wrap: break-word;
+  }
+  
+  .card-amount {
+    position: absolute;
+    left: 24.38px;
+    top: 130.67px;
+    width: 134.61px;
+    height: 18.67px;
+    color: #FCFDFF;
+    font-size: 28px;
+    font-family: Poppins;
+    font-weight: 600;
+    line-height: 18.67px;
+    word-wrap: break-word;
+  }
+  
+  .card-period {
+    position: absolute;
+    left: 24.38px;
+    top: 50.40px;
+    max-width: 150px;
+    height: 18.67px;
+    color: #9E9E9E;
+    font-size: 11.20px;
+    font-family: Poppins;
+    font-weight: 600;
+    line-height: 18.67px;
+    word-wrap: break-word;
+  }
+  
+  .card-percentage {
+    position: absolute;
+    left: 24.38px;
+    top: 159.60px;
+    max-width: 152.63px;
+    height: 18.67px;
+    color: #9E9E9E;
+    font-size: 11.20px;
+    font-family: Poppins;
+    font-weight: 600;
+    line-height: 18.67px;
+    word-wrap: break-word;
+  }
+  
+  .card-icon {
+    position: absolute;
+    left: 306.45px;
+    top: 21.47px;
+    width: 3.85px;
+    height: 15.87px;
+  }
+  
+  .card-indicator {
+    position: absolute;
+    left: 108.11px;
+    top: 57.87px;
+    width: 8.48px;
+    height: 3.73px;
+    border: 0.93px white solid;
+  }
+  
+  @media (max-width: 576px) {
+    .card {
+      max-width: 100%;
+    }
+  }
+
+  .walletAddMoney{
+    
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    
+  }
+ 
+
+  .addMoney{
+    
+    
+    background: linear-gradient(240deg, #b6b3b3 0%, #97b9ef 100%);
+   height: 100%;
+   border-radius: 11.20px;
+  }
+
+  .transaction{
+    border-radius: 11.2px;
+    border: 0.2px solid rgb(157, 154, 154);
+  }
+
+/* -----------------------------------wallet end--------------------------------- */
 
 

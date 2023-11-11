@@ -1,0 +1,80 @@
+
+
+
+<div class="">
+    <div class="row">
+        <div class="col-lg-6 " style="object-fit: contain;">
+
+            <div class="">
+                <div class="card project">
+                    <div class="card-content">Balance</div>
+                    <div class="card-amount">&#8377; <%=user.wallet.balance%></div>
+                    <div class="card-period"><%= new Date(Date.now()).toLocaleString()%></div>
+                    <div class="card-percentage">Total balance in wallet</div>
+                    <img class="card-icon" src="https://via.placeholder.com/4x16" />
+                    <!-- <div class="card-indicator"></div> -->
+                  </div>
+            </div>
+        
+
+            
+        
+
+    
+    
+    
+        </div>
+        <div class="col-lg-6 p-0"  >
+            <div class="walletAddMoney">
+
+
+                <div class="p-3 addMoney project">
+                <h5>Add Money To Wallet</h5>
+                    <input type="Number" id="amount" class="form-control">
+                    <div class="d-flex justify-content-end p-2">
+                        <button class="button-57 profileAction" role="button" id="addToWallet"><span class="text">ADD MONEY</span><span class="profileAction" id="addMoneyToWallet">ADD TO WALLET</span></button>
+                    </div>
+                    
+                </div>
+
+
+            </div>
+        </div>
+        <%for(let transaction of user.wallet.transactions){%>
+        <div class="col-lg-12 py-2">
+            <div class="project transaction">
+                <div><span>TRANSACTION ID</span><span><%=transaction.transaction_id%></span></div>
+                <div><span>TYPE</span><span><%=transaction.type%></span></div>
+                <div><span>AMOUNT</span><span><%=transaction.amount%></span></div>
+                <div><span>TIME</span><span><%= new Date(transaction.timestamp).toLocaleString()%></span></div>
+                <div><span>DESCRIPTION</span><span><%=transaction.description%></span></div>
+                
+            </div>
+
+        </div>
+        <%}%>
+
+    </div>
+
+</div>
+
+
+<!------------------------ confirm model-------------------- -->
+<div id="confirmRemoveAddress" class="rmmodal">
+    <div class="rmmodal-content">
+        
+        <i class="mdi mdi-close rmclose" id="closedeleteAddressConfirmation"></i>
+        <div class="confirmHeader">
+            <h3>Remove item</h3>
+        </div>
+        <div class="confirmBody">
+            <p>Are you sure you want to remove this item?</p>
+        </div>
+        
+        <div>
+            <a id="confirmAddressRemoval" class="darkBtn profileAction">Confirm</a>
+            
+        </div>
+        
+    </div>
+</div>

@@ -32,6 +32,12 @@ const orderSchema = new mongoose.Schema({
       enum: ['Pending', 'Processing', 'Shipped', 'Delivered','Canceled'],
       default:'Pending'
     },
+    paymentStatus:{
+      type:String,
+      required:true,
+      enum:['pending','received','refunded'],
+      default:'pending'
+    },
     canceledByUser:{
       type:Boolean,
       default:false
@@ -43,6 +49,7 @@ const orderSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
+    enum:['COD','ONLINE-PAYMENT'],
     required: true,
   },
 
@@ -91,6 +98,5 @@ const orderSchema = new mongoose.Schema({
  
 },{ timestamps: true });
 
-const Order = mongoose.model('Order', orderSchema);
+module.exports= mongoose.model('Order', orderSchema);
 
-module.exports = Order;

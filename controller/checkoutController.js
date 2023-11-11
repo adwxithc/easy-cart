@@ -3,7 +3,9 @@ const Address=require('../model/addressModel')
 const Product=require('../model/productModel')
 const Cart=require('../model/cartModel')
 const Order=require('../model/orderModel')
+const userHelpers=require('../helperMethods/userHelpers')
 const { default: mongoose } = require('mongoose')
+const crypto=require('crypto')
 
 
 const checkout=async(req,res)=>{
@@ -50,6 +52,7 @@ const checkout=async(req,res)=>{
 const confirmOrder=async(req,res)=>{
     try {
         
+        
         const order=new Order(req.order)
         const orderData=await order.save()
         if(orderData){
@@ -63,7 +66,29 @@ const confirmOrder=async(req,res)=>{
                 await Cart.deleteOne({user:req.session.userId})//checking the order is made on cart items if so empty the cart
             }
 
-            res.json({message:'order confirmed',orderConfirmed:true,order:orderData._id})
+            if(req.body['paymentMethod']=='COD'){
+                res.json({orderConfirmed:true,order:orderData._id,cod:true})
+            }else if(req.body['paymentMethod']=='ONLINE-PAYMENT'){
+                const userInfo = await User.aggregate([
+                    {
+                      $match: {
+                        _id: new mongoose.Types.ObjectId(req.session.userId), // Convert the userId to ObjectId
+                      },
+                    },
+                    {
+                      $project: {
+                        _id: 0,
+                        name: { $concat: ['$fname', ' ', '$lname'] },
+                        email: 1,
+                        mobile: 1,
+                      },
+                    },
+                  ]);
+                userHelpers.generateRazorpay(orderData._id,orderData.totalAmount).then(order=>{
+                        res.json({orderConfirmed:true,order:order,cod:false,userInfo:userInfo[0]})
+                })
+            }
+            
         }else{
             res.json({message:'order confirmed',orderConfirmed:false})
         }
@@ -101,6 +126,32 @@ const orderResponse=async(req,res)=>{
     }
     
 }
+const verifyPayment=async(req,res)=>{
+    try {
+        
+        const details=req.body;
+        let hmac=crypto.createHmac('sha256',process.env.RAZORPAY_KEY_SECRET)
+        hmac.update(details.payment?.razorpay_order_id+'|'+details.payment?.razorpay_payment_id)
+        hmac=hmac.digest('hex')
+        if(hmac==details.payment?.razorpay_signature){
+            
+            const result=await userHelpers.changeOrderStatus(details.order.receipt,'received',null)
+            if(result){
+                res.json({paied:true,orderId:details.order.receipt})
+            }else{
+                res.json({mesaage:'payment failed',paied:false})
+            }
+            
+        }else{
+            
+            res.json({mesaage:'payment failed',paied:false})
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'internal server error'})
+    }
+}
 
 
 
@@ -109,5 +160,6 @@ const orderResponse=async(req,res)=>{
 module.exports={
     checkout,
     confirmOrder,
-    orderResponse
+    orderResponse,
+    verifyPayment
 }

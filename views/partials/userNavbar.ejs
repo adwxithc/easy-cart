@@ -44,9 +44,10 @@
 								</ul>
 							</li>
 							<%if(locals.user){%>
+								
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle  text-capitalize " data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false" ><span class="d-flex align-items-center setsize"><i class="mdi mdi-account-outline Icon-lg mr-1 "></i> <%= user.fname %></span></a>
+								 aria-expanded="false" ><span class="d-flex align-items-center setsize"><i class="mdi mdi-account-outline Icon-lg mr-1 "></i><span id="userName"> <%= user.fname %></span> </span></a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/profile"><i class="mdi mdi-account-circle Icon-lg mr-1"></i>My Profile</a></li>
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-heart-outline  Icon-lg mr-1"></i> Wishlist</a></li>

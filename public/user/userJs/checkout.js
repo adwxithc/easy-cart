@@ -206,7 +206,12 @@ function confirmOrder(paymentMethod){
   })
   .then(data=>{
     if(data.orderConfirmed){
+      if(data.cod){
         window.location.href=`/api/orderResponse?order=${data.order}`
+      }else{
+        razorpayPayment(data.order,data.userInfo)
+      }
+
     }else{
       showModal(data.message)
     }
@@ -218,4 +223,57 @@ function confirmOrder(paymentMethod){
   })
 
 }
+function razorpayPayment(order,userInfo){
+
+    var options = {
+      "key": "rzp_test_s3jjV861Udy8by", // Enter the Key ID generated from the Dashboard
+      "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "Easy Cart", //your business name
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",
+      "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler":function(response){
+        
+        verifyPayment(response,order)
+      },
+      "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+          "name": userInfo.name, //your customer's name
+          "email": userInfo.email,
+          "contact": userInfo.mobile //Provide the customer's phone number for better conversion rates 
+      },
+      "notes": {
+          "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+          "color": "#292929"
+      }
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+  
+}
+function verifyPayment(payment,order){
+  fetch('/api/verifyPayment',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({payment:payment,order:order})
+  })
+  .then(response=>{
+    if(response.ok) return response.json()
+    throw new Error('connection error')
+  })
+  .then(data=>{
+    if(data.paied){
+      window.open(`/api/orderResponse?order=${data.orderId}`,'_self')
+    }else{
+      
+    }
+      console.log(data)
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
 

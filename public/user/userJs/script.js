@@ -255,7 +255,7 @@ fetch('/api/cartCount')
 
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
-  
+ 
 
     if(e.target.classList.contains('productDetails')){
         if(e.target.id=='buyNow'){
@@ -298,6 +298,10 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             changePassword()
         }else if(e.target.id=='updatePassword'){
             updatePassword()
+        }else if(e.target.id=='walletIcon' || e.target.id=='wallet'){
+            showWallet()
+        }else if(e.target.id=='addToWallet' || e.target.id=='addMoneyToWallet'){
+            addMoneyToWallet()
         }
 
     }

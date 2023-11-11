@@ -171,7 +171,7 @@ const validateCheckoutData=async(req,res,next)=>{
                     const product=await Product.findById(req.body.productId)
                     if(product){
                         if(product.stock>=req.body.productQty){
-                            if(req.body.paymentMethod=='COD'){
+                            if(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT'){
 
                                 const lastOrderNumber= await orderManagement.getLastOrderNumber()
 
@@ -209,30 +209,47 @@ const validateCheckoutData=async(req,res,next)=>{
                     const cart=await Cart.findOne({user:req.session.userId})
                     if(cart && cart?.cartItems?.length>0 ){
 
-                        let productInfos=[];
-                        let totalAmount=0
-                        for(let item of cart.cartItems){
-                            totalAmount+=item.quantity*item.price
-                            productInfos.push({
-                                product:item.product,
-                                quantity:item.quantity,
-                                price:item.price
-                            })
+                        if(!(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='NET-BANKING')){
+                            res.json({message:"Invalid payment method",orderConfirmed:false})
+                        }else{
+
+                            let productInfos=[];
+                            let totalAmount=0
+                            let instock=true;
+                            for(let item of cart.cartItems){
+                                const product=await Product.findById(item.product)
+                                if(!(product && item.quantity<=product.stock)){
+                                    instock=false
+                                }
+                                totalAmount+=item.quantity*item.price
+                                productInfos.push({
+                                    product:item.product,
+                                    quantity:item.quantity,
+                                    price:item.price
+                                })
+                            }
+                            if(instock){
+                                const lastOrderNumber= await orderManagement.getLastOrderNumber()
+                                const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
+                              
+                                req.cart=true
+                                req.order={
+                                    orderNumber:orderNumber,
+                                    customer:req.session.userId,
+                                    items:productInfos,
+                                    totalAmount:totalAmount,
+                                    paymentMethod:req.body.paymentMethod,
+                                    // orderStatus:'Pending',
+                                    shippingAddress:address,
+                                }
+                                next()
+                            }else{
+                                res.json({message:"Ths specified amount of quantity for this poduct is not available",orderConfirmed:false})
+                            }
+
+
                         }
-                        const lastOrderNumber= await orderManagement.getLastOrderNumber()
-                        const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
-                      
-                        req.cart=true
-                        req.order={
-                            orderNumber:orderNumber,
-                            customer:req.session.userId,
-                            items:productInfos,
-                            totalAmount:totalAmount,
-                            paymentMethod:req.body.paymentMethod,
-                            // orderStatus:'Pending',
-                            shippingAddress:address,
-                        }
-                        next()
+                       
 
                     }else{
                         res.json({message:"The user has no active cart",orderConfirmed:false})

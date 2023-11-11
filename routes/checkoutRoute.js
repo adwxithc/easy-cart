@@ -19,5 +19,6 @@ checkout_route.set('view engine','ejs')
 checkout_route.get('/checkout',auth.isLogin,checkoutController.checkout)
 checkout_route.post('/confirmOrder',auth.isLogin,validateUserInput.validateCheckoutData,checkoutController.confirmOrder)
 checkout_route.get('/orderResponse',auth.isLogin,checkoutController.orderResponse)
+checkout_route.post('/verifyPayment',auth.isLogin,checkoutController.verifyPayment)
 
 module.exports=checkout_route

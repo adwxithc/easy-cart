@@ -252,7 +252,7 @@ function updateProduct(){
                                     selectedImagesArray.splice(removedImageIndex, 1); // Remove the image from the array
                                 }
 
-                                console.log('at remove----',selectedImagesArray)
+                        
 
                             });
 

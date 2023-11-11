@@ -1,6 +1,40 @@
 const mongoose=require('mongoose')
 
 
+
+const walletSchema = new mongoose.Schema({
+    balance: {
+        type: Number,
+        default: 0
+    },
+    transactions: [
+        {
+            type: {
+                type: String,
+                enum: ['credit', 'debit']
+            },
+            amount: {
+                type: Number,
+                required: true
+            },
+            timestamp: {
+                type: Date,
+                default: Date.now
+            },
+            order_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Order'
+            },
+            transaction_id:{
+                type:String,
+                required:true
+            },
+            description: String
+        }
+    ]
+});
+
+
 const userSchema=mongoose.Schema({
     fname:{
         type:String,
@@ -46,8 +80,13 @@ const userSchema=mongoose.Schema({
     boughtProducts:{
         type:Array
 
+    },
+    wallet: {
+        type: walletSchema, // Embed the wallet schema in the User schema
+        default: {}
     }
 
 
 })
 module.exports=mongoose.model('User',userSchema)
+

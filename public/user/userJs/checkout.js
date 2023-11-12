@@ -206,10 +206,11 @@ function confirmOrder(paymentMethod){
   })
   .then(data=>{
     if(data.orderConfirmed){
-      if(data.cod){
+      if(data.cod || data.wallet){
         window.location.href=`/api/orderResponse?order=${data.order}`
       }else{
-        razorpayPayment(data.order,data.userInfo)
+        
+        razorpayPayment(data.order,data.userInfo,data.cart)
       }
 
     }else{
@@ -223,7 +224,7 @@ function confirmOrder(paymentMethod){
   })
 
 }
-function razorpayPayment(order,userInfo){
+function razorpayPayment(order,userInfo,cart){
 
     var options = {
       "key": "rzp_test_s3jjV861Udy8by", // Enter the Key ID generated from the Dashboard
@@ -235,7 +236,7 @@ function razorpayPayment(order,userInfo){
       "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "handler":function(response){
         
-        verifyPayment(response,order)
+        verifyPayment(response,order,cart)
       },
       "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
           "name": userInfo.name, //your customer's name
@@ -253,11 +254,11 @@ function razorpayPayment(order,userInfo){
   rzp1.open();
   
 }
-function verifyPayment(payment,order){
+function verifyPayment(payment,order,cart){
   fetch('/api/verifyPayment',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({payment:payment,order:order})
+    body:JSON.stringify({payment:payment,order:order,cart:cart})
   })
   .then(response=>{
     if(response.ok) return response.json()

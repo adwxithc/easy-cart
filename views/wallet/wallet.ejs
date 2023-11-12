@@ -6,12 +6,12 @@
         <div class="col-lg-6 " style="object-fit: contain;">
 
             <div class="">
-                <div class="card project">
-                    <div class="card-content">Balance</div>
-                    <div class="card-amount">&#8377; <%=user.wallet.balance%></div>
-                    <div class="card-period"><%= new Date(Date.now()).toLocaleString()%></div>
-                    <div class="card-percentage">Total balance in wallet</div>
-                    <img class="card-icon" src="https://via.placeholder.com/4x16" />
+                <div class="wcard project">
+                    <div class="wcard-content">Balance</div>
+                    <div class="wcard-amount"> &#8377; <%if(locals.user && user.wallet){%><%=user.wallet.balance%><%}else{%>0<%}%></div>
+                    <div class="wcard-period"><%= new Date(Date.now()).toLocaleString()%></div>
+                    <div class="wcard-percentage">Total balance in wallet</div>
+                    <img class="wcard-icon" src="https://via.placeholder.com/4x16" />
                     <!-- <div class="card-indicator"></div> -->
                   </div>
             </div>
@@ -24,7 +24,7 @@
     
     
         </div>
-        <div class="col-lg-6 p-0"  >
+        <div class="col-lg-6 "  >
             <div class="walletAddMoney">
 
 
@@ -40,19 +40,33 @@
 
             </div>
         </div>
-        <%for(let transaction of user.wallet.transactions){%>
-        <div class="col-lg-12 py-2">
-            <div class="project transaction">
-                <div><span>TRANSACTION ID</span><span><%=transaction.transaction_id%></span></div>
-                <div><span>TYPE</span><span><%=transaction.type%></span></div>
-                <div><span>AMOUNT</span><span><%=transaction.amount%></span></div>
-                <div><span>TIME</span><span><%= new Date(transaction.timestamp).toLocaleString()%></span></div>
-                <div><span>DESCRIPTION</span><span><%=transaction.description%></span></div>
+        
+        <div class="col-lg-12 py-3" >
+            <div class="m-0 d-flex justify-content-center ">
+                
+                <h4 class="mx-auto">TRANSACTIONS</h4>
+            </div>
+        <div id="transactionList" class="px-3">
+        <%if(locals.user && user.wallet?.transactions?.length>0){
+            for(let i=user.wallet.transactions.length-1; i>=0;i--){%>
+        
+            <div class="project transaction my-3">
+                
+                <div><span class="bold">TRANSACTION ID  :</span><span class="mr-auto"><%=user.wallet.transactions[i].transaction_id%></span></div>
+                <div><span class="bold">TYPE  :</span><span class="mr-auto"><%=user.wallet.transactions[i].type%></span></div>
+                <div><span class="bold">AMOUNT  :</span><span class="mr-auto"><%=user.wallet.transactions[i].amount%></span></div>
+                <div><span class="bold">TIME  :</span><span class="mr-auto"><%= new Date(user.wallet.transactions[i].timestamp).toLocaleString()%></span></div>
+                <div><span class="bold">DESCRIPTION  :</span ><span class="mr-auto"><%=user.wallet.transactions[i].description%></span></div>
                 
             </div>
 
+        
+        <%
+            }
+        }
+        %>
         </div>
-        <%}%>
+    </div>
 
     </div>
 

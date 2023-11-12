@@ -171,7 +171,7 @@ const validateCheckoutData=async(req,res,next)=>{
                     const product=await Product.findById(req.body.productId)
                     if(product){
                         if(product.stock>=req.body.productQty){
-                            if(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT'){
+                            if(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT' || req.body.paymentMethod=='WALLET'){
 
                                 const lastOrderNumber= await orderManagement.getLastOrderNumber()
 
@@ -209,7 +209,7 @@ const validateCheckoutData=async(req,res,next)=>{
                     const cart=await Cart.findOne({user:req.session.userId})
                     if(cart && cart?.cartItems?.length>0 ){
 
-                        if(!(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='NET-BANKING')){
+                        if(!(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT' || req.body.paymentMethod=='WALLET')){
                             res.json({message:"Invalid payment method",orderConfirmed:false})
                         }else{
 

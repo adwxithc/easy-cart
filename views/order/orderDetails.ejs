@@ -65,6 +65,7 @@
                                 
                                   <p class="text-muted"> Qt: <%=item.quantity%> item</p>
                                   <h4 class="mb-3"> &#8377; <%=item.price%> <span class="small text-muted"> via (<%=orderData.paymentMethod%>) </span></h4>
+                                  <p class="text-muted">Payment Status : <span class="text-body"><%=item.paymentStatus%> </span></p>
                                   <p class="text-muted">Tracking Status on: <span class="text-body"><%=new Date().toLocaleTimeString()%>, Today</span></p>
                                 </div>
                                 <div>

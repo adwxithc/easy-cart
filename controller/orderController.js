@@ -1,6 +1,8 @@
 const Order=require('../model/orderModel')
 const User=require('../model/userModel')
 const Product=require('../model/productModel')
+const userHelpers=require('../helperMethods/userHelpers')
+const crypto=require('crypto')
 const loadOrders=async(req,res)=>{
     try {
       console.log(req.query.page)
@@ -70,27 +72,38 @@ const loadOrderDetails=async(req,res)=>{
 
 const cancelOrder=async(req,res)=>{
   try {
-    console.log(req.body)
     const orderData=await  Order.findOne({customer:req.session.userId,_id:req.body.orderId})
     if(orderData){
       for(let item of orderData.items){
+        //finding which product to be canceled
         if(item.product==req.body.productId){
-          if(item.orderStatus!='Canceled'){
+          
+          if(item.orderStatus=='Pending'|| item.orderStatus=='Processing'|| item.orderStatus=='Shipped'){
 
             item.orderStatus='Canceled';
             item.canceledByUser=true
             await Product.updateOne({_id:req.body.productId},{$inc:{stock:item.quantity}})
+            if(orderData.paymentMethod!=='COD' && item.paymentStatus=='received'){
+              item.paymentStatus='refunded'
+
+              //refunding to wallet
+              const amount=item.quantity*item.price
+              const transactionId=crypto.randomBytes(8).toString('hex')
+              await userHelpers.addMoneyToWallet(req.session.userId,amount,transactionId,'Order refunded')
+   
+            }
+
             const orderCanceled =await orderData.save()
             if(orderCanceled){
                 res.json({message:'order canceled successfully',canceled:true})
             }else{
               res.json({message:"Order cancelation failed",canceled:false})
             }
-            
 
           }else{
-            res.json({message:"This product has already been canceled",canceled:false})
+            res.json({message:"Invalid request",canceled:false})
           }
+ 
 
         }
       }

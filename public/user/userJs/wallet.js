@@ -15,6 +15,7 @@ function showWallet(){
 function addMoneyToWallet(){
     const amount=document.getElementById('amount').value
     if(!amount||amount<1 || isNaN(amount)){
+        alert(amount)
         showModal('Invalid amount')
     }else{
         
@@ -83,8 +84,9 @@ function verifyAmount(payment,order){
         throw new Error('connection error')
       })
       .then(data=>{
-  
+        addNewTransaction(data.transaction)
           if(data.added){
+            
             Swal.fire({
                 icon: "success",
                 text: data.message,
@@ -99,4 +101,21 @@ function verifyAmount(payment,order){
         console.log(error);
         showModal('Something Went Wrong')
       })
+}
+
+function addNewTransaction(transaction){
+
+    const transactionDiv=document.createElement('div')
+    transactionDiv.classList='project transaction my-3'
+    transactionDiv.innerHTML=`
+    <div><span class="bold">TRANSACTION ID  :</span><span class="mr-auto">${transaction.transaction_id}</span></div>
+    <div><span class="bold">TYPE  :</span><span class="mr-auto">${transaction.type}</span></div>
+    <div><span class="bold">AMOUNT  :</span><span class="mr-auto">${transaction.amount}</span></div>
+    <div><span class="bold">TIME  :</span><span class="mr-auto">${ new Date(transaction.timestamp).toLocaleString()}</span></div>
+    <div><span class="bold">DESCRIPTION  :</span ><span class="mr-auto">${transaction.description}</span></div>
+    `
+    const transactionList=document.getElementById('transactionList')
+    transactionList.insertBefore(transactionDiv,transactionList.firstChild)
+    document.getElementById('amount').value=''
+
 }

@@ -56,17 +56,9 @@ const confirmOrder=async(req,res)=>{
         const order=new Order(req.order)
         const orderData=await order.save()
         if(orderData){
-            for(let item of req.order.items){
-                
-                await Product.updateOne({_id:item.product},{$inc:{stock:-item.quantity}})
-               
-            }
-
-            if(req.cart){
-                await Cart.deleteOne({user:req.session.userId})//checking the order is made on cart items if so empty the cart
-            }
 
             if(req.body['paymentMethod']=='COD'){
+                await userHelpers.releaseProducts(req.order,req.cart,req.session.userId)
                 res.json({orderConfirmed:true,order:orderData._id,cod:true})
             }else if(req.body['paymentMethod']=='ONLINE-PAYMENT'){
                 const userInfo = await User.aggregate([
@@ -85,8 +77,23 @@ const confirmOrder=async(req,res)=>{
                     },
                   ]);
                 userHelpers.generateRazorpay(orderData._id,orderData.totalAmount).then(order=>{
-                        res.json({orderConfirmed:true,order:order,cod:false,userInfo:userInfo[0]})
+                    const cart=req.cart?true:false;
+
+                        res.json({orderConfirmed:true,order:order,cod:false,userInfo:userInfo[0],cart:cart})
                 })
+            }else if(req.body['paymentMethod']=='WALLET'){
+
+                const id=crypto.randomBytes(8).toString('hex')
+                const debited=await userHelpers.debitFromWallet(req.session.userId,req.order.totalAmount,id,'Product purchased')
+                if(debited){
+                    userHelpers.changepaymentStatus(orderData._id,'received')
+                    await userHelpers.releaseProducts(req.order,req.cart,req.session.userId)
+
+                    res.json({orderConfirmed:true,order:orderData._id,wallet:true})
+                }else{
+                    res.json({orderConfirmed:false,wallet:true,message:'Insufficient balance in your wallet'})
+                }
+               
             }
             
         }else{
@@ -130,13 +137,16 @@ const verifyPayment=async(req,res)=>{
     try {
         
         const details=req.body;
+       
         let hmac=crypto.createHmac('sha256',process.env.RAZORPAY_KEY_SECRET)
         hmac.update(details.payment?.razorpay_order_id+'|'+details.payment?.razorpay_payment_id)
         hmac=hmac.digest('hex')
         if(hmac==details.payment?.razorpay_signature){
             
-            const result=await userHelpers.changeOrderStatus(details.order.receipt,'received',null)
+            const result=await userHelpers.changepaymentStatus(details.order.receipt,'received',null)
             if(result){
+                const order=await Order.findById(details.order.receipt)
+                await userHelpers.releaseProducts(order,details.cart,req.session.userId)
                 res.json({paied:true,orderId:details.order.receipt})
             }else{
                 res.json({mesaage:'payment failed',paied:false})

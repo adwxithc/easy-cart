@@ -4,6 +4,7 @@ const User=require('../model/userModel')
 const { default: mongoose } = require('mongoose')
 const Order = require('../model/orderModel')
 
+
 const loadWallet=async(req,res)=>{
     try {
         const user=await User.aggregate([
@@ -21,9 +22,9 @@ const loadWallet=async(req,res)=>{
                 $limit: 1
             }
         ])
-        console.log(user[0].wallet.transactions)
-        res.render('wallet',{user:user[0]})
         
+        res.render('wallet',{user:user[0]})
+
     } catch (error) {
         console.log(error)
         res.status(500).json({message:'Internal server error'})
@@ -77,7 +78,8 @@ const verifyAddToWallet=async(req,res)=>{
                 const amount=(details.order.amount)/100
               const updateUser=await userHelpers.addMoneyToWallet(req.session.userId,amount,details.payment.razorpay_payment_id,'Wallet recharge')
                 if(updateUser){
-                    res.json({message:'Amount added successfully',added:true})
+                    const transaction=updateUser.wallet.transactions[updateUser.wallet.transactions.length-1]
+                    res.json({message:'Amount added successfully',added:true,transaction:transaction})
                 }
             }else{
                 res.json({message:'not a valid user'})

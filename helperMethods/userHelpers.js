@@ -1,6 +1,8 @@
 const Razorpay = require('razorpay');
 const Order=require('../model/orderModel')
 const User=require('../model/userModel')
+const Cart=require('../model/cartModel')
+const Product=require('../model/productModel')
 
 var instance = new Razorpay({
     key_id:process.env.RAZORPAY_KEY_ID,
@@ -23,7 +25,7 @@ const generateRazorpay=(orderId,amount)=>{
 
 }
 
-const changeOrderStatus=async(orderId,status,productId)=>{
+const changepaymentStatus=async(orderId,status,productId)=>{
     try {
       const order=await Order.findById(orderId)
       
@@ -90,10 +92,55 @@ async function addMoneyToWallet(userId, amount, transactionId, description) {
     }
 }
 
+async function debitFromWallet(userId,amount,transactionId,description){
+    const user=await User.findById(userId)
+  
+    if(!user.wallet?.balance || user.wallet?.balance<amount){
+     
+        return false
+    }else{
+
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        {
+            $inc: { 'wallet.balance': -amount }, // decrement the wallet balance
+            $push: {
+                'wallet.transactions': {
+                    type: 'debit',
+                    amount: amount,
+                    transaction_id: transactionId,
+                    timestamp: Date.now(),
+                    description: description,
+                },
+            }, // Add a new transaction to the array
+        },
+        { new: true } // Return the updated document
+    );
+    return updatedUser
+
+
+    }
+    
+}
+
+async function releaseProducts(order,cart,userId){
+
+  for(let item of order.items){
+                  
+      await Product.updateOne({_id:item.product},{$inc:{stock:-item.quantity}})
+    
+  }
+  if(cart){
+      await Cart.deleteOne({user:userId})//checking the order is made on cart items if so empty the cart
+  }
+
+}
 
 
 module.exports={
     generateRazorpay,
-    changeOrderStatus,
-    addMoneyToWallet
+    changepaymentStatus,
+    addMoneyToWallet,
+    debitFromWallet,
+    releaseProducts
 }

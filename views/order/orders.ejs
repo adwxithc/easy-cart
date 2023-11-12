@@ -61,17 +61,18 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-center">
-                            <%if(item.orderStatus=='Pending'){%>
+                            
 
                                 <div class="">
                                     <div>
                                         <p>Order id:<%=order.orderNumber%></p>
                                     </div>
-                                    <span>Delivery expected by:</span><br>
-                                    <span class=" text-success"><%=new Date(order.createdAt.getTime() + 3 * 24 * 60 * 60 * 1000)%></span>
+                                    <%if(item.orderStatus!=='Canceled' && item.orderStatus!=='Delivered'){%>
+                                    <span class="text-success">Delivery expected with in 3-4 Days:</span><br>
+                                    <%}%>
                                 </div>
   
-                            <%}%>
+                          
                         </div>
                         
 

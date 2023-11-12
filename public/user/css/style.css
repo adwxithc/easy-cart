@@ -746,7 +746,7 @@
       
 /* -----------------------------------------------------wallet------------------------ */
 
-.card {
+.wcard {
     width: 100%;
     max-width: 336px;
     height: 209.32px;
@@ -756,7 +756,7 @@
     position: relative;
   }
   
-  .card-content {
+  .wcard-content {
     position: absolute;
     left: 24.38px;
     top: 20.53px;
@@ -770,7 +770,7 @@
     word-wrap: break-word;
   }
   
-  .card-amount {
+  .wcard-amount {
     position: absolute;
     left: 24.38px;
     top: 130.67px;
@@ -784,7 +784,7 @@
     word-wrap: break-word;
   }
   
-  .card-period {
+  .wcard-period {
     position: absolute;
     left: 24.38px;
     top: 50.40px;
@@ -798,7 +798,7 @@
     word-wrap: break-word;
   }
   
-  .card-percentage {
+  .wcard-percentage {
     position: absolute;
     left: 24.38px;
     top: 159.60px;
@@ -812,7 +812,7 @@
     word-wrap: break-word;
   }
   
-  .card-icon {
+  .wcard-icon {
     position: absolute;
     left: 306.45px;
     top: 21.47px;
@@ -820,7 +820,7 @@
     height: 15.87px;
   }
   
-  .card-indicator {
+  .wcard-indicator {
     position: absolute;
     left: 108.11px;
     top: 57.87px;
@@ -830,7 +830,7 @@
   }
   
   @media (max-width: 576px) {
-    .card {
+    .wcard {
       max-width: 100%;
     }
   }
@@ -849,12 +849,17 @@
     
     background: linear-gradient(240deg, #b6b3b3 0%, #97b9ef 100%);
    height: 100%;
+   width: auto;
    border-radius: 11.20px;
   }
 
   .transaction{
     border-radius: 11.2px;
-    border: 0.2px solid rgb(157, 154, 154);
+    padding: 1rem;
+  }
+  .bold{
+    font-weight: 500;
+    color: #000;
   }
 
 /* -----------------------------------wallet end--------------------------------- */

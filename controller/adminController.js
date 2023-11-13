@@ -7,6 +7,9 @@ const fs=require('fs')
 const Brand =require('../model/brandModel')
 const Order=require('../model/orderModel')
 const ObjectId = require('mongodb').ObjectId;
+const adminHelpers=require('../helperMethods/adminHelpers')
+const crypto=require('crypto')
+
 
 const loadLogin=(req,res)=>{
     try {
@@ -53,16 +56,36 @@ const verifyLogin=async(req,res)=>{
 
 }
 
+
+
+//load admin dashboard
 const adminDashboard=async(req,res)=>{
     try {
-        res.render('adminDashboard',{admin:true})
+        const totalSalesToday=await adminHelpers.calculateTotalSalesToday()
+        const totalOrdersToday=await adminHelpers.calculateTotalOrdersToday()
+        const averageOrderValue=await adminHelpers.calculateAverageOrderValue()
+        const todaysTOtalDelivery=await adminHelpers.calculateTodaysTotalDelivery()
+        const popularProductInfo=await adminHelpers.findMostSoldProducts()
+        // const popularProducts=popularProductInfo.mostSoldProducts
+        // const popularProductCounts=popularProductInfo.counts
+        const options={
+            totalSalesToday:totalSalesToday,
+            totalOrdersToday:totalOrdersToday,
+            averageOrderValue:averageOrderValue,
+            todaysTOtalDelivery:todaysTOtalDelivery,
+            popularProductInfo:popularProductInfo
+        }
+        res.render('adminDashboard',{admin:true,options:options})
         
     } catch (error) {
-        res.status(500)
-        
+        res.status(500).render('errors/500.ejs')
     }
 
 }
+
+
+
+
 
 //adminlogout
 const logout=async(req,res)=>{
@@ -902,13 +925,16 @@ const updateOrderStatus=async(req,res)=>{
 
         const order=await Order.findById(req.body.orderId)
         if(order){
-            let notCanceled=false,quantity;
+            let notCanceled=false,quantity,amount,paymentMethod,paymentStatus;
             for(let item of order.items){
                 if(item.product==req.body.productId){
                     if(item.orderStatus!='Canceled'){
                         item.orderStatus=req.body.newStatus
                         notCanceled=true
                         quantity=item.quantity
+                        amount=item.quantity*item.price
+                        paymentMethod=order.paymentMethod
+                        paymentStatus=item.paymentStatus
                     }
                 }
             }
@@ -916,7 +942,14 @@ const updateOrderStatus=async(req,res)=>{
                 const updatedOrder=await order.save()
                 if(updatedOrder){
                     if(req.body.newStatus=='Canceled'){
+
                         await Product.updateOne({_id:req.body.productId},{$inc:{stock:quantity}})
+
+                        if(paymentStatus=='received' && paymentMethod!=='COD'){
+                        //refunding to wallet
+                        const transactionId=crypto.randomBytes(8).toString('hex')
+                        await adminHelpers.addMoneyToWallet(req.body.orderId,amount,transactionId,'Order refunded due to admin cancelation')
+                        }
                     }
                     res.json({message:'Order status  updated successfully',updated:true})
                 }else{

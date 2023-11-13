@@ -8,7 +8,7 @@
             <div class="">
                 <div class="wcard project">
                     <div class="wcard-content">Balance</div>
-                    <div class="wcard-amount"> &#8377; <%if(locals.user && user.wallet){%><%=user.wallet.balance%><%}else{%>0<%}%></div>
+                    <div class="wcard-amount" id="balance"> &#8377; <%if(locals.user && user.wallet){%><%=user.wallet.balance%><%}else{%>0<%}%></div>
                     <div class="wcard-period"><%= new Date(Date.now()).toLocaleString()%></div>
                     <div class="wcard-percentage">Total balance in wallet</div>
                     <img class="wcard-icon" src="https://via.placeholder.com/4x16" />

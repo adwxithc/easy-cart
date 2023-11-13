@@ -79,7 +79,9 @@ const verifyAddToWallet=async(req,res)=>{
               const updateUser=await userHelpers.addMoneyToWallet(req.session.userId,amount,details.payment.razorpay_payment_id,'Wallet recharge')
                 if(updateUser){
                     const transaction=updateUser.wallet.transactions[updateUser.wallet.transactions.length-1]
-                    res.json({message:'Amount added successfully',added:true,transaction:transaction})
+                    const balance=updateUser.wallet.balance
+                    console.log(balance)
+                    res.json({message:'Amount added successfully',added:true,transaction:transaction,balance:balance})
                 }
             }else{
                 res.json({message:'not a valid user'})

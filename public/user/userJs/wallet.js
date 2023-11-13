@@ -84,6 +84,7 @@ function verifyAmount(payment,order){
         throw new Error('connection error')
       })
       .then(data=>{
+        document.getElementById('balance').innerHTML='&#8377;'+data.balance
         addNewTransaction(data.transaction)
           if(data.added){
             

@@ -15879,7 +15879,9 @@ code {
   font-weight: normal; }
 
 .bg-gray-dark {
-  background: #12151e; }
+  background: #F6F6F6;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+ }
 
 .text-twitter {
   color: #2caae1; }
@@ -17718,8 +17720,9 @@ div.tagsinput {
     position: relative; }
     .preview-list .preview-item .preview-thumbnail img,
     .preview-list .preview-item .preview-thumbnail .preview-icon {
-      width: 40px;
-      height: 40px;
+      width: 70px;
+      height: 70px;
+      /* changed */
       text-align: center;
       display: -webkit-flex;
       display: flex;

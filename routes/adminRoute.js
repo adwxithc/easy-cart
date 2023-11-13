@@ -3,6 +3,7 @@ const admin_route=express()
 const adminController=require('../controller/adminController')
 const validateAdminInputs=require('../middleware/validateAdminInputs')
 const path=require('path')
+const dashboardController=require('../controller/dashboardController')
 
 const session=require('express-session')
 const multer=require('multer')
@@ -59,8 +60,12 @@ admin_route.use(express.json())
 
 admin_route.get('/',adminController.loadLogin);
 admin_route.post('/',adminController.verifyLogin);
-admin_route.get('/adminDashboard',adminController.adminDashboard);
 admin_route.post('/logout',adminController.logout)
+
+//admin dashboard
+admin_route.get('/adminDashboard',adminController.adminDashboard);
+admin_route.get('/getStats',dashboardController.getStats)
+admin_route.get('/getBasicInfos',dashboardController.getBasicInfos)
 
 
 

@@ -246,41 +246,50 @@ $(document).ready(function(){
 
 
 
-    $(function(){
+    // $(function(){
 
-        if(document.getElementById("price-range")){
+    //     if(document.getElementById("price-range")){
         
-        var nonLinearSlider = document.getElementById('price-range');
+    //     var nonLinearSlider = document.getElementById('price-range');
         
-        noUiSlider.create(nonLinearSlider, {
-            connect: true,
-            behaviour: 'tap',
-            start: [ 500, 4000 ],
-            range: {
-                // Starting at 500, step the value by 500,
-                // until 4000 is reached. From there, step by 1000.
-                'min': [ 0 ],
-                '10%': [ 500, 500 ],
-                '50%': [ 4000, 1000 ],
-                'max': [ 10000 ]
-            }
-        });
+    //     noUiSlider.create(nonLinearSlider, {
+    //         connect: true,
+    //         behaviour: 'tap',
+    //         start: [ 500, 4000 ],
+    //         range: {
+    //             // Starting at 500, step the value by 500,
+    //             // until 4000 is reached. From there, step by 1000.
+    //             'min': [ 0 ],
+    //             '10%': [ 500, 500 ],
+    //             '50%': [ 4000, 1000 ],
+    //             'max': [ 10000 ]
+    //         }
+    //     });
 
 
-        var nodes = [
-            document.getElementById('lower-value'), // 0
-            document.getElementById('upper-value')  // 1
-        ];
+    //     var nodes = [
+    //         document.getElementById('lower-value'), // 0
+    //         document.getElementById('upper-value')  // 1
+    //     ];
 
-        // Display the slider value and how far the handle moved
-        // from the left edge of the slider.
-        nonLinearSlider.noUiSlider.on('update', function ( values, handle, unencoded, isTap, positions ) {
-            nodes[handle].innerHTML = values[handle];
-        });
+    //     // Display the slider value and how far the handle moved
+    //     // from the left edge of the slider.
+    //     nonLinearSlider.noUiSlider.on('update', function ( values, handle, unencoded, isTap, positions ) {
+    //         nodes[handle].innerHTML = values[handle];
+    //     });
 
-        }
+    //             // Trigger a search on the server when the user stops sliding
+    //             nonLinearSlider.noUiSlider.on('end', function (values, handle, unencoded, isTap, positions) {
+    //               const lowerValue = parseFloat(values[0]);
+    //               const upperValue = parseFloat(values[1]);
+      
+    //               // Send a request to the server with the updated price range
+    //               findProductFilters()
+    //           });
 
-    });
+    //     }
+
+    // });
 
     
     //-------- Have Cupon Button Text Toggle Change -------//

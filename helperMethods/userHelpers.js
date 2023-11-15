@@ -136,11 +136,39 @@ async function releaseProducts(order,cart,userId){
 
 }
 
+async function findProducts(matchCriteria,skip,limit,sortCriteria){
+  console.log(matchCriteria)
+    try {
+      const aggregationPipeline=[{$match:matchCriteria}]
+
+      if (Object.keys(sortCriteria).length > 0) {
+        aggregationPipeline.push({ $sort: sortCriteria });
+      }
+      
+      aggregationPipeline.push({$skip:skip},{$limit:limit})
+      const product = await Product.aggregate(aggregationPipeline);
+  
+      if (product.length > 0) {
+
+        return product
+      } else {
+        
+        return false
+      }
+    } catch (error) {
+      console.error('Error finding product:', error.message);
+      throw new Error(error)
+    }
+  }
+  
+
+
 
 module.exports={
     generateRazorpay,
     changepaymentStatus,
     addMoneyToWallet,
     debitFromWallet,
-    releaseProducts
+    releaseProducts,
+    findProducts
 }

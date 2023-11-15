@@ -331,44 +331,6 @@ const findMostSoldProducts = async () => {
 
 
 
-
-    // const orders = await Order.aggregate([
-    //   {
-    //     $unwind: '$items',
-    //   },
-    //   {
-    //     $match: {
-    //       'items.orderStatus': { $ne: 'Canceled' },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: '$items.product',
-    //       totalSold: { $sum: '$items.quantity' },
-    //     },
-    //   },
-    //   {
-    //     $sort: { totalSold: -1 },
-    //   },
-    //   {
-    //     $limit: 5,
-    //   },
-    // ]);
-   
-
-    // const productIds = orders.map((item) => item._id);
-    // const counts=orders.map((item)=>item.totalSold)
-
-    
-    // // Fetch detailed information about the most sold products from the Product collection
-    // const mostSoldProducts = await Product.find({ _id: { $in: productIds } });
-
-    // const popularProductInfo={
-    //   mostSoldProducts:mostSoldProducts,
-    //   counts:counts
-    // }
-    // console.log('--most sold products---',mostSoldProducts);
-    // console.log('count',counts)
     return orders
   } catch (error) {
     console.error(error);
@@ -379,9 +341,9 @@ const findMostSoldProducts = async () => {
 async function addMoneyToWallet(orderId,amount,transactionId,description){
 
   try {
-    console.log('-----------orderid---',orderId)
+    
     const userId=await Order.findOne({_id:orderId},{customer:1})
-    console.log('====userid==',userId)
+    
     // Find the user by ID and update the wallet atomically
     const updatedUser = await User.findOneAndUpdate(
         { _id: userId.customer },

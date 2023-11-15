@@ -27,7 +27,7 @@ db.on('error', (err) => {
   db.once('open', () => {
     console.log('Connected to MongoDB');
   });
-
+let y=0
   
 //seting static files
 app.use('/static',express.static('public'))
@@ -39,6 +39,7 @@ app.use('/api',cartRoute)
 app.use('/api',checkoutRoute)
 app.use('/api',orderRoute)
 app.use('/api',walletRoute)
+
 
 // cron.schedule('0 * * * *',()=>{
 //   tasks.expireCarts()

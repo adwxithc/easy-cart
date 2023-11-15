@@ -4,6 +4,7 @@ const User=require('../model/userModel')
 const Address=require('../model/addressModel')
 const orderManagement=require('../middleware/orderManagement')
 const Order=require('../model/orderModel')
+const mongoose=require('mongoose')
 
 const validateCartInputs=async (req,res,next)=>{
     const userId=req.session.userId;
@@ -291,6 +292,58 @@ const validateChangePassword=(req,res,next)=>{
         }
 }
 
+const validateProductSearchCriteria=async(req,res,next)=>{
+    try {
+        
+        const { name, categories, brands, priceRange={}, page=1, pageSize=10,sort='default'} = req.body;
+        
+
+
+        
+        
+
+        let matchCriteria={};
+        // Validate input parameters here
+        if(name){
+         matchCriteria.name = { $regex: new RegExp(`^${name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}`, 'i') };
+       
+        }
+       
+        if (categories && categories.length > 0) {
+            matchCriteria.category = { $in: categories.map(category => new mongoose.Types.ObjectId(category)) };
+        }
+
+        if (brands && brands.length>0) {
+            matchCriteria.brands = { $in: brands.map(brand => new mongoose.Types.ObjectId(brand)) };
+        }
+
+        if (priceRange && priceRange.min && priceRange.max && !isNaN(priceRange.max) && !isNaN(priceRange.min)) {
+            matchCriteria.price = { $gte: Number(priceRange.min), $lte: Number(priceRange.max) };
+        }
+
+        req.matchCriteria=matchCriteria
+
+        const skip=(page-1)*pageSize//specifies how much data to be skipped
+        const limit=pageSize//specifies how much data needed
+        const totalProducts = await Product.countDocuments(matchCriteria);
+        const totalPages=Math.ceil(totalProducts/pageSize)
+
+        req.skip=skip;
+        req.limit=limit;
+        req.totalPages=totalPages;
+        req.page=page
+
+        req.sort = ['price-low-to-high', 'price-high-to-low', 'latest'].includes(sort) ? sort : null;
+        next()
+
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+ 
+ 
+
 
 module.exports={
     validateCartInputs,
@@ -298,6 +351,7 @@ module.exports={
     validateEditedUserInfo,
     validateAddress,
     validateCheckoutData,
-    validateChangePassword
+    validateChangePassword,
+    validateProductSearchCriteria
     
 }

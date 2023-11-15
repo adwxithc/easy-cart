@@ -1,6 +1,7 @@
 const express=require('express')
 const user_route=express()
 const userController=require('../controller/userController')
+const shopController=require('../controller/shopController')
 const auth=require('../middleware/userAuth')
 const session=require('express-session')
 const validateUserInputs=require('../middleware/validateUserInput')
@@ -22,7 +23,7 @@ user_route.use(session({
 
 user_route.get('/',auth.isLogout,userController.guest)
 user_route.get('/productDetails',userController.productDetails)
-user_route.post('/searchProduct',userController.searchProduct)
+
 
 user_route.get('/login',auth.isLogout,userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
@@ -45,6 +46,11 @@ user_route.put('/updateAddress',auth.isLogin,validateUserInputs.validateAddress,
 user_route.delete('/deleteAddress',auth.isLogin,userController.deleteAddress)
 user_route.get('/changePassword',auth.isLogin,userController.changePassword)
 user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChangePassword,userController.updatePassword)
+
+// shop
+user_route.get('/shop',shopController.loadShop)
+user_route.post('/searchProduct',userController.searchProduct)
+user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,shopController.searchProducts)
 
 module.exports=user_route
 

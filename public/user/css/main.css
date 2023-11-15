@@ -1211,7 +1211,8 @@ h1, h2, h3, h4, h5, h6 {
   /* background: url(/static/assets/img/banner/banner2.jpg) center no-repeat; */
   background-color: white;
   background-size: cover;
-  position: relative; }
+  position: relative;
+  margin-bottom:5rem ; }
   @media (max-width: 768px) {
     .banner-area .fullscreen {
       height: 650px !important; } }
@@ -1541,7 +1542,7 @@ h1, h2, h3, h4, h5, h6 {
         width: 30px;
         line-height: 30px;
         text-align: center;
-        background: #828bb2;
+        background: #000;
         border-radius: 50%;
         display: inline-block;
         color: #fff;
@@ -1550,6 +1551,7 @@ h1, h2, h3, h4, h5, h6 {
         -o-transition: all 0.3s ease 0s;
         transition: all 0.3s ease 0s;
         z-index: 1; }
+
         .single-product .product-details .prd-bottom .social-info span:after {
           position: absolute;
           left: 0;
@@ -3119,7 +3121,7 @@ label {
 
 .filter-bar {
   padding: 0px 20px 10px 20px;
-  background: #828bb3; }
+  background: #000; }
   .filter-bar a, .filter-bar i {
     color: #000; }
 
@@ -3295,7 +3297,7 @@ label {
 
 .sidebar-categories .head {
   line-height: 60px;
-  background: #828bb3;
+  background: #000;
   padding: 0 30px;
   font-size: 16px;
   font-weight: 400;
@@ -3325,7 +3327,7 @@ label {
   margin-top: 50px; }
   .sidebar-filter .top-filter-head {
     line-height: 60px;
-    background: #828bb3;
+    background: #000;
     padding: 0 30px;
     font-size: 16px;
     font-weight: 400;

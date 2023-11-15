@@ -1,4 +1,5 @@
 function changeLabelColor(radioButton) {
+  
     const labels = document.querySelectorAll(".Radio");
     labels.forEach(label => {
       if (label.querySelector("input:checked") === radioButton) {

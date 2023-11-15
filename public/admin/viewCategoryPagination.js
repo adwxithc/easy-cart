@@ -9,17 +9,17 @@ var prev=document.getElementById('prev')
 var currentBtn=document.getElementById("current")
 var next=document.getElementById("next")
 
-var totalpages=document.getElementById("totp").value
-var currentPage = document.getElementById("cur").value
+var totalpages1=document.getElementById("totp").value
+var currentPage1 = document.getElementById("cur").value
 
 
 
 function updatepagination(){
     
     
-    prev.disabled= currentPage==1 ;
-    next.disabled= currentPage == totalpages;
-    currentBtn.textContent=currentPage;
+    prev.disabled= currentPage1==1 ;
+    next.disabled= currentPage1 == totalpages1;
+    currentBtn.textContent=currentPage1;
 }
 
 updatepagination()
@@ -31,23 +31,23 @@ updatepagination()
 
     prev.addEventListener('click', function(e) {
         
-        if (currentPage > 1) {
+        if (currentPage1 > 1) {
             
             
-            currentPage--;
+            currentPage1--;
             updatepagination();
-            fetchDataForPage(currentPage);
+            fetchDataForPage(currentPage1);
         }
     });
     
     next.addEventListener('click', function(e) {
         
         
-        if (currentPage < totalpages) {
-            currentPage++;
+        if (currentPage1 < totalpages1) {
+            currentPage1++;
             updatepagination();
 
-            fetchDataForPage(currentPage);
+            fetchDataForPage(currentPage1);
         }
     });
     

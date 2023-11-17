@@ -1,0 +1,176 @@
+<div class="row">
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-9">
+              <div class="d-flex align-items-center align-self-start">
+                <h3 class="mb-0" id="totalSales">$12.34</h3>
+                <p class="text-success ml-2 mb-0 font-weight-medium" id="totalSalesPG">+3.5%</p>
+              </div>
+            </div>
+            <div class="col-3">
+                <div id="totalSalesMarking">
+                    <div class="icon icon-box-success ">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                </div>
+
+            </div>
+          </div>
+          <h6 class="text-muted font-weight-normal">Total Sales</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <h3 class="mb-0" id="totalOrder">$12.34</h3>
+                  <p class="text-success ml-2 mb-0 font-weight-medium" id="totalOrderPG">+3.5%</p>
+                </div>
+              </div>
+              <div class="col-3">
+                <div id="totalOrderMarking">
+                    <div class="icon icon-box-success ">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                </div>
+
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal">Total Orders</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <h3 class="mb-0" id="averageOrder">$12.34</h3>
+                  <p class="text-success ml-2 mb-0 font-weight-medium" id="averageOrderPG">+3.5%</p>
+                </div>
+              </div>
+              <div class="col-3">
+                <div id="averageOrderMarking">
+                    <div class="icon icon-box-success ">
+                        <span class="mdi mdi-arrow-top-right icon-item"></span>
+                      </div>
+                </div>
+
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal">Average Order Value</h6>
+          </div>
+        </div>
+      </div>
+      <div class="pb-3 px-5 d-flex justify-content-center">
+        <input type="button" name="" id="weeklySales" class="btn-outline-info btn-sm mx-2 reportAction" value="week">
+        <input type="button" name="" id="monthlySales" class="btn-outline-info btn-sm mx-2 reportAction" value="month">
+        <input type="button" name="" id="yearlySales" class="btn-outline-info btn-sm mx-2 reportAction" value="year">
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Sales chart</h4>
+          <canvas id="areaChart" style="height:250px"></canvas>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Bar chart</h4>
+          <canvas id="barChart" style="height:230px"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Sales Report</h4>
+
+        <div class="d-flex justify-content-end">
+
+          <div class="d-flex justify-content-end pb-2">
+            <label for="salesPaymentStatus" class="ml-3 mr-1">Order Status</label>
+            <select class="btn btn-secondary reportAction" id="salesOrderStatus">
+              <option value="all" >All</option>
+              <option value="Pending">Pending</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Canceled">Canceled</option>
+
+
+  
+            </select>
+          </div>
+
+
+          <div class="d-flex justify-content-end pb-2">
+            <label for="salesPaymentStatus" class="ml-3 mr-1">Payment Status</label>
+            <select class="btn btn-secondary reportAction" id="salesPaymentStatus">
+              <option value="all" >All</option>
+              <option value="pending">pending</option>
+              <option value="received">received</option>
+              <option value="refunded">refunded</option>
+  
+            </select>
+          </div>
+  
+          
+          <div class="d-flex justify-content-end pb-2">
+            <label for="salesTimePeriod" class="ml-3 mr-1">Time period</label>
+            <select class="btn btn-secondary reportAction" id="salesTimePeriod">
+              <option value="all" >All</option>
+              <option value="year">This year</option>
+              <option value="month">This month</option>
+              <option value="week">This week</option>
+  
+            </select>
+          </div>
+        </div>
+       
+        <div class="table-responsive">
+
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th> Order Id</th>
+                <th>ordered date</th>
+                <th>delivered date</th>
+                <th> Customer </th>
+                <th> Customer id </th>
+                <th>product</th>
+                <th>product id</th>
+                <th>sales status</th>
+                <th> payment Method </th>
+                <th> payment status </th>
+                <th>order status</th>
+                <th>price</th>
+                <th>quantity</th>
+                <th>total price</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

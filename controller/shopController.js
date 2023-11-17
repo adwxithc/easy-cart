@@ -6,10 +6,10 @@ const userHelpers=require('../helperMethods/userHelpers')
 const loadShop=async(req,res)=>{
 
     try {
-        const products=await Product.find().limit(10);
+        const products=await Product.find().limit(12);
 
         const totalProducts = await Product.countDocuments();
-        const totalPages=Math.ceil(totalProducts/10)
+        const totalPages=Math.ceil(totalProducts/12)
 
         const categories=await Category.find({status:true},{name:1})
         const brands=await Brands.find({status:true},{name:1})

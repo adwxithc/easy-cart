@@ -3,6 +3,7 @@ $(function() {
    * -------
    * Data and config for chartjs
    */
+  
   'use strict';
   var data = {
     labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
@@ -325,6 +326,8 @@ $(function() {
     });
   }
 
+  
+ 
   if ($("#areachart-multi").length) {
     var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
     var multiAreaChart = new Chart(multiAreaCanvas, {
@@ -333,6 +336,7 @@ $(function() {
       options: multiAreaOptions
     });
   }
+
 
   if ($("#doughnutChart").length) {
     var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
@@ -352,6 +356,8 @@ $(function() {
     });
   }
 
+  function areaChart1(){
+    alert('bla')
   if ($("#areaChart").length) {
     var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
     var areaChart = new Chart(areaChartCanvas, {
@@ -360,6 +366,7 @@ $(function() {
       options: areaOptions
     });
   }
+}
 
   if ($("#scatterChart").length) {
     var scatterChartCanvas = $("#scatterChart").get(0).getContext("2d");

@@ -145,10 +145,88 @@ const validateBrandData =async(req,res,next)=>{
     
 }
 
+const sanitiseSalesReportParam=(req,res,next)=>{
+    try {
+        
+        const{timePeriod}=req.query;
+       
+            if(timePeriod &&['month','year','week'].includes(timePeriod)){
+                if(timePeriod=='week'){
+
+                    // Calculate the start and end dates for the current week
+                    const currentDate = new Date();
+                    const currentWeekStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay());
+                    const currentWeekEndDate = new Date(currentWeekStartDate);
+                    currentWeekEndDate.setDate(currentWeekEndDate.getDate() + 6);
+
+                    // Calculate the start and end dates for the last week
+                    const lastWeekStartDate = new Date(currentWeekStartDate);
+                    lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7);
+                    const lastWeekEndDate = new Date(currentWeekEndDate);
+                    lastWeekEndDate.setDate(lastWeekEndDate.getDate() - 7);
+                    req.current={
+                        startDate:currentWeekStartDate,
+                        endDate:currentWeekEndDate
+                    }
+                    req.previous={
+                        startDate:lastWeekStartDate,
+                        endDate:lastWeekEndDate
+                    }
+
+                }else if(timePeriod=='month'){
+                    // Calculate the start and end dates for the current month
+                    const currentDate = new Date();
+                    const currentMonthStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                    const currentMonthEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+                    // Calculate the start and end dates for the last month
+                    const lastMonthStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+                    const lastMonthEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+                    req.current={
+                        startDate:currentMonthStartDate,
+                        endDate:currentMonthEndDate
+                    }
+                    req.previous={
+                        startDate:lastMonthStartDate,
+                        endDate:lastMonthEndDate
+                    }
+                    }else{
+                    // Calculate the start and end dates for the current year
+                    const currentDate = new Date();
+                    const currentYearStartDate = new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0); // January 1st
+                    const currentYearEndDate = new Date(currentDate.getFullYear() + 1, 0, 0, 23, 59, 59); // December 31st
+
+                    // Calculate the start and end dates for the last year
+                    const lastYearStartDate = new Date(currentYearStartDate);
+                    lastYearStartDate.setFullYear(lastYearStartDate.getFullYear() - 1);
+                    const lastYearEndDate = new Date(currentYearEndDate);
+                    lastYearEndDate.setFullYear(lastYearEndDate.getFullYear() - 1);
+
+
+                        req.current={
+                            startDate:currentYearStartDate,
+                            endDate:currentYearEndDate
+                        }
+                        req.previous={
+                            startDate:lastYearStartDate,
+                            endDate:lastYearEndDate
+                        }
+                    }
+                req.timePeriod=timePeriod
+                next()
+            }else{
+            res.json({message:'Invalid timePeriod'})
+            }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:"internal server error"})
+    }
+}
 
 
 module.exports={
 validateProductDatas,
  validateBrandData,
- validateUpdatedBrandData
+ validateUpdatedBrandData,
+ sanitiseSalesReportParam
 }

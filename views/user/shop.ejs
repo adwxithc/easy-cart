@@ -18,7 +18,7 @@
 	</section>
 	<!-- End Banner Area -->
 
-	<div class="container-fluid ">
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xl-3 col-lg-4 col-md-5">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -105,9 +105,15 @@
 			</div>
 			<div class="col-xl-9 col-lg-8 col-md-7">
 				<!-- Start Filter Bar -->
-				<div class="filter-bar d-flex flex-wrap align-items-center">
+				<div class="filterBar d-flex flex-wrap align-items-center">
 					<div class="mr-auto">
-						<input type="text" class="form-control product-search" placeholder="Search" id="productSearchKey">
+						<div class="box">
+							<form name="search">
+								<input type="text" class="input product-search" name="txt" onmouseout="this.value = ''; this.blur();" id="productSearchKey" placeholder="Search Products">
+							</form>
+							<i class="lnr lnr-magnifier"></i>
+						
+						</div>
 					</div>
 					<div class="">
 						<select  id="sortBy">
@@ -131,11 +137,11 @@
                         for(let product of products){
                         %>
                         <!-- single product -->
-                        <div class="col-lg-3 col-6">
+                        <div class="col-lg-3 col-6 h-50">
                             <div class="single-product productdiv">
                                 <div class="product-container">
                                     <div class="product-image-container">
-                                        <a href="/productDetails?id=<%=product._id%>"><img class="img-fluid product-image" src="/static/productImages/<%= product.images[0] %>" alt=""></a>
+                                        <a target="_blank" href="/productDetails?id=<%=product._id%>"  ><img class="img-fluid product-image" src="/static/productImages/<%= product.images[0] %>" alt=""></a>
                                     </div>
                                     <div class="product-details">
                                         <h6 class="product-title"><%=product.name%></h6>
@@ -152,11 +158,8 @@
                                                 <span class="lnr lnr-heart"></span>
                                                 <p class="hover-text">Wishlist</p>
                                             </a>
-                                            <a href="" class="social-info">
-                                                <span class="lnr lnr-sync"></span>
-                                                <p class="hover-text">compare</p>
-                                            </a>
-                                            <a href="" class="social-info">
+
+                                            <a href="/productDetails?id=<%=product._id%>" target="_blank" class="social-info">
                                                 <span class="lnr lnr-move"></span>
                                                 <p class="hover-text">view more</p>
                                             </a>
@@ -177,8 +180,8 @@
 
 
 				<!-- Start Filter Bar -->
-				<div class="filter-bar d-flex  flex-wrap align-items-center">
-					<input type="hidden" name="" id="totalPages" value="<%= totalPages%>">
+				<div class=" d-flex  flex-wrap align-items-center justify-content-center mt-2">
+					<input type="hidden" name="" id="totalProductPages" value="<%= totalPages%>">
 					<!-- pagination -->
 					<div class="d-flex justify-content-center">
 						<nav aria-label="Page navigation example" class="">

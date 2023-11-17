@@ -4,6 +4,7 @@ const adminController=require('../controller/adminController')
 const validateAdminInputs=require('../middleware/validateAdminInputs')
 const path=require('path')
 const dashboardController=require('../controller/dashboardController')
+const reportController=require('../controller/reportController')
 
 const session=require('express-session')
 const multer=require('multer')
@@ -111,6 +112,14 @@ admin_route.put('/updateBrand',updateLogo.single('logo'),validateAdminInputs.val
 admin_route.get('/listOrders',adminController.listOrders);
 admin_route.get('/viewOrder',adminController.viewOrder)
 admin_route.patch('/updateOrderStatus',adminController.updateOrderStatus)
+
+//sales report
+admin_route.get('/salesReport',reportController.loadSalesReport)
+
+admin_route.get('/getSalesReport',validateAdminInputs.sanitiseSalesReportParam,reportController.getSalesReport)
+admin_route.get('/getSalesData',reportController.getSalesData)
+
+
 
 //errors
 admin_route.get('/404',adminController.error404);

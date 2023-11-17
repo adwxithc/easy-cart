@@ -165,6 +165,7 @@ const validateAddress=(req,res,next)=>{
 
 const validateCheckoutData=async(req,res,next)=>{
         try {
+            console.log('###########')
          
             const address=await Address.findById(req.body?.address)
             if(address){
@@ -295,10 +296,10 @@ const validateChangePassword=(req,res,next)=>{
 const validateProductSearchCriteria=async(req,res,next)=>{
     try {
         
-        const { name, categories, brands, priceRange={}, page=1, pageSize=10,sort='default'} = req.body;
+        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body;
         
 
-
+        
         
         
 
@@ -314,7 +315,7 @@ const validateProductSearchCriteria=async(req,res,next)=>{
         }
 
         if (brands && brands.length>0) {
-            matchCriteria.brands = { $in: brands.map(brand => new mongoose.Types.ObjectId(brand)) };
+            matchCriteria.brand = { $in: brands.map(brand => new mongoose.Types.ObjectId(brand)) };
         }
 
         if (priceRange && priceRange.min && priceRange.max && !isNaN(priceRange.max) && !isNaN(priceRange.min)) {

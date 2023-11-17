@@ -1,5 +1,5 @@
-
-let totalProductPages=document.getElementById('totalPages').value;
+if(document.getElementById('totalProductPages')){
+let totalProductPages=document.getElementById('totalProductPages').value;
 let page=1;
 
 
@@ -34,7 +34,7 @@ function prevProducts(){
     }
   }
 
-  
+
 function findProductFilters(productsPage=1,sort){
     const productName=document.getElementById('productSearchKey').value;
     const categoryElements=document.getElementsByName('category')
@@ -54,6 +54,7 @@ function findProductFilters(productsPage=1,sort){
     
         }
     }
+   
 
     const upperValue=document.getElementById('upper-value').innerHTML;
     const lowerValue=document.getElementById('lower-value').innerHTML;
@@ -133,7 +134,7 @@ document.getElementById('searchedProductList').innerHTML=''
         productDiv.innerHTML= `<div class="single-product productdiv">
                 <div class="product-container">
                     <div class="product-image-container">
-                        <a href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
+                        <a target="_blank"  href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
                     </div>
                     <div class="product-details">
                         <h6 class="product-title">${ product.name}</h6>
@@ -150,11 +151,8 @@ document.getElementById('searchedProductList').innerHTML=''
                                 <span class="lnr lnr-heart"></span>
                                 <p class="hover-text">Wishlist</p>
                             </a>
-                            <a href="" class="social-info">
-                                <span class="lnr lnr-sync"></span>
-                                <p class="hover-text">compare</p>
-                            </a>
-                            <a href="" class="social-info">
+
+                            <a href="/productDetails?id=${product._id}" target='_blank' class="social-info">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">view more</p>
                             </a>
@@ -226,3 +224,4 @@ $(function(){
     }
 
 });
+}

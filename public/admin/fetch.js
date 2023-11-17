@@ -482,6 +482,8 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
             
         }else if(e.target.id=='listOrders'){
             listOrders()
+        }else if(e.target.classList.contains('salesReport')){
+            loadSalesReport()
         }
     }
 
@@ -525,6 +527,20 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
             
         }
         
+    }else if(e.target.classList.contains('reportAction')){
+        if(e.target.id=='yearlySales'){
+            getSalesReport('year')
+        }else if(e.target.id=='monthlySales'){
+            getSalesReport('month')
+        }else if(e.target.id=='weeklySales'){
+            getSalesReport('week')
+        }else if(e.target.id=='salesTimePeriod'){
+            changeSalesDataTimePeriod(e.target.value)
+        }else if(e.target.id=='salesPaymentStatus'){
+            filterBySalesPaymentStatus(e.target.value)
+        }else if(e.target.id=='salesOrderStatus'){
+            filterBySalesOrderStatus(e.target.value)
+        }
     }
     if(e.target.id=='viewModalClose'){
         

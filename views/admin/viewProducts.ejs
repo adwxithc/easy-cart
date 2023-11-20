@@ -1,4 +1,4 @@
- <div class="col-lg-12 grid-margin stretch-card px-5 p-4">
+ <div class="col-lg-12 grid-margin stretch-card py-4">
                 <div class="card">
                   <div class="card-body ">
                     <%if(locals.key){%>
@@ -48,7 +48,7 @@
                             <th class="limit200"> Product</th>
                             <th> Stock </th>
                             <th> Price </th>
-                            <th> Rating </th>
+                            <th> Offers </th>
                             <th> Status </th>
                             <th> Actions </th>
                             <th>View</th>
@@ -72,7 +72,7 @@
                             <td class="limit200"> <%=products[i].name%></td>
                             <td><%=products[i].stock%></td>
                             <td><%= products[i].price %></td>
-                            <td></td>
+                            <td id="offer<%=products[i]._id%>"><%if(products[i].offer){%><%= products[i].offer.name %>(<%=products[i].offer.discountPercentage%>%)<%}%></td>
                             <td>
                                 <% if(products[i].status){%>
                                     <span class="text-success"> active</span>
@@ -95,6 +95,14 @@
                                           activate
                                         <%}%>
                                         </a>
+                                        <%if(products[i].offer){%>
+                                          <a class="dropdown-item productAction removeOffer " href="#" productId="<%=products[i]._id%>" id="manageOffer<%=products[i]._id%>">Remove offer</a>
+
+                                        <%}else{%>
+                                        <a class="dropdown-item productAction applyOffer " href="#" productId="<%=products[i]._id%>" id="manageOffer<%=products[i]._id%>">Apply offer</a>
+
+
+                                        <%}%>
                                     </div>
                                   </div>
 
@@ -123,7 +131,7 @@
                       <div id="myModal" class="modal ">
                         <div class="modal-content " >
                           <span class="close d-flex justify-content-end" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
-                          <p>Are you sure you want to activate/inactivate this Category ?</p>
+                          <p>Are you sure you want to activate/inactivate this Product ?</p>
                           <button id="confirmBtn">Confirm</button>
                          
                         </div>
@@ -133,7 +141,7 @@
                       
                       <div id="viewModal" class="modal ">
                         <div class="modal-content viewProductDetailsModal" >
-                          <span class="close d-flex justify-content-end" id="viewModalClose" ><i class="mdi mdi-window-close "></i></span>
+                          <span class="close d-flex justify-content-end"  ><i class="mdi mdi-window-close " id="viewModalClose"></i></span>
                           <div id="viewModal-content" class="mb-2">
                             
                           </div>

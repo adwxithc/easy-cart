@@ -78,6 +78,10 @@ const productSchema=mongoose.Schema({
         required:true,
         ref: 'Brand'
     },
+    offer:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Offer'
+    },
     careInstructions:String,
     material:String,
     additionalSpecifications: String,

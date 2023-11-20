@@ -23,6 +23,7 @@
                         <thead>
                           <tr>
                             <th>Category Name</th>
+                            <th>Offer</th>
                             <th>status</th>
                             <th>Actions</th>
 
@@ -44,6 +45,12 @@
                               
                               <span class=" description-limit"><%=categories[i].description%></span>
                             </td>
+
+                          
+                              <td id="offer<%=categories[i]._id%>">
+                                <%if(categories[i].offer){%><%= categories[i].offer.name %>(<%=categories[i].offer.discountPercentage%>%)<%}%>
+                              </td>
+                            
 
                             <td>
                               <%if(categories[i].status){%> 
@@ -70,6 +77,15 @@
                                       list
                                     <%}%>
                                     </a>
+
+                                    <%if(categories[i].offer){%>
+                                      <a class="dropdown-item categoryAction removeOffer " href="#" categoryId="<%=categories[i]._id%>" id="manageOffer<%=categories[i]._id%>">Remove offer</a>
+
+                                    <%}else{%>
+                                    <a class="dropdown-item categoryAction applyOffer " href="#" categoryId="<%=categories[i]._id%>" id="manageOffer<%=categories[i]._id%>">Apply offer</a>
+
+
+                                    <%}%>
                                 </div>
                               </div>
 
@@ -91,6 +107,17 @@
                           <p>Are you sure you want to list/unlist this Category ?</p>
                           <button id="confirmBtn">Confirm</button>
                          
+                        </div>
+                      </div>
+
+
+                      <div id="viewModal" class="modal ">
+                        <div class="modal-content viewProductDetailsModal" >
+                          <span class="close d-flex justify-content-end"  ><i class="mdi mdi-window-close " id="viewModalClose"></i></span>
+                          <div id="viewModal-content" class="mb-2">
+                            
+                          </div>
+                  
                         </div>
                       </div>
 

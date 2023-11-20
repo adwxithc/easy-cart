@@ -342,7 +342,6 @@ async function salesReport(timePeriod,paymentStatus,orderStatus){
       }
     }
   ])
-    console.log('sales=++++++++',sales)
     return sales
   } catch (error) {
     console.log(error)

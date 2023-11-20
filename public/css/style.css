@@ -70,6 +70,7 @@
     transition: opacity 0.3s;
     opacity: 1;
     pointer-events: auto;
+    background-color: #0000006a;
   
   }
   
@@ -526,4 +527,67 @@
 }
 .error{
   color: #e80a0a;
+}
+
+/* coupone */
+
+.setWidth{
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* offer */
+.shape{	
+	border-style: solid; border-width: 0 70px 40px 0; float:right; height: 0px; width: 0px;
+	-ms-transform:rotate(360deg); /* IE 9 */
+	-o-transform: rotate(360deg);  /* Opera 10.5 */
+	-webkit-transform:rotate(360deg); /* Safari and Chrome */
+	transform:rotate(360deg);
+
+}
+.offer{
+	background: rgb(216,0,50);
+background: linear-gradient(90deg, rgba(216,0,50,1) 1%, rgba(0,0,0,1) 100%);
+   border:1px solid #ddd; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); margin: 15px 0; overflow:hidden;
+  max-width: 300px;
+  width: 100%;
+  color: #fff;
+}
+.offer-radius{
+	border-radius:7px;
+}
+
+.offer-warning {	border-color: #ffffff; }
+.offer-warning .shape{
+	border-color: transparent #f0ad4e transparent transparent;
+	border-color: rgba(255,255,255,0) #f0ad4e rgba(255,255,255,0) rgba(255,255,255,0);
+ 
+}
+
+.shape-text{
+	color:#fff; font-size:12px; font-weight:bold; position:relative; right:-40px; top:2px; white-space: nowrap;
+	-ms-transform:rotate(30deg); /* IE 9 */
+	-o-transform: rotate(360deg);  /* Opera 10.5 */
+	-webkit-transform:rotate(30deg); /* Safari and Chrome */
+	transform:rotate(30deg);
+  
+}	
+.offer-content{
+	padding:1rem;
+  font-weight: 500;
+  
+}
+.offer:hover {
+  transform: scale(1.07); /* You can adjust the scaling factor as needed */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+.offerLink{
+  text-decoration: none;
+  color: inherit;
+
+}
+.offerLink:hover{
+  text-decoration: none;
+  color: inherit;
 }

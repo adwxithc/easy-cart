@@ -1,5 +1,6 @@
 const Brand=require('../model/brandModel')
 const Product=require('../model/productModel')
+const adminHelpers=require('../helperMethods/adminHelpers')
 
 
 const validateProductDatas=async(req,res,next)=>{
@@ -223,10 +224,64 @@ const sanitiseSalesReportParam=(req,res,next)=>{
     }
 }
 
+const validateCoupone=async (req,res,next)=>{
+    try {
+        const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode}=req.body
+        if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
+            res.json({message:'Invalid form data'})
+        }else if(Number(maxPurchaseAmount)<=Number(minPurchaseAmount)){
+            res.json({message:'maximum amount should be greater than minimum amount'})
+        }else if(startDate>expireDate){
+            res.json({message:'Start date must be before the expire date'})
+        }else if(await adminHelpers.doesCouponeCodeTake(couponeCode,req.body?.couponeId)){
+            res.json({created:false,message:'This coupone code already exist'})
+        }else{
+            req.coupone={
+                couponeCode:couponeCode,
+                minPurchaseAmount:minPurchaseAmount,
+                maxPurchaseAmount:maxPurchaseAmount,
+                couponeDiscount:couponeDiscount,
+                startDate:startDate,
+                expireDate:expireDate
+            }
+            next()
+        }
+        
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+const validateOfferData=(req,res,next)=>{
+    try {
+        const{expireDate,startDate,discountPercentage,name}=req.body
+        if(!name || !adminHelpers.isValidDiscount(discountPercentage) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
+            res.json({message:'Invalid form data'})
+        }else if(startDate>expireDate){
+            res.json({message:'Start date must be before the expire date'})
+        }else{
+            req.offer={
+                name:name,
+                discountPercentage:discountPercentage,
+                startDate:startDate,
+                expireDate:expireDate
+            }
+            next()
+        }
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
 
 module.exports={
 validateProductDatas,
  validateBrandData,
  validateUpdatedBrandData,
- sanitiseSalesReportParam
+ sanitiseSalesReportParam,
+ validateCoupone,
+ validateOfferData
 }

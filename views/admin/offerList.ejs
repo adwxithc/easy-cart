@@ -1,0 +1,28 @@
+
+<div class="d-flex justify-content-center row">
+   <%for(let offer of offers){%>
+    <div class="col-lg-6">
+        
+            <div class="offer offer-warning offer-radius">
+                <div class="shape">
+                    <div class="shape-text">
+                        <%=offer.discountPercentage%>%						
+                    </div>
+                </div>
+                <div class="offer-content">
+                    <h3 class="lead font-weight-bol">
+                        <%=offer.name%>
+                    </h3>						
+                    <p>
+                        from:<%=offer.startDate.toDateString()%>
+                        <br>To: <%=offer.expireDate.toDateString()%>
+                        </p>
+                        <div>
+                            <button class="btn offerAction applayOfferLink" id="" offer="<%=offer._id%>" style="background-color: #D80032; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">Applay</button>
+                        </div>
+                    </div>
+                </div>
+
+    </div>
+    <%}%>
+</div>

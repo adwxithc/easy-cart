@@ -13,6 +13,32 @@ function loadSalesReport(){
     })
 }
 
+function downloadTableInExcel() {
+  // Get the table data as an array of objects
+  const tableData = [];
+  const rows = document.querySelectorAll('#salesTableBody tr');
+  rows.forEach(row => {
+      const rowData = [];
+      row.querySelectorAll('td').forEach(cell => {
+          rowData.push(cell.textContent);
+      });
+      tableData.push(rowData);
+  });
+
+  // Create a worksheet
+  const ws = XLSX.utils.aoa_to_sheet([['#', 'Order Number', 'Order Date', 'Delivery Date', 'Customer', 'Customer ID', 'Product', 'Product ID', 'Sales Status', 'Payment Method', 'Payment Status', 'Order Status', 'Price', 'Quantity', 'Total Price'], ...tableData]);
+
+  // Create a workbook
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sales Table');
+
+  // Save the workbook
+  XLSX.writeFile(wb, 'sales_table.xlsx');
+}
+
+
+
+
 function getSalesReport(timePeriod){
    
     fetch(`/admin/getSalesReport?timePeriod=${timePeriod}`)
@@ -94,6 +120,7 @@ function areaChart(labels, data) {
   
 
   function setAverageOrderValueAndCounts(current,previous){
+    
 
     setTotalSales(current.totalOrderAmount,previous.totalOrderAmount)
     setTotalOrder(current.totalOrders,previous.totalOrders)
@@ -106,7 +133,6 @@ function areaChart(labels, data) {
     // Extract AOV values from the results
     const currentTotalSales = current ? current : 0;
     const previousTotalSales = previous ? previous : 0;
-
     let potentialGrowth 
     if(previousTotalSales>0){
     // Calculate potential growth
@@ -126,7 +152,7 @@ function areaChart(labels, data) {
                                                             </div>`
     }else{
         const PG=document.getElementById('totalSalesPG')
-        PG.innerHTML=`-${potentialGrowth.toFixed(2)}%`
+        PG.innerHTML=`${potentialGrowth.toFixed(2)}%`
         PG.classList.remove('text-success')
         PG.classList.add('text-danger')
         document.getElementById('totalSalesMarking').innerHTML=`<div class="icon icon-box-danger ">
@@ -160,7 +186,7 @@ function areaChart(labels, data) {
                                                             </div>`
     }else{
         const PG=document.getElementById('totalOrderPG')
-        PG.innerHTML=`-${potentialGrowth.toFixed(2)}%`
+        PG.innerHTML=`${potentialGrowth.toFixed(2)}%`
         PG.classList.remove('text-success')
         PG.classList.add('text-danger')
         document.getElementById('totalOrderMarking').innerHTML=`<div class="icon icon-box-danger ">
@@ -338,6 +364,10 @@ function setSalesData(data){
       <td>${item.price}</td>
       <td>${item.quantity}</td>
       <td>${item.totalPrice}</td>`
+
+
+      
       document.getElementById('salesTableBody').appendChild(row)
     }
 }
+

@@ -274,3 +274,43 @@ function searchProduct(){
 
     })
 }
+
+
+
+
+function removeOffer(productId){
+
+    fetch('/admin/removeOffer',{
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({productId:productId})
+    })
+    .then(response=>{
+        if(response.ok) return response.json()
+        throw new Error('server communication error')
+    })
+    .then(data=>{
+        if(data.removed){
+    
+                Swal.fire({
+                icon: "success",
+                text: data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
+                option=document.getElementById(`manageOffer${productId}`)
+                option.classList.remove('removeOffer')
+                option.classList.add('applyOffer')
+                option.innerHTML='applay offer'
+
+                document.getElementById('offer'+productId).innerHTML=''
+        }else{
+            Swal.fire({
+                icon: "error",
+                text: data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
+        }
+    })
+}

@@ -6,6 +6,7 @@ const Order=require('../model/orderModel')
 const userHelpers=require('../helperMethods/userHelpers')
 const { default: mongoose } = require('mongoose')
 const crypto=require('crypto')
+const Coupone = require('../model/couponeModel')
 
 
 const checkout=async(req,res)=>{
@@ -163,6 +164,21 @@ const verifyPayment=async(req,res)=>{
     }
 }
 
+const getCoupone=async (req,res)=>{
+    try {
+        
+        const coupone=req.coupone
+        if(coupone){
+            res.json({couponeValid:true,coupone:coupone})
+        }else{
+            res.json({couponeValid:false})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'internal server error'})
+    }
+}
+
 
 
 
@@ -171,5 +187,6 @@ module.exports={
     checkout,
     confirmOrder,
     orderResponse,
-    verifyPayment
+    verifyPayment,
+    getCoupone
 }

@@ -288,7 +288,37 @@ try {
         const limit=pagesize//specifies how much data needed
         
         
-        const products=await Product.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
+
+
+        const products = await Product.aggregate([
+            {
+                $sort: { lastModified: -1 }
+            },
+            {
+                $skip: offset
+            },
+            {
+                $limit: limit
+            },
+            {
+                $lookup: {
+                    from: 'offers', // Replace 'offers' with the actual name of your Offer collection
+                    localField: 'offer',
+                    foreignField: '_id',
+                    as: 'offer'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$offer',
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
+
+// Now 'products' array will contain documents with the 'offer' field populated with actual Offer documents.
+
+        // const products=await Product.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
 
         
 

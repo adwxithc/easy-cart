@@ -19,15 +19,14 @@ const getSalesReport=async(req,res)=>{
             categoryqty.push(item.totalQuantitySold)
         }
 
-        console.log(categoryNames,categoryqty)
         
         // Function call for the current month
         const current=await reportHelper.averageOrderValueAndCount(req.current.startDate, req.current.endDate);
 
         // Function call for the last month
         const last=await reportHelper.averageOrderValueAndCount(req.previous.startDate, req.previous.endDate);
-        
-       
+        console.log('prev---------------------------------',req.previous.startDate, req.previous.endDate,last)
+        console.log('current---------------------------------',req.current.startDate, req.current.endDate,current)
         const salesReport=await reportHelper.generateSalesReport(req.timePeriod)
         let data=[]
         for(let item of salesReport){

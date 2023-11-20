@@ -1,7 +1,6 @@
 var pageContent = document.getElementById('pageContent');
 
 
-
 document.getElementById('sideNavBar').addEventListener("click",(e)=>{
     
    
@@ -484,6 +483,14 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
             listOrders()
         }else if(e.target.classList.contains('salesReport')){
             loadSalesReport()
+        }else if(e.target.id=='addCoupone'){
+            loadPage(`/admin/getAddCoupone`,[])
+        }else if(e.target.id=='viewCoupones'){
+            loadPage('/admin/viewCoupones',[])
+        }else if(e.target.id=='addOffer'){
+            loadPage('/admin/getAddOffer',[])
+        }else if(e.target.id=='viewOffers'){
+            loadPage('/admin/viewOffers',[updateOfferPagination])
         }
     }
 
@@ -493,11 +500,35 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
 
 
+
+
 //action performed in the right block
 
 document.getElementById('pageContent').addEventListener('click',(e)=>{
-  
-    if(e.target.classList.contains('orderOption')){
+
+    if(e.target.id=='viewModalClose'){
+        
+        document.getElementById('viewModal').style.display='none'
+
+    }else if(e.target.id=='brandImgCropClose'){
+        document.getElementById('brandImgCrop').style.display='none'
+    }
+    
+    if(e.target.classList.contains('productAction')){
+       
+        if(e.target.classList.contains('applyOffer')){
+          
+            getOffers(e.target.getAttribute('productId'),'productId')
+        }else if(e.target.classList.contains('removeOffer')){
+            removeOffer(e.target.getAttribute('productId'))
+        }
+    
+    }else if(e.target.classList.contains('categoryAction')){
+        if(e.target.classList.contains('applyOffer')){
+            getOffers(e.target.getAttribute('categoryId'),'categoryId')
+        }
+
+    }else if(e.target.classList.contains('orderOption')){
         if(e.target.id=='nextOrders'){
            
             nextOrders()
@@ -540,16 +571,63 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
             filterBySalesPaymentStatus(e.target.value)
         }else if(e.target.id=='salesOrderStatus'){
             filterBySalesOrderStatus(e.target.value)
+        }else if(e.target.id=='downloadExcel'){
+            downloadTableInExcel()
+        }else if(e.target.id=='downloadPdf'){
+            downloadTableInPdf()
         }
-    }
-    if(e.target.id=='viewModalClose'){
-        
-        
-        document.getElementById('viewModal').style.display='none'
+    }else if(e.target.classList.contains('couponeAction')){
+            if(e.target.id=='addCoupone'){
+               
+                addCoupone()
+            }else if(e.target.classList.contains('edit')){
+                loadPage(`/admin/editCoupone?id=${e.target.getAttribute('couponeId')}`,[])
+            }else if(e.target.id=='updateCoupone'){
+                updateCoupone()
+            }else if(e.target.classList.contains('status')){
+                listUnlistCoupone(e.target.getAttribute('couponeId'))
+            }
 
-    }else if(e.target.id=='brandImgCropClose'){
-        document.getElementById('brandImgCrop').style.display='none'
+    }else if(e.target.classList.contains('offerAction')){
+        if(e.target.id=='addOffer'){
+            addOffer()
+        }else if(e.target.classList.contains('edit')){
+            loadPage(`/admin/editOffer?id=${e.target.getAttribute('offerId')}`,[])
+        }else if(e.target.id=='updateOffer'){
+            updateOffer()
+        }else if(e.target.classList.contains('status')){
+            listUnlistOffer(e.target.getAttribute('offerId'))
+
+        }else if(e.target.id=='nextOffers'){
+         
+            nextOffers()
+        }else if(e.target.id=='prevOffers'){
+            prevOffers()
+        }else if(e.target.classList.contains('applayOfferLink')){
+            const modal=document.getElementById('viewModal')
+            const productId=modal.getAttribute('productId')
+            const categoryId=modal.getAttribute('categoryId')
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Confirm offer application to this product?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, applay it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    if(productId) applayOfferToProduct(e.target.getAttribute('offer'),productId)
+                    if(categoryId) applayOfferToCategory(e.target.getAttribute('offer'),productId)
+                }
+              });
+            
+        }
+        
     }
+
+
     
 
 },true)
@@ -559,9 +637,29 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
 
 
 
+function loadPage(url,callBacks){
+    fetch(url)
+    .then(response=>{
+        if(response.ok) return response.text()
+        throw new Error('unable to load page')
+    })
+    .then(html=>{
+        pageContent.innerHTML=html
+        for(let cb of callBacks){
+            cb()
+        }
+    })
+    .catch((error)=>{
+        console.error(error)
+    })
+}
 
-
-
-
-
-
+function resetErrormsg(){
+    pageContent.addEventListener('click',(e)=>{
+           if(e.target.classList.contains('form-control')){
+            const targetDiv=e.target.nextElementSibling
+            if(targetDiv && targetDiv.classList.contains('error')) targetDiv.innerHTML=''        
+           }
+    },true)
+}
+resetErrormsg()

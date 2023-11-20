@@ -98,7 +98,7 @@ function changeAddress(){
 }
 
 
-function calculateOrderSummery(){
+function calculateOrderSummery(coupone){
   if(document.getElementById('productQty')){
   const productQty=parseInt(document.getElementById('productQty').value)
   const price=parseFloat(document.getElementById('productPrice').innerHTML)
@@ -108,10 +108,15 @@ function calculateOrderSummery(){
   if(total<500){
     deliveryCharge=40
   }
+  let discount=0
+  if(coupone){
+    discount=(total*coupone.couponeDiscount)/100;
+  }
 
   document.getElementById('checkoutTotal').innerHTML='Rs.'+total
   document.getElementById('deliveryCharge').innerHTML='Rs.'+deliveryCharge
-  document.getElementById('grandTotal').innerHTML='Rs.'+(total+deliveryCharge)
+  document.getElementById('discount').innerHTML=discount
+  document.getElementById('grandTotal').innerHTML='Rs.'+(total+deliveryCharge)-discount
 }
 }
 calculateOrderSummery()
@@ -278,4 +283,39 @@ function verifyPayment(payment,order,cart){
   })
 }
 
+
+function applyCoupone(){
+  alert('bla')
+  alert(document.getElementById('productQty'))
+  alert(document.getElementById('productQty').value)
+  const productQty=parseInt(document.getElementById('productQty').value)
+  const price=parseFloat(document.getElementById('productPrice').innerHTML)
+  const total=productQty*price
+  const couponeCode=document.getElementById('couponeCode').value
+  fetch('/api/applyCoupone',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({couponeCode:couponeCode,total:total})
+  })
+  .then(response=>{
+    if(response.ok) return response.json()
+    throw new Error('server connection error')
+  })
+  .then(data=>{
+    if(data.couponeValid){
+      calculateOrderSummery(data.coupone)
+    }else{
+      Swal.fire({
+        icon: "error",
+        title: "Invalid coupone code",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+  })
+  .catch((error)=>{
+    console.error(error)
+    showModal('something went wrong')
+  })
+}
 

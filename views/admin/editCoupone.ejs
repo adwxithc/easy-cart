@@ -1,0 +1,69 @@
+
+
+
+<form class="forms-sample"  method="POST" id="editCouponeForm">
+    <div class="grid-margin stretch-card">
+        <div class="card">
+        <div class="card-body px-5">
+            <div class="d-flex justify-content-center">
+                <h3 class="card-title">Edit Coupone</h3>
+            </div>
+            
+
+            <% if(locals.coupone){%>
+                <input type="hidden" name="couponeId" id="" value="<%= coupone._id %>">
+            <div class="form-group mt-2 setWidth" >
+                <label for="CouponeCode">Code</label>
+                <input type="text" class="form-control" id="CouponeCode" placeholder="Coupone Code" name="couponeCode" value="<%= coupone.couponeCode %>">
+                <div id="CouponeCodeError" class="error"></div>
+            </div>
+            <div class="form-group mt-4 setWidth">
+                <label for="minPurchaseAmount">Minimum Purchase Amount</label>
+                <input type="number" class="form-control" id="minPurchaseAmount" placeholder="Minimum Purchase Amount" name="minPurchaseAmount" value="<%= coupone.minPurchaseAmount %>">
+                <div id="minPurchaseAmountError" class="error"></div>
+
+            </div>
+            <div class="form-group mt-4 setWidth">
+                <label for="maxPurchaseAmount">Maximum Purchase Amount</label>
+                <input type="number" class="form-control" id="maxPurchaseAmount" placeholder="Maximum Purchase Amount" name="maxPurchaseAmount" value="<%= coupone.maxPurchaseAmount %>">
+                <div id="maxPurchaseAmountError" class="error"></div>
+
+            </div>
+            <div class="form-group mt-4 setWidth">
+                <label for="couponeDiscount">Discount</label>
+                <input type="number" class="form-control" id="couponeDiscount" placeholder="Discount" name="couponeDiscount" value="<%= coupone.couponeDiscount %>">
+                <div id="couponeDiscountError" class="error"></div>
+
+            </div>
+            <div class="form-group mt-4 setWidth">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate" placeholder="Start Date" name="startDate" value="<%= new Date(coupone.startDate).toISOString().split('T')[0] %>">
+                <div id="startDateError" class="error"></div>
+
+            </div>
+            <div class="form-group mt-4 setWidth">
+                <label for="expireDate">Expire Date</label>
+                <input type="date" class="form-control" id="expireDate" placeholder="Expire Date" name="expireDate" value="<%= new Date(coupone.expireDate).toISOString().split('T')[0] %>">
+                <div id="expireDateError" class="error"></div>
+
+            </div>
+
+            <div class="d-flex justify-content-center p-3">
+                <input type="button" class="btn btn-primary mr-2 couponeAction" value="Save" id="updateCoupone">
+                <a type="button" name="" id="" href="/admin/adminDashboard" >cancel</a>
+            </div>
+
+            <%}%>
+        </div>
+        </div>
+    </div>
+            
+            
+            
+
+</form>
+
+
+
+
+

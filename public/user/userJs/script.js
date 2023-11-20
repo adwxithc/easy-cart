@@ -325,6 +325,8 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             allowPlaceOrder(e.target)
         }else if(e.target.classList.contains('confirmOrder')){
             confirmOrder(e.target.id)
+        }else if(e.target.classList.contains('applyCoupone')){
+            applyCoupone()
         }
     }
 

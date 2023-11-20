@@ -5,6 +5,9 @@ const validateAdminInputs=require('../middleware/validateAdminInputs')
 const path=require('path')
 const dashboardController=require('../controller/dashboardController')
 const reportController=require('../controller/reportController')
+const couponeController=require('../controller/couponeController')
+const checkExist=require('../middleware/checkExist')
+const offerController=require('../controller/offerController')
 
 const session=require('express-session')
 const multer=require('multer')
@@ -119,7 +122,26 @@ admin_route.get('/salesReport',reportController.loadSalesReport)
 admin_route.get('/getSalesReport',validateAdminInputs.sanitiseSalesReportParam,reportController.getSalesReport)
 admin_route.get('/getSalesData',reportController.getSalesData)
 
+//coupone
+admin_route.get('/getAddCoupone',couponeController.loadAddcoupone)
+admin_route.post('/addCoupone',validateAdminInputs.validateCoupone,couponeController.addCoupone)
+admin_route.get('/viewCoupones',couponeController.loadViewCoupones)
+admin_route.get('/editCoupone',couponeController.loadEditCoupone)
+admin_route.post('/updateCoupone',checkExist.coupone,validateAdminInputs.validateCoupone,couponeController.updateCoupone)
+admin_route.patch('/listUnlistCoupone',checkExist.coupone,couponeController.listUnlistCoupone)
 
+//offer
+
+admin_route.get('/getAddOffer',offerController.loadAddOffer)
+admin_route.post('/addOffer',validateAdminInputs.validateOfferData,offerController.addOffer)
+admin_route.get('/viewOffers',offerController.loadViewOffers)
+admin_route.get('/editOffer',offerController.loadEditOffer)
+admin_route.post('/updateOffer',checkExist.offer,validateAdminInputs.validateOfferData,offerController.updateOffer)
+admin_route.patch('/listUnlistOffer',checkExist.offer,offerController.listUnlistOffer)
+admin_route.get('/getOffers',offerController.getOffers)
+admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.product,offerController.applyOfferToProduct)
+admin_route.patch('/removeOffer',checkExist.product,offerController.removeOffer)
+admin_route.patch('/applyOfferToCategory',checkExist.category,offerController.applyOfferToCategory)
 
 //errors
 admin_route.get('/404',adminController.error404);

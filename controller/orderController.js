@@ -5,7 +5,7 @@ const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const loadOrders=async(req,res)=>{
     try {
-      console.log(req.query.page)
+      
         const user=await User.findById(req.session.userId)
 
         const page=req.query.page||1// specifies which page

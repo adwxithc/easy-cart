@@ -5,6 +5,7 @@ const Address=require('../model/addressModel')
 const orderManagement=require('../middleware/orderManagement')
 const Order=require('../model/orderModel')
 const mongoose=require('mongoose')
+const Coupone = require('../model/couponeModel')
 
 const validateCartInputs=async (req,res,next)=>{
     const userId=req.session.userId;
@@ -342,6 +343,30 @@ const validateProductSearchCriteria=async(req,res,next)=>{
         console.log(error)
     }
 }
+
+const coupone=async(req,res,next)=>{
+    try {
+        const {couponeCode,total}=req.body.couponeCode
+        const currentDate=new Date()
+        const coupone=await Coupone.findOne({couponeCode:couponeCode})
+        if(!coupone){
+            res.json({couponeValid:false,message:"Invalid coupone code"})
+        }else if( !coupone.maxPurchaseAmount>total || !coupone.minPurchaseAmount<total){
+            res.json({couponeValid:false,message:"This coupone is not applicable for this order price range"})
+        }else if(!coupone.status){
+            res.json({couponeValid:false,message:"Invalid coupone code"})
+        }else if( !coupone.expireDate>currentDate || !coupone.startDate<currentDate){
+            res.json({couponeValid:false,message:"Invalid coupone code"})
+        }else{
+            req.coupone=coupone
+            next()
+        }
+        
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
  
  
 
@@ -353,6 +378,7 @@ module.exports={
     validateAddress,
     validateCheckoutData,
     validateChangePassword,
-    validateProductSearchCriteria
+    validateProductSearchCriteria,
+    coupone
     
 }

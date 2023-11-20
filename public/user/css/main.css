@@ -1209,7 +1209,7 @@ h1, h2, h3, h4, h5, h6 {
 ============================================================================================ */
 .banner-area {
   /* background: url(/static/assets/img/banner/banner2.jpg) center no-repeat; */
-  background-color: white;
+  background-color: #fff;
   background-size: cover;
   position: relative;
   margin-bottom:5rem ; }

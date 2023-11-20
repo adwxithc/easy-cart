@@ -1,6 +1,7 @@
 const Order = require('../model/orderModel');
 const Product=require('../model/productModel');
 const User=require('../model/userModel')
+const Coupone = require("../model/couponeModel")
 
 async function calculateTotalSalesToday() {
     try {
@@ -387,8 +388,62 @@ async function getTotalListedUsers(){
   
 }
 
+function isValidCouponCode(couponCode) {
+  // Alphanumeric characters, hyphens, underscores; minimum 6 characters
+  const regex = /^[a-zA-Z0-9_-]{6,}$/;
+  return regex.test(couponCode);
+}
+
+function isValidAmount(amount) {
+
+  // Numeric value greater than or equal to 0
+  return !isNaN(parseFloat(amount)) && isFinite(amount) && parseFloat(amount) >= 0;
+
+}
+
+function isValidDiscount(discount) {
+
+  // Numeric value between 0 and 100
+  return !isNaN(parseFloat(discount)) && isFinite(discount) && parseFloat(discount) >= 0 && parseFloat(discount) <= 100;
+
+}
+
+function isValidDate(date) {
+
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+
+  return regex.test(date);
+}
 
 
+
+
+async function  doesCouponeCodeExist(couponeCode){
+    try {
+  
+        const exist=await Coupone.findOne({couponeCode:couponeCode})
+        if(exist){
+          
+            return exist
+        }else{
+          return false
+        }
+        
+    } catch (error) {
+        console.log(error)
+        return new Error(error)
+    }
+}
+
+async function doesCouponeCodeTake(couponeCode,id){
+  
+  const exist=await Coupone.findOne({_id:{$ne:id},couponeCode:couponeCode})
+  if(exist){
+    return true
+  }else{
+    return false
+  }
+}
 
 
  
@@ -403,5 +458,11 @@ module.exports = {
     getTotalTransactions,
     findMostSoldProducts,
     addMoneyToWallet,
-    getTotalListedUsers
+    getTotalListedUsers,
+    isValidCouponCode,
+    isValidAmount,
+    isValidDiscount,
+    isValidDate,
+    doesCouponeCodeExist,
+    doesCouponeCodeTake
 };

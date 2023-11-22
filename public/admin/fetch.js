@@ -520,12 +520,42 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
           
             getOffers(e.target.getAttribute('productId'),'productId')
         }else if(e.target.classList.contains('removeOffer')){
-            removeOffer(e.target.getAttribute('productId'))
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to remove this offer from this product? This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    removeProductOffer(e.target.getAttribute('productId'))
+                }
+              });
+            
         }
     
     }else if(e.target.classList.contains('categoryAction')){
         if(e.target.classList.contains('applyOffer')){
             getOffers(e.target.getAttribute('categoryId'),'categoryId')
+        }else if(e.target.classList.contains('removeOffer')){
+
+            
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to remove this offer from this category? This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    removeCategoryOffer(e.target.getAttribute('categoryId'))
+                }
+              });
+            
         }
 
     }else if(e.target.classList.contains('orderOption')){
@@ -619,7 +649,7 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
               }).then((result) => {
                 if (result.isConfirmed) {
                     if(productId) applayOfferToProduct(e.target.getAttribute('offer'),productId)
-                    if(categoryId) applayOfferToCategory(e.target.getAttribute('offer'),productId)
+                    if(categoryId) applayOfferToCategory(e.target.getAttribute('offer'),categoryId)
                 }
               });
             

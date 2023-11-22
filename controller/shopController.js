@@ -6,7 +6,13 @@ const userHelpers=require('../helperMethods/userHelpers')
 const loadShop=async(req,res)=>{
 
     try {
-        const products=await Product.find().limit(12);
+        // const products=await Product.find().limit(12);
+        const products=await Product.aggregate([
+            {
+                $limit:12
+            },
+
+        ])
 
         const totalProducts = await Product.countDocuments();
         const totalPages=Math.ceil(totalProducts/12)

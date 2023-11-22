@@ -141,7 +141,8 @@ admin_route.patch('/listUnlistOffer',checkExist.offer,offerController.listUnlist
 admin_route.get('/getOffers',offerController.getOffers)
 admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.product,offerController.applyOfferToProduct)
 admin_route.patch('/removeOffer',checkExist.product,offerController.removeOffer)
-admin_route.patch('/applyOfferToCategory',checkExist.category,offerController.applyOfferToCategory)
+admin_route.patch('/applyOfferToCategory',checkExist.offer,checkExist.category,offerController.applyOfferToCategory)
+admin_route.patch('/removeCategoryOffer',checkExist.category,offerController.removeCategoryOffer)
 
 //errors
 admin_route.get('/404',adminController.error404);

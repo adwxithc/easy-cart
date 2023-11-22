@@ -536,6 +536,18 @@
   margin: 0 auto;
 }
 
+/* view-more */
+.view-more{
+  text-decoration: none;
+  color: #000;
+}
+.view-more:hover{
+  text-decoration: none;
+  color: #6a9cff;
+  transform: scale(1.1); /* You can adjust the scaling factor as needed */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
 /* offer */
 .shape{	
 	border-style: solid; border-width: 0 70px 40px 0; float:right; height: 0px; width: 0px;

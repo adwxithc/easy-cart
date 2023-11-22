@@ -21,7 +21,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xl-3 col-lg-4 col-md-5">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar navbar-expand-lg navbar-light">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                       <span class="navbar-toggler-icon"></span>
                     </button>
@@ -139,6 +139,14 @@
                         <!-- single product -->
                         <div class="col-lg-3 col-6 h-50">
                             <div class="single-product productdiv">
+								<%if(product.effectedDiscount){%>
+									<div class="badge-area-show">
+										<div class="bagde-flag-wrap">
+										  <a href="#" class="bagde-flag"> <%=product.effectedDiscount%>% off</a>
+										</div>
+									  </div>
+								<%}%>
+									
                                 <div class="product-container">
                                     <div class="product-image-container">
                                         <a target="_blank" href="/productDetails?id=<%=product._id%>"  ><img class="img-fluid product-image" src="/static/productImages/<%= product.images[0] %>" alt=""></a>
@@ -146,8 +154,13 @@
                                     <div class="product-details">
                                         <h6 class="product-title"><%=product.name%></h6>
                                         <div class="price">
-                                            <h6 class="product-price"><%=product.price%></h6>
-                                            <h6 class="l-through product-original-price"><%=product.price +100%></h6>
+											<%if(product.effectedDiscount && product.effectedDiscount>0){%>
+                                            <h6 class="product-price">	&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></h6>
+
+                                            <h6 class="l-through product-original-price">&#8377;<%= product.price%></h6>
+											<%}else{%>
+												<h6 class="product-price">	&#8377;<%=product.price%></h6>
+											<%}%>
                                         </div>
                                         <div class="prd-bottom">
                                             <a href="" class="social-info">

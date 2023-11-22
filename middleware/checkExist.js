@@ -5,13 +5,13 @@ const Category=require('../model/categoryModel')
 
 const coupone=async(req,res,next)=>{
     try {
-        const{couponeId}=req.body
-        const exist =await Coupone.findById(couponeId)
+        const{couponeCode}=req.body
+        const exist =await Coupone.findOne({couponeCode:couponeCode})
         if(exist){
             req.coupone=exist;
             next()
         }else{
-            res.status(400).json({message:"This coupone doesn't exist"})
+            res.json({message:"This coupone doesn't exist",coupone:false})
         }
     } catch (error) {
         console.log(error)
@@ -75,9 +75,12 @@ const category =async(req,res,next)=>{
 
 
 
+
+
 module.exports={
     coupone,
     offer,
     product,
-    category
+    category,
+
 }

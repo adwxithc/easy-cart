@@ -15,12 +15,22 @@ const checkout=async(req,res)=>{
         
         const user=await User.findById(req.session.userId)
         const addresses=await Address.find({user:req.session.userId})
+        const currentDate=new Date()
+        const coupones=await Coupone.find({
+            status:true,
+            expireDate:{
+                $gt:currentDate
+            },
+            startDate:{
+                $lte:currentDate
+            }
+    })
      if(req.query.productId){
 
         const product=await Product.findById(req.query.productId).populate('brand')
         if(product.stock>=req.query.quantity){
            
-            res.render('checkout',{user:user,addresses:addresses,product:product,quantity:req.query.quantity})
+            res.render('checkout',{user:user,addresses:addresses,product:product,quantity:req.query.quantity,coupones:coupones})
         }else{
             res.json({message:`Sorry, we can't provide the requested quantity of "${product.name}" as we have ${product.stock} units in stock.`,byuNowAvailable:false})
         }
@@ -36,7 +46,7 @@ const checkout=async(req,res)=>{
           }
         });
 
-        res.render('checkout',{user:user,addresses:addresses,cart:cart}) 
+        res.render('checkout',{user:user,addresses:addresses,cart:cart,coupones:coupones}) 
      }
         
 
@@ -169,9 +179,9 @@ const getCoupone=async (req,res)=>{
         
         const coupone=req.coupone
         if(coupone){
-            res.json({couponeValid:true,coupone:coupone})
+            res.json({coupone:coupone})
         }else{
-            res.json({couponeValid:false})
+            res.json({coupone:false})
         }
     } catch (error) {
         console.log(error)

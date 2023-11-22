@@ -86,6 +86,12 @@ const productSchema=mongoose.Schema({
         type:Number,
         default:0
     },
+    effectedOfferStartDate:{
+        type:Date
+    },
+    effectedOfferEndDate:{
+        type:Date
+    },
     careInstructions:String,
     material:String,
     additionalSpecifications: String,

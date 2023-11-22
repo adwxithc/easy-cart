@@ -53,7 +53,18 @@ async function findProductLargestOffer(productId) {
             },
             {
                 $unwind: { path: '$categoryOffers', preserveNullAndEmptyArrays: true }
-            },            {
+            },
+            {
+                $match:{
+                    'categoryOffers.startDate':{
+                        $lte:new Date()
+                    },
+                    'categoryOffers.expireDate':{
+                        $gte:new Date()
+                    }
+                }
+            },
+            {
                 $sort: {
                     'categoryOffers.discountPercentage': -1
                 }
@@ -64,6 +75,12 @@ async function findProductLargestOffer(productId) {
                     largestOffer: {
                         $first: '$categoryOffers'
                     },
+                    productOffStartDate:{
+                        $first:'$productOffer.startDate'
+                    },
+                    productOffEndDate:{
+                        $first:'$productOffer.expireDate'
+                    },
                     productOffer:{
                         $first:'$productOffer.discountPercentage'
                     }
@@ -71,23 +88,28 @@ async function findProductLargestOffer(productId) {
             },
 
         ]);
-        console.log('---------',result,result[0] )
 
 
         if (result.length === 0) {
             result[0]={
-                productOffer :0,
-                largestOffer:{discountPercentage:0}
+
+                largestOffer:{discountPercentage:0,startDate:null,expireDate:null}
             }
             
         }else{
+
             if( !result[0].largestOffer?.discountPercentage ){
-                console.log(1)
-                result[0].largestOffer={discountPercentage:0}
+
+
+                result[0].largestOffer={discountPercentage:0,startDate:null,expireDate:null}
             }
             if(!result[0].productOffer ){
-                console.log(2)
-                 result[0].productOffer =0
+                
+                
+                result[0].productOffer =0
+                result[0].productOffStartDate=null
+                result[0].productOffEndDate=null
+                
             }
         }
 
@@ -125,32 +147,52 @@ const products = await Product.aggregate([
 
 
     for(let product of products){
+        setEffectedDiscountsForProduct(product)
+    }
+}
+
+async function setEffectedDiscountsForProduct(product){
+    
 
 
 
         const offer=await findProductLargestOffer(product._id)
-        console.log(offer)
+
         if(offer){
-            let effectedDiscount
-            if(product.productOffer?.discountPercentage && offer?.largestOffer){
-             effectedDiscount=Math.max(Number(offer.largestOffer.discountPercentage),Number(product.productOffer?.discountPercentage))
-            }else if(offer?.largestOffer){
-                effectedDiscount=Number(offer.largestOffer.discountPercentage)
-            }else if(product.productOffer?.discountPercentage){
-                effectedDiscount=Number(product.productOffer?.discountPercentage)
-            }else{
-                effectedDiscount=0
+            const currentDate=new Date()
+            let effectedDiscount,effectedOfferStartDate,effectedOfferEndDate,productOffer=0,largestOffer=0;
+        
+            if(product.productOffer){
+                
+                if(product.productOffer?.startDate<=currentDate && product.productOffer?.expireDate>currentDate){
+                
+                    productOffer=product.productOffer?.discountPercentage?product.productOffer.discountPercentage:0
+                }
+            }
+            
+            if(offer.largestOffer?.discountPercentage){
+                largestOffer=offer.largestOffer?.discountPercentage
             }
 
-            await Product.updateOne({_id:product._id},{$set:{effectedDiscount:effectedDiscount}})
+
+            if(largestOffer>=productOffer){
+                    effectedDiscount=largestOffer;
+                    effectedOfferStartDate=offer.largestOffer.startDate
+                    effectedOfferEndDate=offer.largestOffer.expireDate
+            }else{
+                effectedDiscount=productOffer;
+                effectedOfferStartDate=product.productOffer.startDate
+                effectedOfferEndDate=product.productOffer.expireDate
+            }
+             await Product.updateOne({_id:product._id},{$set:{effectedDiscount:effectedDiscount,effectedOfferStartDate:effectedOfferStartDate,effectedOfferEndDate,effectedOfferEndDate}})
+
         }
 
-    }
+    
 }
-
-
 
 module.exports={
     findProductLargestOffer,
-    setEffectedDiscounts
+    setEffectedDiscounts,
+    setEffectedDiscountsForProduct
 }

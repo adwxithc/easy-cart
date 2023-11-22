@@ -346,19 +346,19 @@ const validateProductSearchCriteria=async(req,res,next)=>{
 
 const coupone=async(req,res,next)=>{
     try {
-        const {couponeCode,total}=req.body.couponeCode
+        const coupone=req.coupone
+        const {total}=req.body
         const currentDate=new Date()
-        const coupone=await Coupone.findOne({couponeCode:couponeCode})
-        if(!coupone){
-            res.json({couponeValid:false,message:"Invalid coupone code"})
-        }else if( !coupone.maxPurchaseAmount>total || !coupone.minPurchaseAmount<total){
-            res.json({couponeValid:false,message:"This coupone is not applicable for this order price range"})
-        }else if(!coupone.status){
-            res.json({couponeValid:false,message:"Invalid coupone code"})
-        }else if( !coupone.expireDate>currentDate || !coupone.startDate<currentDate){
-            res.json({couponeValid:false,message:"Invalid coupone code"})
+        if((!new Date(coupone.expireDate)>currentDate) || !(new Date(coupone.startDate)<=currentDate) || (!coupone.status)){
+    
+            res.json({coupone:false,message:'Invalid coupone'})
+        }else if(!total>coupone.minPurchaseAmount){
+            res.json({coupone:false,message:"coupone can't be applied due to insufficient purchase amount "})
+        }else if(!(total<coupone.maxPurchaseAmount)){
+            console.log(!(total<coupone.maxPurchaseAmount),total,coupone.maxPurchaseAmount)
+            res.json({coupone:false,message:"coupone can't be applied due to exceding of  purchase limit "})
+            
         }else{
-            req.coupone=coupone
             next()
         }
         

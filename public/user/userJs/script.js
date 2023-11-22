@@ -309,6 +309,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     
 //------------------checkout actions--------------------
     if(e.target.classList.contains('checkoutActions')){
+    
         if(e.target.classList.contains('addressRadio')){
             
            setDeliveyHere(e.target)
@@ -325,8 +326,12 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             allowPlaceOrder(e.target)
         }else if(e.target.classList.contains('confirmOrder')){
             confirmOrder(e.target.id)
-        }else if(e.target.classList.contains('applyCoupone')){
+        }else if(e.target.classList.contains('selectCoupone')){
+            selectCoupone(e.target.getAttribute('couponeCode'))
+        }else if(e.target.id=='applyCoupone'){
             applyCoupone()
+        }else if(removeCoupone){
+            removeCoupone()
         }
     }
 

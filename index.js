@@ -47,6 +47,12 @@ app.use('/api',walletRoute)
 // })
 
 
+// shedule cron to execute task to handle expires offers every day
+cron.schedule('0 0 * * *',()=>{
+  tasks.expireOffers()
+  
+})
+
 app.listen(PORT,()=>{
     console.log(`app runs at : http://localhost:${PORT}`)
 })

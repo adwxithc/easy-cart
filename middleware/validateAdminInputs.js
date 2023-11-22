@@ -226,8 +226,8 @@ const sanitiseSalesReportParam=(req,res,next)=>{
 
 const validateCoupone=async (req,res,next)=>{
     try {
-        const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode}=req.body
-        if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
+        const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode,quantity}=req.body
+        if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(quantity) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
             res.json({message:'Invalid form data'})
         }else if(Number(maxPurchaseAmount)<=Number(minPurchaseAmount)){
             res.json({message:'maximum amount should be greater than minimum amount'})
@@ -242,7 +242,8 @@ const validateCoupone=async (req,res,next)=>{
                 maxPurchaseAmount:maxPurchaseAmount,
                 couponeDiscount:couponeDiscount,
                 startDate:startDate,
-                expireDate:expireDate
+                expireDate:expireDate,
+                quantity:quantity
             }
             next()
         }

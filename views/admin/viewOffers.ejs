@@ -38,11 +38,15 @@
                                     <td><%= offer.discountPercentage%></td>
                                     <td><%= offer.startDate.toDateString() %></td>
                                     <td><%= offer.expireDate.toDateString() %></td>
-                                    <td><% if(offer.status){%>
+                                    <td>
+                                      <%if(new Date(offer.expireDate)<=new Date()){%>
+                                        <span class="text-danger" >expired</span>
+                                      <%}else if(offer.status){%>
                                          <span class="text-success" id="status<%=offer._id%>">listed</span>
-                                         <%}else{%>
+                                      <%}else{%>
                                         <span class="text-danger" id="status<%=offer._id%>">unlisted</span>
-                                        <%}%></td>
+                                      <%}%>
+                                    </td>
 
 
                                     <td>
@@ -53,6 +57,7 @@
                                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                             <div class="dropdown-menu">
                                               <a class="dropdown-item offerAction edit" href="#" offerId="<%=offer._id%>">Edit</a>
+                                              <%if(!( offer.expireDate<=new Date() )){%>
                                               <a class="dropdown-item offerAction status" href="#"  offerId="<%=offer._id%>" id="change<%=offer._id%>">
                                                 <%if(offer.status){%>
                                                     unlist
@@ -60,6 +65,7 @@
                                                     list
                                                 <%}%>
                                               </a>
+                                              <%}%>
                                           </div>
                                         </div>
           

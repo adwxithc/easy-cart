@@ -1,5 +1,7 @@
 const Cart=require('../model/cartModel')
+const Product=require('../model/productModel')
 const StockManagemant=require('../middleware/stockManagement')
+const offerHelper=require('../helperMethods/offer')
 
 // Periodically check and expire carts
 const expireCarts = async () => {
@@ -20,6 +22,59 @@ const expireCarts = async () => {
     }
 };
 
+const expireOffers=async()=>{
+console.log('cron shedule for expireOffers')
+    const products=await Product.aggregate([
+        {
+            $match:{
+                status:true
+            }
+        }
+    ])
+    for(let product of products){
+        const currentDate=newDate
+        if(!(product.effectedOfferStartDate<=currentDate && product.effectedOfferEndDate>currentDate)){
+
+            const offer=await offerHelper.findProductLargestOffer(product._id)
+
+            if(offer){
+                // const currentDate=new Date()
+                let effectedDiscount,effectedOfferStartDate,effectedOfferEndDate,productOffer=0,largestOffer=0;
+            
+                if(product.productOffer){
+                        
+                    if(product.productOffer?.startDate<=currentDate && product.productOffer?.expireDate>currentDate){
+                    
+                        productOffer=product.productOffer?.discountPercentage?product.productOffer.discountPercentage:0
+                    }
+                }
+                
+
+                if(offer.largestOffer?.discountPercentage){
+                    largestOffer=offer.largestOffer?.discountPercentage
+                }
+
+            
+                if(largestOffer>=productOffer){
+                
+                        effectedDiscount=largestOffer;
+                        effectedOfferStartDate=offer.largestOffer.startDate
+                        effectedOfferEndDate=offer.largestOffer.expireDate
+                }else{
+                    effectedDiscount=productOffer;
+                    effectedOfferStartDate=product.productOffer.startDate
+                    effectedOfferEndDate=product.productOffer.expireDate
+                }
+            
+                await Product.updateOne({_id:product._id},{$set:{effectedDiscount:effectedDiscount,effectedOfferStartDate:effectedOfferStartDate,effectedOfferEndDate,effectedOfferEndDate}})
+
+            }
+        }
+
+    }
+}
+
 module.exports={
-    expireCarts
+    expireCarts,
+    expireOffers
 }

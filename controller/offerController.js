@@ -122,7 +122,24 @@ const getOffers=async(req,res)=>{
 const applyOfferToProduct=async(req,res)=>{
     try {
         const offer=await offerHelper.findProductLargestOffer(req.product._id)
-        req.product.effectedDiscount=Math.max(Number(offer.largestOffer.discountPercentage),Number(req.offer.discountPercentage))
+        if(Number(offer.largestOffer.discountPercentage)>Number(req.offer.discountPercentage)){
+            req.product.effectedDiscount=Number(offer.largestOffer.discountPercentage)
+            req.product.effectedOfferStartDate=offer.largestOffer.startDate
+            req.product.effectedOfferEndDate=offer.largestOffer.expireDate
+        }else{
+            const currentDate=new Date()
+            if(req.offer.startDate<currentDate && req.offer.expireDate>currentDate){
+            req.product.effectedDiscount=Number(req.offer.discountPercentage)
+            req.product.effectedOfferStartDate=req.offer.startDate
+            req.product.effectedOfferEndDate=req.offer.expireDate
+            }else{
+                req.product.effectedDiscount=0
+                req.product.effectedOfferStartDate=null
+                req.product.effectedOfferEndDate=null
+            }
+
+        }
+        // =Math.max(Number(offer.largestOffer.discountPercentage),Number(req.offer.discountPercentage))
 
         
         req.product.offer=req.body.offerId
@@ -145,6 +162,8 @@ const removeOffer=async(req,res)=>{
     try {
 
         const offer=await offerHelper.findProductLargestOffer(req.product._id)
+        req.product.effectedOfferStartDate=offer.largestOffer.startDate
+        req.product.effectedOfferEndDate=offer.largestOffer.expireDate
         
         req.product.effectedDiscount=Number(offer.largestOffer?.discountPercentage)
 

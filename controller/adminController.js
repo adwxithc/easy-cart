@@ -651,7 +651,7 @@ const listOrUnlistCategory=async(req,res)=>{
         if(categoryData.status){
             const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false,unlistDate:Date.now(),lastModified:Date.now()}})
             if(statusUpdate){
-                console.log('next calling')
+                // console.log('next calling')
                 await offerHelper.setEffectedDiscounts(categoryId)
                 res.json({"message":"category unlisted","status":"unlisted"})
             }else{
@@ -661,7 +661,7 @@ const listOrUnlistCategory=async(req,res)=>{
         }else{
             const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true,unlistDate:null,lastModified:Date.now()}})
             if(statusUpdate){
-                console.log('next calling')
+                // console.log('next calling')
                 await offerHelper.setEffectedDiscounts(categoryId)
                 res.json({"message":"category listed","status":"listed"})
             }else{

@@ -52,14 +52,17 @@ function validateCoupone(data){
         const discount=data.get('couponeDiscount')
         const startDate=data.get('startDate')
         const expireDate=data.get('expireDate')
+        const quantity=data.get('quantity')
 
-        if(!code || !minAmt || !maxAmt || !discount || !startDate || !expireDate){
+        if(!code || !minAmt || !maxAmt || !discount || !startDate || !expireDate || !quantity){
             if(!code ) document.getElementById('CouponeCodeError').innerHTML="Coupone code can't be null"
             if(!minAmt ) document.getElementById('minPurchaseAmountError').innerHTML="Coupone minimum purchase amount can't be null"
             if(!maxAmt ) document.getElementById('maxPurchaseAmountError').innerHTML="Coupone maximum purchase amount can't be null"
             if(!discount ) document.getElementById('couponeDiscountError').innerHTML="Coupone discount amount can't be null"
             if(!startDate ) document.getElementById('startDateError').innerHTML="Coupone start date can't be null"
             if(!expireDate ) document.getElementById('expireDateError').innerHTML="Coupone expire date can't be null"
+            if(!quantity ) document.getElementById('quantityError').innerHTML="Coupone quantity can't be null"
+
             return false
         }
         if(Number(minAmt) > Number(maxAmt)){
@@ -85,6 +88,15 @@ function validateCoupone(data){
         }
         if(!couponeRegex.test(code)){
             document.getElementById('CouponeCodeError').innerHTML='Invalid coupone code'
+            return false
+        }
+        if(isNaN(quantity)){
+            if(isNaN(quantity) ) document.getElementById('quantityError').innerHTML="Coupone quantity should be a number"
+            return false
+            
+        }
+        if(quantity<0){
+            if(isNaN(quantity) ) document.getElementById('quantityError').innerHTML="Coupone quantity should be greater than zero"
             return false
         }
         return true

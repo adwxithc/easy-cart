@@ -99,25 +99,29 @@ function changeAddress(){
 
 
 function calculateOrderSummery(coupone){
-  if(document.getElementById('productQty')){
-  const productQty=parseInt(document.getElementById('productQty').value)
-  const price=parseFloat(document.getElementById('productPrice').innerHTML)
+    if(document.getElementById('productQty')){
+    const productQty=parseInt(document.getElementById('productQty').value)
+    const price=parseFloat(document.getElementById('productPrice').innerHTML)
 
-  const total=productQty*price
-  let deliveryCharge=0
-  if(total<500){
-    deliveryCharge=40
-  }
-  let discount=0
-  if(coupone){
-    discount=(total*coupone.couponeDiscount)/100;
-  }
 
-  document.getElementById('checkoutTotal').innerHTML='Rs.'+total
-  document.getElementById('deliveryCharge').innerHTML='Rs.'+deliveryCharge
-  document.getElementById('discount').innerHTML=discount
-  document.getElementById('grandTotal').innerHTML='Rs.'+(total+deliveryCharge)-discount
-}
+
+    const total=productQty*price
+    let deliveryCharge=0
+    if(total<500){
+      deliveryCharge=40
+    }
+    let discount=0
+    if(coupone){
+    
+      discount=(total*coupone.couponeDiscount)/100;
+    }
+
+    document.getElementById('checkoutTotal').innerHTML='Rs.'+total
+    document.getElementById('deliveryCharge').innerHTML='Rs.'+deliveryCharge
+    document.getElementById('discount').innerHTML=discount
+    document.getElementById('grandTotal').innerHTML=((total+deliveryCharge)-discount)
+    // console.log(total,deliveryCharge,discount,(total+deliveryCharge)-discount)
+  }
 }
 calculateOrderSummery()
 
@@ -284,38 +288,194 @@ function verifyPayment(payment,order,cart){
 }
 
 
-function applyCoupone(){
-  alert('bla')
-  alert(document.getElementById('productQty'))
-  alert(document.getElementById('productQty').value)
-  const productQty=parseInt(document.getElementById('productQty').value)
-  const price=parseFloat(document.getElementById('productPrice').innerHTML)
-  const total=productQty*price
+// function applyCoupone(){
+
+//   const productQty=parseInt(document.getElementById('productQty').value)
+//   const price=parseFloat(document.getElementById('productPrice').innerHTML)
+//   const total=productQty*price
+//   const couponeCode=document.getElementById('couponeCode').value
+//   fetch('/api/applyCoupone',{
+//     method:'POST',
+//     headers:{'Content-Type':'application/json'},
+//     body:JSON.stringify({couponeCode:couponeCode,total:total})
+//   })
+//   .then(response=>{
+//     if(response.ok) return response.json()
+//     throw new Error('server connection error')
+//   })
+//   .then(data=>{
+//     if(data.couponeValid){
+//       calculateOrderSummery(data.coupone)
+//     }else{
+//       Swal.fire({
+//         icon: "error",
+//         title: "Invalid coupone code",
+//         showConfirmButton: false,
+//         timer: 1500
+//       });
+//     }
+//   })
+//   .catch((error)=>{
+//     console.error(error)
+//     showModal('something went wrong')
+//   })
+// }
+function getTotalPrice(){
+      const productQty=parseInt(document.getElementById('productQty').value)
+    const price=parseFloat(document.getElementById('productPrice').innerHTML)
+
+
+
+    let total=productQty*price
+    let deliveryCharge=0
+    if(total<500){
+      deliveryCharge=40
+    }
+    total+=deliveryCharge
+    return total
+}
+
+async function applyCoupone(){
   const couponeCode=document.getElementById('couponeCode').value
-  fetch('/api/applyCoupone',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({couponeCode:couponeCode,total:total})
-  })
-  .then(response=>{
-    if(response.ok) return response.json()
-    throw new Error('server connection error')
-  })
-  .then(data=>{
-    if(data.couponeValid){
-      calculateOrderSummery(data.coupone)
-    }else{
-      Swal.fire({
+  if(!couponeCode){
+      document.getElementById('couponeError').innerHTML='Please enter a valid coupon code'
+      
+  }else{
+    document.getElementById('couponeError').innerHTML==''
+    const total=getTotalPrice()
+
+    fetch(`/api/getCoupone`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({couponeCode:couponeCode,total:total})
+    })
+    .then(response=>{
+      if(response.ok){
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+          
+          return response.json(); // Parse JSON response
+        } else {
+           window.open('/login') // Assume HTML content
+        }
+      } 
+      throw new Error("can't get coupone informations from server")
+    })
+    .then(data=>{
+      
+
+      if(data.coupone){
+
+          calculateOrderSummery(data.coupone)
+          setRemoveCoupone()
+          Swal.fire({
+            icon: "success",
+            title: 'coupone applied',
+            showConfirmButton: false, 
+            timer: 1500
+          
+          });
+        
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false, 
+          timer: 1500
+        
+        });
+
+      }
+    })
+    .catch((er)=>{
+      console.error(er)
+            Swal.fire({
         icon: "error",
-        title: "Invalid coupone code",
+        title: "Something went wrong",
         showConfirmButton: false,
         timer: 1500
       });
-    }
-  })
-  .catch((error)=>{
-    console.error(error)
-    showModal('something went wrong')
-  })
+
+    })
+
+  }
 }
 
+function setRemoveCoupone(){
+  const applyCoupone=document.getElementById('applyCoupone')
+  applyCoupone.innerHTML='remove'
+  applyCoupone.id='removeCoupone'
+  document.getElementById('couponeCode').disabled=true
+  document.getElementById('coupones').style.pointerEvents = 'none'
+}
+function removeCoupone(){
+
+  const applyCoupone=document.getElementById('removeCoupone')
+  applyCoupone.innerHTML='Apply'
+  applyCoupone.id='applyCoupone'
+  document.getElementById('couponeCode').disabled=false
+  document.getElementById('coupones').style.pointerEvents = 'auto'
+  calculateOrderSummery(null)
+  Swal.fire({
+    icon: "success",
+    title:'coupone removed',
+    showConfirmButton: false, 
+    timer: 1500
+  
+  });
+}
+
+async function getCoupone(couponeCode,total){
+    fetch(`/api/getCoupone`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({couponeCode:couponeCode,total:total})
+    })
+    .then(response=>{
+      if(response.ok){
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+          
+          return response.json(); // Parse JSON response
+        } else {
+           window.open('/login') // Assume HTML content
+        }
+      } 
+      throw new Error("can't get coupone informations from server")
+    })
+    .then(data=>{
+      
+
+      if(data.coupone){
+        console.log('dataaaa',data)
+         return data.coupone
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false, 
+          timer: 1500
+        
+        });
+        return null
+      }
+    })
+    .catch((er)=>{
+      console.error(er)
+            Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+    })
+}
+
+
+function selectCoupone(couponeCode){
+document.getElementById('couponeCode').value=couponeCode
+
+}

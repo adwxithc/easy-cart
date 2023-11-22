@@ -4,6 +4,7 @@ const Category=require('../model/categoryModel')
 const Brand=require('../model/brandModel')
 const Cart=require('../model/cartModel')
 const Address=require('../model/addressModel')
+const offerHelper=require('../helperMethods/offer')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -102,15 +103,13 @@ const productDetails=async(req,res)=>{
     try {
         const id=req.query.id
         
+
         const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
         const cart=await Cart.findOne({user:req.session.userId})
 
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
-        
-        
 
 
-                
         if(productsWithCategories && productsWithCategories.category){
 
             res.render('productDetails',{product:productsWithCategories,inCart:inCart,user:req.session?.userId})
@@ -145,7 +144,6 @@ const searchProduct=async(req,res)=>{
 
 const loadLogin=(req,res)=>{
     try {
-        
       
         res.render('login');
        
@@ -153,7 +151,6 @@ const loadLogin=(req,res)=>{
         console.log(error.message)
         
     }
-  
 }
 
 const verifyLogin=async(req,res)=>{

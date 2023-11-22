@@ -32,9 +32,19 @@ const discountCouponeSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    quantity:{
+        type:Number,
+        default:1
+    },
     status:{
         type:Boolean,
         default:true
+    },
+    appliedUsers:{
+        type:[{
+            type:mongoose.Schema.ObjectId,
+            ref:'User'
+        }]
     }
 },{ timestamps: true });
 

@@ -1011,6 +1011,87 @@
     background-color: #fff;
     color: #000;
 }
+.shape{	
+	border-style: solid; border-width: 0 70px 40px 0; float:right; height: 0px; width: 0px;
+	-ms-transform:rotate(360deg); /* IE 9 */
+	-o-transform: rotate(360deg);  /* Opera 10.5 */
+	-webkit-transform:rotate(360deg); /* Safari and Chrome */
+	transform:rotate(360deg);
+
+}
+.offer{
+	background: #BEADFA;
+background: linear-gradient(90deg, #44C662 1%, #3A6351 100%);
+   border:1px solid #ddd; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); margin: 15px 0; overflow:hidden;
+  max-width: 300px;
+  max-height: 150px;
+  width: 100%;
+  color: #fff;
+}
+.offer-radius{
+	border-radius:7px;
+}
+
+.offer-warning {	border-color: #ffffff; }
+.offer-warning .shape{
+	border-color: transparent rgb(247, 149, 11) transparent transparent;
+	border-color: rgba(255,255,255,0) rgb(247, 149, 11) rgba(255,255,255,0) rgba(255,255,255,0);
+ 
+}
+
+.shape-text{
+	color:#fff; font-size:12px; font-weight:bold; position:relative; right:-40px; top:2px; white-space: nowrap;
+	-ms-transform:rotate(30deg); /* IE 9 */
+	-o-transform: rotate(360deg);  /* Opera 10.5 */
+	-webkit-transform:rotate(30deg); /* Safari and Chrome */
+	transform:rotate(30deg);
+  
+}	
+.offer-content{
+	padding:1rem;
+  font-weight: 400;
+  
+}
+.offer:hover {
+  transform: scale(1.07); /* You can adjust the scaling factor as needed */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+.offerLink{
+  text-decoration: none;
+  color: inherit;
+
+}
+.offerLink:hover{
+  text-decoration: none;
+  color: inherit;
+}
+.lead{
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.coupones-container{
+    margin-top: 1rem;
+    border: 1px dotted gray;
+    padding: 0.1rem 1rem;
+    height: 350px;
+    overflow-y: scroll; /* Allow vertical scrolling */
+    overflow-x: hidden; /* Hide horizontal scrolling */
+}
+.coupones-container::-webkit-scrollbar {
+    width: 8px; /* Adjust the width as needed */
+}
+
+.coupones-container::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.coupones-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
 
 /* ------------------------------offer badge---------------------------------- */
 
@@ -1047,3 +1128,7 @@ text-decoration: none;
     font-size: 0.8rem;
     color: #7c7c7c;
 }
+#couponeError{
+    color: rgb(252, 16, 16);
+}
+

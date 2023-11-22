@@ -130,17 +130,31 @@ document.getElementById('searchedProductList').innerHTML=''
         for(let product of products){
         const productDiv=document.createElement('div')
         productDiv.classList='col-lg-3 col-6'
-        
+        let offer=''
+        let price=`<h6 class="product-price">${ product.price}</h6>`
+        if(product.effectedDiscount){
+            offer=`<div class="badge-area-show">
+                        <div class="bagde-flag-wrap">
+                        <a href="#" class="bagde-flag"> ${product.effectedDiscount}% off </a>
+                        </div>
+                    </div>`
+
+                    price=`<h6 class="product-price"> ${ Number(product.price)-((Number(product.price) * Number(product.effectedDiscount))/100) }</h6>
+                    <h6 class="l-through product-original-price">${product.price}</h6>`
+        }
+       
         productDiv.innerHTML= `<div class="single-product productdiv">
-                <div class="product-container">
+        <div class="product-container">
+        ${offer}
+
                     <div class="product-image-container">
+                    
                         <a target="_blank"  href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
                     </div>
                     <div class="product-details">
                         <h6 class="product-title">${ product.name}</h6>
                         <div class="price">
-                            <h6 class="product-price">${ product.price}</h6>
-                            <h6 class="l-through product-original-price">${product.price +100}</h6>
+                            ${price}
                         </div>
                         <div class="prd-bottom">
                             <a href="" class="social-info">

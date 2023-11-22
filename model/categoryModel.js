@@ -21,10 +21,14 @@ const categorySchema=mongoose.Schema({
 
     status:{
         type:Boolean,
-        default:1
+        default:true
     },
     unlistDate:{
         type:Date,
-    }
-})
+    },
+    offer:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Offer'
+    },
+},{ timestamps: true })
 module.exports=mongoose.model('Category',categorySchema)

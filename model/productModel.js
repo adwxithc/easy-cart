@@ -82,6 +82,10 @@ const productSchema=mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'Offer'
     },
+    effectedDiscount:{
+        type:Number,
+        default:0
+    },
     careInstructions:String,
     material:String,
     additionalSpecifications: String,
@@ -93,6 +97,6 @@ const productSchema=mongoose.Schema({
         type:Date,
       }
 
-})
+},{ timestamps: true })
 
 module.exports=mongoose.model('Product',productSchema)

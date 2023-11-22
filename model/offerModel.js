@@ -22,7 +22,8 @@ const offerSchema = new mongoose.Schema({
     status:{
         type:Boolean,
         default:true
-    }
+    },
+    
 
 },{ timestamps: true });
 

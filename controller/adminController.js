@@ -9,6 +9,7 @@ const Order=require('../model/orderModel')
 const ObjectId = require('mongodb').ObjectId;
 const adminHelpers=require('../helperMethods/adminHelpers')
 const crypto=require('crypto')
+const offerHelper=require('../helperMethods/offer')
 
 
 const loadLogin=(req,res)=>{
@@ -413,13 +414,29 @@ const searchProduct=async(req,res)=>{
             const matchingCategories=await Category.find({name:{$regex:new RegExp(`^${key}`,'i')}})
             const categoryIds = matchingCategories.map((category) => category._id);
 
-            // const productData=await Product.find({category:{
-            //     $elemMatch:{
-            //         $regex:new RegExp(`^${key}`,'i')
-            //     }
-            // }})
-            const productData = await Product.find({ category: { $in: categoryIds } });
-            console.log(productData.length)
+            // const productData = await Product.find({ category: { $in: categoryIds } });
+            const productData = await Product.aggregate([
+                {
+                    $match:{
+                        category: { $in: categoryIds }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'offers', 
+                        localField: 'offer',
+                        foreignField: '_id',
+                        as: 'offer'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$offer',
+                        preserveNullAndEmptyArrays: true
+                    }
+                }
+            ]);
+            // console.log(productData.length)
             if(productData.length>0){
               
                 
@@ -432,7 +449,28 @@ const searchProduct=async(req,res)=>{
             const matchingBrands=await Brand.find({name:{$regex:new RegExp(`^${key}`,'i')}})
 
             const brandIds = matchingBrands.map((brand) => brand._id);
-            const productData = await Product.find({ brand: { $in: brandIds } });
+            const productData = await Product.aggregate([
+                {
+                    $match:{
+                         brand: { $in: brandIds } 
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'offers', 
+                        localField: 'offer',
+                        foreignField: '_id',
+                        as: 'offer'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$offer',
+                        preserveNullAndEmptyArrays: true
+                    }
+                }
+            ]);
+            // const productData = await Product.find({ brand: { $in: brandIds } });
             // const productData=await Product.find({brand:{$regex:new RegExp(`^${key}`,'i')}})
             console.log(productData.length)
             if(productData.length>0){
@@ -444,8 +482,29 @@ const searchProduct=async(req,res)=>{
                 res.json({message:"No product found"})
             }
         }else{
-            const productData=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')}})
-            console.log(productData.length)
+            const productData = await Product.aggregate([
+                {
+                    $match:{
+                        name:{$regex:new RegExp(`^${key}`,'i')}
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'offers', 
+                        localField: 'offer',
+                        foreignField: '_id',
+                        as: 'offer'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$offer',
+                        preserveNullAndEmptyArrays: true
+                    }
+                }
+            ]);
+            // const productData=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')}})
+            // console.log(productData.length)
             if(productData.length>0){
              
                 
@@ -539,7 +598,31 @@ const loadViewCategory=async(req,res)=>{
         const limit=pagesize//specifies how much data needed
 
         
-        const categories=await Category.find({}).sort({lastModified:-1}).skip(offset).limit(limit)
+        const categories = await Category.aggregate([
+            {
+                $sort: { lastModified: -1 }
+            },
+            {
+                $skip: offset
+            },
+            {
+                $limit: limit
+            },
+            {
+                $lookup: {
+                    from: 'offers', // Replace 'offers' with the actual name of your Offer collection
+                    localField: 'offer',
+                    foreignField: '_id',
+                    as: 'offer'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$offer',
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
 
         
 
@@ -568,13 +651,18 @@ const listOrUnlistCategory=async(req,res)=>{
         if(categoryData.status){
             const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:false,unlistDate:Date.now(),lastModified:Date.now()}})
             if(statusUpdate){
+                console.log('next calling')
+                await offerHelper.setEffectedDiscounts(categoryId)
                 res.json({"message":"category unlisted","status":"unlisted"})
             }else{
+
                 res.json({"message":"category unlisting failed"})
             }
         }else{
             const statusUpdate=await Category.updateOne({_id:categoryId},{$set:{status:true,unlistDate:null,lastModified:Date.now()}})
             if(statusUpdate){
+                console.log('next calling')
+                await offerHelper.setEffectedDiscounts(categoryId)
                 res.json({"message":"category listed","status":"listed"})
             }else{
                 res.json({"message":"category listing failed"})
@@ -599,7 +687,26 @@ const listOrUnlistCategory=async(req,res)=>{
 const categorySearch=async(req,res)=>{
     try {
         
-        const categories=await Category.find({name:{$regex:new RegExp(`^${req.query.key}`,'i')}})
+        // const categories=await Category.find({name:{$regex:new RegExp(`^${req.query.key}`,'i')}})
+        const categories = await Category.aggregate([
+            {
+                $match:{name:{$regex:new RegExp(`^${req.query.key}`,'i')}}
+            },
+            {
+                $lookup: {
+                    from: 'offers', // Replace 'offers' with the actual name of your Offer collection
+                    localField: 'offer',
+                    foreignField: '_id',
+                    as: 'offer'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$offer',
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
         
         if(categories.length>0){
         res.render('viewCategory',{categories:categories,key:req.query.key})

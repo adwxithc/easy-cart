@@ -278,7 +278,7 @@ function searchProduct(){
 
 
 
-function removeOffer(productId){
+function removeProductOffer(productId){
 
     fetch('/admin/removeOffer',{
         method:'PATCH',

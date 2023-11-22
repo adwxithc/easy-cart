@@ -1,6 +1,7 @@
 const Offer=require('../model/offerModel')
 const Product=require('../model/productModel')
 const Category=require('../model/categoryModel')
+const offerHelper=require('../helperMethods/offer')
 const loadAddOffer=(req,res)=>{
     try {
 
@@ -110,7 +111,7 @@ const listUnlistOffer=async(req,res)=>{
 const getOffers=async(req,res)=>{
     try {
        
-        const offers=await Offer.find({status:true})
+        const offers=await Offer.find({status:true,expireDate:{$gt:new Date()}}).sort({updatedAt:-1})
         res.render('offerList',{offers:offers})
     } catch (error) {
         console.error(error)
@@ -120,12 +121,15 @@ const getOffers=async(req,res)=>{
 
 const applyOfferToProduct=async(req,res)=>{
     try {
+        const offer=await offerHelper.findProductLargestOffer(req.product._id)
+        req.product.effectedDiscount=Math.max(Number(offer.largestOffer.discountPercentage),Number(req.offer.discountPercentage))
+
         
         req.product.offer=req.body.offerId
-        const product=Product(req.product)
-        const applied=await product.save()
+ 
+        const applied=await req.product.save()
+        
         if(applied){
-            
             res.json({applied:true,message:"Offer applied to product",offer:req.offer})
         }else{
             res.json({applied:false,message:"Offer applying to product failed"})
@@ -139,9 +143,16 @@ const applyOfferToProduct=async(req,res)=>{
 
 const removeOffer=async(req,res)=>{
     try {
+
+        const offer=await offerHelper.findProductLargestOffer(req.product._id)
+        
+        req.product.effectedDiscount=Number(offer.largestOffer?.discountPercentage)
+
+
         req.product.offer=null
         const removed=await req.product.save()
         if(removed){
+
             res.json({removed:true,message:'offer removed successfully'})
         }else{
             res.json({removed:false,message:'offer removal failed'})
@@ -161,12 +172,30 @@ const applyOfferToCategory=async(req,res)=>{
         const category=Category(req.category)
         const applied=await category.save()
         if(applied){
-            
+            await offerHelper.setEffectedDiscounts(req.category._id)
             res.json({applied:true,message:"Offer applied to category successfully",offer:req.offer})
         }else{
             res.json({applied:false,message:"Offer applying to category failed"})
 
         }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+const removeCategoryOffer=async(req,res)=>{
+    try {
+        req.category.offer=null
+        const removed=await req.category.save()
+        if(removed){
+            await offerHelper.setEffectedDiscounts(req.category._id)
+            res.json({removed:true,message:'offer removed successfully'})
+        }else{
+            res.json({removed:false,message:'offer removal failed'})
+
+        }
+        
     } catch (error) {
         console.error(error)
         res.status(500).json({message:'Internal server error'})
@@ -183,5 +212,6 @@ module.exports={
     getOffers,
     applyOfferToProduct,
     removeOffer,
-    applyOfferToCategory
+    applyOfferToCategory,
+    removeCategoryOffer
 }

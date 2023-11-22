@@ -24,7 +24,16 @@
             <div class="col-lg-4 offset-lg-1">
                 <div class="s_product_text">
                     <h3><%=product.name%></h3>
-                    <h2>$ <%=product.price%></h2>
+                    <%if(product.effectedDiscount){%>
+                   
+                           
+                            <h2>&#8377; <%=product.price-((product.price*product.effectedDiscount)/100)%></h2>
+
+                            <h4><%=product.effectedDiscount%>% off</h4>
+                    <del class="orginalPrice">MRP <%=product.price%></del>
+                    <%}else{%>
+                        <h2>&#8377; <%=product.price%></h2>
+                    <%}%>
                     <ul class="list">
                         <li><a class="" href="#"><span>Categorys</span> :
                             <%for(let category of product.category){%>

@@ -19,6 +19,7 @@
                     <div class="table-responsive">
                         <input type="hidden" value="<%=locals.currentPage%>" id="cur">
                         <input type="hidden" value="<%=locals.totalpages%>" id="totp">
+
                       <table class="table table-hover">
                         <thead>
                           <tr>
@@ -42,8 +43,18 @@
                             <td>
                               
                               <h6 class="card-title"><%=categories[i].name %></h6>
+                              <p>
+                                <a class="view-more" data-bs-toggle="collapse" href="#desc<%=categories[i]._id%>" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                  view Description
+                                </a>
+                              </p>
+                              <div class="collapse" id="desc<%=categories[i]._id%>">
+                                <div class="card card-body">
+                                  <span class="description-limit"><%=categories[i].description%></span> 
+                               </div>
+                              </div>
                               
-                              <span class=" description-limit"><%=categories[i].description%></span>
+                              
                             </td>
 
                           

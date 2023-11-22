@@ -137,8 +137,10 @@ async function releaseProducts(order,cart,userId){
 }
 
 async function findProducts(matchCriteria,skip,limit,sortCriteria){
-  console.log('match criteria',matchCriteria)
+  
     try {
+
+      
       const aggregationPipeline=[{$match:matchCriteria}]
 
       if (Object.keys(sortCriteria).length > 0) {

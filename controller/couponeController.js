@@ -78,7 +78,7 @@ const updateCoupone=async(req,res)=>{
 
 const listUnlistCoupone=async(req,res)=>{
     try {
-
+        if(req.coupone){
         if( req.coupone.status){
             req.coupone.status=false
         }else{
@@ -89,6 +89,9 @@ const listUnlistCoupone=async(req,res)=>{
             res.json({updated:true,message:'coupone status changed',status:updatedCoupon.status})
         }else{
             res.json({updates:false,message:'failed to change coupone status'})
+        }
+        }else{
+            res.json({message:"This coupone doesn't exist",coupone:false})
         }
         
     } catch (error) {

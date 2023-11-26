@@ -361,6 +361,12 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
               });
 
             // cancelOrder(document.getElementById('orderId')?.value,document.getElementById('productId')?.value)
+        }else if(e.target.id=='closeNotEligibleModal'){
+            document.getElementById('cancelNotEligibleModal').style.display='none'
+        }else if(e.target.id=='cancelWholeOrder'){
+            
+            cancenlWholeOrder(document.getElementById('orderId')?.value)
+
         }
     }else if(e.target.classList.contains('searchAction')){
         if(e.target.id=='prevProducts'){

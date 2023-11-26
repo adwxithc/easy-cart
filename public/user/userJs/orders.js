@@ -40,88 +40,133 @@ function nextOrder(){
 }
 function fetchnextOrders(page){
 window.location.href=`/api/orders?page=${page}`
-
 }
+
 function updatePageParameters(){
     currentPage=document.getElementById('cur').value
     totalpages=document.getElementById('total').value
 }
 
-updateOrderStatus(document.getElementById('orderStatus')?.value)
 
 
-function updateOrderStatus(status){
-    if(status){
-      
-      const progressItems = document.querySelectorAll('#progress-bar li');
-      progressItems.forEach(item => {
-          item.classList.remove('step-done', 'step-active');
-          item.classList.add('step-todo');
-      });
+// function cancelOrder(orderId,productId){
 
-        if (status === "Pending") {
-          for(let i=0;i<=0;i++){
-            progressItems[i].classList.remove('step-todo');
-            progressItems[i].classList.add('step-done');
-          }
-          progressItems[1].classList.remove('step-todo');
-          progressItems[1].classList.add('step-active');
-      } else if (status === "Processing") {
-        for(let i=0;i<=1;i++){
-          progressItems[i].classList.remove('step-todo');
-          progressItems[i].classList.add('step-done');
-        }
-        progressItems[2].classList.remove('step-todo');
-        progressItems[2].classList.add('step-active');
-      } else if (status === "Shipped") {
-        for(let i=0;i<=2;i++){
-          progressItems[i].classList.remove('step-todo');
-          progressItems[i].classList.add('step-done');
-        }
-        progressItems[3].classList.remove('step-todo');
-        progressItems[3].classList.add('step-active');
-      } else if (status === "Delivered") {
-        for(let i=0;i<=3;i++){
-          progressItems[i].classList.remove('step-todo');
-          progressItems[i].classList.add('step-done');
-        }
-        progressItems[4].classList.remove('step-todo');
-        progressItems[4].classList.add('step-active');
-      } else if (status === "Canceled") {
-        for(let i=2;i<4;i++){
-          progressItems[i].style.display='none';
-        }
-        progressItems[0].classList.remove('step-todo');
-        progressItems[0].classList.add('cancel-done');
-        // progressItems[1].style.display='table-cell';
-        progressItems[1].textContent='Canceled';
-        progressItems[1].classList.remove('step-todo');
-        progressItems[1].classList.add('cancel-done');
-      }
+//   fetch(`/api/cancelOrder`,{
+//     method:'PATCH',
+//     headers:{'Content-Type':'application/json'},
+//     body:JSON.stringify({orderId:orderId,productId:productId})
+//   })
+//   .then(response=>{
+//     if(response.ok) return response.json()
+//     throw new Error('unable to connect to the server')
+//   })
+//   .then(data=>{
+//     if(data.canceled){
 
-    }
-}
+//       showModal(data.message)
+//       updateOrderStatus('Canceled')
+//       document.getElementById('cancelOrderH5').style.display='none'
 
-function cancelOrder(orderId,productId){
-
-  fetch(`/api/cancelOrder`,{
-    method:'PATCH',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({orderId:orderId,productId:productId})
-  })
-  .then(response=>{
-    if(response.ok) return response.json()
-    throw new Error('unable to connect to the server')
-  })
-  .then(data=>{
-    if(data.canceled){
-
-      showModal(data.message)
-      updateOrderStatus('Canceled')
-      document.getElementById('cancelOrderH5').style.display='none'
-    }else{
-      showModal(data.message)
-    }
+//     }else if(data.singleCancelNotEligible){
+//       const modal=document.getElementById('cancelNotEligibleModal')
+//       modal.querySelector('#notEligibleMessage').innerHTML=data.message
+//       showOrderedItems(orderId)
+//       modal.style.display='block'
+//     }else{
     
-  })
-}
+//       showModal(data.message)
+//     }
+    
+//   })
+// }
+
+// function showOrderedItems(orderId){
+//   fetch(`/api/orderItems?orderId=${orderId}`)
+//   .then(response=>{
+//     if(response.ok) return response.json()
+//     throw new Error("can't get ordered Items")
+//   })
+//   .then(data=>{
+//     if(data.orderData){
+//       let OrderedItems=document.getElementById('OrderedItems')
+//       OrderedItems.innerHTML=''
+//       for(let item of data.orderData.items){
+//         let price=`Price :<span class="darkText amount" >&#8377; ${item.price}</span>`
+//         if(item.discount && item.discount>0){
+//           price=`
+//           Price :<span class="darkText amount" > ${item.price}</span>
+//           <h6><span id="offer">${item.discount}</span>% off</h6>
+//           <del class="orginalPrice">MRP <span >${item.MRP}</span></del>
+//           `
+//         }
+//         const containerDiv=document.createElement('div')
+//         containerDiv.classList='row singleItem'
+       
+//         containerDiv.innerHTML=`
+//         <div class="col-lg-4 pr-auto">
+//               <div class='imgContainerDiv'>
+//               <a href='/productDetails?id=${item.product._id}' target='_blank'><img src="/static/productImages/${item.product.images[0]}" alt="" class='itemImage'></a>
+//               </div>
+//             </div>
+//             <div class="col-lg-8">
+//               <div>
+//               <p class='darkText'>${item.product.name}</p>
+//               ${price}
+//               </div>
+
+//             </div>
+//         `
+
+//         OrderedItems.appendChild(containerDiv)
+//       }
+//       const total=document.createElement('div')
+//       total.innerHTML=`
+//         <h6 class='d-flex justify-content-around '><span>Coupone Discount:</span><span>${data.orderData.couponeDiscount}%</span></h6>
+//         <h6 class='d-flex justify-content-around '><span>Total : </span><span>${data.orderData.totalAmount}</span></h6>
+//       `
+//       OrderedItems.appendChild(total)
+//     }else{
+//       showModal('Something went wrong')
+//     }
+    
+//   })
+//   .catch((error)=>{
+//     console.error(error)
+//     showModal('Something went wrong')
+//   })
+// }
+
+// function cancenlWholeOrder(orderId){
+//   try {
+
+//     fetch(`/api/cancenlWholeOrder`,{
+//       method:'PATCH',
+//       headers:{'Content-Type':'application/json'},
+//       body:JSON.stringify({orderId:orderId})
+//     })
+//     .then(response=>{
+//       if(response.ok) return response.json()
+//       throw new Error('server communication error')
+//     })
+//     .then(data=>{
+//       if(data.canceled){
+//         Swal.fire({
+//           icon: "success",
+//           title: data.message,
+//           showConfirmButton: false,
+//           timer: 1500
+//         });
+//         document.getElementById('cancelNotEligibleModal').style.display='none'
+
+//       }else{
+//         showModal('Something went wrong')
+//       }
+      
+//     })
+    
+//   } catch (error) {
+//     console.error(error)
+//     showModal('Something went wrong')
+    
+//   }
+// }

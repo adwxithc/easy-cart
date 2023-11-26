@@ -226,6 +226,7 @@ const sanitiseSalesReportParam=(req,res,next)=>{
 
 const validateCoupone=async (req,res,next)=>{
     try {
+
         const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode,quantity}=req.body
         if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(quantity) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
             res.json({message:'Invalid form data'})
@@ -247,6 +248,7 @@ const validateCoupone=async (req,res,next)=>{
             }
             next()
         }
+
         
     } catch (error) {
         console.error(error)
@@ -277,6 +279,23 @@ const validateOfferData=(req,res,next)=>{
     }
 }
 
+const orderUpdation=(req,res,next)=>{
+    const {newStatus}=req.body
+    const order=req.order
+
+    if(['Pending', 'Processing', 'Shipped', 'Delivered','Canceled'].includes(newStatus)){
+
+        if(order.orderStatus!==newStatus){
+
+            next()
+        }else{
+        res.status(400).json({success:false,message:'Invalid request'})
+        }
+    }else{
+        res.status(400).json({success:false,message:'Invalid new order Status'})
+    }
+}
+
 
 module.exports={
 validateProductDatas,
@@ -284,5 +303,6 @@ validateProductDatas,
  validateUpdatedBrandData,
  sanitiseSalesReportParam,
  validateCoupone,
- validateOfferData
+ validateOfferData,
+ orderUpdation
 }

@@ -16,21 +16,22 @@ const checkout=async(req,res)=>{
         const user=await User.findById(req.session.userId)
         const addresses=await Address.find({user:req.session.userId})
         const currentDate=new Date()
-        const coupones=await Coupone.find({
-            status:true,
-            expireDate:{
-                $gt:currentDate
-            },
-            startDate:{
-                $lte:currentDate
-            }
-    })
+        const coupons = await Coupone.find({
+            status: true,
+            expireDate: { $gt: currentDate },
+            startDate: { $lte: currentDate },
+            $or: [
+                { appliedUsers: { $size: 0 } }, // Check if the array is empty
+                { appliedUsers: { $ne: req.session.userId } } // Check if the user is not in the array
+            ]
+        });
+    console.log(coupons)
      if(req.query.productId){
 
         const product=await Product.findById(req.query.productId).populate('brand')
         if(product.stock>=req.query.quantity){
            
-            res.render('checkout',{user:user,addresses:addresses,product:product,quantity:req.query.quantity,coupones:coupones})
+            res.render('checkout',{user:user,addresses:addresses,product:product,quantity:req.query.quantity,coupones:coupons})
         }else{
             res.json({message:`Sorry, we can't provide the requested quantity of "${product.name}" as we have ${product.stock} units in stock.`,byuNowAvailable:false})
         }
@@ -39,14 +40,14 @@ const checkout=async(req,res)=>{
         const cart = await Cart.findOne({ user:req.session.userId })
         .populate({
           path: 'cartItems.product',
-          select: 'name images brand color',
+          select: 'name images brand color effectedDiscount',
           populate: {
             path: 'brand',
             select: 'name' 
           }
         });
-
-        res.render('checkout',{user:user,addresses:addresses,cart:cart,coupones:coupones}) 
+console.log(cart.cartItems[0].product.effectedDiscount)
+        res.render('checkout',{user:user,addresses:addresses,cart:cart,coupones:coupons}) 
      }
         
 
@@ -64,12 +65,17 @@ const confirmOrder=async(req,res)=>{
     try {
         
         
+        // console.log(req.order)
         const order=new Order(req.order)
         const orderData=await order.save()
         if(orderData){
 
             if(req.body['paymentMethod']=='COD'){
                 await userHelpers.releaseProducts(req.order,req.cart,req.session.userId)
+                if(req.coupone){
+        
+                    await userHelpers.setCouponeApplied(req.coupone._id,req.session.userId)
+                }
                 res.json({orderConfirmed:true,order:orderData._id,cod:true})
             }else if(req.body['paymentMethod']=='ONLINE-PAYMENT'){
                 const userInfo = await User.aggregate([
@@ -87,9 +93,10 @@ const confirmOrder=async(req,res)=>{
                       },
                     },
                   ]);
-                userHelpers.generateRazorpay(orderData._id,orderData.totalAmount).then(order=>{
+              
+                userHelpers.generateRazorpay(orderData._id,orderData.totalAmount.toFixed(2)).then(order=>{
                     const cart=req.cart?true:false;
-
+                       
                         res.json({orderConfirmed:true,order:order,cod:false,userInfo:userInfo[0],cart:cart})
                 })
             }else if(req.body['paymentMethod']=='WALLET'){
@@ -99,7 +106,9 @@ const confirmOrder=async(req,res)=>{
                 if(debited){
                     userHelpers.changepaymentStatus(orderData._id,'received')
                     await userHelpers.releaseProducts(req.order,req.cart,req.session.userId)
-
+                    if(req.coupone){
+                        await userHelpers.setCouponeApplied(req.coupone._id,req.session.userId)
+                    }
                     res.json({orderConfirmed:true,order:orderData._id,wallet:true})
                 }else{
                     res.json({orderConfirmed:false,wallet:true,message:'Insufficient balance in your wallet'})
@@ -126,7 +135,7 @@ const orderResponse=async(req,res)=>{
             const orderData = await Order.findById(req.query.order)
             .populate({
               path: 'items.product',
-              select: 'color images name size',
+              select: 'color images name size ',
               populate: {
                 path: 'brand',
                 select: 'name',
@@ -158,6 +167,9 @@ const verifyPayment=async(req,res)=>{
             if(result){
                 const order=await Order.findById(details.order.receipt)
                 await userHelpers.releaseProducts(order,details.cart,req.session.userId)
+                if(order.couponeId){
+                    await userHelpers.setCouponeApplied(order.couponeId,req.session.userId)
+                }
                 res.json({paied:true,orderId:details.order.receipt})
             }else{
                 res.json({mesaage:'payment failed',paied:false})
@@ -181,7 +193,7 @@ const getCoupone=async (req,res)=>{
         if(coupone){
             res.json({coupone:coupone})
         }else{
-            res.json({coupone:false})
+            res.json({message:"Coupone doesn't exist",coupone:false})
         }
     } catch (error) {
         console.log(error)

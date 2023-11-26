@@ -3,6 +3,7 @@ const Order=require('../model/orderModel')
 const User=require('../model/userModel')
 const Cart=require('../model/cartModel')
 const Product=require('../model/productModel')
+const Coupone=require('../model/couponeModel')
 
 var instance = new Razorpay({
     key_id:process.env.RAZORPAY_KEY_ID,
@@ -163,7 +164,278 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
     }
   }
   
+  async function checkRefundEligible(product,order){
+    let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterCancel
 
+    // IF IT IS A ORDER FOR MULTIPLE PRODUCTS
+    if(order.items.length>1){
+      
+
+       discountedTotal=order.totalAmount
+      const {quantity,price}=product
+       productPrice=quantity*price
+
+       discountPercentage=order.couponeDiscount
+       totalAmount=discountedTotal
+
+       // IF COUPON HAS USED
+       if(discountPercentage>0){
+        totalAmount=discountedTotal / (1 - discountPercentage / 100);
+        totalAmountAfterCancel=totalAmount-productPrice
+
+        //finding the coupone
+        const coupone=await Coupone.findById(order.couponeId)
+        //if canceling not effecting minPurchaseAmount
+        if(coupone.minPurchaseAmount<totalAmountAfterCancel){
+          
+          return {eligible:true,amount:productPrice}
+        }else{
+            return {eligible:false}
+        }
+       }else{
+       
+        return {eligible:true,amount:productPrice}
+       }
+       
+       
+
+       
+    }else{
+
+      
+      return {eligible:true,amount:order.totalAmount}
+    }
+
+
+  }
+
+  const setCouponeApplied=async(couponId,userId)=>{
+
+    try {
+
+      const coupon = await Coupone.findOneAndUpdate(
+        { _id: couponId },
+        { $push: { appliedUsers: userId } },
+        { new: true } 
+      );
+
+      if(coupon){
+        return coupon
+      }else{
+        return false
+      }
+      
+    } catch (error) {
+      throw new Error(error)
+    }
+    
+  }
+
+  const setNewOrderTotal=async(product,order)=>{
+    try {
+      let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterCancel
+
+      discountedTotal=order.totalAmount
+      const {quantity,price}=product
+       productPrice=quantity*price
+
+       discountPercentage=order.couponeDiscount
+       totalAmount=discountedTotal
+
+       // IF COUPON HAS USED
+       if(discountPercentage>0){
+        totalAmount=discountedTotal / (1 - discountPercentage / 100);
+
+       }
+       //find new total amount
+       totalAmount=totalAmount-productPrice
+
+       //find its discounted total
+       totalAmount=totalAmount-((totalAmount*discountPercentage)/100)
+       order.totalAmount=totalAmount.toFixed(2)
+
+      
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  generateInvoice=(order)=>{
+      try {
+        let items=``
+        for(let item of order.items){
+          if(item.paymentStatus!=='received') continue;
+            const orderItem=`
+            <tr>
+            <td>${item.product.name}</td>
+            <td>${item.product.description}</td>
+            <td>Rs.${item.MRP}</td>
+            <td>${item.quantity}</td>
+            <td>${item.discount}%</td>
+            <td>Rs.${item.price}</td>
+            <td>Rs.${item.price*item.quantity}</td>
+            </tr>
+            `
+            items+=orderItem
+
+        }
+        const invoiceHTML=`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta http-equiv="X-UA-Compatible" content="IE=edge">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Invoice</title>
+              <style>
+                body {
+                  font-family: 'Arial', sans-serif;
+                  padding: 19px;
+                 
+                 
+                }
+                .outerLine{
+                  padding:1rem;
+                  border: 1px solid #ddd;
+                }
+
+                h1 {
+                  color: #333;
+                }
+
+                p {
+                  margin: 9px 0;
+                }
+
+                .invoice-details {
+                  margin-bottom: 20px;
+                }
+
+                .invoice-items {
+                  width: 100%;
+                  border-collapse: collapse;
+                  margin-top: 20px;
+                }
+
+                .invoice-items th, .invoice-items td {
+                  border: 1px solid #ddd;
+                  padding: 10px;
+                  text-align: left;
+                }
+
+                .total , .discount {
+                  margin-top: 2px;
+                  display:flex;
+                  justify-content:end;
+                }
+                .title{
+                  display: flex;
+                  justify-content: center;
+                }
+                .address{
+                  padding:0.4rem;
+                  border:1px solid #ddd;
+                  display: flex;
+                  justify-content: space-between;
+                }
+                .mt{
+                  margin-top:5px
+                }
+                .end{
+                  border:1px dottem #ddd
+                }
+                .addr{
+                  padding-left:0.5rem;
+                  padding-right:0.5rem
+                }
+              </style>
+            </head>
+            <body>
+              <div class='outerLine'>
+              <div class='title'>
+              <h1 ><u>Easy Cart</u></h1>
+              </div>
+
+              <h2>Order Invoice</h2>
+
+              <div class="invoice-details">
+                <p><strong>Order ID:</strong> ${order.orderNumber}</p>
+                <p><strong>Date:</strong> ${order.createdAt}</p>
+                <p><strong>Invoice Date:</strong> ${new Date()}</p>
+                <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+
+
+                <!-- Add more details as needed -->
+              </div>
+
+              <div class="address">
+
+                <div class='addr'>
+                    <h3>Shipping Address</h3>
+                    <div>
+                        <div class=" mt"><span class=""><strong>${order.shippingAddress.name}</strong></span></div>
+                        <div class="mt"> Phone:<span >${order.shippingAddress.mobile}</span></div>
+                    </div>
+                    <p class="p-1 infos">
+                        ${ order.shippingAddress.area}, ${ order.shippingAddress.locality}, ${order.shippingAddress.city}, ${order.shippingAddress.state}-<span class="text-dark ">${order.shippingAddress.pincode}</span> 
+                    </p>
+                </div>
+
+                <div class='addr'>
+                <h3>Billing Address</h3>
+                <div>
+                    <div class=" mt"><span class=""><strong>${order.shippingAddress.name}</strong></span></div>
+                    <div class="mt"> Phone:<span >${order.shippingAddress.mobile}</span></div>
+                </div>
+                <p class="p-1 infos">
+                    ${ order.shippingAddress.area}, ${ order.shippingAddress.locality}, ${order.shippingAddress.city}, ${order.shippingAddress.state}-<span class="text-dark ">${order.shippingAddress.pincode}</span> 
+                </p>
+              </div>
+
+              </div>
+            
+
+              <table class="invoice-items">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>MRP</th>
+                    <th>Quantity</th>
+                    <th>Discounts</th>
+                    <th>Unit Price</th>
+
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                ${items}
+
+                </tbody>
+              </table>
+              <div class="discount">
+              <p><strong>Total:</strong> Rs.${  (order.totalAmount / (1 - order.couponeDiscount / 100)).toFixed(2)}</p>
+              </div>
+
+              <div class="discount">
+              <p><strong>Discount:</strong> Rs.${  (((order.totalAmount / (1 - order.couponeDiscount / 100)).toFixed(2))-order.totalAmount).toFixed(2)}</p>
+              </div>
+
+              <div class="total end">
+                <p><strong>Total Amount:</strong>Rs. ${order.totalAmount}</p>
+              </div>
+             <div>
+
+            </body>
+            </html>
+
+        `
+        return invoiceHTML
+        
+      } catch (error) {
+        throw new Error(error)
+      }
+  }
 
 
 module.exports={
@@ -172,5 +444,9 @@ module.exports={
     addMoneyToWallet,
     debitFromWallet,
     releaseProducts,
-    findProducts
+    findProducts,
+    checkRefundEligible,
+    setCouponeApplied,
+    setNewOrderTotal,
+    generateInvoice
 }

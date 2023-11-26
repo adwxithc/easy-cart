@@ -114,7 +114,7 @@ admin_route.put('/updateBrand',updateLogo.single('logo'),validateAdminInputs.val
 //order management
 admin_route.get('/listOrders',adminController.listOrders);
 admin_route.get('/viewOrder',adminController.viewOrder)
-admin_route.patch('/updateOrderStatus',adminController.updateOrderStatus)
+admin_route.patch('/updateOrderStatus',checkExist.orderForAdmin,validateAdminInputs.orderUpdation,adminController.updateOrderStatus)
 
 //sales report
 admin_route.get('/salesReport',reportController.loadSalesReport)

@@ -24,7 +24,7 @@
                 </div>
             </div>
         <%if(locals.orderData){%>
-
+            <input type="hidden" id="couponeDiscount" value="<%orderData.couponeDiscount%>">
             <div class=" col-lg-12 mx-auto" id="">
                 <div class="blog_right_sidebar  project my-2 " id="">
                     <div class="contain selected p-3">
@@ -87,10 +87,16 @@
                                         <a href="/productDetails?id=<%=item.product._id%>"><h4><%=item.product.name%></h4></a>
                                     </a>
                                     <p><%=item.product.brand.name%><br>
-                                    Price :<span class="darkText amount" > <%=item.price%></span></p>
+                                        <%if(item.discount && item.discount>0){%>
+                                            Price :<span class="darkText amount" > <%=item.price%></span></p>
+                                            <h6><span id="offer"><%=item.discount%></span>% off</h6>
+                                            <del class="orginalPrice">MRP <span ><%=item.MRP%></span></del>
+                                        <%}else{%>
+                                            Price :<span class="darkText amount" >&#8377; <%=item.price%></span></p>
+                                        <%}%>
                                     <p>Color : <input type="color" value="<%=item.product.color%>" disabled> </p>
                                     
-                                    <h5 class="itemTotal"></h5>
+                                    <h5 class="">&#8377;<%=item.price * item.quantity%></h5>
                                     
 
                                 </div>
@@ -111,23 +117,31 @@
                     <div class="d-flex justify-content-center cartSummeryHead">
                         <h2>Grand Total</h2>
                     </div>
-    
+                    
+                    <%
+                    let totalPrice=0
+                    for (let item of orderData.items){
+                        totalPrice+=item.price*item.quantity
+                    }
+                        %>
+
+                    
                     <div class="cartSummeryBody">
                         <div class="">
-                            <span class="total"> Total(4 unit) :</span>
-                            <span class="text-dark " id="cartTotal">$40000</span>
+                            <span class="total"> Total(<%=orderData.items.length%> unit) :</span>
+                            <span class="text-dark " id="ordResTotal">&#8377; <%=totalPrice%></span>
                         </div>
                         <div class="">
                             <span>Discount :</span>
-                            <span class="text-dark">$0</span>
+                            <span class="text-dark" id="ordResDicount"><%=orderData.couponeDiscount%>%</span>
                         </div>
                         <div class="mb-4">
                             <span>Delivery Charge :</span>
-                            <span class="text-dark">$0</span>
+                            <span class="text-dark" >&#8377;  0</span>
                         </div>
                         <div class="borderTop font-weight-bold pt-2 mb-5">
                             <span> Grand Total :</span>
-                            <span class="text-dark" id="grandTotal">$6000</span>
+                            <span class="text-dark" id="ordResgrandTotal"> &#8377; <%=orderData.totalAmount%></span>
                         </div>
                         
                 
@@ -142,8 +156,6 @@
 </div>
 </div>
 </section>
-
-
 
 
 

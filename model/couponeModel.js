@@ -42,7 +42,7 @@ const discountCouponeSchema = new mongoose.Schema({
     },
     appliedUsers:{
         type:[{
-            type:mongoose.Schema.ObjectId,
+            type:mongoose.Schema.Types.ObjectId,
             ref:'User'
         }]
     }

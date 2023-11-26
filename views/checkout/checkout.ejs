@@ -279,12 +279,17 @@
                                     <a href="#">
                                         <a href="/productDetails?id=<%=cartItem.product._id%>"><h4><%=cartItem.product.name%></h4></a>
                                     </a>
+                                   
                                     <p><%=cartItem.product.brand.name%><br>
-                                        
+                                    <%if(cartItem.product.effectedDiscount){%>
+                                    Price :<span class="darkText amount" > <%=cartItem.price-((cartItem.price*cartItem.product.effectedDiscount)/100)%></span></p>
+                                    <h6><span id="offer"><%=cartItem.product.effectedDiscount%></span>% off</h6>
+                                    <del class="orginalPrice">MRP <span ><%=cartItem.price%></span></del>
+                                    <%}else{%>
                                     Price :<span class="darkText amount" > <%=cartItem.price%></span></p>
-                                    
+                                    <%}%>
                                     <h5 class="itemTotal"></h5>
-                                    
+
                                     
                                 </div>
                                 <a href="#" class="yellowBtn cartBtn" onclick="remove( '<%=cartItem.product._id%> ')">REMOVE</a>
@@ -423,7 +428,7 @@
             <div class="blog_right_sidebar mt-3" style="position: sticky; top: 400px;">
                 <div>
                     <div class="d-flex" >
-                        <input type="text" class="squareFeald" placeholder="Enter your coupone code" id="couponeCode" couponeId="">
+                        <input type="text" class="squareFeald" placeholder="Enter your coupone code" id="couponeCode" couponeId="" validCoupone="false">
                         <button class="sideBtn checkoutActions  px-3" id="applyCoupone">Applay</button>
                     </div>
                     <span id="couponeError" ></span>
@@ -431,6 +436,32 @@
 
                 <%if(locals.coupones){%>
                     
+                    <div>
+                        <a class="tandc" data-bs-toggle="collapse" href="#TANDC" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Terms & Conditions
+                          </a>
+                        <div class="collapse" id="TANDC">
+                            <div class="card card-body tandcBody">
+                                <div>
+                                    <p mt-3><strong>Note:</strong></p>
+                                    <ul style="list-style-type: disc;">
+                                        <li>If your order includes multiple products and a discount coupon has been applied, there are limitations on individual product cancellation.</li>
+                                    </ul>
+                                
+                                    <p class="mt-3"><strong>Restriction:</strong></p>
+                                    <ul style="list-style-type: disc;">
+                                        <li>Individual product cancellation may be limited if:</li>
+                                        <ul>
+                                            <li>The combined price of the remaining products does not satisfy the minimum purchase amount required for the coupon.</li>
+                                            <li>The payment has been made online or via wallet.</li>
+                                        </ul>
+                                    </ul>
+                                
+                                    <p><strong>We sincerely appreciate your understanding.Thank you for your cooperation.</strong></p>
+
+                                </div>
+                                                          </div>
+                    </div>
                 <div class=" coupones-container" id="coupones">
                     <%for(let coupone of coupones){%>
                     <div class="offer offer-warning offer-radius" id="<%=coupone._id%>">

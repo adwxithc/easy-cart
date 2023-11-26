@@ -32,7 +32,7 @@ console.log('cron shedule for expireOffers')
         }
     ])
     for(let product of products){
-        const currentDate=newDate
+        const currentDate=new Date()
         if(!(product.effectedOfferStartDate<=currentDate && product.effectedOfferEndDate>currentDate)){
 
             const offer=await offerHelper.findProductLargestOffer(product._id)

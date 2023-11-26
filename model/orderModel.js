@@ -27,6 +27,16 @@ const orderItemSchema=new mongoose.Schema({
       enum:['pending','received','refunded'],
       default:'pending'
     },
+    discount:{
+      type:Number,
+      default:0
+    },
+    MRP:{
+      type:Number,
+      default:0
+
+    },
+
   
 },{ timestamps: { createdAt: 'itemCreatedAt', updatedAt: 'itemUpdatedAt' } })
 
@@ -52,7 +62,14 @@ const orderSchema = new mongoose.Schema({
     enum:['COD','ONLINE-PAYMENT','WALLET'],
     required: true,
   },
-
+  couponeDiscount:{
+    type:Number,
+    default:0
+  },
+  couponeId:{
+    type:mongoose.Schema.Types.ObjectId,
+    default:null
+  },
   shippingAddress: {
     user:{
       type:mongoose.Schema.ObjectId ,

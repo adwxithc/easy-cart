@@ -166,32 +166,47 @@ const validateAddress=(req,res,next)=>{
 
 const validateCheckoutData=async(req,res,next)=>{
         try {
-            console.log('###########')
+       
          
             const address=await Address.findById(req.body?.address)
             if(address){
                 if(req.body.productId){
-                    const product=await Product.findById(req.body.productId)
-                    if(product){
+                    const product=req.product
+                    
                         if(product.stock>=req.body.productQty){
                             if(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT' || req.body.paymentMethod=='WALLET'){
 
                                 const lastOrderNumber= await orderManagement.getLastOrderNumber()
 
                                 const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
-                                    const totalAmount=product.price*req.body.productQty
+                                
+                                const effectedDiscount=product.effectedDiscount?product.effectedDiscount:0;
+                                const totalAmount=req.body.total
+                                let couponeDiscount=0
+                                if(req.couponeApplied){
+                                    const coupone=req.coupone
+                                    couponeDiscount=coupone.couponeDiscount
+                                }
+                                
+                                
+                                const discountedTotal=totalAmount-((totalAmount*couponeDiscount)/100)
+
                                     req.order={
                                         orderNumber:orderNumber,
                                         customer:req.session.userId,
                                         items:[{
                                             product:product._id,
                                             quantity:req.body.productQty,
-                                            price:product.price
+                                            MRP:product.price,
+                                            discount:effectedDiscount,
+                                            price:totalAmount,
+                                            
                                         }],
-                                        totalAmount:totalAmount,
+                                        totalAmount:discountedTotal,
                                         paymentMethod:req.body.paymentMethod,
-                                        // orderStatus:'Pending',
                                         shippingAddress:address,
+                                        couponeDiscount:couponeDiscount,
+                                        couponeId:coupone._id
                                     }
                                     next()
 
@@ -203,46 +218,52 @@ const validateCheckoutData=async(req,res,next)=>{
                         }else{
                             res.json({message:"Ths specified amount of quantity for this poduct is not available",orderConfirmed:false})
                         }
-
-                    }else{
-                        res.json({message:"This product  doesn't exist",orderConfirmed:false})
-                    }
                     //for confirm order for cart
                 }else{
-                    const cart=await Cart.findOne({user:req.session.userId})
-                    if(cart && cart?.cartItems?.length>0 ){
+                    const cart=req.cart
 
                         if(!(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT' || req.body.paymentMethod=='WALLET')){
                             res.json({message:"Invalid payment method",orderConfirmed:false})
                         }else{
 
                             let productInfos=[];
-                            let totalAmount=0
+                            let totalAmount=req.body.total
                             let instock=true;
                             for(let item of cart.cartItems){
                                 const product=await Product.findById(item.product)
                                 if(!(product && item.quantity<=product.stock)){
                                     instock=false
                                 }
-                                totalAmount+=item.quantity*item.price
                                 productInfos.push({
                                     product:item.product,
                                     quantity:item.quantity,
-                                    price:item.price
+                                    MRP:item.MRP,
+                                    discount:item.effectedDiscount,
+                                    price:item.price,
+                                    
                                 })
                             }
                             if(instock){
                                 const lastOrderNumber= await orderManagement.getLastOrderNumber()
                                 const orderNumber=orderManagement.generateOrderNumber(lastOrderNumber)
                               
+                                let couponeDiscount=0,couponeId=null
+                                if(req.couponeApplied){
+                                    const coupone=req.coupone
+                                    couponeDiscount=coupone.couponeDiscount
+                                    couponeId=coupone._id
+                                }
+                                const discountedTotal=totalAmount-((totalAmount*couponeDiscount)/100)
+                                console.log(coupone._id)
                                 req.cart=true
                                 req.order={
                                     orderNumber:orderNumber,
                                     customer:req.session.userId,
                                     items:productInfos,
-                                    totalAmount:totalAmount,
+                                    totalAmount:discountedTotal,
                                     paymentMethod:req.body.paymentMethod,
-                                    // orderStatus:'Pending',
+                                    couponeDiscount:couponeDiscount,
+                                    couponeId:couponeId,
                                     shippingAddress:address,
                                 }
                                 next()
@@ -252,11 +273,7 @@ const validateCheckoutData=async(req,res,next)=>{
 
 
                         }
-                       
 
-                    }else{
-                        res.json({message:"The user has no active cart",orderConfirmed:false})
-                    }
 
 
                 }
@@ -346,27 +363,43 @@ const validateProductSearchCriteria=async(req,res,next)=>{
 
 const coupone=async(req,res,next)=>{
     try {
+
+        
+        if(!req.couponeApplied){
+            console.log('couponeApplied=false')
+             next()
+             return;
+        }
+        
         const coupone=req.coupone
         const {total}=req.body
         const currentDate=new Date()
-        if((!new Date(coupone.expireDate)>currentDate) || !(new Date(coupone.startDate)<=currentDate) || (!coupone.status)){
-    
-            res.json({coupone:false,message:'Invalid coupone'})
-        }else if(!total>coupone.minPurchaseAmount){
-            res.json({coupone:false,message:"coupone can't be applied due to insufficient purchase amount "})
-        }else if(!(total<coupone.maxPurchaseAmount)){
-            console.log(!(total<coupone.maxPurchaseAmount),total,coupone.maxPurchaseAmount)
-            res.json({coupone:false,message:"coupone can't be applied due to exceding of  purchase limit "})
-            
-        }else{
-            next()
-        }
+        
+            if((!new Date(coupone.expireDate)>currentDate) || !(new Date(coupone.startDate)<=currentDate) || (!coupone.status)){
+        
+                res.json({coupone:false,message:'Invalid coupone'})
+            }else if(!(total>coupone.minPurchaseAmount)){
+                console.log('-----------------------------------------------------------min')
+                res.json({coupone:false,message:"coupone can't be applied due to insufficient purchase amount "})
+            }else if(!(total<coupone.maxPurchaseAmount)){
+                console.log(!(total<coupone.maxPurchaseAmount),total,coupone.maxPurchaseAmount)
+                res.json({coupone:false,message:"coupone can't be applied due to exceding of  purchase limit "})
+                
+            }else if(!(coupone.quantity>coupone.appliedUsers.length)){
+                res.json({coupone:false,message:"This coupone has already reached it's limit"})
+
+            }else{
+                next()
+            }
+
         
     } catch (error) {
         console.error(error)
         res.status(500).json({message:'Internal server error'})
     }
 }
+
+
  
  
 
@@ -379,6 +412,7 @@ module.exports={
     validateCheckoutData,
     validateChangePassword,
     validateProductSearchCriteria,
-    coupone
+    coupone,
+    
     
 }

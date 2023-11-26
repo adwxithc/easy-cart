@@ -145,7 +145,7 @@ const searchProduct=async(req,res)=>{
 const loadLogin=(req,res)=>{
     try {
       
-        res.render('login');
+        res.render('logint');
        
     } catch (error) {
         console.log(error.message)

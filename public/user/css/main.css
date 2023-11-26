@@ -1208,8 +1208,8 @@ h1, h2, h3, h4, h5, h6 {
 /* banner area css
 ============================================================================================ */
 .banner-area {
-  /* background: url(/static/assets/img/banner/banner2.jpg) center no-repeat; */
-  background-color: #fff;
+  background: url(/static/assets/img/banner/bn4.jpg) center no-repeat;
+  /* background-color: #f3f2f2; */
   background-size: cover;
   position: relative;
   margin-bottom:5rem ; }

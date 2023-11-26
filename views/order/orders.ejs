@@ -69,7 +69,11 @@
                                     </div>
                                     <%if(item.orderStatus!=='Canceled' && item.orderStatus!=='Delivered'){%>
                                     <span class="text-success">Delivery expected with in 3-4 Days:</span><br>
+                                    <%}else if(item.orderStatus=='Canceled'){%>
+                                    <span class="text-danger">Order Canceled</span><br>
+
                                     <%}%>
+
                                 </div>
   
                           

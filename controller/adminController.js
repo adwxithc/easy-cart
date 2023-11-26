@@ -1059,67 +1059,45 @@ const viewOrder=async(req,res)=>{
 
 const updateOrderStatus=async(req,res)=>{
     try {
+        console.log('--------------------------------')
+        const {productId,newStatus}=req.body;
+        const order=req.order
 
-        const order=await Order.findById(req.body.orderId)
-        if(order){
             let notCanceled=false,quantity,amount,paymentMethod,paymentStatus;
             for(let item of order.items){
-                if(item.product==req.body.productId){
+                if(item.product==productId){
                     if(item.orderStatus!='Canceled'){
-                        item.orderStatus=req.body.newStatus
+                        item.orderStatus=newStatus
                         notCanceled=true
                         quantity=item.quantity
                         amount=item.quantity*item.price
                         paymentMethod=order.paymentMethod
                         paymentStatus=item.paymentStatus
-                    }
-                }
-            }
-            if(notCanceled){
-                const updatedOrder=await order.save()
-                if(updatedOrder){
-                    if(req.body.newStatus=='Canceled'){
-
-                        await Product.updateOne({_id:req.body.productId},{$inc:{stock:quantity}})
-
-                        if(paymentStatus=='received' && paymentMethod!=='COD'){
-                        //refunding to wallet
-                        const transactionId=crypto.randomBytes(8).toString('hex')
-                        await adminHelpers.addMoneyToWallet(req.body.orderId,amount,transactionId,'Order refunded due to admin cancelation')
+                        if(newStatus=='Delivered' && paymentMethod=='COD'){
+                            item.paymentStatus='received'
                         }
                     }
-                    res.json({message:'Order status  updated successfully',updated:true})
-                }else{
-                    res.json({message:'Order status  updation failed ',updated:false})
                 }
-                
-            }else{
-                res.json({message:'This is a canceled order ',updated:false})
             }
-        }else{
-            res.json({message:"This order doesn't exist ",updated:false})
-        }
- 
-        // const updatedOrder = await Order.findOneAndUpdate(
-        //     { _id: req.body.orderId, 'items.product': req.body.productId },
-        //     { $set: { 'items.$.orderStatus': req.body.newStatus } },
-        //     { new: true }
-        //   );
-        //   console.log(updatedOrder)
-        //   if(updatedOrder){
-        //     if(req.body.newStatus=='Canceled'){
-        //         for(let item of updatedOrder.items){
-        //             if(item.product==req.body.productId){
-        //                 await Product.updateOne({_id:req.body.productId},{$inc:{stock:item.quantity}})
-        //             }
-        //         }
-                
-        //       }
-        //      res.json({updated:true,message:'Order status updated successfully'})
 
-        //   }else{
-        //     res.json({message:'unable to update order status',updated:false})
-        //   }
+            const updatedOrder=await order.save()
+            if(updatedOrder){
+                if(req.body.newStatus=='Canceled'){
+
+                    await Product.updateOne({_id:req.body.productId},{$inc:{stock:quantity}})
+
+                    if(paymentStatus=='received' && paymentMethod!=='COD'){
+                    //refunding to wallet
+                    //here if the admin is canceling the order then the discount from coupone is not considering
+                    const transactionId=crypto.randomBytes(8).toString('hex')
+                    await adminHelpers.addMoneyToWallet(req.body.orderId,amount,transactionId,'Order refunded due to admin cancelation')
+                    }
+                }
+                res.json({message:'Order status  updated successfully',updated:true})
+            }else{
+                res.json({message:'Order status  updation failed ',updated:false})
+            }
+                
 
     } catch (error) {
         console.log(error)

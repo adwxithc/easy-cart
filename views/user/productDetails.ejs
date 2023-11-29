@@ -80,7 +80,7 @@
                         <%if(inCart){%>
                             <a class="  darkBtn m-1" href="/api/goToCart" id="goToCart">Go to Cart</a>
                         
-                        <%}else{%>
+                        <%}else if(product.stock>0){%>
                             <a class="  darkBtn m-1" href="#" id="addToCart">Add to Cart</a>
                             <%}%>
                             <%if(product.stock>0){%>

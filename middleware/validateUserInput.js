@@ -6,27 +6,27 @@ const orderManagement=require('../middleware/orderManagement')
 const Order=require('../model/orderModel')
 const mongoose=require('mongoose')
 const Coupone = require('../model/couponeModel')
+const userHelpers=require('../helperMethods/userHelpers')
 
 const validateCartInputs=async (req,res,next)=>{
     const userId=req.session.userId;
 
+    
+    const product=req.product
     const productId=req.body.productId;
     const productQuantity=parseInt(req.body.quantity);
-    const price=req.body.price
+    // const price=req.body.price
 
     //const expiryTime = 24 * 60 * 60 * 1000;  //24 hours in milliseconds
     // const expiryTime = 60 *1000;  //24 hours in milliseconds 
 
    // const cartExpirationTime = new Date(Date.now() + expiryTime); // Set the cart expiration time
 
-    if(!productId || isNaN(productQuantity) || isNaN(price) || parseInt(productQuantity)<1 || parseInt(price)<1 ){
+    if(!productId || isNaN(productQuantity)|| parseInt(productQuantity)<1  ){
         res.json({message:'Invalide Information'})
     }else{
 
-        const product=await Product.findById(productId)
-        if(!product){
-            res.json({message:'product not fount'})
-        }else if(product.stock<productQuantity){
+        if(product.stock<productQuantity){
             res.json({message:'Sorry, the requested quantity exceeds our current stock.'})
         }else{
             req.newCart={
@@ -35,7 +35,7 @@ const validateCartInputs=async (req,res,next)=>{
                     {
                         product:productId,
                         quantity:productQuantity,
-                        price:price,
+                        price:product.price,
                         
                     }
                 ],
@@ -399,6 +399,58 @@ const coupone=async(req,res,next)=>{
     }
 }
 
+const returnOrder=(req,res,next)=>{
+    try {
+        const order=req.order 
+        const {productId}=req.body
+
+        for(let item of order.items){
+            if(productId==item.product){
+                if(!(item.orderStatus!=='Delivered' || item.returnStatus)){
+                    next()
+                    return
+                }
+            }
+        }
+        res.status(400).json({success:false,message:'Invalid request'})
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+const otp=(req,res,next)=>{
+    try {
+        const {otpWithTimestamp}=req.session
+        if(otpWithTimestamp){
+            const isNotExpired =userHelpers.verifyOTP(req.session.otpWithTimestamp)
+            if(isNotExpired){
+                const otp = otpWithTimestamp.split(':')[0];
+                if(otp==req.body.otp){
+
+                next()
+
+                }else{
+                    console.log("otp not verified")
+                    res.render('getOtp',{message:"Invalid OTP"})
+                }
+            }else{
+                console.log("otp expired")
+                res.render('getOtp',{message:"OTP has expired please resend OTP"})
+
+            }
+        }else{
+            res.redirect('/register')
+
+        }
+        
+        
+    } catch (error) {
+        
+    }
+}
+
 
  
  
@@ -413,6 +465,8 @@ module.exports={
     validateChangePassword,
     validateProductSearchCriteria,
     coupone,
+    returnOrder,
+    otp
     
     
 }

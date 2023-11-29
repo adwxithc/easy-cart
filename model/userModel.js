@@ -84,6 +84,10 @@ const userSchema=mongoose.Schema({
     wallet: {
         type: walletSchema, // Embed the wallet schema in the User schema
         default: {}
+    },
+    referCode:{
+        type:String,
+        
     }
 
 

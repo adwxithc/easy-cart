@@ -4,6 +4,7 @@ const Product = require("../model/productModel")
 const Category=require('../model/categoryModel')
 const Cart=require('../model/cartModel')
 const Order=require('../model/orderModel')
+const User=require('../model/userModel')
 const { default: mongoose } = require("mongoose")
 
 const coupone=async(req,res,next)=>{
@@ -83,9 +84,9 @@ const offer=async(req,res,next)=>{
         res.status(500).json({message:'Internal server error'})
     }
 }
-const product =async(req,res,next)=>{
+const singleProduct =async(req,res,next)=>{
     try {
-        console.log(1)
+        
         if(req.body.productId){
             const{productId}=req.body
             const exist =await Product.findById(productId)
@@ -105,6 +106,23 @@ const product =async(req,res,next)=>{
     }
 }
 
+const product=async(req,res,next)=>{
+    try {
+        const{productId}=req.body
+        const exist =await Product.findById(productId)
+        if(exist){
+            req.product=exist;
+            next()
+        }else{
+            res.status(400).json({message:"This product doesn't exist"})
+        }
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
 const cart= async(req,res,next)=>{
     try {
         if(req.body.cart){
@@ -115,7 +133,7 @@ const cart= async(req,res,next)=>{
               path: 'cartItems.product',
               select: 'effectedDiscount',
             });
-            // console.log('------------exist-------',req.cart.cartItems[0].product.effectedDiscount)
+            
             if(exist){
                 req.cart=exist
             }else{
@@ -154,15 +172,15 @@ const category =async(req,res,next)=>{
 
 const order=async(req,res,next)=>{
     try {
-        const {orderId}=req.body
         
+        const {orderId}=req.body
         const exist=await  Order.findOne({customer:req.session.userId,_id:new mongoose.Types.ObjectId(orderId)})
-        console.log(exist)
+
         if(exist){
             req.order=exist
             next()
         }else{
-            res.json({message:"This order doesn't exist",canceled:false})
+            res.json({message:"This order doesn't exist",canceled:false,success:false})
         }
         
     } catch (error) {
@@ -213,6 +231,42 @@ const orderForAdmin=async(req,res,next)=>{
     }
 }
 
+const refer=async(req,res,next)=>{
+    try {
+        const {refer}=req.session;
+        if(refer){
+
+            const user=await User.findOne({referCode:refer},{fname:1,lname:1})
+            if(user){
+                req.refer=user
+            }
+        }
+        next()
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+const hasCart=async(req,res,next)=>{
+    try {
+        const exist=await Cart.aggregate([
+            {
+                $match:{
+                    user:new mongoose.Types.ObjectId(req.session.userId)
+                }
+            }
+        ])
+        if(exist){
+            req.cart=exist[0]
+        }
+        next()
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
 
 
 
@@ -222,12 +276,15 @@ module.exports={
     coupone,
     offer,
     product,
+    singleProduct,
     category,
     couponeCode,
     couponeApplied,
     cart,
     order,
     orderId,
-    orderForAdmin
+    orderForAdmin,
+    refer,
+    hasCart
 
 }

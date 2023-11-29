@@ -52,6 +52,7 @@ const loadOrderDetails=async(req,res)=>{
             path: 'items.product',
             match: { _id: req.query.productId } // This matches the specific product by its _id
           })
+          // console.log('-----------------------------------------------------------------------------------------------',orderData,req.query.productId,req.query.orderId)
           let selectedProduct
           for(let item of orderData.items){
             if(item.product){
@@ -59,6 +60,7 @@ const loadOrderDetails=async(req,res)=>{
                 selectedProduct=item
             }
           }
+          // return
           orderData.items=selectedProduct
           if(orderData){
             console.log(orderData)
@@ -125,8 +127,6 @@ const cancelOrder=async(req,res)=>{
 
         }
       }
-
-    
   } catch (error) {
     console.log(error)
     res.status(500).json({message:'Internal server error'})
@@ -157,7 +157,7 @@ const orderItems=async(req,res)=>{
         select: 'name',
       },
     });
-    console.log(orderData)
+    
     if(orderData){
       res.json({orderData:orderData})
 
@@ -248,6 +248,45 @@ const downloadInvoice=async(req,res)=>{
   }
 }
 
+//RETURN ORDER
+const returnOrder=async(req,res)=>{
+  try {
+    
+    
+    const order=req.order 
+    
+    const {productId,returnReason}=req.body;
+
+    for(let item of order.items){
+      if(item.product==productId && item.orderStatus=='Delivered'){
+        
+
+        item.returnStatus='returnPlaced'
+        const eligibleForReturn=await  userHelpers.eligibleForReturn(item,order)
+        
+        item.eligibleForReturn=eligibleForReturn
+        item.returnReason=returnReason
+
+        const placed=await order.save()
+        if(placed){
+         
+            res.json({success:true,message:"Thank you for providing the reason. We will review your request shortly."})
+        }else{
+          console.log(2)
+
+          res.json({success:false,message:"your return request has been failed"})
+
+        }
+
+      }
+    }
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message:'Internal server error'})
+  }
+}
+
 
 module.exports={
     loadOrders,
@@ -256,5 +295,6 @@ module.exports={
     singleCancelNotEligible,
     orderItems,
     cancenlWholeOrder,
-    downloadInvoice
+    downloadInvoice,
+    returnOrder
 }

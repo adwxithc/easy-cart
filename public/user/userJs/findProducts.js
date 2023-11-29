@@ -92,7 +92,7 @@ function findProducts(name,categories,brands,priceRange,page,sort){
             page=data.page
             totalProductPages=data.totalPages
   
-            displaySearchresult(data.products)
+            displaySearchresult(data.products,data.cart)
             console.log(totalProductPages)
         }else{
             showNoResult()
@@ -123,13 +123,35 @@ document.addEventListener('DOMContentLoaded', function() {
     },true);
 });
 
-function displaySearchresult(products){
-   
+function displaySearchresult(products,cart){
 
-document.getElementById('searchedProductList').innerHTML=''
+document.getElementById('searchedProductList').innerHTML=''                             
+        
+
         for(let product of products){
         const productDiv=document.createElement('div')
         productDiv.classList='col-lg-3 col-6'
+       
+        //CHECK PRODUCT IS ALREADY IN CART
+        let InCart = cart ? cart.cartItems?.some(item => item.product.toString()== product._id.toString()) : false
+        let cartOption=``
+        if(!InCart && product.stock > 0){
+            cartOption=`
+             <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" id="${'addCart'+product._id}">
+             <span class="ti-bag searchAction easyAddToCart" productId="${product._id}"></span>
+             <p class="hover-text searchAction easyAddToCart" productId="${product._id}" >add to cart</p>
+             </a>
+            `
+        }else{
+            cartOption=`
+             <a href="/api/goToCart" class="social-info">
+                 <span class="ti-bag"></span>
+                 <p class="hover-text">go to cart</p>
+             </a>
+            `
+        }
+
+        //SETTING OFFER BADGE
         let offer=''
         let price=`<h6 class="product-price">${ product.price}</h6>`
         if(product.effectedDiscount){
@@ -157,10 +179,9 @@ document.getElementById('searchedProductList').innerHTML=''
                             ${price}
                         </div>
                         <div class="prd-bottom">
-                            <a href="" class="social-info">
-                                <span class="ti-bag"></span>
-                                <p class="hover-text">add to bag</p>
-                            </a>
+
+                            ${cartOption}
+
                             <a href="" class="social-info">
                                 <span class="lnr lnr-heart"></span>
                                 <p class="hover-text">Wishlist</p>
@@ -182,12 +203,16 @@ document.getElementById('searchedProductList').innerHTML=''
 
 function showNoResult(){
     const div=document.createElement('div')
-    div.classList.add('noresultDiv')
+    
+    div.classList='col-lg-12 noresultDiv p-3'
+    div.innerHTML=`
 
-    div.innerHTML=`<div class='noresultHead'>
-                    <h3>NO RESULTS FOUND..!</h3>
+                    <div class="d-flex justify-content-center">
+                    <lottie-player src="https://lottie.host/a7470a7f-8508-464a-a71c-9926c8f04ab1/wemUnPijfZ.json" background="##ffffff" speed="1" style="width: 300px; height: 300px" loop  autoplay direction="1" mode="normal"></lottie-player>
                     </div>
-                    <img src='/static/assets/bckImages/noResponse.jpg' class='noresultImg'>
+                    <div class='noresultHead'>
+                    <h3>No results found..!</h3>
+                    </div>
                     `
 
     document.getElementById('searchedProductList').innerHTML=''
@@ -238,4 +263,80 @@ $(function(){
     }
 
 });
+}
+
+
+function addSingleProductToCart(productId,quantity){
+    const addToCartData={
+        productId:productId,
+        quantity:quantity,
+    }
+    fetch('/api/add-to-cart',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(addToCartData)
+    })
+    .then(response=>{
+        
+        if(response.ok){
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+              return response.json(); // Parse JSON response
+            } else {
+              return response.text(); // Assume HTML content
+            }
+        }
+        throw new Error('unable to connect to server')
+    })
+    .then(data=>{
+        if (typeof data === 'object') {
+
+            showModal(data.message)
+            setTimeout(()=>{
+                closeModal()
+            },1100)
+          
+
+            if(data.added)
+            {
+                const cartCount=document.querySelector('.cBadge')
+                
+                setEasyGotoCart(productId)
+                cartCount.style.display='flex'
+                cartCount.innerHTML=data.count
+
+            }
+ 
+        }else{
+            showModal("Please login to add the product to cart")
+            
+            setTimeout(()=>{
+                closeModal()
+                window.location.href='/login'
+            },1200)
+
+        }
+
+    })
+    .catch((er)=>{
+        console.log(er.message)
+        // window.location.href='/'
+
+    })
+}
+
+function setEasyGotoCart(productId){
+    // alert('setEasyGotoCart')
+    const addToCartBtn=document.getElementById(`addCart${productId}`)
+  
+    addToCartBtn.classList.remove('searchAction')
+    addToCartBtn.classList.remove('easyAddToCart')
+   
+
+    addToCartBtn.setAttribute('href','/api/goToCart')
+    addToCartBtn.innerHTML=`
+    <span class="ti-bag "></span>
+    <p class="hover-text">go to cart</p>
+    `
 }

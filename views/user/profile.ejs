@@ -13,12 +13,24 @@
 
              <div class="blog_right_sidebar setPdding ">
                     <div><img src="/static/assets/profile/profilePic.jpg" alt="" class="profile-image"></div>
+
                     <div class="d-flex justify-content-center">
                         <%if(locals.user){%>
                         <h4><%=user.fname+' '+user.lname%></h4>
                         <%}%>
                     </div>
+                    <div>
 
+                        <form data-copy=true id="data-copy">
+                            <label for="referLink">Refer To Others</label>
+                            <div class="d-flex">
+                                
+                                <input type="text" id="refer" style="color: blue; border: 0;" value="http://localhost:3000/register?refer=<%=user.referCode%>" data-click-select-all class="form-control ">
+                                <button type="submit"id='referLink' style="border: 0; border-radius: 2px;"><i class="mdi mdi-content-copy"></i></button>
+                            </div>
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -107,8 +119,8 @@
 
                     <a href="#" class="darkBtn save profileAction" id="save">SAVE</a>
 
-            
-            </div>
+
+
             </div>
 
 
@@ -134,5 +146,18 @@
         <p id="modal-message">Your message goes here.</p>
     </div>
 </div>
+
+<script>
+    // Select on pressing COPY
+let els_copy = document.querySelector("#data-copy");
+
+els_copy.addEventListener("submit", function(e) {
+    e.preventDefault();
+    var text = e.target.querySelector('#refer').select();
+    document.execCommand("copy");
+  });
+
+
+</script>
 
 <%- include("../partials/userFooter.ejs") %>

@@ -21,6 +21,41 @@ function showOrderCancelProgress(){
   }, 1000);
 }
 
+//SGOWING RETURN PROGRESS
+
+function showReturnProgress(status){
+  if(status=='returnPlaced'){
+    setTimeout(() => {
+    updateProgress('5%', 'Return Placed','stage-0'); 
+    }, 200);
+
+ }else if(status=='outForPick'){
+    setTimeout(() => {
+      updateProgress('0%', 'Return Placed','stage-0');
+      }, 200);
+
+      setTimeout(() => {
+      updateProgress('50%', 'Out For Pick','stage-1');
+      }, 2500);
+
+
+  }else if(status=='returned'){
+    
+
+    setTimeout(() => {
+      updateProgress('0%', 'Return Placed','stage-0');
+      }, 200);
+
+      setTimeout(() => {
+      updateProgress('50%', 'Out For Pick','stage-2');
+      }, 2500);
+      setTimeout(() => {
+      updateProgress('100%', 'returned','stage-3');
+      }, 4500);
+
+  }
+}
+
 //SHOWING PROGRESS BAR OF ORDER
 function showProgress(status){
 
@@ -81,7 +116,10 @@ window.onload = function() {
 
 
     const status=document.getElementById('orderStatus').value
-    if(status!='Canceled'){
+    const returnStatus=document.getElementById('returnStatus')?.value
+    if(returnStatus){
+      showReturnProgress(returnStatus)
+    }else if(status!='Canceled'){
       
       showProgress(status)
     }else{
@@ -136,7 +174,7 @@ window.onload = function() {
         showModal(data.message)
         setUpCancelOrderProgressBar()
         showOrderCancelProgress()
-
+        document.getElementById('invoice').remove()
         document.getElementById('cancelOrderH5').style.display='none'
   
       }else if(data.singleCancelNotEligible){
@@ -247,4 +285,89 @@ window.onload = function() {
       showModal('Something went wrong')
       
     }
+  }
+
+  //FUNCTION TO RETURN ORDER
+  function returnOrder(orderId,productId){
+    askReasonForReturn(orderId,productId)
+
+  }
+
+  function askReasonForReturn(orderId,productId){
+     // Swal.fire configuration with custom classes and styling
+     Swal.fire({
+      title: 'Request for Return',
+      html: `
+        <div class="return-request-modal">
+          <label for="returnReason" class="return-reason-label">Please provide a reason for your return:</label>
+          <textarea id="returnReason" class="return-reason-textarea" placeholder="Enter your reason here..." rows="5"></textarea>
+          <div id="returnReasonValidationError" class="swal2-validation-error"></div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Submit Request',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      customClass:{
+        confirmButton:'returnRequestSubmit',
+        cancelButton:'returnRequestCancel'
+      },
+      preConfirm: async() => {
+        const returnReason = document.getElementById('returnReason').value;
+  
+        // Check if the return reason is empty
+        if (!returnReason) {
+          document.getElementById('returnReasonValidationError').innerText = 'Please enter a reason for the return.';
+          return false; // Prevent the modal from closing
+        }
+        
+        return true
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
+    }).then(() => {
+      const returnReason = document.getElementById('returnReason').value;
+      if (!returnReason) {
+        document.getElementById('returnReasonValidationError').innerText = 'Please enter a reason for the return.';
+        return false; // Prevent the modal from closing
+      }
+      sendReturnRequest(orderId,productId,returnReason)
+     
+    });
+    
+  }
+
+
+  async function sendReturnRequest(orderId,productId,returnReason){
+    fetch(`/api/returnOrder`,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({productId:productId,orderId:orderId,returnReason:returnReason})
+
+    })
+    .then(response=>{
+      if(response.ok) return response.json()
+      throw new Error()
+    })
+    .then(data=>{
+      console.log(data)
+      if(data.success){
+        
+        Swal.fire({
+          title: 'Return Request Submitted!',
+          text: data.message,
+          icon: 'success',
+        })
+        .then(()=>{
+          window.location.href=`/api/orderDetails?orderId=${orderId}&productId=${productId}`
+
+        });
+      }else{
+          showModal(data.message) 
+      }
+      
+    })
+    .catch(error=>{
+      console.log(error)
+      showModal('Something went wrong')
+    })
   }

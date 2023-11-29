@@ -5,6 +5,9 @@ const Brand=require('../model/brandModel')
 const Cart=require('../model/cartModel')
 const Address=require('../model/addressModel')
 const offerHelper=require('../helperMethods/offer')
+const userHelpers=require('../helperMethods/userHelpers')
+const crypto=require('crypto')
+const mongoose=require('mongoose')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -28,7 +31,7 @@ const securePassword=async(password)=>{
 //email verification
 const sendverifyMail=async (name,email,otp)=>{
     try {
-        
+
         const transporter=nodemailer.createTransport({
             host:'smtp.gmail.com',
             port:587,
@@ -67,20 +70,20 @@ const sendverifyMail=async (name,email,otp)=>{
 
 
 // Verify an OTP and check if it has expired
-function verifyOTP(otp, maxAgeInSeconds =120) {
-        const otpTimestamp = otp.split(':')[1];
-        const currentTime = Date.now() / 1000; // Convert to seconds
-        const otpTime = parseFloat(otpTimestamp);
+// function verifyOTP(otp, maxAgeInSeconds =120) {
+//         const otpTimestamp = otp.split(':')[1];
+//         const currentTime = Date.now() / 1000; // Convert to seconds
+//         const otpTime = parseFloat(otpTimestamp);
     
-        if (otpTime + maxAgeInSeconds < currentTime) {
-            // OTP has expired
-            return false;
-        }
+//         if (otpTime + maxAgeInSeconds < currentTime) {
+//             // OTP has expired
+//             return false;
+//         }
     
-        return true;
+//         return true;
     
 
-}
+// }
 
 //rndering the site for all
 const guest=async(req,res)=>{
@@ -145,7 +148,7 @@ const searchProduct=async(req,res)=>{
 const loadLogin=(req,res)=>{
     try {
       
-        res.render('logint');
+        res.render('login');
        
     } catch (error) {
         console.log(error.message)
@@ -196,12 +199,19 @@ const userHome=async(req,res)=>{
 
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        
 
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id})
+        const cart=await Cart.aggregate([
+            {
+                $match:{
+                    user:new mongoose.Types.ObjectId(req.session.userId)
+                }
+            }
+        ])
+
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0]})
         
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         res.status(500).render('errors/500.ejs')
         
     }
@@ -210,7 +220,8 @@ const userHome=async(req,res)=>{
 
 const loadRegister=(req,res)=>{
     try {
-        res.render('register')
+        const {refer}=req.query || null
+        res.render('register',{refer:refer})
         
     } catch (error) {
         console.log(error)
@@ -226,13 +237,9 @@ const signUp=async(req,res)=>{
             res.render('register',{message:"This email is already exist please login"})
 
         }else{
-            const fname=req.body.fname
-            const lname=req.body.lname
-            const email=req.body.email
- 
-            const password=req.body.password
-            const rePassword=req.body.rePassword
-            console.log(req.body)
+
+           const {fname,lname,email,password,rePassword,refer}=req.body
+
             if(!(fname&&lname&&email&&password&&rePassword)){
                 res.render('register',{message:"Please fill all the fields"})
             }else if(password!=rePassword){
@@ -253,9 +260,10 @@ const signUp=async(req,res)=>{
                 req.session.lname=lname
                 req.session.email=email
                 req.session.password=spassword
+                req.session.refer=refer
 
                 //sending email
-                sendverifyMail(`fname`,email,numericOTP)
+                sendverifyMail(`${fname} ${lname}`,email,numericOTP)
 
                 res.redirect('/loadOtpForm')
 
@@ -280,81 +288,69 @@ const loadOtpForm =async(req,res)=>{
 }
 const reSendOtp=(req,res)=>{
     if(req.session.otpWithTimestamp){
-    const isNotExpired=verifyOTP(req.session.otpWithTimestamp,30) 
+    const isNotExpired= userHelpers.verifyOTP(req.session.otpWithTimestamp,30) 
     if(!isNotExpired){
         // Generate a 6-digit numeric OTP
         const numericOTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false,lowerCaseAlphabets:false, specialChars: false });
 
                     
         req.session.otpWithTimestamp = `${numericOTP}:${Date.now() / 1000}`;
-    // console.log("bofore sending email",req.session.email) 
+    
         sendverifyMail(`${req.session.fname} ${req.session.lname}`,req.session.email,numericOTP)
-        // console.log("after sending mail")
+        
         res.json({status:"success",message:'New otp has been send to the email'})
     }else{
         console.log("wait 30 seconds")
         res.json({status:'success',message:'Please wait 30 seconds before requesting a new OTP'})
     }
 }else{
-    res.send('404')
+    res.render('errors/404.ejs')
 }
-
 
 }
 
 const otpVerification=async(req,res)=>{
 
     try {
+        const refer=req.refer
+        const referCode=crypto.randomBytes(8).toString('hex')
+    
+            const user=new User({
+                fname:req.session.fname,
+                lname:req.session.lname,
+                email:req.session.email,
+                password:req.session.password,
+                referCode:referCode
+            })
+            req.session.fname=null
+            req.session.lname=null
+            req.session.email=null
+            req.session.password=null
+            req.session.otpWithTimestamp=null
 
-        if(req.session.otpWithTimestamp){
-            const isNotExpired =verifyOTP(req.session.otpWithTimestamp)
-            if(isNotExpired){
-                const otp = req.session.otpWithTimestamp.split(':')[0];
-                if(otp==req.body.otp){
-                    console.log('otp verified')
-    
-                    const user=new User({
-                        fname:req.session.fname,
-                        lname:req.session.lname,
-                        email:req.session.email,
-                        password:req.session.password,
-                    })
-                    req.session.fname=null
-                    req.session.lname=null
-                    req.session.email=null
-                    req.session.password=null
-                    req.session.otpWithTimestamp=null
-    
-                
-                    const userData=await user.save()
-                    if(userData){
-                        console.log("data inserted to data base")
-                        res.redirect('/userHome')
-    
-                    }else{
-                        console.log("data insertion failed")
-                    }
-    
-                }else{
-                    console.log("otp not verified")
-                    res.render('getOtp',{message:"Invalid OTP"})
+        
+            const userData=await user.save()
+            if(userData){
+
+                if(refer){
+                    const transactionId1=crypto.randomBytes(8).toString('hex')
+                    await userHelpers.addMoneyToWallet(refer._id,100,transactionId1,`A referral bonus is added to the  wallet as a token of appreciation for bringing in a new user ${userData.fname+' '+userData.lname}`)
+                    
+                    const transactionId2=crypto.randomBytes(8).toString('hex')
+                    await userHelpers.addMoneyToWallet(userData._id,100,transactionId2,`A welcome bonus is added to the wallet as a special benefit for joining through a referral code of ${refer.fname+' '+refer.lname}`)
                 }
-                
-    
+
+                res.redirect('/userHome')
+
             }else{
-                console.log("otp expired")
-                res.render('getOtp',{message:"OTP has expired please resend OTP"})
-    
+                res.status(500).render('errors/500.ejs')
+                console.log("data insertion failed")
             }
-        }else{
-            res.redirect('/register')
-    
-        }
-        
+                
     } catch (error) {
-        
+        console.log(error)
+        res.render('errors/500.ejs')
     }
-    
     
 }
 
@@ -362,6 +358,7 @@ const logout=(req,res)=>{
 
         req.session.destroy((er)=>{
         if(er){
+  
 
          console.log(er.message)//send status
          res.render('errors/500.ejs')
@@ -374,8 +371,8 @@ const logout=(req,res)=>{
 
 const loadProfile=async(req,res)=>{
     try {
-        const user=await User.findById(req.session.userId)
-      
+        const user=await User.findOne({_id:req.session.userId},{transactions:0})
+      console.log(user)
         res.render('profile',{user:user})
         
     } catch (error) {

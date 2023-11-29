@@ -296,6 +296,30 @@ const orderUpdation=(req,res,next)=>{
     }
 }
 
+const returnStatus=async(req,res,next)=>{
+   
+    const {newReturnStatus,productId}=req.body
+    const order=req.order
+   
+    if(['returnPlaced','outForPick','returned'].includes(newReturnStatus)){
+      
+        for(let i=0;i< order.items.length;i++){
+            if(order.items[i].product==productId){
+                if(order.items[i].orderStatus=='Delivered' && order.items[i].returnStatus!=newReturnStatus && order.items[i].returnStatus!='returned'){
+           
+                    req.productIndex=i
+                    next()
+                    return
+                }
+            }
+        }
+        res.status(400).json({success:false,message:'Invalid request'})
+
+    }else{
+        res.status(400).json({success:false,message:'Invalid new order Status'})
+    }
+}
+
 
 module.exports={
 validateProductDatas,
@@ -304,5 +328,6 @@ validateProductDatas,
  sanitiseSalesReportParam,
  validateCoupone,
  validateOfferData,
- orderUpdation
+ orderUpdation,
+ returnStatus
 }

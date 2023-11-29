@@ -36,6 +36,17 @@ const orderItemSchema=new mongoose.Schema({
       default:0
 
     },
+    returnStatus:{ 
+      type:String,
+      enum:['returnPlaced','outForPick','returned']
+    },
+    eligibleForReturn:{
+      type:Boolean,
+      default:true
+    },
+    returnReason:{
+      type:String,
+    }
 
   
 },{ timestamps: { createdAt: 'itemCreatedAt', updatedAt: 'itemUpdatedAt' } })

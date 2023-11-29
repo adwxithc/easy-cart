@@ -19,7 +19,7 @@ checkout_route.set('views','./views/checkout')
 checkout_route.set('view engine','ejs')
 
 checkout_route.get('/checkout',auth.isLogin,checkoutController.checkout)
-checkout_route.post('/confirmOrder',auth.isLogin,checkExist.product,checkExist.cart,helperMiddeleware.findOrderTotal,checkExist.couponeApplied,validateUserInput.coupone,validateUserInput.validateCheckoutData,checkoutController.confirmOrder)
+checkout_route.post('/confirmOrder',auth.isLogin,checkExist.singleProduct,checkExist.cart,helperMiddeleware.findOrderTotal,checkExist.couponeApplied,validateUserInput.coupone,validateUserInput.validateCheckoutData,checkoutController.confirmOrder)
 checkout_route.get('/orderResponse',auth.isLogin,checkoutController.orderResponse)
 checkout_route.post('/verifyPayment',auth.isLogin,checkoutController.verifyPayment)
 // checkout_route.post('/applyCoupone',auth.isLogin,checkoutController.getCoupone)

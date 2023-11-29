@@ -106,22 +106,22 @@ function viewOrder(orderId){
 
 function updateOrderStatusByAdmin(elem){
 
-    
-
     const productId=elem.getAttribute('productId')
     const orderId=elem.getAttribute('orderId')
  
     const newStatus=document.getElementById('select'+productId).value
     const oldStatus=document.getElementById('select'+productId).getAttribute('oldData')
 
-    if(newStatus!=oldStatus){
+
+    if(newStatus!==oldStatus){
 
         fetch(`/admin/updateOrderStatus`,{
             method:'PATCH',
             body:JSON.stringify({
                 productId:productId,
                 orderId:orderId,
-                newStatus:newStatus
+                newStatus:newStatus,
+               
             }),
             headers:{'Content-Type':'application/json'}
         })
@@ -143,6 +143,7 @@ function updateOrderStatusByAdmin(elem){
                   })
                   document.getElementById('select'+productId).setAttribute('oldData',newStatus)
                   if(newStatus=='Canceled') document.getElementById('select'+productId).setAttribute('disabled','disabled')
+
             }else{
                 Swal.fire({
                     
@@ -159,5 +160,70 @@ function updateOrderStatusByAdmin(elem){
 
             
         })
+        .catch(error=>{
+            console.log(error)
+            window.location.href='/admin/500'
+        })
     }
+}
+
+function updateReturnStatus(elem){
+    const productId=elem.getAttribute('productId')
+    const orderId=elem.getAttribute('orderId')
+ 
+    const newReturnStatus=document.getElementById('ret'+productId).value
+    const oldReturnStatus=document.getElementById('ret'+productId).getAttribute('oldData')
+
+    if(newReturnStatus!==oldReturnStatus){
+
+        fetch(`/admin/updateReturnStatus`,{
+            method:'PATCH',
+            body:JSON.stringify({
+                productId:productId,
+                orderId:orderId,
+                newReturnStatus:newReturnStatus,
+               
+            }),
+            headers:{'Content-Type':'application/json'}
+        })
+        .then(response=>{
+            if(response.ok) return response.json()
+            throw new Error('unable to connect to the server')
+        })
+        .then(data=>{
+            if(data.success){
+                Swal.fire({
+                   
+                    icon: 'success',
+                    text: `${data.message }`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    coustomClass:{
+                        content:'set-color'
+                    }
+                  })
+                  document.getElementById('ret'+productId).setAttribute('oldData',newReturnStatus)
+                  if(newReturnStatus=='returned') document.getElementById('ret'+productId).setAttribute('disabled','disabled')
+
+
+            }else{
+                Swal.fire({
+                    
+                    icon: 'error',
+                    text: `${data.message}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    coustomClass:{
+                        content:'set-color'
+                    }
+                  })
+
+            }
+        })
+        .catch(error=>{
+            console.log(error)
+            window.location.href='/admin/500'
+        })
+    }
+
 }

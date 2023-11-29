@@ -60,6 +60,22 @@ const changepaymentStatus=async(orderId,status,productId)=>{
     }
 }
 
+// Verify an OTP and check if it has expired
+function verifyOTP(otp, maxAgeInSeconds =120) {
+  const otpTimestamp = otp.split(':')[1];
+  const currentTime = Date.now() / 1000; // Convert to seconds
+  const otpTime = parseFloat(otpTimestamp);
+
+  if (otpTime + maxAgeInSeconds < currentTime) {
+      // OTP has expired
+      return false;
+  }
+
+  return true;
+
+
+}
+
 
 
 async function addMoneyToWallet(userId, amount, transactionId, description) {
@@ -185,10 +201,12 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
 
         //finding the coupone
         const coupone=await Coupone.findById(order.couponeId)
+
         //if canceling not effecting minPurchaseAmount
         if(coupone.minPurchaseAmount<totalAmountAfterCancel){
-          
-          return {eligible:true,amount:productPrice}
+          let newDiscountedTotal=totalAmountAfterCancel-((totalAmountAfterCancel*discountPercentage)/100)
+          const refundAmount=discountedTotal-newDiscountedTotal
+          return {eligible:true,amount:refundAmount}
         }else{
             return {eligible:false}
         }
@@ -259,7 +277,7 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
       throw new Error(error)
     }
   }
-  generateInvoice=(order)=>{
+  const generateInvoice=(order)=>{
       try {
         let items=``
         for(let item of order.items){
@@ -437,10 +455,42 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
       }
   }
 
+const eligibleForReturn=async(product,order)=>{
+
+  let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterReturn
+
+    // IF IT IS A ORDER FOR MULTIPLE PRODUCTS AND COUPON HAS APPLIED
+    if(order.items.length>1 && order.couponeDiscount>0){
+      
+
+       discountedTotal=order.totalAmount
+       productPrice=product.quantity*product.price
+       discountPercentage=order.couponeDiscount
+       totalAmount=discountedTotal / (1 - discountPercentage / 100);
+       totalAmountAfterReturn=totalAmount-productPrice
+
+      //finding the coupone
+      const coupone= await Coupone.findById(order.couponeId)
+
+
+      //Check if canceling the product's return would violate the minimum purchase amount
+      if(coupone.minPurchaseAmount>totalAmountAfterReturn){
+        
+        return false
+      }
+      
+    }
+    return true
+  
+}
+
+
+
 
 module.exports={
     generateRazorpay,
     changepaymentStatus,
+    verifyOTP,
     addMoneyToWallet,
     debitFromWallet,
     releaseProducts,
@@ -448,5 +498,6 @@ module.exports={
     checkRefundEligible,
     setCouponeApplied,
     setNewOrderTotal,
-    generateInvoice
+    generateInvoice,
+    eligibleForReturn
 }

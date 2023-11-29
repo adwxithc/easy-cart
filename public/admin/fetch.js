@@ -586,17 +586,38 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
                 }
               });
             
+        }else if(e.target.classList.contains('updateReturnStatus')){
+            Swal.fire({
+                
+                text: "Are you sure? You want to update return  status of this order",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Change status",
+                coustomClass:{
+                    title:'set-color'
+                }
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    updateReturnStatus(e.target)
+                }
+              });
         }
         
     }else if(e.target.classList.contains('reportAction')){
         if(e.target.id=='yearlySales'){
+            setActive(e.target)
             getSalesReport('year')
         }else if(e.target.id=='monthlySales'){
+            setActive(e.target)
             getSalesReport('month')
         }else if(e.target.id=='weeklySales'){
+            setActive(e.target)
             getSalesReport('week')
-        }else if(e.target.id=='salesTimePeriod'){
-            changeSalesDataTimePeriod(e.target.value)
+        }else if(e.target.classList.contains('timePeriod')){
+            setChoose(e.target)
+            changeSalesDataTimePeriod(e.target.getAttribute('time'))
         }else if(e.target.id=='salesPaymentStatus'){
             filterBySalesPaymentStatus(e.target.value)
         }else if(e.target.id=='salesOrderStatus'){

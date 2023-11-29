@@ -64,22 +64,10 @@ function areaChart(labels, data) {
       datasets: [{
         label: 'Total Sales',
         data: data,
-        backgroundColor: [
-          'rgba(10, 100, 15, 0.2)', // green with 20% opacity
-          'rgba(75, 192, 192, 0.2)', // Teal with 20% opacity
-          'rgba(255, 99, 132, 0.2)', // Red with 20% opacity
-          'rgba(54, 162, 235, 0.2)', // Blue with 20% opacity
-          'rgba(153, 102, 255, 0.2)', // Purple with 20% opacity
-          'rgba(255, 159, 64, 0.2)' // Orange with 20% opacity
-        ],
-        borderColor: [
-          'rgba(10, 100, 15, 1)',
-          'rgba(75, 192, 192, 1)', 
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)', 
-          'rgba(153, 102, 255, 1)', 
-          'rgba(255, 159, 64, 1)' 
-        ],
+        backgroundColor:'#CDF5FD', 
+
+        borderColor: '#00A9FF',
+
         borderWidth: 1,
         fill: true,
       }]
@@ -138,7 +126,7 @@ function areaChart(labels, data) {
     // Calculate potential growth
     potentialGrowth= ((currentTotalSales - previousTotalSales) / previousTotalSales) * 100;
     }else{
-        potentialGrowth=100;
+        potentialGrowth='Infinity';
     }
     document.getElementById('totalSales').innerHTML='\u20B9'+`${currentTotalSales}`
     if(potentialGrowth.toFixed(2)>0){
@@ -171,7 +159,7 @@ function areaChart(labels, data) {
     // Calculate potential growth
      potentialGrowth = ((currentTotalOrder - previousTotalOrder) / previousTotalOrder) * 100;
     }else{
-        potentialGrowth=100
+      potentialGrowth='Infinity';
     }
     document.getElementById('totalOrder').innerHTML=currentTotalOrder;
 
@@ -205,7 +193,7 @@ function areaChart(labels, data) {
     // Calculate potential growth
      potentialGrowth = ((currentAverageOrder - previousAverageOrder) / previousAverageOrder) * 100;
     }else{
-        potentialGrowth=100
+      potentialGrowth='Infinity';
     }
     document.getElementById('averageOrder').innerHTML=`\u20B9${currentAverageOrder.toFixed(2)}`;
    
@@ -371,3 +359,16 @@ function setSalesData(data){
     }
 }
 
+
+
+
+function setActive(elem){
+  document.querySelector('.active').classList.remove('active')
+  elem.classList.add('active')
+
+}
+
+function setChoose(elem){
+  document.querySelector('.choose').classList.remove('choose')
+  elem.classList.add('choose')
+}

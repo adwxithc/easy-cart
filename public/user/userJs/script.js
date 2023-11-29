@@ -57,8 +57,7 @@ function validateForm(){
     
     const fname=document.getElementById('fname').value;
     const sname=document.getElementById('lname').value;
-    // const phone=document.getElementById('phone').value;
-    // const prof=document.getElementById('prof').value;
+
     const username = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const rpassword = document.getElementById('rePassword').value;
@@ -70,8 +69,7 @@ function validateForm(){
     const errorPassword = document.getElementById('passwordError');
     const errorFname = document.getElementById('fnameError');
     const errorSname = document.getElementById('lnameError');
-    // const errorPhone = document.getElementById('phoneError');
-    // const errorProf = document.getElementById('profError');
+
     
   
     const emailExpr= /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/;
@@ -94,12 +92,7 @@ function validateForm(){
     document.getElementById('lname').addEventListener('focusin',()=>{
         errorSname.innerHTML = '';
     })
-    // document.getElementById('phone').addEventListener('focusin',()=>{
-    // errorPhone.innerHTML = '';
-    // })
-    // document.getElementById('prof').addEventListener('focusin',()=>{
-    // errorProf.innerHTML = '';
-    // })
+
    
   
     // user
@@ -124,16 +117,6 @@ function validateForm(){
     } else {
         errorUsername.innerHTML = ''; 
     }
-//phone number
-// if(!phoneExpr.test(phone)){
-//     errorPhone.innerHTML="*invalid Phone nummber"
-//     isValid=false;
-// }
-//picture
-// if (prof.trim() === '') {
-//     errorProf.innerHTML = '*Profile picture is required.';
-//     isValid = false;
-// } 
 
     //match check
   if(password!=rpassword){
@@ -255,7 +238,7 @@ fetch('/api/cartCount')
 
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
- 
+   
 
     if(e.target.classList.contains('productDetails')){
         if(e.target.id=='buyNow'){
@@ -263,6 +246,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
         }
     }
     
+    // USER PROFILE ACTIONS
     if(e.target.classList.contains('profileAction')){
 
         if(e.target.id=='cancelEdit'){
@@ -307,7 +291,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     }
 
     
-//------------------checkout actions--------------------
+    // CHECKOUT ACTIONS
     if(e.target.classList.contains('checkoutActions')){
     
         if(e.target.classList.contains('addressRadio')){
@@ -336,7 +320,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     }
 
 
-    // ----------------------------------order actions------------------------------------
+    //ORDER ACTIONS
     if(e.target.classList.contains('orderAction')){
         
         if(e.target.id=='prevOrder'){
@@ -345,35 +329,44 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             
             nextOrder()
         }else if(e.target.id=='cancelOrder'){
-
             Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                title: "Cancel Order",
+                text: "Are you sure you want to cancel your order? This action cannot be undone.",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Remove it!"
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#797a7a",
+                confirmButtonText: "Yes, cancel my order",
+                cancelButtonText: "No, keep my order",
               }).then((result) => {
                 if (result.isConfirmed) {
                     cancelOrder(document.getElementById('orderId')?.value,document.getElementById('productId')?.value)
+
                 }
               });
 
-            // cancelOrder(document.getElementById('orderId')?.value,document.getElementById('productId')?.value)
         }else if(e.target.id=='closeNotEligibleModal'){
             document.getElementById('cancelNotEligibleModal').style.display='none'
         }else if(e.target.id=='cancelWholeOrder'){
             
             cancenlWholeOrder(document.getElementById('orderId')?.value)
 
+        }else if(e.target.id=='returnOrder'){
+            
+            returnOrder(e.target.getAttribute('orderId'),e.target.getAttribute('productId'))
         }
+
     }else if(e.target.classList.contains('searchAction')){
+
+        //SEARCH ACTION
         if(e.target.id=='prevProducts'){
             prevProducts()
         }else if(e.target.id=='nextProducts'){
             
             nextProducts()
+        }else if(e.target.classList.contains('easyAddToCart')){
+            const productId=e.target.getAttribute('productId')
+            addSingleProductToCart(productId,1)
         }
     }
 

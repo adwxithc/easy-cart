@@ -115,6 +115,8 @@ admin_route.put('/updateBrand',updateLogo.single('logo'),validateAdminInputs.val
 admin_route.get('/listOrders',adminController.listOrders);
 admin_route.get('/viewOrder',adminController.viewOrder)
 admin_route.patch('/updateOrderStatus',checkExist.orderForAdmin,validateAdminInputs.orderUpdation,adminController.updateOrderStatus)
+admin_route.patch('/updateReturnStatus',checkExist.orderForAdmin,validateAdminInputs.returnStatus,adminController.updateReturnStatus)
+
 
 //sales report
 admin_route.get('/salesReport',reportController.loadSalesReport)
@@ -139,8 +141,8 @@ admin_route.get('/editOffer',offerController.loadEditOffer)
 admin_route.post('/updateOffer',checkExist.offer,validateAdminInputs.validateOfferData,offerController.updateOffer)
 admin_route.patch('/listUnlistOffer',checkExist.offer,offerController.listUnlistOffer)
 admin_route.get('/getOffers',offerController.getOffers)
-admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.product,offerController.applyOfferToProduct)
-admin_route.patch('/removeOffer',checkExist.product,offerController.removeOffer)
+admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.singleProduct,offerController.applyOfferToProduct)
+admin_route.patch('/removeOffer',checkExist.singleProduct,offerController.removeOffer)
 admin_route.patch('/applyOfferToCategory',checkExist.offer,checkExist.category,offerController.applyOfferToCategory)
 admin_route.patch('/removeCategoryOffer',checkExist.category,offerController.removeCategoryOffer)
 

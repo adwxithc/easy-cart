@@ -5,6 +5,8 @@ const shopController=require('../controller/shopController')
 const auth=require('../middleware/userAuth')
 const session=require('express-session')
 const validateUserInputs=require('../middleware/validateUserInput')
+const checkExist=require('../middleware/checkExist')
+
 
 
 user_route.use(express.urlencoded({extended:true}))
@@ -32,7 +34,7 @@ user_route.get('/userHome',auth.isLogin,userController.userHome)
 user_route.get('/register',auth.isLogout,userController.loadRegister)
 user_route.post('/register',userController.signUp)
 user_route.get('/loadOtpForm',auth.isLogout,userController.loadOtpForm)
-user_route.post('/verifyOtp',userController.otpVerification)
+user_route.post('/verifyOtp',validateUserInputs.otp,checkExist.refer,userController.otpVerification)
 user_route.get('/reSendOtp',auth.isLogout,userController.reSendOtp)
 user_route.get('/logout',auth.isLogin,userController.logout)
 
@@ -50,8 +52,6 @@ user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChange
 // shop
 user_route.get('/shop',shopController.loadShop)
 user_route.post('/searchProduct',userController.searchProduct)
-user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,shopController.searchProducts)
+user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts)
 
 module.exports=user_route
-
- 

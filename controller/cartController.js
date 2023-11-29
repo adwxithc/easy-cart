@@ -18,7 +18,7 @@ const addToCart=async(req,res)=>{
                         
                         if(item.product.toString()==newCart.cartItems[0].product){
                             const product=await Product.findById(item.product)
-                            if(item.quantity+newCart.cartItems[0].quantity<=product.stock){
+                            if(item.quantity+newCart.cartItems[0].quantity<product.stock){
 
                                 item.quantity+=newCart.cartItems[0].quantity
                                 productAlreadyExist=true

@@ -208,7 +208,7 @@ const addProduct=async(req,res)=>{
 const insertProduct=async(req,res)=>{
     try {
        
-        console.log(req.files)
+        
 
         const name=req.body.name
         const description=req.body.description
@@ -1044,8 +1044,6 @@ const viewOrder=async(req,res)=>{
           path: 'customer',
           select: 'fname lname email mobile',
         });
-        console.log(orderData)
-
 
         res.render('orderDetails',{orderData:orderData})
         
@@ -1059,7 +1057,7 @@ const viewOrder=async(req,res)=>{
 
 const updateOrderStatus=async(req,res)=>{
     try {
-        console.log('--------------------------------')
+        
         const {productId,newStatus}=req.body;
         const order=req.order
 
@@ -1100,6 +1098,64 @@ const updateOrderStatus=async(req,res)=>{
                 
 
     } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal server error'})
+    }
+}
+
+//Update Return Status
+const updateReturnStatus=async(req,res)=>{
+    try {
+        const {newReturnStatus,productId}=req.body
+        const {order,productIndex}=req
+
+        //IF THE NEW STATUS IS 'RETURNED'
+        if(newReturnStatus=='returned' ){
+            let refundAmount=0
+            let totalPidAmount=order.totalAmount
+            let productPrice=order.items[productIndex].quantity*order.items[productIndex].price
+            let discountPercentage=order.couponeDiscount
+
+            if(order.items[productIndex].eligibleForReturn){
+                //if eligible refunding to wallet
+                if(discountPercentage>0){
+                    //CALCULATE NEW ORDER TOTAL BY EXCLUDING THE RETURNING PRODUCT AND FINDING ITS NEW DISCOUNTED TOTAL
+                    let totalAmount=totalPidAmount / (1 - discountPercentage / 100);
+                    let totalAmountAfterReturn=totalAmount-productPrice
+                    let newDiscountedTotal=totalAmountAfterReturn-((totalAmountAfterReturn*discountPercentage)/100)
+                    
+                    //RETURNING REMAING AMOUNT AFTER MINUSING NEW DISCOUNTED TOTAL FROM PAIED AMOUNT
+                    refundAmount=(totalPidAmount-newDiscountedTotal)>0?(totalPidAmount-newDiscountedTotal):0
+                }else{
+                    refundAmount=productPrice
+                }
+
+            }else{
+            //WHEN THE RETURN OF PARTICULAR PRODUCT WILL EFFECT THE MINIMUM PURCHASE AMOUNT OF APPLIED COUPONE
+                let totalAmount=totalPidAmount / (1 - discountPercentage / 100);
+                let totalAmountAfterReturn=totalAmount-productPrice;
+                refundAmount=(totalPidAmount-totalAmountAfterReturn)>0?(totalPidAmount-totalAmountAfterReturn):0;
+                order.discountPercentage=0;
+            }
+            //REFUNDING TO WALLET
+            const transactionId=crypto.randomBytes(8).toString('hex')
+            await adminHelpers.addMoneyToWallet(req.body.orderId,refundAmount,transactionId,'refunded due to order return')
+
+
+            order.items[productIndex].returnStatus=newReturnStatus
+            order.items[productIndex].paymentStatus='refunded'
+        }else{
+            order.items[productIndex].returnStatus=newReturnStatus
+        }
+        const updated= await order.save()
+        if(updated){
+            await Product.updateOne({_id:productId},{$inc:{stock:order.items[productIndex].quantity}})
+            res.json({success:true,message:'Product return status updated successfully'})
+        }else{
+        res.json({success:false,message:'Product return status updation failed'})
+        }
+
+    }catch (error) {
         console.log(error)
         res.status(500).json({message:'Internal server error'})
     }
@@ -1155,6 +1211,7 @@ module.exports={
     listOrders,
     viewOrder,
     updateOrderStatus,
+    updateReturnStatus,
 
     error404,
     error500

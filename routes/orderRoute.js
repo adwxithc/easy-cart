@@ -24,5 +24,6 @@ order_route.get('/singleCancelNotEligible',auth.isLogin,orderController.singleCa
 order_route.get('/orderItems',auth.isLogin,orderController.orderItems)
 order_route.patch('/cancenlWholeOrder',auth.isLogin,checkExist.order,orderController.cancenlWholeOrder)
 order_route.get('/downloadInvoice',auth.isLogin,checkExist.orderId,orderController.downloadInvoice)
+order_route.patch('/returnOrder',auth.isLogin,checkExist.order,validateUserInput.returnOrder,orderController.returnOrder)
 
 module.exports=order_route

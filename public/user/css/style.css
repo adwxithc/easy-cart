@@ -442,6 +442,11 @@
         .save{
             display: none;
         }
+
+
+       /* refer link */
+       
+
         
 /* -----------------------------------------------------------------------------------------------------------------------find a way to make it responsive
         @media (max-width:991px) {
@@ -567,109 +572,6 @@
 
 
 
-
-/* Progress bar */
-/* #progress-bar {
-    display: table;
-    width: 100%;
-    margin: 0;
-    padding: 15px 15px 0;
-    table-layout: fixed;
-    width: 100%;
-    counter-reset: step;
-} */
-
-/* #progress-bar li {
-    list-style-type: none;
-    display: table-cell;
-    width: 20%;
-    float: left;
-    font-size: 16px;
-    position: relative;
-    text-align: center;
-} */
-
-/* #progress-bar li:before {
-    width: 50px;
-    height: 50px;
-    color: #212121;
-    content: counter(step);
-    counter-increment: step;
-    line-height: 50px;
-    font-size: 18px;
-    border: 1px solid #CCCCCC;
-    display: block;
-    text-align: center;
-    margin: 0 auto 10px auto;
-    border-radius: 50%;
-    background-color: #ffffff;
-    position: relative;
-    z-index: 1; 
-} */
-/* 
-#progress-bar li:after {
-    width: 100%;
-    height: 10px;
-    content: '';
-    position: absolute;
-    background-color: #CCCCCC;
-    top: 25px;
-    left: -50%;
-    z-index: 0; 
-}
-
-#progress-bar li:first-child:after {
-    content: none;
-} */
-
-/* #progress-bar li.step-done {
-    color: #000000;
-}
-
-#progress-bar li.step-done:before {
-    border-color: #000000;
-    background-color: #000000;
-    color: #ffffff;
-    content: "\f00c";
-    font-family: "FontAwesome";
-}
-
-#progress-bar li.step-done + li:after {
-    background-color: #000000;
-} */
-
-
-
-
-/* #progress-bar li.step-active {
-    color: #000000;
-}
-
-#progress-bar li.step-active:before {
-    border-color: #000000;
-    color: #000000;
-    font-weight: 700;
-} */
-
-   
-/* ---------------------cancel case------------------------- */
-/* 
-#progress-bar li.cancel-done {
-    color: #000000;
-}
-
-#progress-bar li.cancel-done:before {
-    border-color: #ff0000;
-    background-color: #ff0000;
-    color: #ffffff;
-    content: "\f00c";
-    font-family: "FontAwesome";
-}
-
-#progress-bar li.cancel-done + li:after {
-    background-color: #ff0000;
-} */
-        
 .progress{
     background-color:rgba(79, 78, 78,0.321);
    height: 4px;
@@ -902,7 +804,7 @@
 /* ---------------------------------------shope page------------------------- */
 .productdiv {
 
-    height: 400px; /* Adjust this value based on your design */
+    height: 450px; /* Adjust this value based on your design */
     /* box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.05); */
     margin-bottom: 0 !important;
     /* border: 1px solid rgba(172, 170, 170, 0.705); */
@@ -927,16 +829,21 @@
 }
 
 .product-image-container {
-    flex: 1;
-    height: 300px; /* Adjust this value based on your design */
+    
+    height: 400px; /* Adjust this value based on your design */
     overflow: hidden;
-    padding: 0.51rem;
+    padding: 0.5rem;
+}
+
+.product-image-container:hover .product-image {
+    transform: scale(1.1); /* Increase the scale factor as needed */
 }
 
 .product-image {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
 
 .product-details {
@@ -965,6 +872,7 @@
 }
 .noresultDiv{
     padding: 1rem;
+
 }
 .noresultImg{
     width: 100%;
@@ -1134,6 +1042,7 @@ background: linear-gradient(90deg, #44C662 1%, #3A6351 100%);
     position: absolute;
   top: 30px;
   left: 3px;
+  z-index: 2;
 }
 
 .bagde-flag-wrap::before {
@@ -1172,9 +1081,7 @@ text-decoration: none;
     color: #000;
 
 }
-.tandcBody{
-    
-}
+
 
 #OrderedItems{
     
@@ -1229,3 +1136,37 @@ text-decoration: none;
     color: #f8c331;
     font-size: 1rem;
 }
+
+/* return order */
+.return-reason-label {
+    margin-bottom: 20px;
+  }
+
+  .return-reason-textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+  }
+
+  .swal2-validation-error {
+    font-size: 14px;
+    color: rgb(247, 35, 35);
+  }
+  .returnRequestSubmit{
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    background-color: rgb(238, 60, 60) !important;
+    color: #fff !important;
+
+  }
+  .returnRequestCancel{
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    border: 1px solid black !important;
+    background-color: #fff !important;
+    color: #000 !important;
+  }

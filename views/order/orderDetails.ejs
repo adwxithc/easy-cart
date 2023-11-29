@@ -17,9 +17,11 @@
 
           <!-- storing order _id and product _id -->
 
-<input type="hidden" name="" id="orderId" value="<%=orderData._id%>">
-<input type="hidden" name="" id="productId" value="<%=orderData.items[0].product._id%>">
-            
+<input type="hidden" id="orderId" value="<%=orderData._id%>">
+<input type="hidden" id="productId" value="<%=orderData.items[0].product._id%>">
+<%if(orderData.items[0].returnStatus){%>
+<input type="hidden" id="returnStatus" value="<%=orderData.items[0].returnStatus%>">
+<%}%>
 
 
             <div class="col-lg-12 mx-auto">
@@ -39,7 +41,7 @@
                                 </div>
                                 <div>
                                   <%if(item.paymentStatus=='received'){%>
-                                  <a href="/api/downloadInvoice?orderId=<%=orderData._id%>" > <i class="mdi mdi-file-document"></i> <span class="invoice">Download Invoice</span></a>
+                                  <a href="/api/downloadInvoice?orderId=<%=orderData._id%>" id="invoice"> <i class="mdi mdi-file-document"></i> <span class="invoice">Download Invoice</span></a>
                                   <%}%>
                                 </div>
                               </div>
@@ -100,7 +102,30 @@
 
                               <!-- -------------------PROGRESS BAR-------------------- -->
                               <div id="progressDiv">
-                              <%if(item.orderStatus=='Canceled'){%>
+                              <%if(['returnPlaced','outForPick','returned'].includes(item.returnStatus)){%>
+                                <div class="" id="orderProgressBar">
+                                  <div class="stages">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="progress-stage stage-0" id="stage-0"></span>
+                                        <span class="progress-stage stage-2" id="stage-2"></span>
+                                        <span class="progress-stage stage-4" id="stage-4"></span>
+                                    </div>
+  
+                                    <div class="progress">
+                                        <div id="progress" class="progress-bar" role="progressbar" style="width: 0%; transition: width 2s ease-in-out;"></div>
+                                    </div>
+           
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                  <span>Return Placed</span>
+                                  <span>Out For Pick</span>
+                                  <span>Returned</span>
+                                </div>
+                                <div id="statusText" class="statusText" style="margin-top: 20px;">Return Placed</div>
+                                </div>
+
+
+                              <%}else if(item.orderStatus=='Canceled'){%>
                                 <div class="">
                                   <div class="stages">
                                     <div class="d-flex justify-content-between">
@@ -160,10 +185,10 @@
                                 <%if(item.orderStatus!='Canceled' && item.orderStatus!='Delivered'){%>
                                 <h5 class="fw-normal mb-0" id="cancelOrderH5"><a href="#!" id="cancelOrder" class="orderAction" >Cancel</a></h5>
                                 <%}else if(item.orderStatus=='Delivered'){%>
-                                <h5 class="fw-normal mb-0"><a href="/api/returnOrder?productId=<%=orderData.items[0].product._id%>&orderId=<%=orderData._id%>">Return</a></h5>
+                                <h5 class="fw-normal mb-0" id="returnOrderH5"><a href="#!" id="returnOrder" class="orderAction" productId="<%=orderData.items[0].product._id%>" orderId="<%=orderData._id%>">Return</a></h5>
 
                                 <%}%>
-                              
+                               
                               </div>
                             </div>
                           </div>
@@ -182,6 +207,7 @@
 </div>
 
 </section>
+
 
 <!-- ------------------------------------------------------singleCancelNotEligible ------------------------------------------------------>
 <div id="cancelNotEligibleModal" class="rmmodal">
@@ -217,9 +243,6 @@
   </div>
 </div>
 
+
 <script src="/static/user/userJs/order/orderDetails.js"></script>
-
-
-
-
 <%- include("../partials/userFooter.ejs") %>

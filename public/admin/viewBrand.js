@@ -132,35 +132,13 @@ function brandOperations(){
                         if(response.ok) return response.json()
                     })
                     .then(data=>{
-                        const modal=document.getElementById('viewModal')
-                        modal.style.display='block'
-                        document.getElementById('viewModal-content').innerHTML=data.message
+                        // const modal=document.getElementById('viewModal')
+                        // modal.style.display='block'
+                        // document.getElementById('viewModal-content').innerHTML=data.message
+                        showMessage(data.message)
 
-                        document.getElementById('closeBrandAlert').addEventListener('click',()=>{
+                        updateBrandStatus(data,brandId)
 
-                            const brand=document.getElementById(brandId)
-                            
-
-                            const statusChanger=brand.querySelector('.status')
-                            const statusInfo=brand.querySelector('.text-success,.text-danger')
-
-                            if(data.brandStatus){
-                                
-                                statusChanger.textContent="unlist"
-                                statusInfo.textContent='listed'
-                                statusInfo.classList.remove('text-danger')
-                                statusInfo.classList.add('text-success')
-                            }else{
-                                
-                                statusChanger.textContent="list"
-
-                                statusInfo.textContent="unlisted"
-                                statusInfo.classList.remove('text-success')
-                                statusInfo.classList.add('text-danger')
-
-                            }
-                        modal.style.display='none'
-                        })
                     })
 
                 })
@@ -235,7 +213,7 @@ function setupEditablelogo(selectedlogo, existingImageURL){
         // It's an existing image URL
        
         convertUrlToFile(logoToDisplay, (file) => {
-            console.log('------------',URL.createObjectURL(file))
+            // console.log('------------',URL.createObjectURL(file))
             imgElement.src = URL.createObjectURL(file);
 
         });
@@ -300,17 +278,12 @@ function setupEditablelogo(selectedlogo, existingImageURL){
                         imgElement.src = URL.createObjectURL(croppedFile);
                        
                         logoToDisplay=croppedFile
-                       
-
 
                     }, 'image/png');
 
                     document.getElementById('brandImgCrop').classList.add('hidden');
 
-
                 });
-
-                
 
                  cropper=new Cropper(cropperImage,{
                     aspectRatio:0,
@@ -318,9 +291,6 @@ function setupEditablelogo(selectedlogo, existingImageURL){
                 })
 
 },true)
-
-
-
         
         image.appendChild(imgElement);
         
@@ -362,14 +332,16 @@ function updateBrand(){
         })
         .then(data=>{
 
-            const modal=document.getElementById('viewModal')
-            modal.style.display='block'
-            document.getElementById('viewModal-content').innerHTML=data.message
+            // const modal=document.getElementById('viewModal')
+            // modal.style.display='block'
+            // document.getElementById('viewModal-content').innerHTML=data.message
+            showMessage(data.message)
 
-            document.getElementById('closeBrandAlert').addEventListener('click',()=>{
-                modal.style.display='none'
+
+            // document.getElementById('closeBrandAlert').addEventListener('click',()=>{
+            //     modal.style.display='none'
            
-            });
+            // });
 
         })
     })
@@ -392,5 +364,32 @@ function showlogoPreview(imgId,imgPreviewId){
     reader.readAsDataURL(file)
     }
 
+}
+
+function updateBrandStatus(data,brandId){
+   
+
+        const brand=document.getElementById(brandId)
+        
+
+        const statusChanger=brand.querySelector('.status')
+        const statusInfo=brand.querySelector('.text-success,.text-danger')
+
+        if(data.brandStatus){
+            
+            statusChanger.textContent="unlist"
+            statusInfo.textContent='listed'
+            statusInfo.classList.remove('text-danger')
+            statusInfo.classList.add('text-success')
+        }else{
+            
+            statusChanger.textContent="list"
+
+            statusInfo.textContent="unlisted"
+            statusInfo.classList.remove('text-success')
+            statusInfo.classList.add('text-danger')
+
+        }
+  
 }
 

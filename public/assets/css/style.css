@@ -8575,7 +8575,9 @@ pre {
   .jsgrid .jsgrid-table td {
     padding: 0.9375rem;
     vertical-align: top;
-    border-top: 1px solid #2c2e33; }
+    /* border-top: 1px solid #2c2e33; */
+    /* changed */
+   }
   .table thead th, .jsgrid .jsgrid-table thead th {
     vertical-align: bottom;
     border-bottom: 2px solid #2c2e33; }
@@ -9788,12 +9790,12 @@ input[type="button"].btn-block {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
-  color: #ffffff;
+  color: #000;
   text-align: left;
   list-style: none;
-  background-color: #191c24;
+  background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #2c2e33;
+  border: 1px solid #bab8b8;
   border-radius: 0.25rem; }
 
 .dropdown-menu-left {
@@ -9925,15 +9927,15 @@ input[type="button"].btn-block {
   padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
-  color: #ffffff;
+  color: #000;
   text-align: inherit;
   white-space: nowrap;
   background-color: transparent;
   border: 0; }
   .dropdown-item:hover, .dropdown-item:focus {
-    color: #16181b;
+    color: #fff;
     text-decoration: none;
-    background-color: #13151b; }
+    background-color: #bab8b8; }
   .dropdown-item.active, .dropdown-item:active {
     color: #fff;
     text-decoration: none;
@@ -19642,7 +19644,7 @@ body.avgrund-active {
   z-index: 1500; }
 
 .swal2-modal {
-  min-height: 315px;
+  /* min-height: 315px; */
   -webkit-align-items: center;
   align-items: center;
   -webkit-justify-content: center;

@@ -2,29 +2,31 @@
             <div class=" grid-margin stretch-card px-5 p-4" id="categ">
                 <div class="card">
                   <div class="card-body">
-                    <% if(locals.key){%>
-                      <h4 class="card-title">Search result for <%=key%></h4>
-                      <%}else{%>
-                    <h3 class="card-title">Coupones</h3>
-                    <%}%>
 
-                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="couponeSearch">
+                    <div class="px-auto">
+                      <% if(locals.key){%>
+                        <h4 class="card-title">Search result for <%=key%></h4>
+                        <%}else{%>
+                      <h2 class="card-title ">Coupones</h2>
+                      <%}%>
+                    </div>
+
+                    <form class="nav-link mt-2 d-flex justify-content-end search" id="couponeSearch">
                       <input type="text" class="form-control" placeholder="Search Coupones" id="searchKey">
                       <button class="btn btn-dark p-2" type="submit">Search</button>
                     </form>
 
-                    <p class="card-description" id="alertMessage">
                    
                     </p>
                     <div class="table-responsive">
                     <%if(locals.coupones){%>
-                      <table class="table table-hover" id="">
-                        <thead>
+                      <table class="table table-hover table-borderless" id="">
+                        <thead class="border-bottom">
                           <tr>
                            
                             <th>Code</th>
-                            <th>Min Purchase Amount</th>
-                            <th>Max Purchase Amount</th>
+                            <th>Min Purchase Amt.</th>
+                            <th>Max Purchase Amt.</th>
                             <th>Discount</th>
                             <th>Start Date</th>
                             <th>Expire Date</th>

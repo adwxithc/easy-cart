@@ -515,6 +515,15 @@ const updatePassword=async(req,res)=>{
     }
 }
 
+const loadContact=async(req,res)=>{
+    try {
+        res.render('contact')
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:'Internal Server Error'})
+    }
+}
+
 module.exports={
     guest,
     productDetails,
@@ -539,5 +548,7 @@ module.exports={
     updateAddress,
     deleteAddress,
     changePassword,
-    updatePassword
+    updatePassword,
+
+    loadContact
 }

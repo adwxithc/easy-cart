@@ -3,28 +3,28 @@
     <div class="card ">
       <div class="card-body">
         
+        <div class="d-flex justify-content-center">
+          <% if(locals.key){%>
+            <h4 class="card-title">Search result for <%=key%></h4>
+            <%}else{%>
+              <h2 class="card-title">Users</h2>
+          <%}%>
+        </div>
 
-        <% if(locals.key){%>
-          <h4 class="card-title">Search result for <%=key%></h4>
-          <%}else{%>
-            <h4 class="card-title">Users</h4>
-        <%}%>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        <!-- </p> -->
         <input type="hidden" value="<%=locals.currentPage%>" id="cur">
         <input type="hidden" value="<%=locals.totalpages%>" id="totp">
 
-        <div class="table-responsive ">
-
-
-          <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="userSearch">
+        <form class="nav-link mt-2  search " id="userSearch">
+          <div class="d-flex justify-content-end">
             <input type="text" class="form-control" placeholder="Search Categories" id="searchKey">
             <button class="btn btn-dark p-2" type="submit">Search</button>
-          </form>
+          </div>
+        </form>
 
-            <p class="card-description" id="alertMessage"></p>
-          <table class="table table-hover">
-            <thead>
+        <div class="table-responsive ">
+
+          <table class="table table-hover table-borderless">
+            <thead class="border-bottom">
               <tr>
                 <th>Full Name</th>
                 <th>Mobile</th>
@@ -43,8 +43,8 @@
                 <td><%=users[i].fname  +" "+users[i].lname %></td>
                 <td><%= users[i].mobile %></td>
                 <td><%=users[i].email %></td>
-                <td><%= users[i].joinDate %></td>
-                <td><button type="button" class="btn <%= users[i].status ? 'btn-outline-danger' : 'btn-outline-success' %> btn-fw status" userId="<%= users[i]._id %>">
+                <td><%= new Date(users[i].createdAt).toLocaleDateString() %></td>
+                <td><button type="button" class="btn <%= users[i].status ? 'btn-outline-danger' : 'btn-outline-success' %>  status" userId="<%= users[i]._id %>">
 
                     <%
                     if(users[i].status){
@@ -69,36 +69,42 @@
 
           <div id="myModal" class="modal">
             <div class="modal-content " >
-              <span class="close" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
+              <span class="close d-flex justify-content-end" id="closeBtn"><i class="mdi mdi-window-close"></i></span>
               <p>Are you sure you want to block/unblock this user?</p>
-              <button id="confirmBtn">Confirm</button>
+              <div class="d-flex justify-content-center">
+                <button id="confirmBtn" class="button-24" role="button">Confirm</button>
+              </div>
+              
             </div>
           </div>
           
+          
+          <div class="d-flex justify-content-center p-3">
+            <%if(locals.pagination){%>
+              <nav aria-label="Page navigation example" id="pagination">
+                <ul class="pagination">
+                  <li class="page-item" id="prev">
+                    <a class="page-link" href="#" aria-label="Previous">
+                      <span aria-hidden="true" >&laquo;</span>
+                      <span class="sr-only" >Previous</span>
+                    </a>
+                  </li>
+                  <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+                  <li class="page-item" ><a class="page-link" href="#" id="current">1</a></li>
+                  
+                  <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                  <li class="page-item" id="next">
+                    <a class="page-link" href="#" aria-label="Next">
+                      <span aria-hidden="true" >&raquo;</span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              <%}%>
+          </div>
 
 
-          <%if(locals.pagination){%>
-          <nav aria-label="Page navigation example" id="pagination">
-            <ul class="pagination">
-              <li class="page-item" id="prev">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true" >&laquo;</span>
-                  <span class="sr-only" >Previous</span>
-                </a>
-              </li>
-              <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
-              <li class="page-item" ><a class="page-link" href="#" id="current">1</a></li>
-              
-              <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-              <li class="page-item" id="next">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true" >&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <%}%>
 
         </div>
       </div>

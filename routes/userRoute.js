@@ -52,6 +52,10 @@ user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChange
 // shop
 user_route.get('/shop',shopController.loadShop)
 user_route.post('/searchProduct',userController.searchProduct)
-user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts)
+user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
+
+//CONTACT
+
+user_route.get('/contact',userController.loadContact)
 
 module.exports=user_route

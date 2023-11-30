@@ -22,9 +22,9 @@ function postUpdation(){
                 })
                 if(response.ok){
                     const data=await response.json()
-                    document.getElementById("alertMessage").innerHTML=data.message
-                    document.getElementById("alertMessage").classList.add("text-info")
-                    clearAlert()
+       
+                    showMessage(data.message)
+
 
                 }else{
                     throw new Error("failed to update")

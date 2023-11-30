@@ -11,7 +11,6 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
             // view category
 
-
                 const pageUrl = '/admin/viewCategory';
 
                 fetch(pageUrl)
@@ -32,25 +31,15 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         scriptexist.parentNode.removeChild(scriptexist);
                     }
 
-
                     const script2=document.createElement('script');
                     script2.src=scriptSrc;
-                    document.body.appendChild(script2);
-
-                    
-
-                    
+                    document.body.appendChild(script2); 
 
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
                     window.location.href='/admin/500'
                 });
-        
-
-
-
-        
 
         //if closed  
     
@@ -412,9 +401,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                                     }
 
-                                    // Handle the response from the server
-                                    document.getElementById('alertMessage').textContent = data.message;
-                                    clearAlert()
+                                    showMessage(data.message)
 
                                     document.getElementById('addProductForm').scrollIntoView({
                                         behavior: 'smooth', // You can use 'auto' for instant scrolling
@@ -714,3 +701,18 @@ function resetErrormsg(){
     },true)
 }
 resetErrormsg()
+
+
+function showMessage(message){
+    Swal.fire({
+        position:'bottom',
+        html: `
+            <div class="p-3 ">
+                    ${message}
+            </div>
+        `,
+        showConfirmButton: false,
+        timer: 2500,
+        
+      });
+  }

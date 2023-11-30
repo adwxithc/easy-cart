@@ -712,7 +712,7 @@ const categorySearch=async(req,res)=>{
         res.render('viewCategory',{categories:categories,key:req.query.key})
         }else{
             
-            res.json({"message":`No Category Exist with name ${req.query.key}`})
+            res.json({"message":`No Category Exist with name '${req.query.key}'`})
         }
 
         
@@ -802,7 +802,7 @@ const insertCategory=async(req,res)=>{
         const description=req.body.categoryDescription
 
         if(name&&description){
-            const check=await Category.findOne({name:{$regex:new RegExp(`^${req.body.categoryName}`,'i')}})
+            const check=await Category.findOne({name:req.body.categoryName})
             
             if(!check){
                 const categor=new Category({

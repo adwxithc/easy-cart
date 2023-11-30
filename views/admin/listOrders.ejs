@@ -6,14 +6,11 @@
                   <input type="hidden" value="<%=locals.totalpages%>" id="totp">
 
 
-                  <p class="card-description" id="alertMessage">
-                 
-                  </p>
                   <div class="table-responsive">
 
-                    <table class="table table-hover" id="">
-                      <thead>
-                        <tr>
+                    <table class="table table-hover table-borderless" id="" >
+                      <thead class="border-bottom">
+                        <tr >
                           <th>Order Id</th>
                           <th>Total</th>
                           <th>Placed On</th>
@@ -30,16 +27,19 @@
                           for(let order of orders){
                             
                           %>
-                        <tbody>
+                        <tbody >
             
-                          <tr>
-                            <td><%=order.orderNumber%></td>
-                            <td><%=order.totalAmount%></td>
-                            <td> <%=new Date(order.createdAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%></td>
-                            <td> <%=new Date(order.updatedAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%></td>
+                          <tr  style="padding:1rem 0 ;">
+                            <td ><%=order.orderNumber%></td>
+                            <td ><%=order.totalAmount%></td>
+                            <td > <%=new Date(order.createdAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%></td>
+                            <td > <%=new Date(order.updatedAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%></td>
 
                             
-                            <td><a href="#" class="btn btn-dark btn-rounded orderOption manageOrder" orderId="<%=order._id%>">Manage</a></td>
+                            <td>
+                              <!-- <a href="#" class="btn btn-warning p-3 btn-rounded orderOption manageOrder" orderId="<%=order._id%>">Manage</a> -->
+                              <button class="button-24 orderOption manageOrder" role="button" orderId="<%=order._id%>" >Manage</button>
+                            </td>
                           </tr>
                           
                         </tbody>
@@ -51,35 +51,31 @@
                       </tbody>
                     </table>
 
-
-
-
-
-
-
-
-                    <%if(locals.pagination){%>
-                    <nav aria-label="Page navigation example" id="pagination">
-                      <ul class="pagination ">
-                        <li class="page-item  ">
-                          <a class="page-link orderOption" href="#" aria-label="Previous" id="prevOrders">
-                            <span aria-hidden="true" >&laquo;</span>
-                            <span class="sr-only" >Previous</span>
-                          </a>
-                        </li>
-                        <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
-                        <li class="page-item" ><a class="page-link " href="#" id="currentorders">1</a></li>
-                        
-                        <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-                        <li class="page-item"  >
-                          <a class="page-link orderOption" href="#" aria-label="Next"  id="nextOrders">
-                            <span aria-hidden="true" >&raquo;</span>
-                            <span class="sr-only">Next</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                    <%}%>
+                      <div class="d-flex justify-content-center p-3">
+                        <%if(locals.pagination){%>
+                          <nav aria-label="Page navigation example" id="pagination">
+                            <ul class="pagination ">
+                              <li class="page-item  ">
+                                <a class="page-link orderOption" href="#" aria-label="Previous" id="prevOrders">
+                                  <span aria-hidden="true" >&laquo;</span>
+                                  <span class="sr-only" >Previous</span>
+                                </a>
+                              </li>
+                              <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+                              <li class="page-item" ><a class="page-link " href="#" id="currentorders">1</a></li>
+                              
+                              <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                              <li class="page-item"  >
+                                <a class="page-link orderOption" href="#" aria-label="Next"  id="nextOrders">
+                                  
+                                  <span aria-hidden="true" >&raquo;</span>
+                                  <span class="sr-only">Next</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </nav>
+                          <%}%>
+                      </div>
 
                   </div>
                 </div>

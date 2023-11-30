@@ -51,10 +51,10 @@ if(!(name&&description&&category&&stock&&price&&size&&images)){
     stockError.innerHTML="stock should be a positive number";
     return false
 }else if(isNaN(price)){
-    stockError.innerHTML="price should be a number";
+    priceError.innerHTML="price should be a number";
     return false
 }else if(price<0){
-    stockError.innerHTML="price should be a positive number";
+    priceError.innerHTML="price should be a positive number";
     return false
 }else{
     return true

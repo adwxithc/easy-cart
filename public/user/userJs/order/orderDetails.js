@@ -21,7 +21,7 @@ function showOrderCancelProgress(){
   }, 1000);
 }
 
-//SGOWING RETURN PROGRESS
+//SHOWING RETURN PROGRESS
 
 function showReturnProgress(status){
   if(status=='returnPlaced'){
@@ -31,7 +31,7 @@ function showReturnProgress(status){
 
  }else if(status=='outForPick'){
     setTimeout(() => {
-      updateProgress('0%', 'Return Placed','stage-0');
+      updateProgress('5%', 'Return Placed','stage-0');
       }, 200);
 
       setTimeout(() => {
@@ -43,7 +43,7 @@ function showReturnProgress(status){
     
 
     setTimeout(() => {
-      updateProgress('0%', 'Return Placed','stage-0');
+      updateProgress('5%', 'Return Placed','stage-0');
       }, 200);
 
       setTimeout(() => {

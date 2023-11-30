@@ -138,9 +138,8 @@ function blockOrUnblockUser(){
             }
         })
         .then(data=>{
-            document.getElementById("alertMessage").innerHTML=data.message
-            document.getElementById("alertMessage").classList.add("text-info")
-            clearAlert()
+
+            showMessage(data.message)
             const statusBtn=document.querySelector(`[userId='${id}']`)
             if(data.status=='blocked'){
                 statusBtn.textContent='unblock';
@@ -164,7 +163,7 @@ blockOrUnblockUser()
 
 
 
-//categorySearch
+//Search
 function searchUser(){
    
   
@@ -193,11 +192,8 @@ function searchUser(){
         // Check if the response is JSON or HTML
         if (typeof data === 'object') {
           // Handle JSON response (e.g., error)
-          
-          document.getElementById("alertMessage").innerHTML=data.message
-          document.getElementById("alertMessage").classList.add("text-info")
-          clearAlert()
-          // You can handle the JSON data here, e.g., display an error message
+          showMessage(data.message)
+         
         } else {
           // Handle HTML response
           document.getElementById('pageContent').innerHTML = data;
@@ -225,3 +221,4 @@ function searchUser(){
   }
   searchUser()
   
+

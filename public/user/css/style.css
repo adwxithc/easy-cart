@@ -61,7 +61,7 @@
     text-decoration: none;
     color: white;
     font-weight: 500;
-    
+    cursor: pointer;
 }
 .yellowBtn{
 
@@ -73,6 +73,7 @@
     text-decoration: none;
     color: rgb(255, 255, 255);
     font-weight: 500;
+    cursor: pointer;
 }
 
 .yellowBtn:hover{
@@ -832,7 +833,8 @@
     
     height: 400px; /* Adjust this value based on your design */
     overflow: hidden;
-    padding: 0.5rem;
+    
+    
 }
 
 .product-image-container:hover .product-image {
@@ -842,7 +844,7 @@
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
 
@@ -1170,3 +1172,68 @@ text-decoration: none;
     background-color: #fff !important;
     color: #000 !important;
   }
+
+
+  /* banner */
+
+  .banner-item{
+    height: 800px;
+	padding-top: 230px;
+  }
+
+
+  @media only screen and (max-width: 479px) {
+	.banner-item {
+		height: auto;
+		padding-top: 130px;
+		padding-bottom: 40px;
+	}
+
+ }
+	.hero__text h2 {
+		font-size: 36px;
+		line-height: 48px;
+        font-weight: 700;
+	}
+    .hero__text h6{
+        color: #ffba00;
+    }
+    .hero__text p{
+        color: #000000d2;
+    }
+	.hero__social {
+		margin-top: 145px;
+	}
+
+
+
+
+
+.dark-btn{
+    padding: 18px 28px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #000;
+    border: 1.5px solid #000;
+    line-height: 50px;
+    border-radius: 40px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    transform: translateY(-2px);
+    
+}
+
+.fa-facebook,.fa-twitter,.fa-pinterest,.fa-instagram{
+    margin-top: 1rem;
+    color: #000;
+    font-size: large;
+    margin: 1rem;
+}
+
+.dark-btn:hover{
+    background-color: #fff;
+    color: #000;
+
+}

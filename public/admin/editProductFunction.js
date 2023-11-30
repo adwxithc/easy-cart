@@ -125,18 +125,13 @@ function updateProduct(){
             })
             .then(data=>{
                 
-                document.getElementById('alertMessage').innerHTML=data.message
-                clearAlert()
-
-                document.getElementById('editProductForm').scrollIntoView({
-                    behavior: 'smooth', // You can use 'auto' for instant scrolling
-                    block: 'start' // Scroll to the top of the form
-                });
+                showMessage(data.message)
+            
             })
             .catch((er)=>{
                 console.log(er)
                 
-                // window.location.href='/admin/500'
+                window.location.href='/admin/500'
             })
     }
 
@@ -187,8 +182,7 @@ function updateProduct(){
 
 
                     function setupEditableImages(selectedImages, existingImageURLs){
-                        console.log('---selectedImages-------',selectedImages)
-                        console.log('----existingImageURLs---',existingImageURLs)
+                   
 
                         const imagesToDisplay = selectedImages.length > 0 ? selectedImages : existingImageURLs;
                         selectedImagesArray=[]
@@ -220,7 +214,7 @@ function updateProduct(){
                             
                             
 
-                            console.log('selectedImagesArray--------------after file conversion',selectedImagesArray)
+                            
                     
 
                             // ----------------------------------crop image
@@ -309,7 +303,7 @@ function updateProduct(){
                                                 imgElement.src = URL.createObjectURL(croppedFile);
                                                
                                                 selectedImagesArray[index].image=croppedFile
-                                               console.log('at save crop ----------',selectedImagesArray)
+                                              
     
             
                                             }, 'image/png');
@@ -334,7 +328,6 @@ function updateProduct(){
                             image.appendChild(cropButton);
                             imagePreviewContainer.appendChild(image);
 
-                           
                         }
                     }
                     

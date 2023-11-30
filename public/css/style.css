@@ -48,7 +48,7 @@
   }
 
   
-  .modal-content{
+  .preview-Modal-content{
     position: fixed;
     top: 50%; /* Center vertically */
     left: 50%; /* Center horizontally */
@@ -57,6 +57,22 @@
     
     padding: 20px;
   }
+
+  .modal{
+    background-color: #0000007b;
+  }
+
+  .modal-content{
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    max-width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    padding: 20px;
+    border: 0;
+  }
+
 
 
   .viewProductDetailsModal{
@@ -93,6 +109,10 @@
  
   }
 
+  .mdi-close-circle,.mdi-crop-free{
+    color: rgb(53, 234, 53);
+  }
+
   /* Hide the default scrollbar */
 .viewProductDetailsModal::-webkit-scrollbar {
   width: 0.2em; /* Set the width to a very small value */
@@ -115,6 +135,7 @@
 
   #searchKey{
     max-width: 40%;
+    
   }
 
 /* view product */
@@ -483,9 +504,11 @@
   top: 50%;
   max-height: 35rem;
   width: auto;
+ 
   transform: translate(-50%, -50%);
   background-color: #fff;
   padding: 2rem;
+  padding-top: 0.5rem;
   
   border-radius: 5px;
   object-fit: contain;
@@ -727,4 +750,58 @@ background: linear-gradient(90deg, rgba(216,0,50,1) 1%, rgba(0,0,0,1) 100%);
 .timePeriod:hover{
   color: #fff;
   background-color: rgb(3, 3, 182);
+}
+
+.noBorder{
+  border: 0 !important;
+}
+.page-link{
+  background-color: white;
+  color: #000;
+  padding: 0.5rem  1.5rem;
+}
+
+/* button */
+
+/* CSS */
+.button-24 {
+  background: #FFB200;
+  border: 1px solid #FFB200;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 10px 14px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+
+.button-24:hover,
+.button-24:active {
+  background-color: initial;
+  background-position: 0 0;
+  color: #FFB200;
+}
+
+.button-24:active {
+  opacity: .5;
+}
+#alertMessage{
+  background-color: rgba(255, 255, 0, 0.197);
+  border:1.5px solid  rgb(255, 221, 1);
+  padding: 1rem;
+  color: black;
 }

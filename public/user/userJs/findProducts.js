@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function displaySearchresult(products,cart){
 
-document.getElementById('searchedProductList').innerHTML=''                             
+    document.getElementById('searchedProductList').innerHTML=''                             
         
 
         for(let product of products){
@@ -137,7 +137,7 @@ document.getElementById('searchedProductList').innerHTML=''
         let cartOption=``
         if(!InCart && product.stock > 0){
             cartOption=`
-             <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" id="${'addCart'+product._id}">
+             <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" role="addCart${product._id}" >
              <span class="ti-bag searchAction easyAddToCart" productId="${product._id}"></span>
              <p class="hover-text searchAction easyAddToCart" productId="${product._id}" >add to cart</p>
              </a>
@@ -182,10 +182,7 @@ document.getElementById('searchedProductList').innerHTML=''
 
                             ${cartOption}
 
-                            <a href="" class="social-info">
-                                <span class="lnr lnr-heart"></span>
-                                <p class="hover-text">Wishlist</p>
-                            </a>
+
 
                             <a href="/productDetails?id=${product._id}" target='_blank' class="social-info">
                                 <span class="lnr lnr-move"></span>
@@ -327,16 +324,20 @@ function addSingleProductToCart(productId,quantity){
 }
 
 function setEasyGotoCart(productId){
-    // alert('setEasyGotoCart')
-    const addToCartBtn=document.getElementById(`addCart${productId}`)
-  
-    addToCartBtn.classList.remove('searchAction')
-    addToCartBtn.classList.remove('easyAddToCart')
    
+    const addToCartBtns=document.querySelectorAll(`[role="${'addCart'+productId}"]`)
+    console.log('-------------------',addToCartBtns)
+    for(let btn of addToCartBtns){
+        btn.classList.remove('searchAction')
+        btn.classList.remove('easyAddToCart')
+       
+    
+        btn.setAttribute('href','/api/goToCart')
+        btn.innerHTML=`
+        <span class="ti-bag "></span>
+        <p class="hover-text">go to cart</p>
+        `
+    }
+  
 
-    addToCartBtn.setAttribute('href','/api/goToCart')
-    addToCartBtn.innerHTML=`
-    <span class="ti-bag "></span>
-    <p class="hover-text">go to cart</p>
-    `
 }

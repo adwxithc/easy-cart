@@ -8,6 +8,7 @@ const reportController=require('../controller/reportController')
 const couponeController=require('../controller/couponeController')
 const checkExist=require('../middleware/checkExist')
 const offerController=require('../controller/offerController')
+const bannerController=require('../controller/bannerController')
 
 const session=require('express-session')
 const multer=require('multer')
@@ -145,6 +146,10 @@ admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.singleProdu
 admin_route.patch('/removeOffer',checkExist.singleProduct,offerController.removeOffer)
 admin_route.patch('/applyOfferToCategory',checkExist.offer,checkExist.category,offerController.applyOfferToCategory)
 admin_route.patch('/removeCategoryOffer',checkExist.category,offerController.removeCategoryOffer)
+
+
+//banner
+admin_route.get('/banner',bannerController.loadBanner)
 
 //errors
 admin_route.get('/404',adminController.error404);

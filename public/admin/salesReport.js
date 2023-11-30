@@ -154,6 +154,7 @@ function areaChart(labels, data) {
     // Extract AOV values from the results
     const currentTotalOrder = current ? current : 0;
     const previousTotalOrder = previous ? previous : 0;
+    console.log(currentTotalOrder,previousTotalOrder)
     let potentialGrowth;
     if(previousTotalOrder>0){
     // Calculate potential growth

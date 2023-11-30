@@ -41,9 +41,8 @@ function viewProduct(){
                         
                         })
                         .then(data=>{
-                            
-                            document.getElementById('alertMessage').textContent = data.message;
-                            clearAlert()
+
+                            showMessage(data.message)
 
                             const product=document.getElementById(productId)
                             
@@ -251,12 +250,8 @@ function searchProduct(){
         })
         .then(data=>{
             if (typeof data === 'object') {
-                // Handle JSON response (e.g., error)
-                
-                document.getElementById("alertMessage").innerHTML=data.message
-                
-                clearAlert()
-                // You can handle the JSON data here, e.g., display an error message
+
+                showMessage(data.message)
               } else {
                 // Handle HTML response
                 document.getElementById('pageContent').innerHTML = data;

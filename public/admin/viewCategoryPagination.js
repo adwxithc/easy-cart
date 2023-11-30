@@ -142,10 +142,8 @@ statusButtons.forEach(button => {
       }
     })
     .then(data => {
-      // Handle the successful response
-      document.getElementById("alertMessage").innerHTML=data.message
-      document.getElementById("alertMessage").classList.add("text-info")
-      clearAlert()
+
+      showMessage(data.message)
 
       const categoryRow = document.getElementById(categoryID);
       
@@ -274,9 +272,8 @@ function categorySearch(){
       if (typeof data === 'object') {
         // Handle JSON response (e.g., error)
         
-        document.getElementById("alertMessage").innerHTML=data.message
-        document.getElementById("alertMessage").classList.add("text-info")
-        clearAlert()
+  
+        showMessage(data.message)
         // You can handle the JSON data here, e.g., display an error message
       } else {
         // Handle HTML response

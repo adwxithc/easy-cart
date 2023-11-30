@@ -36,7 +36,8 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
         if(data.success) document.getElementById('addCategoryForm').reset();
 
         // Handle the response from the server
-        document.getElementById('adCategoryalert').textContent = data.message;
+       
+        showMessage(data.message)
 
         document.getElementById('addCategoryForm').scrollIntoView({
             behavior: 'smooth', // You can use 'auto' for instant scrolling

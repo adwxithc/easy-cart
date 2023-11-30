@@ -152,9 +152,9 @@ function postBrand(){
             }
 
             
-            const modal=document.getElementById('viewModal')
-            modal.style.display='block'
-            document.getElementById('viewModal-content').innerHTML=data.message
+
+            //SHOW RESPONSE
+            showMessage(data.message)
 
 
             document.getElementById('closeBtn').addEventListener('click',()=>{

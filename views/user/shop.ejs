@@ -166,20 +166,20 @@
 											<% let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false %>
 											
 											<%if(!InCart && product.stock > 0){%>
-                                            <a href="#" class="social-info searchAction easyAddToCart" productId="<%=product._id%>" id="<%='addCart'+product._id%>">
+                                            <a href="#" class="social-info searchAction easyAddToCart" productId="<%=product._id%>" role="<%= 'addCart' + product._id%>">
                                                 <span class="ti-bag searchAction easyAddToCart" productId="<%=product._id%>"></span>
                                                 <p class="hover-text searchAction easyAddToCart" productId="<%=product._id%>" >add to cart</p>
                                             </a>
-											<%}else{%>
+											<%}else if(product.stock > 0){%>
 												<a href="/api/goToCart" class="social-info">
 													<span class="ti-bag "></span>
 													<p class="hover-text">go to cart</p>
 												</a>
 											<%}%>
-                                            <a href="" class="social-info">
+                                            <!-- <a href="" class="social-info">
                                                 <span class="lnr lnr-heart"></span>
                                                 <p class="hover-text">Wishlist</p>
-                                            </a>
+                                            </a> -->
 
                                             <a href="/productDetails?id=<%=product._id%>" target="_blank" class="social-info">
                                                 <span class="lnr lnr-move"></span>

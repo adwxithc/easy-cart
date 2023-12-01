@@ -179,6 +179,7 @@ const Order=require('../model/orderModel')
         {
           $match: {
             'items.orderStatus': 'Delivered',
+            'items.paymentStatus':'received',
             'items.itemUpdatedAt': {
               $gte: startDate,
               $lte: currentDate,

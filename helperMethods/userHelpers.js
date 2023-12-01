@@ -484,6 +484,52 @@ const eligibleForReturn=async(product,order)=>{
   
 }
 
+async function getMostSoldCategories(){
+    try {
+      const mostSoldCategories = await Order.aggregate([
+        { $unwind: '$items' },
+        {
+          $match:{
+            'items.orderStatus':'Delivered',
+            'items.paymentStatus':'received'
+          }
+        }, // Flatten the array of items
+        {
+          $lookup: {
+            from: 'products', // Adjust to the actual name of your Product collection
+            localField: 'items.product',
+            foreignField: '_id',
+            as: 'productDetails',
+          },
+        },
+        { $unwind: '$productDetails' },
+        { $unwind: '$productDetails.category' }, // Unwind the array of categories
+
+        { $group: { _id: '$productDetails.category', totalQuantitySold: { $sum: '$items.quantity' }, product: { $first: '$productDetails' } } }, // Group by category and calculate total quantity sold
+        {
+          $lookup: {
+            from: 'categories', // Adjust to the actual name of your Category collection
+            localField: '_id',
+            foreignField: '_id',
+            as: 'categoryDetails',
+          },
+        }, 
+        {
+          $match:{
+            'categoryDetails.status':true
+          }
+        },
+        { $sort: { totalQuantitySold: -1 } }, // Sort in descending order based on total quantity sold
+        // { $limit: 6 },
+// Limit to the first six categories
+      ]);
+      
+      return mostSoldCategories
+    } catch (error) {
+      throw new Error(error)
+    }
+
+}
 
 
 
@@ -499,5 +545,6 @@ module.exports={
     setCouponeApplied,
     setNewOrderTotal,
     generateInvoice,
-    eligibleForReturn
+    eligibleForReturn,
+    getMostSoldCategories
 }

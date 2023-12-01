@@ -1,0 +1,102 @@
+<%- include('../partials/header.ejs') -%>
+<input type="hidden" name="" id="editBannerFlag" value="/static/bannerImages/<%=banner.bannerBackground%>" bannerId="<%=banner._id%>">
+
+<form class="forms-sample"  method="POST" id="bannerForm" >
+<div class="grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-center">
+                <h3 class="card-title ">Edit Banner</h>
+            </div>
+            <div class="form-group mt-2 setWidth" >
+                <label for="miniTitle">Mini Title</label>
+                <input type="text" class="form-control" placeholder="Mini Title" name="miniTitle" id="miniTitle" value="<%=banner.miniTitle%>">
+                <div id="miniTitleError" class="error"></div>
+            </div>
+            <div class="form-group mt-2 setWidth" >
+                <label for="mainTitle">Main Title</label>
+                <input type="text" class="form-control" placeholder="Main Title" name="mainTitle" id="mainTitle" value="<%=banner.mainTitle%>">
+                <div id="mainTitleError" class="error"></div>
+            </div>
+
+            <div class="form-group mt-2 setWidth" >
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="description" cols="30" rows="5" ><%=banner.description%></textarea>
+                <div id="descriptionError" class="error"></div>
+            </div>
+
+            <div class="form-group mt-2 setWidth" >
+                <label for="link">Link</label>
+                <input type="text" class="form-control" placeholder="Link" name="link" id="link" value="<%=banner.link%>">
+                <div id="linkError" class="error"></div>
+            </div>
+
+            <div class="d-flex flex-column align-items-center">
+                <div class="form-group py-4 mr-3 col-2">
+                    <label for="banner-upload" >Upload Banner</label>
+                    <input type="file" class="form-control"  id="banner-upload" name="bannerBackground">
+                    <div id="imgError" class="error"></div>
+                </div>
+                <div id='banner-image-preview' class="banner-image-preview" >
+                    <i class="mdi mdi-crop cropBanner" id="crop-banner-img"></i>
+                    <img src="/static/bannerImages/<%=banner.bannerBackground%>" alt="" class="banner-img" id="banner-img">
+                </div>
+            </div>
+
+
+
+
+            <div class="d-flex justify-content-center">
+                <input type="button" class="btn btn-success m-2" name="" id="updateBanner" value="Save">
+                <input type="button" class="btn btn-primary m-2" value="preview" id="preViewBanner">
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+
+<!-- Start Banner Area -->
+
+<div class="single-banner" id="bannerPreview">
+    <div class="carousel-item banner-item active" data-bs-interval="5000"  id="bannerBackGroundImg">
+        <div class="container" >
+            <div class="row">
+                <div class="col-xl-5 col-lg-7 col-md-8">
+                    <div class="hero__text">
+                        <h6 id="bannerMiniTitle">Summer Collection</h6>
+                        <h2 id="bannerMainTitle">Fall - Winter Collections 2030</h2>
+                        <p id="bannerDescription">A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                        commitment to exceptional quality.</p>
+                        <a href="#" class="dark-btn" id="bannerLink">Shop now</a>
+                        <div class="hero__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Banner Area -->
+
+<!-- BANNER IMAGE CROPPING MODAL -->
+<div id="bannerCrop" class="img-modal">
+  
+    <div  class="img-modal-content">
+      <span class="img-close" id="bannerImgCropClose" style="font-size: large;">&times;</span>
+      <div id="bannerImgCrop-content">
+        <img src="" alt="" class="bannerCropImg" id="bannerCropImg">
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <input type="button" name="" id="saveCropedImg" class="saveCrop " value="Save">
+    </div>
+
+    </div>
+  </div>
+
+<%- include('../partials/footer.ejs') %>

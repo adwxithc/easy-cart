@@ -42,10 +42,6 @@ function imagePreview(){
 
             cropButton.addEventListener('click',(e)=>{
                         
-                
-                
-             
-                    
 
                    
                     const imgSrc=image.src;
@@ -157,9 +153,6 @@ function postBrand(){
             showMessage(data.message)
 
 
-            document.getElementById('closeBtn').addEventListener('click',()=>{
-                modal.style.display='none'
-            })
         })
         .catch((er)=>{
             console.log(er)

@@ -5,6 +5,7 @@ const Category=require('../model/categoryModel')
 const Cart=require('../model/cartModel')
 const Order=require('../model/orderModel')
 const User=require('../model/userModel')
+const Banner=require('../model/bannerModel')
 const { default: mongoose } = require("mongoose")
 
 const coupone=async(req,res,next)=>{
@@ -268,6 +269,26 @@ const hasCart=async(req,res,next)=>{
     }
 }
 
+const banner=async(req,res,next)=>{
+    try {
+        
+        const bannerId = req.query.bannerId || req.body.bannerId;
+        
+        
+        const exist=await Banner.findOne({_id:new mongoose.Types.ObjectId(bannerId),deleted:false})
+     
+
+        if(exist){
+            req.banner=exist;
+            next()
+        }else{
+            res.status(400).json({success:false,message:"This banner doesn't exist"})
+        }
+        
+    } catch (error) {
+        
+    }
+}
 
 
 
@@ -285,6 +306,7 @@ module.exports={
     orderId,
     orderForAdmin,
     refer,
-    hasCart
+    hasCart,
+    banner
 
 }

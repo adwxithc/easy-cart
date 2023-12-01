@@ -56,6 +56,20 @@ const brandStorage=multer.diskStorage({
 const updateLogo=multer({storage:brandStorage})
 
 
+//seting up storage engine of banner image
+const bannerStorage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,path.join(__dirname,'../public/bannerImages'))
+
+    },
+    filename:function(req,file,cb){
+        const name=Date.now()+'-'+file.originalname
+        cb(null,name)
+    }
+})
+const updateBannerImage=multer({storage:bannerStorage})
+
+
 //parsing user req data
 admin_route.use(express.urlencoded({extended:true}))
 admin_route.use(express.json())
@@ -150,6 +164,12 @@ admin_route.patch('/removeCategoryOffer',checkExist.category,offerController.rem
 
 //banner
 admin_route.get('/banner',bannerController.loadBanner)
+admin_route.get('/addBanner',bannerController.loadAddBanner)
+admin_route.post('/addBanner',updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.addBanner)
+admin_route.put('/updateBannerStatus',checkExist.banner,bannerController.updateBannerStatus)
+admin_route.get('/editBanner',checkExist.banner,bannerController.loadEditBanner)
+admin_route.put('/updateBanner',checkExist.banner,updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.updateBanner)
+admin_route.delete('/deleteBanner',checkExist.banner,bannerController.deleteBanner)
 
 //errors
 admin_route.get('/404',adminController.error404);

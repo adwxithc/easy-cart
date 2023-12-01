@@ -14,6 +14,7 @@ fetch('/admin/getStats')
 
 
 function showTransactionStats(stats){
+  if(!document.getElementById('ot')) return;
     document.getElementById('ot').innerHTML='\u20B9'+stats.totaltransactions[1]
     document.getElementById('cod').innerHTML='\u20B9'+stats.totaltransactions[2]
     document.getElementById('wt').innerHTML='\u20B9'+stats.totaltransactions[0]
@@ -96,6 +97,7 @@ function showTransactionStats(stats){
 }
 
 
+if(document.getElementById('listedUsers')){
     fetch('/admin/getBasicInfos')
     .then(response=>{
         if(response.ok) return response.json()
@@ -112,3 +114,4 @@ function showTransactionStats(stats){
         console.log(er)
 
     })
+  }

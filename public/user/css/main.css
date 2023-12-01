@@ -1400,7 +1400,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     width: 100%;
     content: "";
-    background: #000;
+    background: #ff8e0c50;
     opacity: 0;
     visibility: hidden;
     -webkit-transition: all 0.3s ease 0s;
@@ -1431,7 +1431,7 @@ h1, h2, h3, h4, h5, h6 {
     opacity: .5;
     visibility: visible; }
   .single-deal:hover .deal-details {
-    top: 50%;
+    top: 90%;
     opacity: 1;
     visibility: visible; }
 

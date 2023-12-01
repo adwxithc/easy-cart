@@ -1,6 +1,7 @@
 const Brand=require('../model/brandModel')
 const Product=require('../model/productModel')
 const adminHelpers=require('../helperMethods/adminHelpers')
+const path=require('path')
 
 
 const validateProductDatas=async(req,res,next)=>{
@@ -55,16 +56,18 @@ const validateBrandData =async(req,res,next)=>{
     const name=req.body.name
     const description=req.body.description
     const logo=req.file?.filename
-    console.log(logo)
+    
     
     if(name&& description&& logo){
-        const check=await Brand.findOne({name:{$regex:new RegExp(`^${name}$`,'i')}})
+        const check=await Brand.findOne({name:name})
+      
         if(check){
             console.log("This brand already exist")
             res.json({message:"This brand already exist"})
 
 
         }else{
+            
             req.brandData={
                 name:name,
                 description:description,
@@ -320,6 +323,37 @@ const returnStatus=async(req,res,next)=>{
     }
 }
 
+const banner=async(req,res,next)=>{
+    try {
+       
+        const {miniTitle,mainTitle,description,link} =req.body
+        const bannerBackground=req.file?.filename
+        if(!miniTitle || !mainTitle || !description || !link || !bannerBackground){
+
+            //DELETE NEWLY ADDED IMAGE
+            const url=path.join(__dirname,'..','public','bannerBackground')
+            const deleted=adminHelpers.deleteFile(url)
+  
+            res.json({success:false,message:'Please provide all informations'})
+            return
+
+        }else{
+            req.bannerData={
+                miniTitle:miniTitle,
+                mainTitle:mainTitle,
+                description:description,
+                link:link,
+                bannerBackground:bannerBackground
+            }
+            next()
+        }
+
+        
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports={
 validateProductDatas,
@@ -329,5 +363,6 @@ validateProductDatas,
  validateCoupone,
  validateOfferData,
  orderUpdation,
- returnStatus
+ returnStatus,
+ banner
 }

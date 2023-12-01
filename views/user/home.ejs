@@ -1,14 +1,55 @@
 <%- include("../partials/userHeader.ejs") %>
 
 
+<%if(locals.banners && banners.length>0){%>
+<!-- Start Banner Area -->
+<div  class="hero">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade hero_carousel" data-bs-ride="carousel">
+        <div class="carousel-inner" >
+            <%for(let banner of banners){%>
 
-<!-- Start category Area -->
+            <div class="carousel-item banner-item <%= banner === banners[0] ? 'active' : '' %>" data-bs-interval="4000" style="background-image: url('/static/bannerImages/<%=banner.bannerBackground%>'); ">
+                <div class="container" >
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6><%=banner.miniTitle%></h6>
+                                <h2><%=banner.mainTitle%></h2>
+                                <p><%=banner.description%></p>
+                                <a href="<%=banner.link%>" class="dark-btn">Shop now</a>
+                                <div class="hero__social">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<div  style="height: 100vh;">
-    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 100%; width: 100%;">
-        <div class="carousel-inner" style="height: 100%; width: 100%;">
+            <%}%>         
+    
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev" style="border: 0; background: transparent; ">
+            <span class="mdi mdi-arrow-left" aria-hidden="true" style="color: rgb(105, 104, 104); font-size: 30px;"></span>
+            <!-- <span class="visually-hidden">Previous</span> -->
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next" style="border: 0; background: transparent; ">
+            <span class="mdi mdi-arrow-right" aria-hidden="true" style="color: rgb(105, 104, 104); font-size: 30px;"></span>
+            <!-- <span class="visually-hidden">Next</span> -->
+        </button>
+    </div>
+</div>
+<!-- End Banner Area -->
+<%}else{%>
+    <!-- Start Banner Area -->
+<div  class="hero">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade hero_carousel" data-bs-ride="carousel">
+        <div class="carousel-inner" >
 
-            <div class="carousel-item banner-item active" data-bs-interval="5000" style="background-image: url('/static/assets/img/banner/black11.jpg'); height: 100%; width:100% ; background-size: cover;">
+            <div class="carousel-item banner-item active" data-bs-interval="4000" style="background-image: url('/static/assets/img/banner/black11.jpg'); ">
                 <div class="container" >
                     <div class="row">
                         <div class="col-xl-5 col-lg-7 col-md-8">
@@ -29,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item banner-item" data-bs-interval="5000" style="background-image: url('/static/assets/img/banner/3.jpg'); height: 100%; width: 100%; background-size: cover;">
+            <div class="carousel-item banner-item" data-bs-interval="4000" style="background-image: url('/static/assets/img/banner/3.jpg'); ">
                 <div class="container" >
                     <div class="row">
                         <div class="col-xl-5 col-lg-7 col-md-8">
@@ -63,10 +104,8 @@
         </button>
     </div>
 </div>
-
-
-<!-- End category Area -->
-
+<!-- End Banner Area -->
+<%}%>
 
 
 <!-- start features Area -->
@@ -123,82 +162,72 @@
 <!-- -------------------------------------------------------------- -->
 
 <!-- Start category Area -->
-<section class="category-area">
-<div class="container">
-    <div  >
-        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner" style="padding: 50px;" >
-
-                <div class="carousel-item active" data-bs-interval="5000">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="https://assets.ajio.com/medias/sys_master/root/20231124/tXOl/6560caddafa4cf41f59da83a/-473Wx593H-442253129-brown-MODEL.jpg" alt="">
-                            <a href="img/category/c5.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="banner-content p-3" style="margin-top:30% ;">
-                            <h1>Classic <br> Men's Attire!</h1>
-                            <p>Timeless style for every man awaits in our standard collection. Discover the everyday elegance you've been looking for, crafted with meticulous attention to detail.</p>
-                            <div class="add-bag d-flex align-items-center">
-                                <button class="button-57" role="button"><span class="text">visit Link</span><span>Alternate text</span></button>
-        
-                            </div>
-                        </div>
-                    </div>
-        
-                </div>
-                </div>
-                <div class="carousel-item " data-bs-interval="5000">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="https://assets.ajio.com/medias/sys_master/root/20231124/9vWp/6560d90cddf77915199abb3e/-473Wx593H-442253109-ltbrown-MODEL.jpg" alt="">
-                            <a href="img/category/c5.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="banner-content p-3" style="margin-top:30% ;">
-                            <h1>Classic <br> Men's Attire!</h1>
-                            <p>Timeless style for every man awaits in our standard collection. Discover the everyday elegance you've been looking for, crafted with meticulous attention to detail.</p>
-                            <div class="add-bag d-flex align-items-center">
-                                <button class="button-57" role="button"><span class="text">visit Link</span><span>Alternate text</span></button>
-        
-                            </div>
-                        </div>
-                    </div>
-        
-                </div>
-                </div>
-                
-        
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev" style="border: 0; background: transparent; ">
-                <span class="carousel-control-prev-icon" aria-hidden="true" style="color: gray;"></span>
-                <!-- <span class="visually-hidden">Previous</span> -->
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next" style="border: 0; background: transparent; ">
-                <span class="carousel-control-next-icon" aria-hidden="true" style="color: gray;"></span>
-                <!-- <span class="visually-hidden">Next</span> -->
-            </button>
-            </div>
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  
+    <div class="d-flex justify-content-center">
+        <h3 class="mb-5">Our Popular Categories</h3>
     </div>
+    <div class="carousel-inner">
+    <%for(let i=0;i < 2;i++){ 
+        if(!mostSoldCategories[i]) break
 
-</div>
-</section>
+        
+        %>
+      <div class="carousel-item <%if(i==0){%>active" <% }else{ %>"<%}%> >
+        <div class="card-wrapper container">
+            <div class="row">
+                <%for(let j=i*3 ;j< (i*3)+3;j++ ){
+                    if(!mostSoldCategories[j]) break
+                    %>
+                <div class="  col-md-4 col-12" style="width: 18rem;">
+                    <div class="single-deal" style="position: relative;">
+                        <div class="overlay"></div>
+                        <div class="category-image-container">
+                            <img class="img-fluid w-100 product-image" src="/static/productImages/<%=mostSoldCategories[j].product.images[0]%>" alt="">
+                            <h5 style="transform: rotate(270deg); position: absolute; top: 25%; left: -20%;" class="crossLabel  d-none d-md-block">POPULAR CATEGORIES</h5>
+        
+                        </div>
+                            <a href="img/category/c5.jpg" class="img-pop-up" target="_blank">
+                            <div class="deal-details">
+                                <a href="" style="width: 100%; background-color: #000 ;color: #fff; " class="mx-auto d-flex justify-content-center p-2"><span>Explore</span></a>
+    
+                                <h6 class="deal-title" style="visibility: hidden;">Sneaker for Sports</h6>
+                            </div>
+                            
+                        </a>
+                           
+                        
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <h6 class="deal-title mb-3"><%=mostSoldCategories[j].categoryDetails[0].name%></h6>
+        
+                    </div>
+                   
+                    
+                     
+                  </div>
+                <%}%>
+
+            </div>
+
+
+        </div>
+      </div>
+      <%}%>
+
+
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" style="background-color: transparent; border: 0; color: black;">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden"><i class="mdi mdi-chevron-double-left display-4"></i></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" style="background-color: transparent; border: 0; color: black;">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden"><i class="mdi mdi-chevron-double-right display-4"></i></span>
+    </button>
+  </div>
 <!-- End category Area -->
-
+        
 
 <!-- --------------------------------------------------------------------------- -->
 
@@ -219,7 +248,6 @@
             </div>
             <div class="row">
                 <%for(product of latestProducts){%>
-
                         <!-- single product -->
                         <div class="col-lg-3 col-6 h-50 p-3">
                             <div class="single-product productdiv">
@@ -274,7 +302,6 @@
                                 </div>
                             </div>
                         </div>
-
                 <%}%>
 
             </div>
@@ -438,21 +465,11 @@
 <section class="brand-area section_gap">
     <div class="container">
         <div class="row">
+            <%for(let brand of brands){%>
             <a class="col single-img" href="#">
-                <img class="img-fluid d-block mx-auto" src="/static/assets/img/brand/1.png" alt="">
+                <img class="img-fluid d-block mx-auto" src="/static/brandImages/<%=brand.logo%>" alt="">
             </a>
-            <a class="col single-img" href="#">
-                <img class="img-fluid d-block mx-auto" src="/static/assets/img/brand/2.png" alt="">
-            </a>
-            <a class="col single-img" href="#">
-                <img class="img-fluid d-block mx-auto" src="/static/assets/img/brand/3.png" alt="">
-            </a>
-            <a class="col single-img" href="#">
-                <img class="img-fluid d-block mx-auto" src="/static/assets/img/brand/4.png" alt="">
-            </a>
-            <a class="col single-img" href="#">
-                <img class="img-fluid d-block mx-auto" src="/static/assets/img/brand/5.png" alt="">
-            </a>
+            <%}%>
         </div>
     </div>
 </section>
@@ -604,5 +621,7 @@
 			<p id="modal-message">Your message goes here.</p>
 		</div>
 	</div>
+
+
 
 <%- include("../partials/userFooter.ejs") %>

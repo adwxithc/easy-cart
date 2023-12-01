@@ -1,4 +1,83 @@
+
 <%- include('../partials/header.ejs') -%>
 
 
+<div class="d-flex justify-content-between px-3">
+   
+    <div>
+        <h2>Banner</h2>
+    </div>
+    <a href="/admin/addBanner" class="button-24 addBanner" role="button" data-bs-toggle="tooltip" acement="right" title="Add Banner">
+        Add Banner
+       
+    </a>
+</div>
+
+<div id="banners">
+<%
+if(locals.banners && banners.length>0){
+    for(let banner of banners){
+    %>
+<!-- Start Banner Area -->
+<div id="<%=banner._id%>" class="py-5">
+    <div class="bannerOptions ml-3  px-3" style="position: relative;" >
+        <div class="dropdown " >
+            <button class="btn btn-outline-primary dropdown-toggle " type="button" id="dropdownMenuOutlineButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown </button>
+            <div class="dropdown-menu bannerOptionList" aria-labelledby="dropdownMenuOutlineButton2" >
+           
+                <%if(banner.status){%>
+              <a class="btn btn-warning " status href="#" bannerId="<%=banner._id%>" id="statusChanger<%=banner._id%>">unlist</a>
+    
+              <%}else{%>
+              <a class="btn btn-success " status href="#" bannerId="<%=banner._id%>" id="statusChanger<%=banner._id%>">list</a>
+                <%}%>
+              <a class="btn btn-danger " href="#" delete bannerId="<%=banner._id%>">Delete</a>
+              <a class="btn btn-dark" href="/admin/editBanner?bannerId=<%=banner._id%>">Edit</a>
+             
+            </div>
+          </div>
+          <div style="position: absolute; right: 1rem; top: -1rem;">
+            <%if(banner.status){%>
+                <i class="mdi mdi-eye " id="status<%=banner._id%>"></i>
+                <%}else{%>
+              <i class="mdi mdi-eye-off "></i>
+              <%}%>
+    
+          </div>
+    
+    </div>
+    <div class="single-banner ">
+        <div class=" banner-item active" data-bs-interval="5000" style="background-image: url('/static/bannerImages/<%=banner.bannerBackground%>'); height: 100%; width:100% ; background-size: cover;">
+    
+        
+            <div class="container" >
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6><%=banner.miniTitle%></h6>
+                            <h2><%=banner.mainTitle%></h2>
+                            <p><%=banner.description%></p>
+                            <a href="<%=banner.link%>" class="dark-btn">Shop now</a>
+                            <div class="hero__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Banner Area -->
+<%
+    }
+}
+%>
+</div>
+  
 <%- include('../partials/footer.ejs') %>
+

@@ -72,6 +72,17 @@
     padding: 20px;
     border: 0;
   }
+  .offer-modal-content{
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    max-width: 50%;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    padding: 20px;
+    border: 0;
+    background-color: #f7f7f7;
+  }
 
 
 
@@ -804,4 +815,140 @@ background: linear-gradient(90deg, rgba(216,0,50,1) 1%, rgba(0,0,0,1) 100%);
   border:1.5px solid  rgb(255, 221, 1);
   padding: 1rem;
   color: black;
+}
+
+
+
+  /* ------------------------banner------------------------- */
+
+  .single-banner{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  }
+
+  .banner-item{
+    /* height: 800px; */
+	  padding-top: 230px;
+    height: 100%;
+    width:100% ;
+    background-size: cover;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  }
+
+
+  @media only screen and (max-width: 479px) {
+	.banner-item {
+		height: auto;
+		padding-top: 130px;
+		padding-bottom: 40px;
+	}
+
+ }
+	.hero__text h2 {
+		font-size: 36px;
+		line-height: 48px;
+        font-weight: 700;
+	}
+    .hero__text h6{
+        color: #ffba00;
+    }
+    .hero__text p{
+        color: #000000d2;
+    }
+	.hero__social {
+		margin-top: 145px;
+	}
+
+
+.dark-btn{
+    padding: 18px 28px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #000;
+    border: 1.5px solid #000;
+    line-height: 50px;
+    border-radius: 40px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    transform: translateY(-2px);
+    
+}
+
+.fa-facebook,.fa-twitter,.fa-pinterest,.fa-instagram{
+    margin-top: 1rem;
+    color: #000;
+    font-size: large;
+    margin: 1rem;
+}
+
+.dark-btn:hover{
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+
+
+}
+
+.mdi-library-plus{
+  font-size: 2rem;
+  color: #000;
+  
+}
+
+
+.banner-image-preview{
+  position: relative;
+}
+
+.cropBanner{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.banner-img{
+  max-width: 400px;
+  max-height: 400px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom:1rem ;
+  
+}
+.bannerCropImg{
+  max-width: 600px;
+  max-height: 600px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom:1rem ;
+}
+
+#bannerPreview{
+  display: none;
+}
+
+.bannerOptions{
+  margin-bottom: -4rem;
+}
+.bannerOptionList{
+  background-color: transparent;
+  border: 0;
+}
+.mdi-eye-off,.mdi-eye{
+  
+  font-size: 2rem;
+  color: black;
+}
+
+.addBanner{
+  text-decoration: none;
+}
+.addBanner:hover{
+  text-decoration: none;
+
 }

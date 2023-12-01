@@ -852,8 +852,10 @@ const addBrand=async(req,res)=>{
         const brand=new Brand(req.brandData)
         const added=await brand.save()
         if(added){
+         
             res.json({message:"brand added successfully",success:true})
         }else{
+           
             res.status(500).json({message:"Unable to add brand"})
         }
         

@@ -8,6 +8,7 @@ const offerHelper=require('../helperMethods/offer')
 const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const mongoose=require('mongoose')
+const Banner=require('../model/bannerModel')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -88,10 +89,18 @@ const sendverifyMail=async (name,email,otp)=>{
 //rndering the site for all
 const guest=async(req,res)=>{
     try {
+        const banners=await Banner.aggregate([
+            {
+                $match:{
+                    status:true,
+                    deleted:false
+                }
+            }
+        ])
         
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners})
         
     } catch (error) {
         console.log(error.message)
@@ -194,11 +203,24 @@ const userHome=async(req,res)=>{
 
     try {
 
+
         const id=req.session?.userId
-       
+        const mostSoldCategories=await userHelpers.getMostSoldCategories()
+        console.log('-----------------------------------------------',mostSoldCategories)
+        const brands=await Brand.find({status:true})
+        
 
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
+        const banners=await Banner.aggregate([
+            {
+                $match:{
+                    status:true,
+                    deleted:false
+                }
+            }
+        ])
+        
 
         const cart=await Cart.aggregate([
             {
@@ -208,7 +230,7 @@ const userHome=async(req,res)=>{
             }
         ])
 
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0]})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0],banners:banners,mostSoldCategories:mostSoldCategories,brands:brands})
         
     } catch (error) {
         console.log(error)

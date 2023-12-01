@@ -132,9 +132,7 @@ function brandOperations(){
                         if(response.ok) return response.json()
                     })
                     .then(data=>{
-                        // const modal=document.getElementById('viewModal')
-                        // modal.style.display='block'
-                        // document.getElementById('viewModal-content').innerHTML=data.message
+
                         showMessage(data.message)
 
                         updateBrandStatus(data,brandId)
@@ -184,7 +182,7 @@ function editBrandlogo(existingImageURL){
 
 
         const selectedlogo = event.target.files[0];
-        console.log(selectedlogo)
+        
     
 
         setupEditablelogo(selectedlogo, existingImageURL);
@@ -213,7 +211,7 @@ function setupEditablelogo(selectedlogo, existingImageURL){
         // It's an existing image URL
        
         convertUrlToFile(logoToDisplay, (file) => {
-            // console.log('------------',URL.createObjectURL(file))
+           
             imgElement.src = URL.createObjectURL(file);
 
         });

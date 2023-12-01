@@ -848,6 +848,11 @@
     transition: transform 0.3s ease; /* Add a smooth transition effect */
 }
 
+.category-image-container{
+    height: 400px;
+    width: auto;
+    overflow: hidden;
+}
 .product-details {
     padding: 10px;
     background-color: #f5f5f5;
@@ -1174,11 +1179,13 @@ text-decoration: none;
   }
 
 
-  /* banner */
+  /* ------------------------banner------------------------- */
 
   .banner-item{
     height: 800px;
 	padding-top: 230px;
+    width:100% ;
+    background-size: cover;
   }
 
 
@@ -1204,9 +1211,6 @@ text-decoration: none;
 	.hero__social {
 		margin-top: 145px;
 	}
-
-
-
 
 
 .dark-btn{
@@ -1236,4 +1240,49 @@ text-decoration: none;
     background-color: #fff;
     color: #000;
 
+}
+.hero{
+    height: 100vh;
+}
+.hero_carousel{
+    height: 100%;
+     width: 100%;
+}
+
+.hero .hero_carousel .carousel-inner{
+    height: 100%; 
+    width: 100%;
+}
+
+
+
+@media (max-width:800px) {
+    .crossLabel{
+        font-size: 0.8rem;
+    }
+}
+@media (max-width:00px) {
+    .crossLabel{
+        font-size: 0.7rem;
+    }
+}
+@media (max-width:600px) {
+    .crossLabel{
+        font-size: 0.6rem;
+    }
+}
+@media (max-width:500px) {
+    .crossLabel{
+        font-size: 0.5rem;
+    }
+}
+@media (max-width:400px) {
+    .crossLabel{
+        font-size: 0.4rem;
+    }
+}
+@media (max-width:300px) {
+    .crossLabel{
+        font-size: 0.3rem;
+    }
 }

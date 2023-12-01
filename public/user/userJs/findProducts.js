@@ -129,71 +129,73 @@ function displaySearchresult(products,cart){
         
 
         for(let product of products){
-        const productDiv=document.createElement('div')
-        productDiv.classList='col-lg-3 col-6'
-       
-        //CHECK PRODUCT IS ALREADY IN CART
-        let InCart = cart ? cart.cartItems?.some(item => item.product.toString()== product._id.toString()) : false
-        let cartOption=``
-        if(!InCart && product.stock > 0){
-            cartOption=`
-             <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" role="addCart${product._id}" >
-             <span class="ti-bag searchAction easyAddToCart" productId="${product._id}"></span>
-             <p class="hover-text searchAction easyAddToCart" productId="${product._id}" >add to cart</p>
-             </a>
-            `
-        }else{
-            cartOption=`
-             <a href="/api/goToCart" class="social-info">
-                 <span class="ti-bag"></span>
-                 <p class="hover-text">go to cart</p>
-             </a>
-            `
-        }
 
-        //SETTING OFFER BADGE
-        let offer=''
-        let price=`<h6 class="product-price">${ product.price}</h6>`
-        if(product.effectedDiscount){
-            offer=`<div class="badge-area-show">
-                        <div class="bagde-flag-wrap">
-                        <a href="#" class="bagde-flag"> ${product.effectedDiscount}% off </a>
+            const productDiv=document.createElement('div')
+            productDiv.classList='col-lg-3 col-6'
+        
+            //CHECK PRODUCT IS ALREADY IN CART
+            let InCart = cart ? cart.cartItems?.some(item => item.product.toString()== product._id.toString()) : false
+            let cartOption=``
+            
+            if(!InCart && product.stock > 0){
+                cartOption=`
+                <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" role="addCart${product._id}" >
+                <span class="ti-bag searchAction easyAddToCart" productId="${product._id}"></span>
+                <p class="hover-text searchAction easyAddToCart" productId="${product._id}" >add to cart</p>
+                </a>
+                `
+            }else{
+                cartOption=`
+                <a href="/api/goToCart" class="social-info">
+                    <span class="ti-bag"></span>
+                    <p class="hover-text">go to cart</p>
+                </a>
+                `
+            }
+
+            //SETTING OFFER BADGE
+            let offer=''
+            let price=`<h6 class="product-price">${ product.price}</h6>`
+            if(product.effectedDiscount){
+                offer=`<div class="badge-area-show">
+                            <div class="bagde-flag-wrap">
+                            <a href="#" class="bagde-flag"> ${product.effectedDiscount}% off </a>
+                            </div>
+                        </div>`
+
+                        price=`<h6 class="product-price"> ${ Number(product.price)-((Number(product.price) * Number(product.effectedDiscount))/100) }</h6>
+                        <h6 class="l-through product-original-price">${product.price}</h6>`
+            }
+        
+            productDiv.innerHTML= `<div class="single-product productdiv">
+            <div class="product-container">
+            ${offer}
+
+                        <div class="product-image-container">
+                        
+                            <a target="_blank"  href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
                         </div>
-                    </div>`
+                        <div class="product-details">
+                            <h6 class="product-title">${ product.name}</h6>
+                            <div class="price">
+                                ${price}
+                            </div>
+                            <div class="prd-bottom">
 
-                    price=`<h6 class="product-price"> ${ Number(product.price)-((Number(product.price) * Number(product.effectedDiscount))/100) }</h6>
-                    <h6 class="l-through product-original-price">${product.price}</h6>`
-        }
-       
-        productDiv.innerHTML= `<div class="single-product productdiv">
-        <div class="product-container">
-        ${offer}
+                                ${cartOption}
 
-                    <div class="product-image-container">
-                    
-                        <a target="_blank"  href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
+
+
+                                <a href="/productDetails?id=${product._id}" target='_blank' class="social-info">
+                                    <span class="lnr lnr-move"></span>
+                                    <p class="hover-text">view more</p>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-details">
-                        <h6 class="product-title">${ product.name}</h6>
-                        <div class="price">
-                            ${price}
-                        </div>
-                        <div class="prd-bottom">
-
-                            ${cartOption}
-
-
-
-                            <a href="/productDetails?id=${product._id}" target='_blank' class="social-info">
-                                <span class="lnr lnr-move"></span>
-                                <p class="hover-text">view more</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>`
-       
-            document.getElementById('searchedProductList').appendChild(productDiv)
+                </div>`
+        
+                document.getElementById('searchedProductList').appendChild(productDiv)
         }
     
 }

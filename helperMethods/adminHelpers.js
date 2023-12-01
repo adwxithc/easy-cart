@@ -2,6 +2,8 @@ const Order = require('../model/orderModel');
 const Product=require('../model/productModel');
 const User=require('../model/userModel')
 const Coupone = require("../model/couponeModel")
+const fs=require('fs')
+const path=require('path')
 
 async function calculateTotalSalesToday() {
     try {
@@ -446,11 +448,26 @@ async function doesCouponeCodeTake(couponeCode,id){
 }
 
 
+function deleteFile(url){
+
+
+
+  fs.unlink(url,(err)=>{
+      if(err){
+        console.log(err.message)
+        throw Error(err)
+      }else{
+          console.log("old image removed")
+          return true
+      }
+  })
+}
+
  
   
 
 module.exports = {
-    calculateTotalSalesToday,
+    calculateTotalSalesToday, 
     calculateTotalOrdersToday,
     calculateTotalOrdersThisMonth,
     calculateAverageOrderValue,
@@ -464,5 +481,8 @@ module.exports = {
     isValidDiscount,
     isValidDate,
     doesCouponeCodeExist,
-    doesCouponeCodeTake
+    doesCouponeCodeTake,
+    deleteFile
 };
+
+

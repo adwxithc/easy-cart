@@ -296,7 +296,7 @@ function removeProductOffer(productId){
                 option=document.getElementById(`manageOffer${productId}`)
                 option.classList.remove('removeOffer')
                 option.classList.add('applyOffer')
-                option.innerHTML='applay offer'
+                option.innerHTML='apply offer'
 
                 document.getElementById('offer'+productId).innerHTML=''
         }else{

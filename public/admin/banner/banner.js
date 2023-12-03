@@ -234,7 +234,7 @@ function sendBannerData(formData,url,method,cb){
         })
         .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('server communication error')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
             if(data.success){
@@ -248,6 +248,7 @@ function sendBannerData(formData,url,method,cb){
                 return false
             }
         })
+        .catch(handleError)
 
 }
 
@@ -302,7 +303,7 @@ function updateBannerStatus(bannerId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.success){
@@ -326,9 +327,7 @@ function updateBannerStatus(bannerId){
         showMessage(data.message)
 
     })
-    .catch(er=>{
-        console.error(er)
-    })
+    .catch(handleError)
 }
 
 //SOFT DELETE BANNER
@@ -340,7 +339,7 @@ function deleteBanner(bannerId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.success){
@@ -349,8 +348,6 @@ function deleteBanner(bannerId){
         showMessage(data.message)
 
     })
-    .catch(er=>{
-        console.error(er)
-    })
+    .catch(handleError)
 }
 

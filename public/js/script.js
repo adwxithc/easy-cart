@@ -8,34 +8,68 @@ if(alertMessage){
 }
 
 //resend otp in user otp verification @ sign up
-$(function(){
-    $('#resendOtp').on('click',function(e){
-      e.preventDefault()
-      $('#resendOtp').css('color','rgba(78, 71, 70, 0.707)')
-      $('#resendOtp').prop('disabled',true)
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('resendOtp').addEventListener('click', function (e) {
+    e.preventDefault();
 
-      setTimeout(()=>{
-        $('#resendOtp').css('color','blue')
-        $('#resendOtp').prop('disabled',false)
-        $("#resendInfo").html("")
-      },30000)
+    // Disable the button and change its color
+    this.style.color = 'rgba(78, 71, 70, 0.707)';
+    this.disabled = true;
+
+    setTimeout(() => {
+      // Enable the button and restore its color after 30 seconds
+      this.style.color = 'blue';
+      this.disabled = false;
+      document.getElementById('resendInfo').innerHTML = '';
+    }, 30000);
+
+    // Make a fetch request
+    fetch('/reSendOtp', {
+      method: 'GET',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw { status: response.status, data: response.json() };
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle successful response
+        document.getElementById('resendInfo').innerHTML = data.message;
+      })
+      .catch(handleError)
+  });
+});
+
+
+// $(function(){
+//     $('#resendOtp').on('click',function(e){
+//       e.preventDefault()
+//       $('#resendOtp').css('color','rgba(78, 71, 70, 0.707)')
+//       $('#resendOtp').prop('disabled',true)
+
+//       setTimeout(()=>{
+//         $('#resendOtp').css('color','blue')
+//         $('#resendOtp').prop('disabled',false)
+//         $("#resendInfo").html("")
+//       },30000)
 
       
-      $.ajax({
-        url:'/reSendOtp',
-        method:"GET",
-        success:function(res){
-          $("#resendInfo").html(res.message)
+//       $.ajax({
+//         url:'/reSendOtp',
+//         method:"GET",
+//         success:function(res){
+//           $("#resendInfo").html(res.message)
           
-        },
-        error:function(){
-          $("#resendInfo").html("Some error occured please try again after some time")
+//         },
+//         error:function(){
+//           $("#resendInfo").html("Some error occured please try again after some time")
+          
 
-
-        }
-      })
-    })
-  })
+//         }
+//       })
+//     })
+//   })
 
   function clearAlert(){
     if(document.getElementById("alertMessage")){
@@ -43,3 +77,6 @@ $(function(){
             document.getElementById("alertMessage").innerHTML='';
         },3000)
     }}
+
+
+    

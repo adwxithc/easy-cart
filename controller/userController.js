@@ -9,10 +9,12 @@ const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const mongoose=require('mongoose')
 const Banner=require('../model/bannerModel')
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
 const otpGenerator = require('otp-generator');
+const CustomError = require('../Utils/CustomError')
 
 
 //creating hashing function with bcrypt
@@ -22,10 +24,9 @@ const securePassword=async(password)=>{
         return hashedPassword
         
     } catch (error) {
-        console.log(error.message)
-        
+        console.log(error)
+        throw error
     }
-
 }
 
 
@@ -56,7 +57,7 @@ const sendverifyMail=async (name,email,otp)=>{
         }
         transporter.sendMail(mailOptions,(er,info)=>{
             if(er){
-                console.log(er)
+                throw er
             }
             else{
                 console.log("email has been send",info.response)
@@ -64,31 +65,15 @@ const sendverifyMail=async (name,email,otp)=>{
         })
 
     } catch (error) {
-        console.log(error.message)
+        throw error
         
     }
 }
 
+//rendering the site for all
+const guest= asyncErrorHandler (async(req,res,next)=>{
 
-// Verify an OTP and check if it has expired
-// function verifyOTP(otp, maxAgeInSeconds =120) {
-//         const otpTimestamp = otp.split(':')[1];
-//         const currentTime = Date.now() / 1000; // Convert to seconds
-//         const otpTime = parseFloat(otpTimestamp);
-    
-//         if (otpTime + maxAgeInSeconds < currentTime) {
-//             // OTP has expired
-//             return false;
-//         }
-    
-//         return true;
-    
-
-// }
-
-//rndering the site for all
-const guest=async(req,res)=>{
-    try {
+        //GETTING BANNER DATAS
         const banners=await Banner.aggregate([
             {
                 $match:{
@@ -96,28 +81,30 @@ const guest=async(req,res)=>{
                     deleted:false
                 }
             }
-        ])
-        
+        ]);
+
+        //GETTING BRAND DATAS
+        const brands=await Brand.find({status:true})
+
+        //GETTING MOST SOLD CATEGORIES DATAS
+        const mostSoldCategories=await userHelpers.getMostSoldCategories()
+
+        //GETTING LATEST PRODUCT DATAS
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
+
+        //GETTING AFFORDABLE PRODUCTS DATAS
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners})
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).render('errors/500.ejs',{hideRedirect:true})
-        
-    }
-}
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners,mostSoldCategories:mostSoldCategories,brands:brands})
+
+});
 
 //view product details
-
-const productDetails=async(req,res)=>{
-    try {
-        const id=req.query.id
-        
+const productDetails=asyncErrorHandler( async(req,res,next)=>{
+   
+        const {id}=req.query
+        const cart=req.cart
 
         const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
-        const cart=await Cart.findOne({user:req.session.userId})
 
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
 
@@ -127,48 +114,32 @@ const productDetails=async(req,res)=>{
             res.render('productDetails',{product:productsWithCategories,inCart:inCart,user:req.session?.userId})
 
         }else{
-            res.status(404).render('errors/500.ejs')
+            const err=new CustomError('Invalid request',400)
+            next(err)
 
         }
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).render('errors/500.ejs')
-        
-    }
 
+})
+
+const searchProduct= asyncErrorHandler( async(req,res, next)=>{
+
+    const key=req.body.searchKey||''
+    const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')},status:true})
+    res.render('productShop',{products:products,user:req.session.userId})
+
+})
+
+
+const loadLogin=(req,res,next)=>{
+
+    res.render('login');  
+ 
 }
 
-const searchProduct=async(req,res)=>{
-    try {
-        const key=req.body.searchKey||''
-        const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')},status:true})
-        res.render('productShop',{products:products,user:req.session.userId})
-        
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).render('errors/500.ejs') 
-        
-    }
-}
+const verifyLogin= asyncErrorHandler (async(req,res, next)=>{
 
+        const {email, password}=req.body;
 
-const loadLogin=(req,res)=>{
-    try {
-      
-        res.render('login');
-       
-    } catch (error) {
-        console.log(error.message)
-        
-    }
-}
-
-const verifyLogin=async(req,res)=>{
-    try {
-        const email=req.body.email;
-        const password =req.body.password;
         const userData=await User.findOne({email:email})
         if(userData){
             const hashedPassword=userData.password
@@ -177,7 +148,6 @@ const verifyLogin=async(req,res)=>{
                 if(userData.status==1){
                     req.session.userId=userData._id
 
-                
                 
                 res.redirect('/userHome');
                 }else{
@@ -192,26 +162,20 @@ const verifyLogin=async(req,res)=>{
             res.render('login',{message:"Wrong username password combination"})
         }
 
-        
-    } catch (error) {
-        console.log(error.message)
-        
-    }
-}
+})
 
-const userHome=async(req,res)=>{
-
-    try {
+const userHome=asyncErrorHandler( async(req,res, next)=>{
 
 
         const id=req.session?.userId
         const mostSoldCategories=await userHelpers.getMostSoldCategories()
-        console.log('-----------------------------------------------',mostSoldCategories)
+        
         const brands=await Brand.find({status:true})
         
 
         const latestProducts=await Product.find({status:true}).sort({ addedDate: -1 }).limit(8)
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
+
         const banners=await Banner.aggregate([
             {
                 $match:{
@@ -221,7 +185,6 @@ const userHome=async(req,res)=>{
             }
         ])
         
-
         const cart=await Cart.aggregate([
             {
                 $match:{
@@ -231,27 +194,21 @@ const userHome=async(req,res)=>{
         ])
 
         res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0],banners:banners,mostSoldCategories:mostSoldCategories,brands:brands})
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-        
-    }
 
-}
+})
 
-const loadRegister=(req,res)=>{
+const loadRegister=(req,res, next)=>{
     try {
         const {refer}=req.query || null
         res.render('register',{refer:refer})
         
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 }
 
-const signUp=async(req,res)=>{
-    try {
+const signUp= asyncErrorHandler( async(req,res, next)=>{
+
       
         const check=await User.findOne({email:req.body.email})
 
@@ -271,8 +228,6 @@ const signUp=async(req,res)=>{
                 // Generate a 6-digit numeric OTP
                 const numericOTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false,lowerCaseAlphabets:false, specialChars: false });
 
-                
-
                 req.session.otpWithTimestamp = `${numericOTP}:${Date.now() / 1000}`;
 
                 const spassword=await securePassword(req.body.password)
@@ -291,49 +246,52 @@ const signUp=async(req,res)=>{
 
             }
         }
-        
-    } catch (error) {
-        console.log(error.message)
-        
-    }
 
-}
+});
 
-const loadOtpForm =async(req,res)=>{
+const loadOtpForm =(req,res, next)=>{
     try {
         res.render('getOtp',{email:req.session.email})
         
     } catch (error) {
-        console.log(error)
+        next(error)
         
     }
 }
-const reSendOtp=(req,res)=>{
-    if(req.session.otpWithTimestamp){
-    const isNotExpired= userHelpers.verifyOTP(req.session.otpWithTimestamp,30) 
-    if(!isNotExpired){
-        // Generate a 6-digit numeric OTP
-        const numericOTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false,lowerCaseAlphabets:false, specialChars: false });
 
-                    
-        req.session.otpWithTimestamp = `${numericOTP}:${Date.now() / 1000}`;
-    
-        sendverifyMail(`${req.session.fname} ${req.session.lname}`,req.session.email,numericOTP)
-        
-        res.json({status:"success",message:'New otp has been send to the email'})
-    }else{
-        console.log("wait 30 seconds")
-        res.json({status:'success',message:'Please wait 30 seconds before requesting a new OTP'})
-    }
-}else{
-    res.render('errors/404.ejs')
-}
-
-}
-
-const otpVerification=async(req,res)=>{
-
+const reSendOtp=(req,res, next)=>{
     try {
+       
+        if(req.session.otpWithTimestamp){
+            const isNotExpired= userHelpers.verifyOTP(req.session.otpWithTimestamp,30) 
+            if(!isNotExpired){
+                // Generate a 6-digit numeric OTP
+                const numericOTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false,lowerCaseAlphabets:false, specialChars: false });
+        
+                            
+                req.session.otpWithTimestamp = `${numericOTP}:${Date.now() / 1000}`;
+            
+                sendverifyMail(`${req.session.fname} ${req.session.lname}`,req.session.email,numericOTP)
+                
+                res.json({status:"success",message:'New otp has been send to the email'})
+            }else{
+                console.log("wait 30 seconds")
+                res.json({status:'success',message:'Please wait 30 seconds before requesting a new OTP'})
+            }
+        }else{
+            const err=new CustomError('Invalid request',400)
+            return next(err)
+        
+        }
+        
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+const otpVerification=asyncErrorHandler( async(req,res,next)=>{
+
         const refer=req.refer
         const referCode=crypto.randomBytes(8).toString('hex')
     
@@ -365,153 +323,107 @@ const otpVerification=async(req,res)=>{
                 res.redirect('/userHome')
 
             }else{
-                res.status(500).render('errors/500.ejs')
-                console.log("data insertion failed")
-            }
+             const err=new CustomError('Failed to register user',500)
+             return next(err)
                 
-    } catch (error) {
-        console.log(error)
-        res.render('errors/500.ejs')
-    }
+            }
     
-}
+});
 
-const logout=(req,res)=>{
+const logout=(req,res,next)=>{
 
         req.session.destroy((er)=>{
-        if(er){
-  
-
-         console.log(er.message)//send status
-         res.render('errors/500.ejs')
-
-        }
-
+        if(er) return next(er)
+        
         else res.redirect('/')
+
         });
 }
 
-const loadProfile=async(req,res)=>{
-    try {
-        const user=await User.findOne({_id:req.session.userId},{transactions:0})
-      console.log(user)
+const loadProfile=asyncErrorHandler( async(req,res, next)=>{
+
+        const user=req.user
         res.render('profile',{user:user})
         
-    } catch (error) {
-        console.log(error)
-        res.render('errors/500.ejs')
-        
-    }
-}
+});
 
 //update user info
-const updateUserInfo=async(req,res)=>{
-    try {
-        
-        const user=await User.updateOne({_id:req.session.userId},{$set:req.body})
-        if(user){
-            res.json({message:'profile update successfuly',updated:true})
-        }
-        
-    } catch (error) {
-        console.log(error)
+const updateUserInfo=asyncErrorHandler( async(req,res, next)=>{
 
+    const user=await User.updateOne({_id:req.session.userId},{$set:req.body})
+    if(user){
+        res.json({message:'profile update successfuly',updated:true})
     }
+});
 
-}
-const loadManageAddress=async(req,res)=>{
-    try {
-        const Addresses=await Address.find({user:req.session.userId}).sort({updatedAt:-1})
-        console.log(Addresses)
-        res.render('manageAddress',{Addresses:Addresses})
-        
-    } catch (error) {
-        console.log('catched')
-        console.log(error)
-        res.render('errors.404.ejs')
-    }
-}
-const addNewAddress=async(req,res)=>{
-    try {
+const loadManageAddress=asyncErrorHandler(async(req,res, next)=>{
+    const Addresses=await Address.find({user:req.session.userId}).sort({updatedAt:-1})
+    res.render('manageAddress',{Addresses:Addresses})
+});
+
+const addNewAddress=asyncErrorHandler( async(req,res, next)=>{
         const address=new Address(req.address)
         const added=await address.save()
         if(added){
-            res.json({message:'New address added successfully',added:true,newAddress:added})
+            res.status(201).json({message:'New address added successfully',added:true,newAddress:added})
         }else{
-            res.json({message:'Failed to added new address',added:false})
+            const err=new CustomError('Failed to added new address',400)
+            next(err)
         }
-        
 
-    } catch (error) {
-        console.log(error)
-        res.status(500)
-    }
-}
+});
 
-const loadEditAddress=async(req,res)=>{
-    try {
-        console.log(req.query.id)
+const loadEditAddress=asyncErrorHandler( async(req,res, next)=>{
+
         const user=await User.findById(req.session.userId)
         const address=await Address.findById(req.query.id)
         if(address){
             res.render('editAddress',{address:address,user:user})
         }else{
-            res.status(404).render('errors/404.ejs')
+            const err=new CustomError('Address not found ')
+            next(err)
+           
         }
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-        
-    }
-}
+});
 
-const updateAddress=async(req,res)=>{
-    try {
-        
-        console.log(req.address,req.body.addressId)
+const updateAddress=asyncErrorHandler( async(req,res, next)=>{
+
+       
         const updated=await Address.updateOne({_id:req.body.addressId},{$set:req.address})
         if(updated){
-            res.json({message:'Address updated successfuly',added:true})
+            res.json({message:'Address updated successfuly',success:true})
         }else{
-            res.json({message:'Address updation failed',added:false})
+            const err=new CustomError('Address updation failed',400)
+            next(err)
         }
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500)
-        
-    }
-}
-const deleteAddress=async(req,res)=>{
-    try {
-        console.log(req.body)
+
+});
+
+const deleteAddress=asyncErrorHandler( async(req,res, next)=>{
+   
         const removed=await Address.deleteOne({_id:req.body.id})
-        if(removed){
+        if(removed.deletedCount > 0){
             res.json({message:'Address Deleted',deleted:true})
         }else{
-            res.json({message:'unable to Delete Address',deleted:false})
+            const err= new CustomError('unable to Delete Address',400)
+            next(err)
         }
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal Server Error'})
-    }
-}
-const changePassword=(req,res)=>{
+})
+
+const changePassword=(req, res, next)=>{
     try {
         res.render('changepassword')
         
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal Server Error'})
-
+        next(error)
     }
 }
 
-const updatePassword=async(req,res)=>{
-    try {
+const updatePassword=asyncErrorHandler( async(req,res, next)=>{
+
         const password=req.body.cPassword
-        const user=await User.findById(req.session.userId)
+        const user=req.user
+
         const hashedPassword=user.password
         const valid=await bcrypt.compare(password,hashedPassword)
         if(!valid){
@@ -526,23 +438,18 @@ const updatePassword=async(req,res)=>{
             if(updatedUser){
                 res.json({message:'password changed successfully',changed:true})
             }else{
-                res.json({message:'password updation failed'})
+                const err=new CustomError('password updation failed',500)
+                next(err)
             }
         }
-        console.log(req.body)
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal Server Error'})
-    }
-}
+     
+})
 
-const loadContact=async(req,res)=>{
+const loadContact=async(req,res, next)=>{
     try {
         res.render('contact')
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal Server Error'})
+        next(error)
     }
 }
 

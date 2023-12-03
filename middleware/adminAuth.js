@@ -1,10 +1,13 @@
+const asyncErrorHandler = require("../Utils/asyncErrorHandler");
+
+
 const isLogin=(req,res,next)=>{
     try {
-        if(req.session.userId){
+        if(req.session.adminId){
             next()
         }else{
 
-            res.redirect('/login');
+            res.redirect('/admin');
         }
         
     } catch (error) {
@@ -15,15 +18,14 @@ const isLogin=(req,res,next)=>{
 const isLogout=(req,res,next)=>{
     try {
 
-        if(req.session.userId){
-            res.redirect('/userHome')
+        if(req.session.adminId){
+            res.redirect('/admin/adminDashboard')
         }else{
             next()
         }
-        
     } catch (error) {
-        next(error)
-
+       next(error)
+        
     }
 }
 

@@ -14,7 +14,7 @@ function addCoupone(){
        })
        .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to connect to the server')
+        throw { status: response.status, data: response.json() };
        })
        .then(data=>{
         if(data.created){
@@ -36,6 +36,7 @@ function addCoupone(){
                 });
         }
        })
+       .catch(handleError)
     }
 }
 
@@ -117,7 +118,7 @@ function updateCoupone(){
            })
            .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to connect to the server')
+            throw { status: response.status, data: response.json() };
            })
            .then(data=>{
             if(data.updated){
@@ -142,16 +143,7 @@ function updateCoupone(){
                     });
             }
            })
-           .catch((error)=>{
-            console.error(error)
-            Swal.fire({
-                icon: "error",
-                text: 'something went wrong',
-                showConfirmButton: false,
-                timer: 1500
-                });
-            
-           })
+           .catch(handleError)
 
     }
 }
@@ -164,7 +156,7 @@ function listUnlistCoupone(couponeId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.updated){
@@ -186,15 +178,7 @@ function listUnlistCoupone(couponeId){
                 });
         }
     })
-    .catch((error)=>{
-        console.error(error)
-        Swal.fire({
-            icon: "error",
-            text: 'something went wrong',
-            showConfirmButton: false,
-            timer: 1500
-            });
-    })
+    .catch(handleError)
 }
 
 function updateCouponStatus(couponId, status) {

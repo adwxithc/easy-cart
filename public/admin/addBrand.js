@@ -2,17 +2,14 @@ function getAddBrand(){
     fetch('/admin/loadAddBrand')
     .then(response =>{
         if(response.ok) return response.text()
-        throw new Error('Unable to connect to the server')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
         imagePreview()
         postBrand()
     })
-    .catch((er)=>{
-        console.log(er.message)
-        window.location.href='/admin/500'
-    })
+    .catch(handleError)
 }
 let logo;
 function imagePreview(){
@@ -137,7 +134,7 @@ function postBrand(){
             body:formData
         })
         .then(response=>{
-            if(!response.ok) throw new Error('brand data upload failed')
+            if(!response.ok) throw { status: response.status, data: response.json() };
             return response.json()
         })
         .then(data=>{
@@ -154,11 +151,7 @@ function postBrand(){
 
 
         })
-        .catch((er)=>{
-            console.log(er)
-            window.location.href='/admin/500'
-    
-        })
+        .catch(handleError)
 
     })
   

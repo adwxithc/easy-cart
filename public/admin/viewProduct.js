@@ -37,7 +37,7 @@ function viewProduct(){
                             if(response.ok){
                                 return response.json()
                             }
-                            throw new Error("Connection to server failed")
+                            throw { status: response.status, data: response.json() };
                         
                         })
                         .then(data=>{
@@ -67,10 +67,7 @@ function viewProduct(){
                             }
 
                         })
-                        .catch((error)=>{
-                            console.log(error.message)
-                            window.location.href='/admin/500'
-                        })
+                        .catch(handleError)
                     
                 })
                 
@@ -84,7 +81,7 @@ function viewProduct(){
                     if(response.ok){
                         return response.text()
                     }
-                    throw new Error("Unable to connect to server")
+                    throw { status: response.status, data: response.json() };
                 })
                 .then(html=>{
                     pageContent.innerHTML=html;
@@ -101,10 +98,7 @@ function viewProduct(){
                     updateProduct() //this function is located at => public\admin\editProductFunction.js
 
                 })
-                .catch((error)=>{
-                    console.log(error)
-                    // window.location.href='/admin/500'
-                })
+                .catch(handleError)
 
             }
 
@@ -119,7 +113,7 @@ function viewProduct(){
                 if(response.ok){
                     return response.text()
                 }
-                throw new Error("Unable to get more info")
+                throw { status: response.status, data: response.json() };
             })
             .then(html=>{
                 
@@ -133,10 +127,7 @@ function viewProduct(){
                 document.getElementById('viewModal-content').innerHTML=html
 
             })
-            .catch((er)=>{
-                console.log(er.message)
-                window.location.href='/admin/500'
-            })
+            .catch(handleError)
 
         }
 
@@ -197,7 +188,7 @@ function fetchDataForPage(Page){
     fetch(url)
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw { status: response.status, data: response.json() };
         }
         return response.text();
     })
@@ -214,9 +205,7 @@ function fetchDataForPage(Page){
 
 
     })
-    .catch(error => {
-        console.error('Fetch error:', error);
-    });
+    .catch(handleError);
 }
 }
 
@@ -237,7 +226,7 @@ function searchProduct(){
         fetch(`/admin/searchProduct?field=${field}&key=${key}`)
         .then(response=>{
             if(!response.ok){
-                throw new Error("can't get searched products")
+                throw { status: response.status, data: response.json() };
             }
             const contentType = response.headers.get("content-type");
 
@@ -261,11 +250,7 @@ function searchProduct(){
               }
             
         })
-        .catch((error)=>{
-           console.log(er.message)
-           window.location.href='/admin/500'
-
-        })
+        .catch(handleError)
 
     })
 }
@@ -282,7 +267,7 @@ function removeProductOffer(productId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.removed){
@@ -308,4 +293,5 @@ function removeProductOffer(productId){
                 });
         }
     })
+    .catch(handleError)
 }

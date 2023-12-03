@@ -18,10 +18,7 @@ const removeFromStock=async(newCart)=>{
         }
         
     } catch (error) {
-        console.log(error)
-        const customError = new Error('Stock update failed');
-        customError.originalError = error;
-        return Promise.reject(customError)
+        throw error
     }
 }
 
@@ -45,10 +42,7 @@ const addToStock=async(productId,quantity)=>{
         }
     } catch (error) {
 
-        console.log(error)
-        const customError = new Error('Stock update failed');
-        customError.originalError = error;
-        return Promise.reject(customError)
+       throw error
 
     }
 }

@@ -118,21 +118,15 @@ function updateProduct(){
                 body:formData
             })
             .then(response=>{
-                if(response.ok){
-                    return response.json()
-                }
-                throw new Error("Unable to Update product")
+                if(response.ok) return response.json()
+                throw { status: response.status, data: response.json() };
             })
             .then(data=>{
                 
                 showMessage(data.message)
             
             })
-            .catch((er)=>{
-                console.log(er)
-                
-                window.location.href='/admin/500'
-            })
+            .catch(handleError)
     }
 
     })
@@ -162,7 +156,7 @@ function updateProduct(){
  
                          const selectedImages = event.target.files;
                          if (selectedImages.length > 4) {
-                             alert('You can select a maximum of 4 images.');
+                             showMessage('You can select a maximum of 4 images.');
                              imageUploadInput.value = ''; // Clear the input field
                              return;
                          }
@@ -339,13 +333,16 @@ function updateProduct(){
 function convertUrlToFile(url, callback) {
   
     fetch(url)
-        .then(response => response.blob())
+        .then(response => {
+            if(response.ok) return response.blob()
+            throw { status: response.status, data: response.json() };
+        })
         .then(blob => {
             const filename = url.substring(url.lastIndexOf('/') + 1);
             const file = new File([blob], filename, { type: blob.type });
             
             callback(file);
         })
-        .catch(error => console.error('Error converting URL to File:', error));
+        .catch(handleError);
 }
                     

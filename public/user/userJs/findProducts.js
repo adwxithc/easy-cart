@@ -83,7 +83,7 @@ function findProducts(name,categories,brands,priceRange,page,sort){
     .then(response=>{
         
         if(response.ok) return response.json() 
-        throw new Error('connection to server error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         
@@ -93,16 +93,13 @@ function findProducts(name,categories,brands,priceRange,page,sort){
             totalProductPages=data.totalPages
   
             displaySearchresult(data.products,data.cart)
-            console.log(totalProductPages)
+          
         }else{
             showNoResult()
         }
 
     })
-    .catch((error)=>{
-        console.error(error)
-        showModal('something went wrong')
-    })
+    .catch(handleError)
  
 }
 

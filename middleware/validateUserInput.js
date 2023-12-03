@@ -7,8 +7,10 @@ const Order=require('../model/orderModel')
 const mongoose=require('mongoose')
 const Coupone = require('../model/couponeModel')
 const userHelpers=require('../helperMethods/userHelpers')
+const CustomError = require('../Utils/CustomError')
+const asyncErrorHandler= require('../Utils/asyncErrorHandler')
 
-const validateCartInputs=async (req,res,next)=>{
+const validateCartInputs= (req,res,next)=>{
     const userId=req.session.userId;
 
     
@@ -46,8 +48,6 @@ const validateCartInputs=async (req,res,next)=>{
             next()
         }
 
-
-
     }
 
 }
@@ -82,9 +82,7 @@ try {
     }
     
 } catch (error) {
-    console.log(error.message)
-    res.status(500).json({message:'internal server error'})
-   
+    next(error) 
 }}
 
 const validateEditedUserInfo=async(req,res,next)=>{
@@ -114,8 +112,7 @@ const validateEditedUserInfo=async(req,res,next)=>{
         }
         
     } catch (error) {
-        console.log('error')
-        res.status(500)
+        next(error)
     }
 }
 
@@ -164,10 +161,8 @@ const validateAddress=(req,res,next)=>{
 
 }
 
-const validateCheckoutData=async(req,res,next)=>{
-        try {
-       
-         
+const validateCheckoutData=asyncErrorHandler( async(req,res,next)=>{
+
             const address=await Address.findById(req.body?.address)
             if(address){
                 if(req.body.productId){
@@ -182,15 +177,17 @@ const validateCheckoutData=async(req,res,next)=>{
                                 
                                 const effectedDiscount=product.effectedDiscount?product.effectedDiscount:0;
                                 const totalAmount=req.body.total
-                                let couponeDiscount=0
+                                let couponeDiscount=0,couponeId=null
                                 if(req.couponeApplied){
-                                    const coupone=req.coupone
+
+                                     const coupone=req.coupone
                                     couponeDiscount=coupone.couponeDiscount
+                                    couponeId=coupone._id
                                 }
                                 
                                 
                                 const discountedTotal=totalAmount-((totalAmount*couponeDiscount)/100)
-
+                                
                                     req.order={
                                         orderNumber:orderNumber,
                                         customer:req.session.userId,
@@ -206,12 +203,13 @@ const validateCheckoutData=async(req,res,next)=>{
                                         paymentMethod:req.body.paymentMethod,
                                         shippingAddress:address,
                                         couponeDiscount:couponeDiscount,
-                                        couponeId:coupone._id
+                                        couponeId:couponeId
                                     }
                                     next()
 
                             }else{
-                                res.json({message:"Invalid payment method",orderConfirmed:false})
+                                const err= new CustomError("Invalid payment method",400)
+                                next(err)
                             }
 
 
@@ -223,7 +221,9 @@ const validateCheckoutData=async(req,res,next)=>{
                     const cart=req.cart
 
                         if(!(req.body.paymentMethod=='COD' ||req.body.paymentMethod=='ONLINE-PAYMENT' || req.body.paymentMethod=='WALLET')){
-                            res.json({message:"Invalid payment method",orderConfirmed:false})
+                            const err= new CustomError("Invalid payment method",400)
+                            next(err)
+                           
                         }else{
 
                             let productInfos=[];
@@ -279,15 +279,11 @@ const validateCheckoutData=async(req,res,next)=>{
                 }
 
             }else{
-                res.json({message:"This address doesn't exist",orderConfirmed:false})
+                const err= new CustomError("This address doesn't exist",400)
+                next(err)
             }
-             
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({message:'internal server error'})
-            
-        }
-}
+
+})
 
 const validateChangePassword=(req,res,next)=>{
         try {
@@ -306,19 +302,13 @@ const validateChangePassword=(req,res,next)=>{
                 next()
             }
         } catch (error) {
-            console.log(error)
-            res.status(500).json({message:'internal server error'})
+            next(error)
         }
 }
 
-const validateProductSearchCriteria=async(req,res,next)=>{
-    try {
-        
-        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body;
-        
+const validateProductSearchCriteria=asyncErrorHandler( async(req,res,next)=>{
 
-        
-        
+        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body;
         
 
         let matchCriteria={};
@@ -355,11 +345,7 @@ const validateProductSearchCriteria=async(req,res,next)=>{
         req.sort = ['price-low-to-high', 'price-high-to-low', 'latest'].includes(sort) ? sort : null;
         next()
 
-        
-    } catch (error) {
-        console.log(error)
-    }
-}
+})
 
 const coupone=async(req,res,next)=>{
     try {
@@ -379,7 +365,7 @@ const coupone=async(req,res,next)=>{
         
                 res.json({coupone:false,message:'Invalid coupone'})
             }else if(!(total>coupone.minPurchaseAmount)){
-                console.log('-----------------------------------------------------------min')
+                
                 res.json({coupone:false,message:"coupone can't be applied due to insufficient purchase amount "})
             }else if(!(total<coupone.maxPurchaseAmount)){
                 console.log(!(total<coupone.maxPurchaseAmount),total,coupone.maxPurchaseAmount)
@@ -394,8 +380,7 @@ const coupone=async(req,res,next)=>{
 
         
     } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
+        next(error)
     }
 }
 
@@ -415,8 +400,7 @@ const returnOrder=(req,res,next)=>{
         res.status(400).json({success:false,message:'Invalid request'})
 
     } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
+        next(error)
     }
 }
 
@@ -447,7 +431,7 @@ const otp=(req,res,next)=>{
         
         
     } catch (error) {
-        
+        next(error)
     }
 }
 

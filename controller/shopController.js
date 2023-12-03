@@ -3,42 +3,34 @@ const Category=require('../model/categoryModel')
 const Brands=require('../model/brandModel')
 const userHelpers=require('../helperMethods/userHelpers')
 const Cart=require('../model/cartModel')
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const { default: mongoose } = require('mongoose')
 
-const loadShop=async(req,res)=>{
+//LOAD SHOP PAGE
+const loadShop=asyncErrorHandler( async(req,res, next)=>{
 
-    try {
-        // const products=await Product.find().limit(12);
-        const products=await Product.aggregate([
-            {
-                $limit:12
-            },
+    const cart=req.cart;
+    // GETING ANY FIRST 12 PRODUCTS
+    const products=await Product.aggregate([
+        {
+            $limit:12
+        },
+    ])
 
-        ])
-        const cart=await Cart.aggregate([
-            {
-                $match:{
-                    user:new mongoose.Types.ObjectId(req.session.userId)
-                }
-            }
-        ])
-        
+    //FIND TOTAL PAGE FOR PAGINATION
+    const totalProducts = await Product.countDocuments();
+    const totalPages=Math.ceil(totalProducts/12)
 
-        const totalProducts = await Product.countDocuments();
-        const totalPages=Math.ceil(totalProducts/12)
+    //GETTING FILTERING DETAILS
+    const categories=await Category.find({status:true},{name:1})
+    const brands=await Brands.find({status:true},{name:1})
+    
+    res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart,page:1})
 
-        const categories=await Category.find({status:true},{name:1})
-        const brands=await Brands.find({status:true},{name:1})
-      
-        res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart[0],page:1})
-    } catch (error) {
-        console.log(error)
-        res.render('errors/500.ejs')
-    }
-}
+});
 
-const searchProducts=async(req,res)=>{
-    try {
+const searchProducts=asyncErrorHandler( async(req,res, next)=>{
+
         const sort=req.sort
         // Default sorting order
         let sortCriteria = {};
@@ -55,18 +47,11 @@ const searchProducts=async(req,res)=>{
         const products= await userHelpers.findProducts(req.matchCriteria,req.skip,req.limit,sortCriteria)
         if(products){
 
-
-            
-           
             res.json({products:products,totalPages:req.totalPages,page:req.page,cart:req.cart})
         }else{
             res.json({products:false})
         }
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-}
+});
 
 module.exports={
     loadShop,

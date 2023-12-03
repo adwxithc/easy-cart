@@ -23,7 +23,7 @@ const expireCarts = async () => {
 };
 
 const expireOffers=async()=>{
-console.log('cron shedule for expireOffers')
+
     const products=await Product.aggregate([
         {
             $match:{

@@ -115,78 +115,81 @@ async function findProductLargestOffer(productId) {
 
         return result[0]
     } catch (error) {
-        console.error(`Error finding product offer: ${error.message}`);
+        
         throw error;
     }
 }
 
 async function  setEffectedDiscounts(categoryId){
-    
-const products = await Product.aggregate([
-    {
-        $match: {
-            category: {
-                $elemMatch: {
-                    $eq: new mongoose.Types.ObjectId(categoryId)
+    try {
+        const products = await Product.aggregate([
+            {
+                $match: {
+                    category: {
+                        $elemMatch: {
+                            $eq: new mongoose.Types.ObjectId(categoryId)
+                        }
+                    }
                 }
+            },
+            {
+                $lookup: {
+                    from: 'offers',
+                    localField: 'offer',
+                    foreignField: '_id',
+                    as: 'productOffer'
+                }
+            },
+            {
+                $unwind: { path: '$productOffer', preserveNullAndEmptyArrays: true }
             }
+        ]);
+        for(let product of products){
+            setEffectedDiscountsForProduct(product)
         }
-    },
-    {
-        $lookup: {
-            from: 'offers',
-            localField: 'offer',
-            foreignField: '_id',
-            as: 'productOffer'
-        }
-    },
-    {
-        $unwind: { path: '$productOffer', preserveNullAndEmptyArrays: true }
+    } catch (error) {
+        throw error
     }
-]);
 
-
-    for(let product of products){
-        setEffectedDiscountsForProduct(product)
-    }
 }
 
 async function setEffectedDiscountsForProduct(product){
+try {
+    const offer=await findProductLargestOffer(product._id)
+
+    if(offer){
+        const currentDate=new Date()
+        let effectedDiscount,effectedOfferStartDate,effectedOfferEndDate,productOffer=0,largestOffer=0;
     
-
-
-
-        const offer=await findProductLargestOffer(product._id)
-
-        if(offer){
-            const currentDate=new Date()
-            let effectedDiscount,effectedOfferStartDate,effectedOfferEndDate,productOffer=0,largestOffer=0;
-        
-            if(product.productOffer){
-                
-                if(product.productOffer?.startDate<=currentDate && product.productOffer?.expireDate>currentDate){
-                
-                    productOffer=product.productOffer?.discountPercentage?product.productOffer.discountPercentage:0
-                }
-            }
+        if(product.productOffer){
             
-            if(offer.largestOffer?.discountPercentage){
-                largestOffer=offer.largestOffer?.discountPercentage
+            if(product.productOffer?.startDate<=currentDate && product.productOffer?.expireDate>currentDate){
+            
+                productOffer=product.productOffer?.discountPercentage?product.productOffer.discountPercentage:0
             }
-
-
-            if(largestOffer>=productOffer){
-                    effectedDiscount=largestOffer;
-                    effectedOfferStartDate=offer.largestOffer.startDate
-                    effectedOfferEndDate=offer.largestOffer.expireDate
-            }else{
-                effectedDiscount=productOffer;
-                effectedOfferStartDate=product.productOffer.startDate
-                effectedOfferEndDate=product.productOffer.expireDate
-            }
-             await Product.updateOne({_id:product._id},{$set:{effectedDiscount:effectedDiscount,effectedOfferStartDate:effectedOfferStartDate,effectedOfferEndDate,effectedOfferEndDate}})
-
         }
+        
+        if(offer.largestOffer?.discountPercentage){
+            largestOffer=offer.largestOffer?.discountPercentage
+        }
+
+
+        if(largestOffer>=productOffer){
+                effectedDiscount=largestOffer;
+                effectedOfferStartDate=offer.largestOffer.startDate
+                effectedOfferEndDate=offer.largestOffer.expireDate
+        }else{
+            effectedDiscount=productOffer;
+            effectedOfferStartDate=product.productOffer.startDate
+            effectedOfferEndDate=product.productOffer.expireDate
+        }
+         await Product.updateOne({_id:product._id},{$set:{effectedDiscount:effectedDiscount,effectedOfferStartDate:effectedOfferStartDate,effectedOfferEndDate,effectedOfferEndDate}})
+
+    }
+} catch (error) {
+    throw error
+}
+ 
 
     
 }

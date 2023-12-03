@@ -55,7 +55,7 @@ function pagination(){
             fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw { status: response.status, data: response.json() };
                 }
                 return response.text();
             })
@@ -75,9 +75,7 @@ function pagination(){
                 document.body.appendChild(script2);
         
             })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
+            .catch(handleError);
         }
     }
 
@@ -130,12 +128,9 @@ function blockOrUnblockUser(){
             body:jsonData
         })
         .then(response=>{
-            if(response.ok){
-                return response.json()
+            if(response.ok)return response.json()
+            throw { status: response.status, data: response.json() };
 
-            }else{
-                throw new Error("Unable TO Change Status")
-            }
         })
         .then(data=>{
 
@@ -151,10 +146,7 @@ function blockOrUnblockUser(){
                 statusBtn.classList.add('btn-outline-danger');
             }
         })
-        .catch(error=>{
-            console.log(error.message)
-            window.location.href='/admin/500'
-        })
+        .catch(handleError)
     }
 
 
@@ -177,7 +169,7 @@ function searchUser(){
       .then(response =>{
         console.log(response)
         if(!response.ok){
-          throw new Error(`HTTP error! Status: ${response.status}`)
+            throw { status: response.status, data: response.json() };
         }
         const contentType = response.headers.get("content-type");
   
@@ -212,10 +204,7 @@ function searchUser(){
   
         }
       })
-      .catch((error) => {
-        console.log("Fetch error", error.message);
-        window.location.href='/admin/500'
-      });
+      .catch(handleError);
     })
   
   }

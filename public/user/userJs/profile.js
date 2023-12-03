@@ -34,7 +34,9 @@ function updateUserInfo(data){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to connect to server')
+       
+        throw { status: response.status, data: response.json() };
+    
     })
     .then(data=>{
         
@@ -51,10 +53,7 @@ function updateUserInfo(data){
             info.setAttribute('disabled','disabled')
         }
     })
-    .catch((error)=>{
-        console.log(error)
-        showModal('something went wrong')
-    })
+    .catch(handleError)
 
 
 }
@@ -110,7 +109,8 @@ function getManageAddress(){
     fetch('/manageAddress')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('unable to connect to server')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(data=>{
         
@@ -119,10 +119,7 @@ function getManageAddress(){
         document.getElementById('manageAddress').classList.add('selected')
         
     })
-    .catch((error)=>{
-        console.log(error)
-        showModal('Something went wrong')
-    })
+    .catch(handleError)
 }
 
 function removeErrorMessage(){
@@ -245,7 +242,8 @@ function addNewAddress(newAddress){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to conect to the server')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(data=>{
         if(data.added){
@@ -262,18 +260,11 @@ function addNewAddress(newAddress){
                 const newAddressElement = createAddressElement(data.newAddress);
                 appendAddressToList(newAddressElement);
             }
-            
-            
 
-        }else{
-            showModal(data.message)
         }
 
     })
-    .catch((er)=>{
-        console.log(er)
-        showModal('Something went wrong')
-    })
+    .catch(handleError)
 }
 
 function setAddAddress(){
@@ -346,7 +337,8 @@ function deletAddress(id){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to connect to server')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(data=>{
         if(data.deleted){
@@ -357,10 +349,7 @@ function deletAddress(id){
         }
         
     })
-    .catch((error)=>{
-        console.log(error)
-        showModal('Something went wrong')
-    })
+    .catch(handleError)
 }
 
 function validateUpdatedAddress(){
@@ -465,19 +454,15 @@ function updateAddress(address){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to connect to server')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(data=>{
-        if(data.added){
-            showModal(data.message)
-        }else{
+        if(data.success){
             showModal(data.message)
         }
     })
-    .catch((er)=>{
-        console.log(er)
-        showModal('Something went wrong')
-    })
+    .catch(handleError)
 }
 
 
@@ -486,12 +471,14 @@ function changePassword(){
     document.getElementById('changePassword').classList.add('selected')
     fetch('/changePassword')
     .then(response=>{
+
         if(response.ok) return response.text()
-        throw new Error('unable to connect to the server')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         document.getElementById('profileSettingArea').innerHTML=html
     })
+    .catch(handleError)
 }
 
 function removePasswordErrorMessage(){
@@ -504,6 +491,7 @@ function removePasswordErrorMessage(){
 }
 
 function validateChangePassword(data){
+  
     removePasswordErrorMessage()
 
     const cPassword=data.get('cPassword')
@@ -539,12 +527,14 @@ function validateChangePassword(data){
         rePasswordError.innerHTML="your  entered two new diffrent password"
         return false
     }else{
+       
         return true
     }
 
 }
 
 function updatePassword(){
+   
     const changePasswordForm=document.getElementById('changePasswordForm')
     const formData=new FormData(changePasswordForm)
     
@@ -561,15 +551,18 @@ function updatePassword(){
         })
         .then(response=>{
             if(response.ok){ 
-            const contentType = response.headers.get("content-type");
+               
+                const contentType = response.headers.get("content-type");
 
-            if (contentType && contentType.includes("application/json")) {
-              return response.json(); // Parse JSON response
-            } else {
-              return response.text(); // Assume HTML content
+                if (contentType && contentType.includes("application/json")) {
+                    return response.json(); // Parse JSON response
+                } else {
+                    return response.text(); // Assume HTML content
+                }
             }
-            }
-            throw new Error('unable to connect to the server')
+           
+            throw { status: response.status, data: response.json() };
+
         })
         .then(data=>{
             if (typeof data === 'object'){
@@ -582,9 +575,6 @@ function updatePassword(){
         }
         })
 
-        .catch((er)=>{
-            showModal("something went wrong")
-            console.log(er)
-        })
+        .catch(handleError)
     }
 }

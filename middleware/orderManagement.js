@@ -30,7 +30,7 @@ async function getLastOrderNumber() {
       return 'ORD0000'; 
     }
   } catch (error) {
-    console.error('Error fetching the last order number:', error);
+    throw error()
     // Handle the error as appropriate for your application.
   }
 }

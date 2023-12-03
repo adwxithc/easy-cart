@@ -3,37 +3,20 @@ const crypto=require('crypto')
 const User=require('../model/userModel')
 const { default: mongoose } = require('mongoose')
 const Order = require('../model/orderModel')
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const CustomError = require('../Utils/CustomError')
 
 
-const loadWallet=async(req,res)=>{
-    try {
-        const user=await User.aggregate([
-            {
-                $match:{
-                    _id:new mongoose.Types.ObjectId(req.session.userId)
-                }
-            },
-            {
-                $project:{
-                    wallet:1
-                }
-            },
-            {
-                $limit: 1
-            }
-        ])
+const loadWallet=asyncErrorHandler( async(req, res, next)=>{
+
+        const user=req.user
+        res.render('wallet',{user:user})
+
+})
+
+const createAddAmount=asyncErrorHandler( async(req,res, next)=>{
+        const {amount} = req.body
         
-        res.render('wallet',{user:user[0]})
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-}
-
-const createAddAmount=async(req,res)=>{
-    try {
-        const amount=req.body.amount
         if(amount>0 && !isNaN(amount)){
             const userInfo = await User.aggregate([
                 {
@@ -50,22 +33,19 @@ const createAddAmount=async(req,res)=>{
                   },
                 },
               ]);
+              
         const id=crypto.randomBytes(8).toString('hex')
         userHelpers.generateRazorpay(id,amount).then(order=>{
                     res.json({order:order,userInfo:userInfo})
             })
         }else{
-                res.json({order:false})
+                const err=new CustomError('Invalid amount',400)
+                next(err)
         }
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json('internal server error')
-    }
-}
-const verifyAddToWallet=async(req,res)=>{
-    try {
-        
+
+})
+const verifyAddToWallet=asyncErrorHandler( async(req,res, next)=>{
+
         const details=req.body;
         let hmac=crypto.createHmac('sha256',process.env.RAZORPAY_KEY_SECRET)
         hmac.update(details.payment?.razorpay_order_id+'|'+details.payment?.razorpay_payment_id)
@@ -84,18 +64,15 @@ const verifyAddToWallet=async(req,res)=>{
                     res.json({message:'Amount added successfully',added:true,transaction:transaction,balance:balance})
                 }
             }else{
-                res.json({message:'not a valid user'})
+                const err=new CustomError('Not a valid user',401)
+                next(err)
             }
         }else{
-           res.json({message:'payment not verified'})
+           const err = new CustomError('payment not verified',400)
+           next(err)
         }
 
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'internal server error'})
-    }
-}
+});
 
 
 module.exports={

@@ -56,7 +56,7 @@ function removeFromCart(productId){
               return response.text(); // Assume HTML content
             }
         }
-        throw new Error('unable to connect to the server')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if (typeof data === 'object') {
@@ -103,11 +103,7 @@ function removeFromCart(productId){
 
        
     })
-    .catch((er)=>{
- 
-        console.log(er.message)
-
-    })
+    .catch(handleError)
 }
 
 function inc(id){
@@ -168,7 +164,7 @@ function updateCart(productId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('unable to connect to server')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         
@@ -179,9 +175,7 @@ function updateCart(productId){
         // finding total value at checkout
         showCartOrderSummery()
     })
-    .catch((er)=>{
-        console.log(er)
-    })
+    .catch(handleError)
   
 
 }

@@ -1,63 +1,44 @@
 const Coupone = require("../model/couponeModel")
 const adminHelpers=require('../helperMethods/adminHelpers')
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const CustomError = require("../Utils/CustomError")
 
 const loadAddcoupone=(req,res)=>{
-    try {
-       
-        res.render('addCoupone')
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:"Internal server error"})
+
+    res.render('addCoupone')
+}
+
+const addCoupone=asyncErrorHandler( async(req,res, next)=>{
+
+    const coupone = new Coupone(req.coupone)
+    const saveCoupone= await coupone.save()
+    
+
+    if(saveCoupone){
+
+        res.json({message:'coupone created',created:true})
+    }else{
+        const err=new CustomError('coupone creation failed',500)
+        next(err)
     }
-}
 
-const addCoupone=async(req,res)=>{
-        try {
+})
 
-         
-            const coupone = new Coupone(req.coupone)
-            const saveCoupone= await coupone.save()
-         
+const loadViewCoupones=asyncErrorHandler( async (req,res, next)=>{
 
-            if(saveCoupone){
-
-                res.json({message:'coupone created',created:true})
-            }else{
-                res.json({message:'coupone creation failed',created:false})
-            }
-        
-            
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal server error' });
-        }
-}
-
-const loadViewCoupones=async (req,res)=>{
-    try {
-        const coupones=await Coupone.find({})
+        const coupones=await Coupone.find({}).sort({updatedAt:-1})
         res.render('viewCoupones',{coupones:coupones})
+  
+})
+const loadEditCoupone=asyncErrorHandler( async(req,res, next)=>{
 
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-} 
-const loadEditCoupone=async(req,res)=>{
-    try {
+    const coupone=await Coupone.findById(req.query.id)
+    res.render('editCoupone',{coupone:coupone})
 
-            const coupone=await Coupone.findById(req.query.id)
-            res.render('editCoupone',{coupone:coupone})
-        
+})
 
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-}
+const updateCoupone=asyncErrorHandler( async(req,res, next)=>{
 
-const updateCoupone=async(req,res)=>{
-    try {
         const updatedCoupon = await Coupone.findOneAndUpdate(
             { _id: req.body.couponeId },
             { $set: req.coupone },
@@ -66,18 +47,14 @@ const updateCoupone=async(req,res)=>{
         if(updatedCoupon){
             res.json({updated:true,message:'coupone Updated successfully'})
         }else{
-            res.json({updated:false,message:'coupone Updation failed'})
+            const err=new CustomError('coupone Updation failed',500)
+            next(err)
 
         }
-        
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-}
+})
 
-const listUnlistCoupone=async(req,res)=>{
-    try {
+const listUnlistCoupone=asyncErrorHandler(async(req, res, next)=>{
+
         if(req.coupone){
         if( req.coupone.status){
             req.coupone.status=false
@@ -91,14 +68,11 @@ const listUnlistCoupone=async(req,res)=>{
             res.json({updates:false,message:'failed to change coupone status'})
         }
         }else{
-            res.json({message:"This coupone doesn't exist",coupone:false})
+            const err=new CustomError("coupone doesn't exist",400)
+            next(err)
         }
-        
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
-    }
-}
+
+})
 
 module.exports={
     loadAddcoupone,

@@ -7,25 +7,39 @@ const userHelpers=require('../helperMethods/userHelpers')
 const { default: mongoose } = require('mongoose')
 const crypto=require('crypto')
 const Coupone = require('../model/couponeModel')
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const CustomError = require('../Utils/CustomError')
 
 
-const checkout=async(req,res)=>{
-    try {
+const checkout=asyncErrorHandler( async(req,res, next)=>{
+
         //----------------------------validate quantity---------------------------------
         
-        const user=await User.findById(req.session.userId)
+        const user=req.user
         const addresses=await Address.find({user:req.session.userId})
         const currentDate=new Date()
+
         const coupons = await Coupone.find({
             status: true,
             expireDate: { $gt: currentDate },
             startDate: { $lte: currentDate },
             $or: [
                 { appliedUsers: { $size: 0 } }, // Check if the array is empty
-                { appliedUsers: { $ne: req.session.userId } } // Check if the user is not in the array
+                {
+                    $and: [
+                        {
+                            $expr: {
+                                $lt: [ { $size: "$appliedUsers" }, "$quantity" ] // Check if the number of applied users is less than quantity
+                            }
+                        },
+                        { appliedUsers: { $ne: req.session.userId } } // Check if the user is not in the array
+                    ]
+                }
             ]
         });
-    console.log(coupons)
+        
+        
+    
      if(req.query.productId){
 
         const product=await Product.findById(req.query.productId).populate('brand')
@@ -46,26 +60,19 @@ const checkout=async(req,res)=>{
             select: 'name' 
           }
         });
-console.log(cart.cartItems[0].product.effectedDiscount)
+
         res.render('checkout',{user:user,addresses:addresses,cart:cart,coupones:coupons}) 
      }
         
 
-       
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-    }
-}
+})
 
 
 
 
-const confirmOrder=async(req,res)=>{
-    try {
+const confirmOrder=asyncErrorHandler( async(req,res, next)=>{
+
         
-        
-        // console.log(req.order)
         const order=new Order(req.order)
         const orderData=await order.save()
         if(orderData){
@@ -120,15 +127,11 @@ const confirmOrder=async(req,res)=>{
             res.json({message:'order confirmed',orderConfirmed:false})
         }
         
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-    }
-}
 
-const orderResponse=async(req,res)=>{
-    try {
+});
+
+const orderResponse=asyncErrorHandler( async(req,res, next)=>{
+
         if(req.query.order){
         const user=await User.findById(req.session.userId)
 
@@ -146,18 +149,13 @@ const orderResponse=async(req,res)=>{
             res.render('orderResponse',{orderData:orderData,user:user})
         }
 
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-        
-    }
+
     
-}
-const verifyPayment=async(req,res)=>{
-    try {
-        
+})
+const verifyPayment=asyncErrorHandler( async(req,res, next)=>{
+
         const details=req.body;
-       
+        
         let hmac=crypto.createHmac('sha256',process.env.RAZORPAY_KEY_SECRET)
         hmac.update(details.payment?.razorpay_order_id+'|'+details.payment?.razorpay_payment_id)
         hmac=hmac.digest('hex')
@@ -172,34 +170,29 @@ const verifyPayment=async(req,res)=>{
                 }
                 res.json({paied:true,orderId:details.order.receipt})
             }else{
-                res.json({mesaage:'payment failed',paied:false})
+                
+                const err=new CustomError('payment failed',500)
+                next(err)
             }
             
         }else{
+            const err= new CustomError('Invalid verification request',400)
+            next(err)
             
-            res.json({mesaage:'payment failed',paied:false})
         }
 
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'internal server error'})
-    }
-}
+})
 
-const getCoupone=async (req,res)=>{
-    try {
-        
+const getCoupone=asyncErrorHandler( async (req,res, next)=>{
+
         const coupone=req.coupone
         if(coupone){
             res.json({coupone:coupone})
         }else{
             res.json({message:"Coupone doesn't exist",coupone:false})
         }
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'internal server error'})
-    }
-}
+
+})
 
 
 

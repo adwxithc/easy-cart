@@ -175,8 +175,8 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
         return false
       }
     } catch (error) {
-      console.error('Error finding product:', error.message);
-      throw new Error(error)
+      
+      throw error
     }
   }
   
@@ -244,7 +244,7 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
       }
       
     } catch (error) {
-      throw new Error(error)
+      throw error
     }
     
   }
@@ -274,7 +274,7 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
 
       
     } catch (error) {
-      throw new Error(error)
+      throw error
     }
   }
   const generateInvoice=(order)=>{
@@ -451,13 +451,13 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
         return invoiceHTML
         
       } catch (error) {
-        throw new Error(error)
+        throw error
       }
   }
 
 const eligibleForReturn=async(product,order)=>{
-
-  let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterReturn
+  try {
+    let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterReturn
 
     // IF IT IS A ORDER FOR MULTIPLE PRODUCTS AND COUPON HAS APPLIED
     if(order.items.length>1 && order.couponeDiscount>0){
@@ -481,7 +481,10 @@ const eligibleForReturn=async(product,order)=>{
       
     }
     return true
-  
+  } catch (error) {
+    throw error
+  }
+
 }
 
 async function getMostSoldCategories(){
@@ -526,7 +529,7 @@ async function getMostSoldCategories(){
       
       return mostSoldCategories
     } catch (error) {
-      throw new Error(error)
+      throw error
     }
 
 }

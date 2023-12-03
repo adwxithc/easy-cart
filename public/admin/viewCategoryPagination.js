@@ -59,7 +59,7 @@ updatepagination()
         fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+              throw { status: response.status, data: response.json() };
             }
             return response.text();
         })
@@ -80,10 +80,7 @@ updatepagination()
             document.body.appendChild(script2);
     
         })
-        .catch(error => {
-          window.location.href='/admin/500'
-            console.error('Fetch error:', error);
-        });
+        .catch(handleError);
     }
   }
 
@@ -135,11 +132,10 @@ statusButtons.forEach(button => {
       body: JSON.stringify({ categoryID: categoryID })
     })
     .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Failed to unlist category');
-      }
+      if (response.ok) return response.json();
+     
+      throw { status: response.status, data: response.json() };
+      
     })
     .then(data => {
 
@@ -173,12 +169,7 @@ statusButtons.forEach(button => {
       }
     })
 
-    .catch(error => {
-      // Handle errors
-
-      console.error(error.message);
-      window.location.href='/admin/500'
-    });
+    .catch(handleError);
   }
 
 }
@@ -202,7 +193,7 @@ function loadeditCategory(){
     fetch(`/admin/loadeditCategory?id=${id}`)
     .then(response =>{
       if(!response){
-        throw new Error(`HTTP error! Status: ${response.status}`)
+        throw { status: response.status, data: response.json() };
       }
       const contentType = response.headers.get("content-type");
 
@@ -231,10 +222,7 @@ function loadeditCategory(){
         document.body.appendChild(script);
       }
     })
-    .catch((error) => {
-      console.log("Fetch error", error);
-      window.location.href='/admin/500'
-    });
+    .catch(handleError);
 
   }
 
@@ -254,9 +242,9 @@ function categorySearch(){
     
     fetch(`/admin/categorySearch?key=${searchKey}`)
     .then(response =>{
-      console.log(response)
+      
       if(!response.ok){
-        throw new Error(`HTTP error! Status: ${response.status}`)
+        throw { status: response.status, data: response.json() };
       }
       const contentType = response.headers.get("content-type");
 
@@ -293,10 +281,7 @@ function categorySearch(){
 
       }
     })
-    .catch((error) => {
-      console.log("Fetch error", error.message);
-      window.location.href='/admin/500'
-    });
+    .catch(handleError);
   })
 
 }

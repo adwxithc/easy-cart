@@ -2,15 +2,13 @@ function loadSalesReport(){
     fetch('/admin/salesReport')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
         getSalesReport('week')
     })
-    .catch((er)=>{
-        console.log(er)
-    })
+    .catch(handleError)
 }
 
 function downloadTableInExcel() {
@@ -44,7 +42,7 @@ function getSalesReport(timePeriod){
     fetch(`/admin/getSalesReport?timePeriod=${timePeriod}`)
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server connection error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         let labeles=[`${timePeriod}1`,`${timePeriod}2`,`${timePeriod}3`,`${timePeriod}4`,`${timePeriod}5`]
@@ -54,6 +52,7 @@ function getSalesReport(timePeriod){
         showSalesData('all','all','all')
         
     })
+    .catch(handleError)
 }
 
 let areaChartInstance
@@ -320,15 +319,13 @@ function showSalesData(time,paymentStatus,orderStatus){
   fetch(`/admin/getSalesData?timePeriod=${time}&paymentStatus=${paymentStatus}&orderStatus=${orderStatus}`)
   .then(response=>{
     if(response.ok) return response.json()
-    throw new Error('server communication failed')
+    throw { status: response.status, data: response.json() };
   })
   .then(data=>{
     console.log(data)
     setSalesData(data.sales)
   })
-  .catch((error)=>{
-    console.log(error)
-  })
+  .catch(handleError)
 }
 
 function setSalesData(data){

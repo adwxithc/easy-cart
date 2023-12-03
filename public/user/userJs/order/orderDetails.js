@@ -166,7 +166,7 @@ window.onload = function() {
     })
     .then(response=>{
       if(response.ok) return response.json()
-      throw new Error('unable to connect to the server')
+      throw { status: response.status, data: response.json() };
     })
     .then(data=>{
       if(data.canceled){
@@ -182,12 +182,10 @@ window.onload = function() {
         modal.querySelector('#notEligibleMessage').innerHTML=data.message
         showOrderedItems(orderId)
         modal.style.display='block'
-      }else{
-      
-        showModal(data.message)
       }
       
     })
+    .catch(handleError)
   }
   
   //SHOW ALL PRODUCTS IN THAT PARTICULAR ORDER IN CASE SINGLE ORDER CANCELATION DOESN'T SATISFY APPLIED COUPON MIN AMOUNT
@@ -195,7 +193,7 @@ window.onload = function() {
     fetch(`/api/orderItems?orderId=${orderId}`)
     .then(response=>{
       if(response.ok) return response.json()
-      throw new Error("can't get ordered Items")
+      throw { status: response.status, data: response.json() };
     })
     .then(data=>{
       if(data.orderData){
@@ -236,20 +234,15 @@ window.onload = function() {
           <h6 class='d-flex justify-content-around '><span>Total : </span><span>${data.orderData.totalAmount}</span></h6>
         `
         OrderedItems.appendChild(total)
-      }else{
-        showModal('Something went wrong')
       }
       
     })
-    .catch((error)=>{
-      console.error(error)
-      showModal('Something went wrong')
-    })
+    .catch(handleError)
   }
   
   //REQUEST TO SERVER FOR CANCELING WHOLE ORDER
   function cancenlWholeOrder(orderId){
-    try {
+   
   
       fetch(`/api/cancenlWholeOrder`,{
         method:'PATCH',
@@ -258,7 +251,7 @@ window.onload = function() {
       })
       .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
       })
       .then(data=>{
         if(data.canceled){
@@ -273,18 +266,11 @@ window.onload = function() {
             showOrderCancelProgress()
             document.getElementById('cancelOrderH5').style.display='none'
 
-            
-        }else{
-          showModal('Something went wrong')
         }
         
       })
-      
-    } catch (error) {
-      console.error(error)
-      showModal('Something went wrong')
-      
-    }
+      .catch(handleError)
+
   }
 
   //FUNCTION TO RETURN ORDER
@@ -346,10 +332,10 @@ window.onload = function() {
     })
     .then(response=>{
       if(response.ok) return response.json()
-      throw new Error()
+      throw { status: response.status, data: response.json() };
     })
     .then(data=>{
-      console.log(data)
+      
       if(data.success){
         
         Swal.fire({
@@ -361,13 +347,8 @@ window.onload = function() {
           window.location.href=`/api/orderDetails?orderId=${orderId}&productId=${productId}`
 
         });
-      }else{
-          showModal(data.message) 
       }
       
     })
-    .catch(error=>{
-      console.log(error)
-      showModal('Something went wrong')
-    })
+    .catch(handleError)
   }

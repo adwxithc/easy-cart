@@ -371,3 +371,23 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     }
 
 },true)
+
+function handleError(error) {
+     
+    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      console.error('Network error: Unable to reach the server.');
+      // Optionally show a user-friendly message to the user
+    } else {
+      error.data.then(data => {
+        console.error('Fetch error:', error);
+        const queryParams = new URLSearchParams({
+          statusCode: data.statusCode,
+          message: data.message,
+          status: data.status,
+          homeLink: data.homeLink,
+        });
+        console.log(queryParams.toString())
+        window.location.href = `/error?${queryParams.toString()}`;
+      });
+    }
+  }

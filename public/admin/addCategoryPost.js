@@ -30,7 +30,10 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
             'Content-Type': 'application/json' // Set the Content-Type header
         }
     })
-    .then(response => response.json())
+    .then(response =>{
+        if(response.ok) return response.json()
+        throw { status: response.status, data: response.json() };
+    })
     .then(data => {
         
         if(data.success) document.getElementById('addCategoryForm').reset();
@@ -44,9 +47,6 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
             block: 'start' // Scroll to the top of the form
         });
     })
-    .catch(error => {
-        console.error('Error:', error);
-        window.location.href='/admin/500'
-    });
+    .catch(handleError);
 });
 

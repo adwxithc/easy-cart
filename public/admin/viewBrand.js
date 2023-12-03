@@ -2,18 +2,14 @@ function viewBrands(){
     fetch('/admin/loadviewBrands')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('unable to connect')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
         brandPagination()
 
     })
-    .catch((er)=>{
-        window.location.href='/admin/500'
-        console.log(er.message)
-
-    })
+    .catch(handleError)
 }
 
 function brandPagination(){
@@ -77,7 +73,7 @@ function brandPagination(){
             fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw { status: response.status, data: response.json() };
                 }
                 return response.text();
             })
@@ -88,11 +84,7 @@ function brandPagination(){
 
         
             })
-            .catch(error => {
-                
-                window.location.href='/admin/500'
-                console.error('Fetch error:', error);
-            });
+            .catch(handleError);
         }
       
 }
@@ -130,6 +122,7 @@ function brandOperations(){
                     })
                     .then(response=>{
                         if(response.ok) return response.json()
+                        throw { status: response.status, data: response.json() };
                     })
                     .then(data=>{
 
@@ -138,6 +131,7 @@ function brandOperations(){
                         updateBrandStatus(data,brandId)
 
                     })
+                    .catch(handleError)
 
                 })
 
@@ -147,7 +141,7 @@ function brandOperations(){
                     fetch(`/admin/editBrand?id=${id}`)
                     .then(response=>{
                         if(response.ok) return response.text()
-                        throw new Error("Unab]le to connect to server")
+                        throw { status: response.status, data: response.json() };
                     })
                     .then(html=>{
                         pageContent.innerHTML = html;
@@ -157,11 +151,7 @@ function brandOperations(){
                         editBrandlogo(existingImageURL)
                         updateBrand()
                     })
-                    .catch(error => {
-                
-                        // window.location.href='/admin/500'
-                        console.error('Fetch error:', error);
-                    });
+                    .catch(handleError);
                 }
 
             }
@@ -326,22 +316,14 @@ function updateBrand(){
         })
         .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to connect to error')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
 
-            // const modal=document.getElementById('viewModal')
-            // modal.style.display='block'
-            // document.getElementById('viewModal-content').innerHTML=data.message
             showMessage(data.message)
 
-
-            // document.getElementById('closeBrandAlert').addEventListener('click',()=>{
-            //     modal.style.display='none'
-           
-            // });
-
         })
+        .catch(handleError)
     })
 }
 

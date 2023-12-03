@@ -24,7 +24,7 @@ user_route.use(session({
 }))
 
 user_route.get('/',auth.isLogout,userController.guest)
-user_route.get('/productDetails',userController.productDetails)
+user_route.get('/productDetails',checkExist.hasCart,userController.productDetails)
 
 
 user_route.get('/login',auth.isLogout,userController.loadLogin)
@@ -38,7 +38,7 @@ user_route.post('/verifyOtp',validateUserInputs.otp,checkExist.refer,userControl
 user_route.get('/reSendOtp',auth.isLogout,userController.reSendOtp)
 user_route.get('/logout',auth.isLogin,userController.logout)
 
-user_route.get('/profile',auth.isLogin,userController.loadProfile)
+user_route.get('/profile',auth.isLogin,checkExist.user,userController.loadProfile)
 user_route.put('/updateUserInfo',auth.isLogin,validateUserInputs.validateEditedUserInfo,userController.updateUserInfo)
 
 user_route.get('/manageAddress',auth.isLogin,userController.loadManageAddress)
@@ -47,10 +47,10 @@ user_route.get('/editAddress',auth.isLogin,userController.loadEditAddress)
 user_route.put('/updateAddress',auth.isLogin,validateUserInputs.validateAddress,userController.updateAddress)
 user_route.delete('/deleteAddress',auth.isLogin,userController.deleteAddress)
 user_route.get('/changePassword',auth.isLogin,userController.changePassword)
-user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChangePassword,userController.updatePassword)
+user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChangePassword,checkExist.user,userController.updatePassword)
 
 // shop
-user_route.get('/shop',shopController.loadShop)
+user_route.get('/shop',checkExist.hasCart,shopController.loadShop)
 user_route.post('/searchProduct',userController.searchProduct)
 user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
 

@@ -27,13 +27,12 @@ function postUpdation(){
 
 
                 }else{
-                    throw new Error("failed to update")
+                    throw { status: response.status, data: response.json() };
 
                 }
                 
             } catch (error) {
-                console.log(error.message)
-                window.location.href='/admin/500'
+                handleError(error)
                 
             }
 

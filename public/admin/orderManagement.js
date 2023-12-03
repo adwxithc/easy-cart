@@ -5,7 +5,7 @@ function listOrders(){
     fetch('/admin/listOrders')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('unable to connect to the server')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
@@ -14,10 +14,7 @@ function listOrders(){
         updateOrderPagination()
 
     })
-    .catch((er)=>{
-        console.log(er)
-        window.location.href='/admin/500'
-    })
+    .catch(handleError)
 }
 
 
@@ -66,7 +63,7 @@ function fetchDataForOrderPage(Page){
     fetch(url)
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw { status: response.status, data: response.json() };
         }
         return response.text();
     })
@@ -80,11 +77,7 @@ function fetchDataForOrderPage(Page){
 
 
     })
-    .catch(error => {
-        
-        window.location.href='/admin/500'
-        console.error('Fetch error:', error);
-    });
+    .catch(handleError);
 }
 
 function viewOrder(orderId){
@@ -92,15 +85,12 @@ function viewOrder(orderId){
     fetch(`/admin/viewOrder?orderId=${orderId}`)
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('unable to connect to the server')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
     })
-    .catch((error)=>{
-        window.location.href='/admin/500'
-        console.log(error)
-    })
+    .catch(handleError)
 
 }
 
@@ -127,7 +117,7 @@ function updateOrderStatusByAdmin(elem){
         })
         .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to connect to the server')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
             if(data.updated){
@@ -160,10 +150,7 @@ function updateOrderStatusByAdmin(elem){
 
             
         })
-        .catch(error=>{
-            console.log(error)
-            window.location.href='/admin/500'
-        })
+        .catch(handleError)
     }
 }
 
@@ -188,7 +175,7 @@ function updateReturnStatus(elem){
         })
         .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to connect to the server')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
             if(data.success){
@@ -220,10 +207,7 @@ function updateReturnStatus(elem){
 
             }
         })
-        .catch(error=>{
-            console.log(error)
-            window.location.href='/admin/500'
-        })
+        .catch(handleError)
     }
 
 }

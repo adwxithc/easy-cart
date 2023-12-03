@@ -2,10 +2,11 @@ const Brand=require('../model/brandModel')
 const Product=require('../model/productModel')
 const adminHelpers=require('../helperMethods/adminHelpers')
 const path=require('path')
+const asyncErrorHandler = require('../Utils/asyncErrorHandler')
+const CustomError = require('../Utils/CustomError')
 
 
-const validateProductDatas=async(req,res,next)=>{
-    try {
+const validateProductDatas=asyncErrorHandler( async(req,res,next)=>{
 
         const images=[]
         for(let image of req.files){
@@ -43,14 +44,10 @@ const validateProductDatas=async(req,res,next)=>{
             }
             next()
         }
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:"internal server error"})
-    }
-}
 
-const validateBrandData =async(req,res,next)=>{
+})
+
+const validateBrandData =asyncErrorHandler( async(req,res,next)=>{
     
 
     const name=req.body.name
@@ -82,12 +79,10 @@ const validateBrandData =async(req,res,next)=>{
     }
 
 
-}
+})
 
 
- const validateUpdatedBrandData=async(req,res,next)=>{
-    
-    try {
+ const validateUpdatedBrandData=asyncErrorHandler( async(req,res,next)=>{
     
 
     const name=req.body.name;
@@ -100,29 +95,24 @@ const validateBrandData =async(req,res,next)=>{
         const brand=await Brand.findById(id)
         const originalbrandData = { ...brand._doc };
 
-        const brandChechByName=await Brand.findOne({name:name})
+        const brandCheckByName=await Brand.findOne({name:name})
     
 
-        if(brandChechByName && !brand._id.equals(brandChechByName._id)){
+        if(brandCheckByName && !brand._id.equals(brandCheckByName._id)){
             res.json({message:"This name has already stored as a seperate brand"})
         }else{
-
-
             
         if(req.file?.filename){
 
             req.originalbrandData=originalbrandData
            
-
                     req.brandData={
                         name:name,
                         description:description,
                         logo:logo
                     }
                     next()
-
-
-                                
+                   
         
         }else{
             
@@ -134,20 +124,13 @@ const validateBrandData =async(req,res,next)=>{
 
         }
 
-
         }
 
     }else{
         res.json({message:"Please provide all informations"})
     }
         
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message:"internal server error"})
-        
-    }
-    
-}
+})
 
 const sanitiseSalesReportParam=(req,res,next)=>{
     try {
@@ -222,42 +205,35 @@ const sanitiseSalesReportParam=(req,res,next)=>{
             res.json({message:'Invalid timePeriod'})
             }
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message:"internal server error"})
+        next(error)
     }
 }
 
-const validateCoupone=async (req,res,next)=>{
-    try {
+const validateCoupone=asyncErrorHandler( async (req,res,next)=>{
 
-        const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode,quantity}=req.body
-        if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(quantity) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
-            res.json({message:'Invalid form data'})
-        }else if(Number(maxPurchaseAmount)<=Number(minPurchaseAmount)){
-            res.json({message:'maximum amount should be greater than minimum amount'})
-        }else if(startDate>expireDate){
-            res.json({message:'Start date must be before the expire date'})
-        }else if(await adminHelpers.doesCouponeCodeTake(couponeCode,req.body?.couponeId)){
-            res.json({created:false,message:'This coupone code already exist'})
-        }else{
-            req.coupone={
-                couponeCode:couponeCode,
-                minPurchaseAmount:minPurchaseAmount,
-                maxPurchaseAmount:maxPurchaseAmount,
-                couponeDiscount:couponeDiscount,
-                startDate:startDate,
-                expireDate:expireDate,
-                quantity:quantity
-            }
-            next()
+    const{expireDate,startDate,couponeDiscount,maxPurchaseAmount,minPurchaseAmount,couponeCode,quantity}=req.body
+    if(!adminHelpers.isValidCouponCode(couponeCode) || !adminHelpers.isValidAmount(maxPurchaseAmount) || !adminHelpers.isValidAmount(quantity) || !adminHelpers.isValidAmount(minPurchaseAmount) || !adminHelpers.isValidDiscount(couponeDiscount) || !adminHelpers.isValidDate(startDate) || !adminHelpers.isValidDate(expireDate)){
+        res.json({message:'Invalid form data'})
+    }else if(Number(maxPurchaseAmount)<=Number(minPurchaseAmount)){
+        res.json({message:'maximum amount should be greater than minimum amount'})
+    }else if(startDate>expireDate){
+        res.json({message:'Start date must be before the expire date'})
+    }else if(await adminHelpers.doesCouponeCodeTake(couponeCode,req.body?.couponeId)){
+        res.json({created:false,message:'This coupone code already exist'})
+    }else{
+        req.coupone={
+            couponeCode:couponeCode,
+            minPurchaseAmount:minPurchaseAmount,
+            maxPurchaseAmount:maxPurchaseAmount,
+            couponeDiscount:couponeDiscount,
+            startDate:startDate,
+            expireDate:expireDate,
+            quantity:quantity
         }
-
-        
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
+        next()
     }
-}
+
+})
 
 const validateOfferData=(req,res,next)=>{
     try {
@@ -277,26 +253,33 @@ const validateOfferData=(req,res,next)=>{
         }
 
     } catch (error) {
-        console.error(error)
-        res.status(500).json({message:'Internal server error'})
+        next(error)
     }
 }
 
 const orderUpdation=(req,res,next)=>{
-    const {newStatus}=req.body
-    const order=req.order
-
-    if(['Pending', 'Processing', 'Shipped', 'Delivered','Canceled'].includes(newStatus)){
-
-        if(order.orderStatus!==newStatus){
-
-            next()
+    try {
+        const {newStatus}=req.body
+        const order=req.order
+    
+        if(['Pending', 'Processing', 'Shipped', 'Delivered','Canceled'].includes(newStatus)){
+    
+            if(order.orderStatus!==newStatus){
+    
+                next()
+            }else{
+                const err= new CustomError('Invalid request',400)
+                next(err)
+            }
         }else{
-        res.status(400).json({success:false,message:'Invalid request'})
+            
+            const err= new CustomError('Invalid new order Status',400)
+                next(err)
         }
-    }else{
-        res.status(400).json({success:false,message:'Invalid new order Status'})
+    } catch (error) {
+        next(error)
     }
+   
 }
 
 const returnStatus=async(req,res,next)=>{
@@ -316,43 +299,42 @@ const returnStatus=async(req,res,next)=>{
                 }
             }
         }
-        res.status(400).json({success:false,message:'Invalid request'})
+
+        const err= new CustomError('Invalid request',400)
+                next(err)
 
     }else{
-        res.status(400).json({success:false,message:'Invalid new order Status'})
-    }
-}
-
-const banner=async(req,res,next)=>{
-    try {
        
-        const {miniTitle,mainTitle,description,link} =req.body
-        const bannerBackground=req.file?.filename
-        if(!miniTitle || !mainTitle || !description || !link || !bannerBackground){
-
-            //DELETE NEWLY ADDED IMAGE
-            const url=path.join(__dirname,'..','public','bannerBackground')
-            const deleted=adminHelpers.deleteFile(url)
-  
-            res.json({success:false,message:'Please provide all informations'})
-            return
-
-        }else{
-            req.bannerData={
-                miniTitle:miniTitle,
-                mainTitle:mainTitle,
-                description:description,
-                link:link,
-                bannerBackground:bannerBackground
-            }
-            next()
-        }
-
-        
-    } catch (error) {
-        
+        const err= new CustomError('Invalid new order return Status',400)
+        next(err)
     }
 }
+
+const banner=asyncErrorHandler( async(req,res,next)=>{
+
+    const {miniTitle,mainTitle,description,link} =req.body
+    const bannerBackground=req.file?.filename
+    if(!miniTitle || !mainTitle || !description || !link || !bannerBackground){
+
+        //DELETE NEWLY ADDED IMAGE
+        const url=path.join(__dirname,'..','public','bannerBackground')
+        const deleted=adminHelpers.deleteFile(url)
+
+        res.json({success:false,message:'Please provide all informations'})
+        return
+
+    }else{
+        req.bannerData={
+            miniTitle:miniTitle,
+            mainTitle:mainTitle,
+            description:description,
+            link:link,
+            bannerBackground:bannerBackground
+        }
+        next()
+    }
+
+})
 
 
 module.exports={

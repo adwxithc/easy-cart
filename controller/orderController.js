@@ -5,10 +5,14 @@ const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const { default: mongoose } = require('mongoose')
 const puppeteer=require('puppeteer')
-const loadOrders=async(req,res)=>{
-    try {
-      
-        const user=await User.findById(req.session.userId)
+const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const { aggregate } = require('../model/brandModel')
+const CustomError = require('../Utils/CustomError')
+
+
+const loadOrders=asyncErrorHandler( async(req,res,next)=>{
+
+        const user=req.user
 
         const page=req.query.page||1// specifies which page
         const pagesize=req.query.pageSize||5//specifies how much data page contains
@@ -27,57 +31,46 @@ const loadOrders=async(req,res)=>{
             select: 'name',
           },
         });
-       
+    
 
         const totalOrdes=(await Order.find({customer:req.session.userId})).length
         const totalpages=Math.ceil(totalOrdes/pagesize)
         
         
         res.render('orders',{orderData:orderData,user:user,currentPage:page,totalpages:totalpages})
-        
-    } catch (error) {
-        console.log(error)
-        res.render('errors/500.ejs')
-        
-    }
-}
 
-const loadOrderDetails=async(req,res)=>{
-    try { 
+});
+
+const loadOrderDetails=asyncErrorHandler( async(req,res,next)=>{
+
+    const user=req.user
+    
+    const orderData = await Order.findOne({_id:req.query.orderId,customer:req.session.userId,items:{$elemMatch:{product:req.query.productId}}})
+    .populate({
+        path: 'items.product',
+        match: { _id: req.query.productId } // This matches the specific product by its _id
+      })
       
-        const user=await User.findById(req.session.userId)
-        
-        const orderData = await Order.findOne({_id:req.query.orderId,customer:req.session.userId,items:{$elemMatch:{product:req.query.productId}}})
-        .populate({
-            path: 'items.product',
-            match: { _id: req.query.productId } // This matches the specific product by its _id
-          })
-          // console.log('-----------------------------------------------------------------------------------------------',orderData,req.query.productId,req.query.orderId)
-          let selectedProduct
-          for(let item of orderData.items){
-            if(item.product){
-
-                selectedProduct=item
-            }
-          }
-          // return
-          orderData.items=selectedProduct
-          if(orderData){
-            console.log(orderData)
-            res.render('orderDetails',{orderData:orderData,user:user})
-          }else{
-            res.status(404).render('errors/404.ejs')
-          }
-      
-    } catch (error) {
-        console.log(error)
-        res.status(500).render('errors/500.ejs')
-    }
-}
+      let selectedProduct
+      for(let item of orderData.items){
+        if(item.product){
+            selectedProduct=item
+        }
+      }
+      // return
+      orderData.items=selectedProduct
+      if(orderData){
+        console.log(orderData)
+        res.render('orderDetails',{orderData:orderData,user:user})
+      }else{
+        const err=new CustomError('Order not found',404)
+        next(err)
+      }
+})
 
 
-const cancelOrder=async(req,res)=>{
-  try {
+const cancelOrder=asyncErrorHandler( async(req,res, next)=>{
+
     const orderData=req.order
 
       for(let item of orderData.items){
@@ -88,8 +81,6 @@ const cancelOrder=async(req,res)=>{
             item.orderStatus='Canceled';
             item.canceledByUser=true
 
-           
-            
             if(orderData.paymentMethod!=='COD' && item.paymentStatus=='received'){
               item.paymentStatus='refunded'
 
@@ -117,35 +108,36 @@ const cancelOrder=async(req,res)=>{
                 await Product.updateOne({_id:req.body.productId},{$inc:{stock:item.quantity}})
                 res.json({message:'order canceled successfully',canceled:true})
             }else{
-              res.json({message:"Order cancelation failed",canceled:false})
+              const err=CustomError('Order cancelation failed',500)
+              next(err)
             }
 
           }else{
-            res.status(400).json({message:"Invalid request",canceled:false})
+            
+            const err=new CustomError('Invalid cancel request',400)
+            next(err)
           }
  
 
         }
       }
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
 
-const singleCancelNotEligible=async(req,res)=>{
-  try {
-    console.log('singleCancelNotEligible')
-    const {productId,orderId}=req.query
-    console.log('productId',productId,'orderId',orderId)
+})
+
+// const singleCancelNotEligible=async(req,res)=>{
+//   try {
+//     console.log('singleCancelNotEligible')
+//     const {productId,orderId}=req.query
+//     console.log('productId',productId,'orderId',orderId)
     
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
-const orderItems=async(req,res)=>{
-  try {
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json({message:'Internal server error'})
+//   }
+// }
+
+const orderItems=asyncErrorHandler( async(req,res, next)=>{
+
     const {orderId}=req.query
   
     const orderData = await Order.findOne({customer:req.session.userId,_id:orderId})
@@ -162,24 +154,21 @@ const orderItems=async(req,res)=>{
       res.json({orderData:orderData})
 
     }else{
-      res.status(400).json({message:"This order doesn't exist"})
+      const err=new CustomError("This order doesn't exist",400)
+      next(err)
     }
-    
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
 
-const cancenlWholeOrder=async(req,res)=>{
-  try {
+});
+
+const cancenlWholeOrder=asyncErrorHandler( async(req,res, next)=>{
+
     const order=req.order
     let refundAmount=order.totalAmount;
     let total=0
     //IF PAYMENT METHOD IS COD 
     if(order.paymentMethod=='COD'){
-      res.status(400).json({message:'invalid request'})
-      return 
+      const err=new CustomError('invalid cancel request',400)
+      return next(err)
     }
 
     //CANCELING AND RELEASING ALL ORDER PRODUCTS
@@ -214,16 +203,11 @@ const cancenlWholeOrder=async(req,res)=>{
     await userHelpers.addMoneyToWallet(req.session.userId,refundAmount,transactionId,'Entire Order refunded')
 
     res.json({canceled:true,message:'Your order has been successfully canceled. We appreciate your understanding.'})
-    
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
 
-const downloadInvoice=async(req,res)=>{
-  try {
-    
+});
+
+const downloadInvoice=asyncErrorHandler( async(req,res)=>{
+  
     const oredr=req.order;
     const invoiceHTML= userHelpers.generateInvoice(oredr)
     
@@ -241,18 +225,12 @@ const downloadInvoice=async(req,res)=>{
     res.setHeader('Content-Disposition', `attachment; filename=invoice_${req.query.orderId}.pdf`);
     res.send(pdfBuffer);
     
-    
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
+
+});
 
 //RETURN ORDER
-const returnOrder=async(req,res)=>{
-  try {
-    
-    
+const returnOrder=asyncErrorHandler( async(req,res)=>{
+
     const order=req.order 
     
     const {productId,returnReason}=req.body;
@@ -272,27 +250,23 @@ const returnOrder=async(req,res)=>{
          
             res.json({success:true,message:"Thank you for providing the reason. We will review your request shortly."})
         }else{
-          console.log(2)
 
-          res.json({success:false,message:"your return request has been failed"})
+          const err=new CustomError('Return request has been failed',500)
+          next(err)
 
         }
 
       }
     }
-    
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({message:'Internal server error'})
-  }
-}
+
+});
 
 
 module.exports={
     loadOrders,
     loadOrderDetails,
     cancelOrder,
-    singleCancelNotEligible,
+    // singleCancelNotEligible,
     orderItems,
     cancenlWholeOrder,
     downloadInvoice,

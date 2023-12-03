@@ -1,16 +1,14 @@
 fetch('/admin/getStats')
 .then(response=>{
     if(response.ok) return response.json()
-    throw new error('unable to get transaction stats')
+    throw { status: response.status, data: response.json() };
 })
 .then(data=>{
     if(data){
     showTransactionStats(data.transactions)
     }
 })
-.catch((er)=>{
-    console.log(er)
-})
+.catch(handleError)
 
 
 function showTransactionStats(stats){
@@ -101,7 +99,7 @@ if(document.getElementById('listedUsers')){
     fetch('/admin/getBasicInfos')
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('cant get /admin/getBasicInfos from server')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         console.log(data)
@@ -110,8 +108,5 @@ if(document.getElementById('listedUsers')){
             document.getElementById('monthlyOrders').innerHTML=data.totalOrdersThisMonth
         }
     })
-    .catch((er)=>{
-        console.log(er)
-
-    })
+    .catch(handleError)
   }

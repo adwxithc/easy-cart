@@ -44,8 +44,8 @@ async function calculateTotalSalesToday() {
       // console.log('Total sales today:', totalSalesToday);
       return totalSalesToday;
     } catch (error) {
-      console.error('Error:', error);
-      return new Error(error);
+      
+      return error;
     }
   }
   
@@ -89,8 +89,8 @@ const calculateTotalOrdersToday=async()=>{
         // console.log(`Today's total ordered items: ${totalOrderedItems}`);
         return totalOrderedItems
     } catch (error) {
-        console.error('Error aggregating orders:', error);
-        return new Error(error)
+        
+        return error
     }
 }
 
@@ -138,8 +138,8 @@ async function calculateTotalOrdersThisMonth(){
         return totalOrderedItems
     
   } catch (error) {
-    console.log('error at calculateTotalOrdersThisMonth',error)
-    throw new Error(error)
+    
+    throw error
   }
 }
 
@@ -203,8 +203,8 @@ async function calculateAverageOrderValue() {
         return 0;
       }
     } catch (error) {
-      console.error('Error calculating AOV:', error);
-      throw new Error(error);
+      
+      throw error
     }
   }
   
@@ -246,8 +246,8 @@ async function calculateAverageOrderValue() {
         return totalDeliveredItems
         
     } catch (error) {
-        console.error('Error calculating AOV:', error);
-        throw new Error(error);
+      
+        throw error
     }
        
 
@@ -283,8 +283,8 @@ async function getTotalTransactions() {
     return [walletTransactions[0].totalAmount,onlineTransactions[0].totalAmount,codTransactions[0].totalAmount]
 
   } catch (error) {
-    console.error('Error:', error.message);
-    throw new Error(error)
+    
+    throw error
   }
 }
 
@@ -336,8 +336,8 @@ const findMostSoldProducts = async () => {
 
     return orders
   } catch (error) {
-    console.error(error);
-    throw new Error(error)
+    
+    throw error
   }
 };
 
@@ -372,7 +372,7 @@ async function addMoneyToWallet(orderId,amount,transactionId,description){
 
     return updatedUser
 } catch (error) {
-    console.error('Error adding money to wallet:', error);
+    throw error
 }
 
 }
@@ -384,8 +384,8 @@ async function getTotalListedUsers(){
       return totalUsers>0?totalUsers:0
 
     } catch (error) {
-      console.log('Error at getTotalListedUsers',error)
-      throw new Error(error)
+     
+      throw error
     }
   
 }
@@ -432,8 +432,8 @@ async function  doesCouponeCodeExist(couponeCode){
         }
         
     } catch (error) {
-        console.log(error)
-        return new Error(error)
+        
+        throw error
     }
 }
 
@@ -450,12 +450,10 @@ async function doesCouponeCodeTake(couponeCode,id){
 
 function deleteFile(url){
 
-
-
   fs.unlink(url,(err)=>{
       if(err){
-        console.log(err.message)
-        throw Error(err)
+       
+        throw err
       }else{
           console.log("old image removed")
           return true

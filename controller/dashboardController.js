@@ -1,25 +1,22 @@
+const asyncErrorHandler = require('../Utils/asyncErrorHandler')
 const adminHelpers=require('../helperMethods/adminHelpers')
-const getStats=async (req,res)=>{
-    try {
-        const getTotalTransactions=await adminHelpers.getTotalTransactions()
-        if(getTotalTransactions){
-            console.log(getTotalTransactions)
+ 
+ const getStats=asyncErrorHandler(async (req,res, next)=>{
 
-            const transactions={
-                totaltransactions:getTotalTransactions,
-                labels:['WALLET','ONLINE-TRANSFER','COD']
-            }
-            res.json({transactions:transactions})
+    const getTotalTransactions=await adminHelpers.getTotalTransactions()
+    if(getTotalTransactions){
+        console.log(getTotalTransactions)
+
+        const transactions={
+            totaltransactions:getTotalTransactions,
+            labels:['WALLET','ONLINE-TRANSFER','COD']
         }
-        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'internal server error'})
+        res.json({transactions:transactions})
     }
-}
 
-const getBasicInfos=async(req,res)=>{
-    try {
+})
+
+const getBasicInfos=asyncErrorHandler( async(req,res, next)=>{
 
     const userCount=await adminHelpers.getTotalListedUsers()
     const totalOrdersThisMonth=await adminHelpers.calculateTotalOrdersThisMonth()
@@ -27,11 +24,8 @@ const getBasicInfos=async(req,res)=>{
         userCount:userCount,
         totalOrdersThisMonth:totalOrdersThisMonth
     })
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:'internal server error'})
-    }
-}
+
+})
 
 module.exports={
     getStats,

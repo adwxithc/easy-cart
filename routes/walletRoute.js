@@ -1,6 +1,7 @@
 const express=require('express')
 const wallet_route=express()
 const walletController=require('../controller/walletController')
+const checkExist=require('../middleware/checkExist')
 
 const auth=require('../middleware/userAuth')
 const session=require('express-session')
@@ -16,7 +17,7 @@ wallet_route.use(session({
 wallet_route.set('views','./views/wallet')
 wallet_route.set('view engine','ejs')
 
-wallet_route.get('/getWallet',walletController.loadWallet)
+wallet_route.get('/getWallet',auth.isLogin,checkExist.user,walletController.loadWallet)
 wallet_route.post('/addAmountToWallet',auth.isLogin,walletController.createAddAmount)
 wallet_route.post('/verifyAddToWallet',auth.isLogin,walletController.verifyAddToWallet)
 

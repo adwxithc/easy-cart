@@ -3,19 +3,20 @@ function showWallet(){
     fetch('/api/getWallet')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(html=>{
         document.getElementById('profileSettingArea').innerHTML=html
         document.querySelector('.selected').classList.remove('selected')
         document.getElementById('addToWallet').classList.add('selected')
     })
+    .catch(handleError)
 }
 
 function addMoneyToWallet(){
     const amount=document.getElementById('amount').value
     if(!amount||amount<1 || isNaN(amount)){
-        alert(amount)
         showModal('Invalid amount')
     }else{
         
@@ -26,21 +27,16 @@ function addMoneyToWallet(){
         })
         .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to communicate with server')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
             
             if(data.order){
                 razorpayAddAmount(data.order,data.userInfo)
-            }else{
-                showModal('Invalid Requiest')
             }
             
         })
-        .catch((er)=>{
-            console.log(er)
-            showModal('something went wrong')
-        })
+        .catch(handleError)
     }
 }
 function razorpayAddAmount(order,userInfo){
@@ -81,7 +77,7 @@ function verifyAmount(payment,order){
       })
       .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('connection error')
+        throw { status: response.status, data: response.json() };
       })
       .then(data=>{
         document.getElementById('balance').innerHTML='&#8377;'+data.balance
@@ -98,10 +94,7 @@ function verifyAmount(payment,order){
             showModal('payment failed')
           }
       })
-      .catch((error)=>{
-        console.log(error);
-        showModal('Something Went Wrong')
-      })
+      .catch(handleError)
 }
 
 function addNewTransaction(transaction){

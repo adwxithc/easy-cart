@@ -230,7 +230,7 @@ function confirmOrder(paymentMethod){
   })
   .then(response=>{
     if(response.ok) return response.json()
-    throw new Error('unable to connect to the server')
+    throw { status: response.status, data: response.json() };
   })
   .then(data=>{
     if(data.orderConfirmed){
@@ -247,10 +247,7 @@ function confirmOrder(paymentMethod){
     }
    
   })
-  .catch((er)=>{
-    console.log(er)
-    showModal('Something went wrong')
-  })
+  .catch(handleError)
 
 }
 
@@ -293,7 +290,7 @@ function verifyPayment(payment,order,cart){
   })
   .then(response=>{
     if(response.ok) return response.json()
-    throw new Error('connection error')
+    throw { status: response.status, data: response.json() };
   })
   .then(data=>{
     if(data.paied){
@@ -303,9 +300,7 @@ function verifyPayment(payment,order,cart){
     }
       console.log(data)
   })
-  .catch((error)=>{
-    console.log(error);
-  })
+  .catch(handleError)
 }
 
 
@@ -375,7 +370,7 @@ async function applyCoupone(){
            window.open('/login') // Assume HTML content
         }
       } 
-      throw new Error("can't get coupone informations from server")
+      throw { status: response.status, data: response.json() };
     })
     .then(data=>{
       
@@ -395,7 +390,7 @@ async function applyCoupone(){
           // ShowCouponeTANDC(data.coupone)
           Swal.fire({
             icon: "success",
-            title: 'coupone applied',
+            title: 'coupon applied',
             showConfirmButton: false, 
             timer: 1500
           
@@ -412,16 +407,7 @@ async function applyCoupone(){
 
       }
     })
-    .catch((er)=>{
-      console.error(er)
-            Swal.fire({
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-    })
+    .catch(handleError)
 
   }
 }

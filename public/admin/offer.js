@@ -14,7 +14,7 @@ function addOffer(){
        })
        .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
        })
        .then(data=>{
         if(data.created){
@@ -37,6 +37,7 @@ function addOffer(){
         }
 
        })
+       .catch(handleError)
     }
 }
 
@@ -54,7 +55,7 @@ function updateOffer(){
            })
            .then(response=>{
             if(response.ok) return response.json()
-            throw new Error('unable to connect to the server')
+            throw { status: response.status, data: response.json() };
            })
            .then(data=>{
             if(data.updated){
@@ -78,16 +79,7 @@ function updateOffer(){
                     });
             }
            })
-           .catch((error)=>{
-            console.error(error)
-            Swal.fire({
-                icon: "error",
-                text: 'something went wrong',
-                showConfirmButton: false,
-                timer: 1500
-                });
-            
-           })
+           .catch(handleError)
 
     }
 }
@@ -132,7 +124,7 @@ function listUnlistOffer(offerId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.updated){
@@ -154,15 +146,7 @@ function listUnlistOffer(offerId){
                 });
         }
     })
-    .catch((error)=>{
-        console.error(error)
-        Swal.fire({
-            icon: "error",
-            text: 'something went wrong',
-            showConfirmButton: false,
-            timer: 1500
-            });
-    })
+    .catch(handleError)
 }
 
 function updateOfferStatus(offerId, status) {
@@ -236,7 +220,7 @@ function applayOfferToProduct(offerId,productId){
         })
         .then(response=>{
             if(response.ok)  return response.json()
-            throw new Error('server communication error')
+            throw { status: response.status, data: response.json() };
         })
         .then(data=>{
             if(data.applied){
@@ -259,15 +243,7 @@ function applayOfferToProduct(offerId,productId){
                     });
             }
         })
-        .catch((error)=>{
-            console.error(error)
-            Swal.fire({
-                icon: "error",
-                text: 'something went wrong',
-                showConfirmButton: false,
-                timer: 1500
-                });
-        })
+        .catch(handleError)
 }
 
 function applayOfferToCategory(offerId,categoryId){
@@ -280,7 +256,7 @@ function applayOfferToCategory(offerId,categoryId){
     })
     .then(response=>{
         if(response.ok)  return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.applied){
@@ -304,15 +280,7 @@ function applayOfferToCategory(offerId,categoryId){
                 });
         }
     })
-    .catch((error)=>{
-        console.error(error)
-        Swal.fire({
-            icon: "error",
-            text: 'something went wrong',
-            showConfirmButton: false,
-            timer: 1500
-            });
-    })
+    .catch(handleError)
 }
 
 function setPageAfterApplayOffer(productId,data){
@@ -343,7 +311,7 @@ function getOffers(id,type){
     fetch('/admin/getOffers')
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         const modal=document.getElementById('viewModal')
@@ -360,15 +328,7 @@ function getOffers(id,type){
         }
         document.getElementById('viewModal-content').innerHTML=html
     })
-    .catch((error)=>{
-        console.error(error)
-        Swal.fire({
-            icon: "error",
-            text: 'Something went wrong',
-            showConfirmButton: false,
-            timer: 1500
-            });
-    })
+    .catch(handleError)
 }
 
 
@@ -380,7 +340,7 @@ function removeCategoryOffer(categoryId){
     })
     .then(response=>{
         if(response.ok) return response.json()
-        throw new Error('server communication error')
+        throw { status: response.status, data: response.json() };
     })
     .then(data=>{
         if(data.removed){
@@ -406,4 +366,5 @@ function removeCategoryOffer(categoryId){
                 });
         }
     })
+    .catch(handleError)
 }

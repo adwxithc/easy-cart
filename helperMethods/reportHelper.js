@@ -1,3 +1,4 @@
+const CustomError = require('../Utils/CustomError');
 const Order=require('../model/orderModel')
 
 
@@ -25,7 +26,8 @@ const Order=require('../model/orderModel')
           startDate = new Date(currentDate.getFullYear() - 5, 0, 1);
           break;
         default:
-          throw new Error('Invalid time period specified');
+          
+          throw new CustomError('Invalid time period specified',400);
       }
   
       const result = await Order.aggregate([
@@ -55,13 +57,14 @@ const Order=require('../model/orderModel')
       return result;
       
     } catch (err) {
-      console.error(err);
-      throw new Error(err)
+      
+      throw err
       // Handle the error appropriately
     }
   }
   
   function generateGroupById(timePeriod) {
+
     switch (timePeriod) {
       case 'week':
         return { $week: '$items.itemUpdatedAt' };
@@ -73,7 +76,7 @@ const Order=require('../model/orderModel')
       case 'year':
         return { $year: '$items.itemUpdatedAt' };
       default:
-        throw new Error('Invalid time period specified');
+        throw new CustomError('Invalid time period specified',400);
     }
   }
   
@@ -85,7 +88,7 @@ const Order=require('../model/orderModel')
       case 'year':
         return { $sort: { '_id.year': 1, '_id.month': 1 } };
       default:
-        throw new Error('Invalid time period specified');
+        throw new CustomError('Invalid time period specified',400);
     }
   }
   
@@ -98,13 +101,14 @@ const Order=require('../model/orderModel')
       case 'year':
         return { $project: { _id: 1, totalSales: 1 } };
       default:
-        throw new Error('Invalid time period specified');
+        throw new CustomError('Invalid time period specified',400);
     }
   }
  
 
   async function averageOrderValueAndCount(startDate,endDate){
-    const sales=await Order.aggregate([
+    try {
+      const sales=await Order.aggregate([
 
         {
             $unwind:'$items'
@@ -149,6 +153,10 @@ const Order=require('../model/orderModel')
    
 
     return sales[0]?sales[0]:{totalOrderAmount:0,totalOrders:0,averageOrderValue:0}
+
+    } catch (error) {
+      throw error
+    }
 
   }
 
@@ -231,11 +239,10 @@ const Order=require('../model/orderModel')
         },
       ]);
   
-      console.log(`Top 5 Most Sold Categories in the last ${timePeriod}:`, result);
       return result;
     } catch (error) {
-      console.error('Error finding top selling categories:', error);
-      throw new Error(error);
+      
+      throw error;
     }
   }
   
@@ -277,7 +284,7 @@ async function salesReport(timePeriod,paymentStatus,orderStatus){
         //no idea what to do
         break;
       default:
-        throw new Error('Invalid time period specified');
+        throw new CustomError('Invalid time period specified',400);
     }
 
     const matchStage = {
@@ -345,8 +352,8 @@ async function salesReport(timePeriod,paymentStatus,orderStatus){
   ])
     return sales
   } catch (error) {
-    console.log(error)
-    throw new Error(erro)
+    
+    throw error
   }
 
 }

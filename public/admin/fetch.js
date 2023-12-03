@@ -16,7 +16,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 fetch(pageUrl)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw { status: response.status, data: response.json() };
                     }
                     return response.text();
                 })
@@ -36,10 +36,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     document.body.appendChild(script2); 
 
                 })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    window.location.href='/admin/500'
-                });
+                .catch(handleError);
 
         //if closed  
     
@@ -55,7 +52,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 fetch(pageUrl)
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
+                            throw { status: response.status, data: response.json() };
                         }
                         return response.text();
                     })
@@ -78,10 +75,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         
 
                     })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        window.location.href='/admin/500'
-                    });
+                    .catch(handleError);
             
 
 
@@ -98,7 +92,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     fetch(pageUrl)
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
+                                throw { status: response.status, data: response.json() };
                             }
                             return response.text();
                         })
@@ -118,11 +112,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                             document.body.appendChild(script);
                 
                         })
-                        .catch(error => {
-                            console.error('Fetch error:', error.message);
-                            window.location.href='/admin/500'
-                            
-                        });
+                        .catch(handleError);
                 
                 }
                 viewUsers()
@@ -135,7 +125,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
             fetch(pageUrl)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw { status: response.status, data: response.json() };
                     }
                     return response.text();
                 })
@@ -192,7 +182,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                         const selectedImages = event.target.files;
                         if (selectedImages.length > 4) {
-                            alert('You can select a maximum of 4 images.');
+                            showMessage('You can select a maximum of 4 images.');
                             imageUploadInput.value = ''; // Clear the input field
                             return;
                         }
@@ -389,7 +379,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                     body: formData,
 
                                 })
-                                .then(response => response.json())
+                                .then(response => {
+                                    if(response.ok) return response.json()
+                                    throw { status: response.status, data: response.json() };
+                                })
                                 .then(data => {
                                    
                                     
@@ -408,10 +401,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                         block: 'start' // Scroll to the top of the form
                                     });
                                 })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    window.location.href='/admin/500'
-                                });
+                                .catch(handleError);
                             }
 
                         
@@ -421,10 +411,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     
 
                 })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    window.location.href='/admin/500'
-                });
+                .catch(handleError);
                 
 
 
@@ -435,7 +422,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
             fetch('/admin/viewProducts')
             .then(response=>{
                 if(!response.ok){
-                    throw new Error("Unable to get response from server")
+                    throw { status: response.status, data: response.json() };
                 }
                 return response.text()
             })
@@ -454,10 +441,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                    
                     productPagination()
             })
-            .catch((er)=>{
-                console.log(er)
-                window.location.href='/admin/500'
-            })
+            .catch(handleError)
 
 
         }else if(e.target.id=='add-brand'){
@@ -679,7 +663,7 @@ function loadPage(url,callBacks){
     fetch(url)
     .then(response=>{
         if(response.ok) return response.text()
-        throw new Error('unable to load page')
+        throw { status: response.status, data: response.json() };
     })
     .then(html=>{
         pageContent.innerHTML=html
@@ -687,9 +671,7 @@ function loadPage(url,callBacks){
             cb()
         }
     })
-    .catch((error)=>{
-        console.error(error)
-    })
+    .catch(handleError)
 }
 
 function resetErrormsg(){
@@ -715,4 +697,25 @@ function showMessage(message){
         timer: 2500,
         
       });
+  }
+
+
+  function handleError(error) {
+     
+    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      console.error('Network error: Unable to reach the server.');
+      // Optionally show a user-friendly message to the user
+    } else {
+      error.data.then(data => {
+        console.error('Fetch error:', error);
+        const queryParams = new URLSearchParams({
+          statusCode: data.statusCode,
+          message: data.message,
+          status: data.status,
+          homeLink: data.homeLink,
+        });
+        console.log(queryParams.toString())
+        window.location.href = `/error?${queryParams.toString()}`;
+      });
+    }
   }

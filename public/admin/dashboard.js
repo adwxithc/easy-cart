@@ -13,18 +13,24 @@ fetch('/admin/getStats')
 
 function showTransactionStats(stats){
   if(!document.getElementById('ot')) return;
-    document.getElementById('ot').innerHTML='\u20B9'+stats.totaltransactions[1]
-    document.getElementById('cod').innerHTML='\u20B9'+stats.totaltransactions[2]
-    document.getElementById('wt').innerHTML='\u20B9'+stats.totaltransactions[0]
+
+    const onlinePayment=(stats.find(item=>item._id=='ONLINE-PAYMENT').totalAmount)
+    const cod=(stats.find(item=> item._id=='COD').totalAmount)
+    const wallet=(stats.find(item=> item._id=='WALLET').totalAmount)
+
+    document.getElementById('ot').innerHTML='\u20B9'+onlinePayment
+    document.getElementById('cod').innerHTML='\u20B9'+cod
+    document.getElementById('wt').innerHTML='\u20B9'+wallet
     
-    const totalSum = stats.totaltransactions.reduce((sum, value) => sum + value, 0);
+    const totalSum = stats.reduce((sum, value) => sum + value.totalAmount, 0);
 
     // Convert each element to its percentage
-    const percentages = stats.totaltransactions.map(value => (value / totalSum) * 100);
+    const percentages = stats.map(value => (value.totalAmount / totalSum) * 100);
+    const labels=stats.map(value => value._id)
 
     if ($("#transaction-history").length) {
       var areaData = {
-        labels: stats.labels,
+        labels: labels,
         datasets: [{
             data: percentages,
             backgroundColor: [

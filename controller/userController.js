@@ -24,7 +24,7 @@ const securePassword=async(password)=>{
         return hashedPassword
         
     } catch (error) {
-        console.log(error)
+       
         throw error
     }
 }
@@ -132,7 +132,7 @@ const searchProduct= asyncErrorHandler( async(req,res, next)=>{
 
 const loadLogin=(req,res,next)=>{
 
-    res.render('login');  
+    res.render('login-register/login',{title:'login'});  
  
 }
 
@@ -151,15 +151,15 @@ const verifyLogin= asyncErrorHandler (async(req,res, next)=>{
                 
                 res.redirect('/userHome');
                 }else{
-                    res.render('login',{message:"This account is blocked by the admin"})
+                    res.render('login-register/login',{message:"This account is blocked by the admin",title:'login'})
                 }
 
             }else{
-                res.render('login',{message:"Wrong username password combination"})
+                res.render('login-register/login',{message:"Wrong username password combination",title:'login'})
             }
 
         }else{
-            res.render('login',{message:"Wrong username password combination"})
+            res.render('login-register/login',{message:"Wrong username password combination",title:'login'})
         }
 
 })
@@ -200,7 +200,7 @@ const userHome=asyncErrorHandler( async(req,res, next)=>{
 const loadRegister=(req,res, next)=>{
     try {
         const {refer}=req.query || null
-        res.render('register',{refer:refer})
+        res.render('login-register/register',{refer:refer,title:'sign up'})
         
     } catch (error) {
         next(error)
@@ -213,7 +213,7 @@ const signUp= asyncErrorHandler( async(req,res, next)=>{
         const check=await User.findOne({email:req.body.email})
 
         if(check){
-            res.render('register',{message:"This email is already exist please login"})
+            res.render('login-register/register',{message:"This email is already exist please login",refer:req.body.refer,title:'sign up'})
 
         }else{
 
@@ -251,7 +251,10 @@ const signUp= asyncErrorHandler( async(req,res, next)=>{
 
 const loadOtpForm =(req,res, next)=>{
     try {
-        res.render('getOtp',{email:req.session.email})
+        const seconds=Number(req.session?.otpWithTimestamp?.split(':')[1])
+        const expire=(seconds+120)
+        
+        res.render('login-register/otp',{title:'otp',expire:expire})
         
     } catch (error) {
         next(error)
@@ -272,10 +275,13 @@ const reSendOtp=(req,res, next)=>{
                 req.session.otpWithTimestamp = `${numericOTP}:${Date.now() / 1000}`;
             
                 sendverifyMail(`${req.session.fname} ${req.session.lname}`,req.session.email,numericOTP)
+
+                const seconds=Number(req.session?.otpWithTimestamp?.split(':')[1])
+                const expire=(seconds+120)
                 
-                res.json({status:"success",message:'New otp has been send to the email'})
+                res.json({status:"success",message:'New otp has been send to your email',expire:expire})
             }else{
-                console.log("wait 30 seconds")
+                
                 res.json({status:'success',message:'Please wait 30 seconds before requesting a new OTP'})
             }
         }else{
@@ -293,14 +299,14 @@ const reSendOtp=(req,res, next)=>{
 const otpVerification=asyncErrorHandler( async(req,res,next)=>{
 
         const refer=req.refer
-        const referCode=crypto.randomBytes(8).toString('hex')
+        
     
             const user=new User({
                 fname:req.session.fname,
                 lname:req.session.lname,
                 email:req.session.email,
                 password:req.session.password,
-                referCode:referCode
+              
             })
             req.session.fname=null
             req.session.lname=null
@@ -453,6 +459,16 @@ const loadContact=async(req,res, next)=>{
     }
 }
 
+
+const googleAuthSuccess=asyncErrorHandler( async(req,res)=>{
+    req.session.userId=req.user._id
+    res.redirect('/userHome')
+})
+
+const googleAuthFailure=asyncErrorHandler( async(req, res)=>{
+        res.render('login-register/login',{title:'login',message:'your google authentication has failed'})
+})
+
 module.exports={
     guest,
     productDetails,
@@ -479,5 +495,8 @@ module.exports={
     changePassword,
     updatePassword,
 
-    loadContact
+    loadContact,
+
+    googleAuthSuccess,
+    googleAuthFailure
 }

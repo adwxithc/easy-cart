@@ -322,7 +322,7 @@ function showSalesData(time,paymentStatus,orderStatus){
     throw { status: response.status, data: response.json() };
   })
   .then(data=>{
-    console.log(data)
+    
     setSalesData(data.sales)
   })
   .catch(handleError)
@@ -330,7 +330,7 @@ function showSalesData(time,paymentStatus,orderStatus){
 
 function setSalesData(data){
   let i=1
-  document.getElementById('salesTableBody').innerHTML=''
+  document.getElementById('salesTableBody').innerHTML=``
     for(let item of data){
       const salesStatus=item.paymentStatus=='received'?'Credit':'Debit'
       const row=document.createElement('tr')

@@ -258,29 +258,28 @@ async function calculateAverageOrderValue() {
 // Function to find total transactions by payment method
 async function getTotalTransactions() {
   try {
-    // Count the total number of orders for each payment method
-    // const walletTransactions = await Order.countDocuments({ paymentMethod: 'WALLET' });
-    // const onlineTransactions = await Order.countDocuments({ paymentMethod: 'ONLINE-PAYMENT' });
-    // const codTransactions = await Order.countDocuments({ paymentMethod: 'COD' });
 
-    const codTransactions = await Order.aggregate([
-      { $match: { paymentMethod: 'COD' } },
-      { $group: { _id: null, totalAmount: { $sum: "$totalAmount" } } }
-    ]);
 
-    const walletTransactions = await Order.aggregate([
-      { $match: { paymentMethod: 'WALLET' } },
-      { $group: { _id: null, totalAmount: { $sum: "$totalAmount" } } }
-    ]);
+    const transactions=await Order.aggregate([
+      {
+        $unwind:'$items'
+      },
+      {
+        $match:{
+          'items.paymentStatus':'received',
+          'items.orderStatus':'Delivered'
+        }
+      },
+      {
+        $group:{
+          _id:'$paymentMethod',
+          totalAmount:{$sum:{$multiply:['$items.quantity','$items.price']}}
+        }
+      }
+    ])
+   
 
-    const onlineTransactions = await Order.aggregate([
-      { $match: { paymentMethod: 'ONLINE-PAYMENT' } },
-      { $group: { _id: null, totalAmount: { $sum: "$totalAmount" } } }
-    ]);
-    // console.log('Total Wallet Transactions:', walletTransactions);
-    // console.log('Total Online Transactions:', onlineTransactions);
-    // console.log('Total COD Transactions:', codTransactions);
-    return [walletTransactions[0].totalAmount,onlineTransactions[0].totalAmount,codTransactions[0].totalAmount]
+    return transactions
 
   } catch (error) {
     

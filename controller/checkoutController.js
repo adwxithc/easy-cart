@@ -160,10 +160,20 @@ const verifyPayment=asyncErrorHandler( async(req,res, next)=>{
         hmac.update(details.payment?.razorpay_order_id+'|'+details.payment?.razorpay_payment_id)
         hmac=hmac.digest('hex')
         if(hmac==details.payment?.razorpay_signature){
-            
+
+            const order=await Order.findById(details.order.receipt)
+
+            const haveStock= await userHelpers.haveStock(order)
+            if(!haveStock){
+                const transactionId=crypto.randomBytes(8).toString('hex')
+                userHelpers.addMoneyToWallet(req.session.userId, order.totalAmount, transactionId, 'item  purchased has out of stock.  the full amount you paid has been promptly refunded and credited back to your wallet.')
+
+                return res.json({success:false,message:'We regret to inform you that the item you purchased is currently out of stock. We sincerely apologize for any inconvenience this may have caused. The full amount you paid has been promptly refunded and credited back to your wallet.'})
+            }
+
             const result=await userHelpers.changepaymentStatus(details.order.receipt,'received',null)
             if(result){
-                const order=await Order.findById(details.order.receipt)
+                
                 await userHelpers.releaseProducts(order,details.cart,req.session.userId)
                 if(order.couponeId){
                     await userHelpers.setCouponeApplied(order.couponeId,req.session.userId)

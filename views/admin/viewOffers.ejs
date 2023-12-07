@@ -15,7 +15,7 @@
 
 
                     <div class="table-responsive">
-                    <%if(locals.offers){%>
+                    <%if(locals.offers && offers.length > 0 ){%>
                         <input type="hidden" name="" id="cur" value="<%=currentPage%>">
                         <input type="hidden" name="" id="totp" value="<%= totalpages%>">
                       <table class="table table-hover table-borderless" id="">
@@ -78,7 +78,10 @@
                         </tbody>
                       </table>
                       <%}else{%>
-                        No offer created..!
+                        <div class="noData">
+                          No offer created..!
+
+                        </div>
 
                         <%}%>
                       <div id="myModal" class="modal">

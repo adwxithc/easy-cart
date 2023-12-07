@@ -5,7 +5,10 @@
                   <input type="hidden" value="<%=locals.currentPage%>" id="cur">
                   <input type="hidden" value="<%=locals.totalpages%>" id="totp">
 
-
+                  <div class="d-flex justify-content-center">
+                    <h2>Orders</h2>
+                  </div>
+                  <%if(locals.orders && orders.length>0){%>
                   <div class="table-responsive">
 
                     <table class="table table-hover table-borderless" id="" >
@@ -23,7 +26,7 @@
                           
                         
                         <%
-                        if(locals.orders){
+                        
                           for(let order of orders){
                             
                           %>
@@ -45,7 +48,7 @@
                         </tbody>
                         <%
                             
-                          }
+                          
                         }
                         %>
                       </tbody>
@@ -78,6 +81,11 @@
                       </div>
 
                   </div>
+                  <%}else{%>
+                    <div class="noData">
+                      no orders yet..!
+                    </div>
+                    <%}%>
                 </div>
               </div>
           </div>

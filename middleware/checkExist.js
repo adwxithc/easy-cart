@@ -191,7 +191,7 @@ const refer=asyncErrorHandler( async(req,res,next)=>{
         const {refer}=req.session;
         if(refer){
 
-            const user=await User.findOne({referCode:refer},{fname:1,lname:1})
+            const user=await User.findOne({_id:refer},{fname:1,lname:1})
             if(user){
                 req.refer=user
             }

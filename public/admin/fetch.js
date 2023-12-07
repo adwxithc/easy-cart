@@ -682,7 +682,7 @@ function resetErrormsg(){
            }
     },true)
 }
-resetErrormsg()
+resetErrormsg() 
 
 
 function showMessage(message){

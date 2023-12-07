@@ -295,10 +295,10 @@ function verifyPayment(payment,order,cart){
   .then(data=>{
     if(data.paied){
       window.open(`/api/orderResponse?order=${data.orderId}`,'_self')
-    }else{
-      
+    }else if(!data.success){
+      showMessage(data.message)
     }
-      console.log(data)
+     
   })
   .catch(handleError)
 }

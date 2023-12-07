@@ -20,11 +20,11 @@ admin_route.set('view engine','ejs')
 
 
 //configuring session
-admin_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// admin_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 //
 //seting up storage engine for product images

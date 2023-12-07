@@ -75,8 +75,13 @@ if(locals.banners && banners.length>0){
 <!-- End Banner Area -->
 <%
     }
-}
+}else{
 %>
+<div class="d-flex justify-content-center">
+    <lottie-player src="https://lottie.host/cd9b4cc1-6db2-46bf-9b01-e1a9dac1b407/93m9q1Ja00.json" background="##FFFFFF" speed="1" style="width: 300px; height: 300px" loop  autoplay direction="1" mode="normal"></lottie-player>
+
+</div>
+<%}%>
 </div>
   
 <%- include('../partials/footer.ejs') %>

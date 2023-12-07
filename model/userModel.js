@@ -1,7 +1,6 @@
 const mongoose=require('mongoose')
 
 
-
 const walletSchema = new mongoose.Schema({
     balance: {
         type: Number,
@@ -92,5 +91,8 @@ const userSchema=mongoose.Schema({
 
 
 },{ timestamps: true })
+
+
+
 module.exports=mongoose.model('User',userSchema)
 

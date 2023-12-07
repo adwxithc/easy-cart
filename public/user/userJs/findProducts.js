@@ -123,12 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function displaySearchresult(products,cart){
 
     document.getElementById('searchedProductList').innerHTML=''                             
-        
 
         for(let product of products){
 
             const productDiv=document.createElement('div')
-            productDiv.classList='col-lg-3 col-6'
+            productDiv.classList='col-lg-3 col-12'
         
             //CHECK PRODUCT IS ALREADY IN CART
             let InCart = cart ? cart.cartItems?.some(item => item.product.toString()== product._id.toString()) : false
@@ -136,61 +135,75 @@ function displaySearchresult(products,cart){
             
             if(!InCart && product.stock > 0){
                 cartOption=`
-                <a href="#" class="social-info searchAction easyAddToCart" productId="${product._id}" role="addCart${product._id}" >
-                <span class="ti-bag searchAction easyAddToCart" productId="${product._id}"></span>
-                <p class="hover-text searchAction easyAddToCart" productId="${product._id}" >add to cart</p>
-                </a>
+                <a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="${product._id}" easyAddToCart>
+                            
+                <span class="mr-1 searchAction text-capital" productId="${product._id}" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="${product._id}" easyAddToCart></i>
+            </a>
                 `
-            }else{
+            }else if(InCart){
                 cartOption=`
-                <a href="/api/goToCart" class="social-info">
-                    <span class="ti-bag"></span>
-                    <p class="hover-text">go to cart</p>
+                <a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
+                            
+                <span class="mr-1 text-capital"> GO To Cart </span><i class="mdi mdi-cart "></i>
                 </a>
                 `
             }
 
             //SETTING OFFER BADGE
             let offer=''
-            let price=`<h6 class="product-price">${ product.price}</h6>`
-            if(product.effectedDiscount){
+            let price=`<span class="product-price">&#8377;${ product.price}</span>`
+            if(product.effectedDiscount && product.effectedDiscount > 0){
                 offer=`<div class="badge-area-show">
                             <div class="bagde-flag-wrap">
                             <a href="#" class="bagde-flag"> ${product.effectedDiscount}% off </a>
                             </div>
                         </div>`
 
-                        price=`<h6 class="product-price"> ${ Number(product.price)-((Number(product.price) * Number(product.effectedDiscount))/100) }</h6>
-                        <h6 class="l-through product-original-price">${product.price}</h6>`
+                        price=`<span class="l-through mr-2">&#8377;${ product.price}</span>
+                        <span class="product-price ">&#8377; ${product.price-(product.price*product.effectedDiscount)/100}</span>`
             }
         
-            productDiv.innerHTML= `<div class="single-product productdiv">
-            <div class="product-container">
-            ${offer}
+            productDiv.innerHTML= ` <div class="single1-product">
+           ${offer}
+            <div class="" style="position: relative;">
+                <a href="/productDetails?id=${product._id}" target="_blank">
+                <div class="overlay-div">
+                <div class="product1-image-container">
+                    <img class="img-fluid w-100 product1-image" src="/static/productImages/${product.images[0]}" alt="">
+                
+                </div>
+                <div class="overlay"></div>
+                </div>
+                </a>
+                <div class="prod-actions w-100">
 
-                        <div class="product-image-container">
+                    <div class="d-flex justify-content-around px-1">
+                        <a href="/productDetails?id=${product._id}"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
+                            
+                            <span class="mr-1"> View More </span><i class="mdi mdi-eye"></i>
+                        </a>
                         
-                            <a target="_blank"  href="/productDetails?id=${product._id}"><img class="img-fluid product-image" src="/static/productImages/${ product.images[0] }" alt=""></a>
-                        </div>
-                        <div class="product-details">
-                            <h6 class="product-title">${ product.name}</h6>
-                            <div class="price">
-                                ${price}
-                            </div>
-                            <div class="prd-bottom">
+                            
+                        ${cartOption}
 
-                                ${cartOption}
-
-
-
-                                <a href="/productDetails?id=${product._id}" target='_blank' class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
                     </div>
-                </div>`
+
+                    
+                </div>   
+                
+            </div>
+
+            <div class="p-3 product-details">
+                <h6 class="deal-title mb-3">${product.name}</h6>
+                <div class="d-flex ">
+                    
+                    <div class="pricing">
+                       ${price}
+                    </div>
+                    <div class="rating"></div>
+                </div>
+            </div>
+        </div>`
         
                 document.getElementById('searchedProductList').appendChild(productDiv)
         }
@@ -202,7 +215,7 @@ function showNoResult(){
     
     div.classList='col-lg-12 noresultDiv p-3'
     div.innerHTML=`
-
+                    
                     <div class="d-flex justify-content-center">
                     <lottie-player src="https://lottie.host/a7470a7f-8508-464a-a71c-9926c8f04ab1/wemUnPijfZ.json" background="##ffffff" speed="1" style="width: 300px; height: 300px" loop  autoplay direction="1" mode="normal"></lottie-player>
                     </div>
@@ -324,17 +337,16 @@ function addSingleProductToCart(productId,quantity){
 
 function setEasyGotoCart(productId){
    
-    const addToCartBtns=document.querySelectorAll(`[role="${'addCart'+productId}"]`)
-    console.log('-------------------',addToCartBtns)
+    const addToCartBtns=document.querySelectorAll(`[productId="${productId}"]`)
+   
     for(let btn of addToCartBtns){
         btn.classList.remove('searchAction')
-        btn.classList.remove('easyAddToCart')
-       
+        // btn.classList.remove('easyAddToCart')
+        btn.removeAttribute('easyAddToCart')
     
         btn.setAttribute('href','/api/goToCart')
         btn.innerHTML=`
-        <span class="ti-bag "></span>
-        <p class="hover-text">go to cart</p>
+        <span class="mr-1"> GO To Cart </span><i class="mdi mdi-cart "></i>
         `
     }
   

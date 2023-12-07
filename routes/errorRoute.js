@@ -10,11 +10,11 @@ error_route.set('view engine','ejs')
 
 
 //configuring session
-error_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// error_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 error_route.get('/',(req,res)=>{
     const {homeLink, statusCode, message, status } = req.query;

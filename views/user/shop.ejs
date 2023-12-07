@@ -31,8 +31,11 @@
                             <%
                             if(locals.categories){
                             %>
+							<div class="d-flex justify-content-center p-2">
+								<div class="" style="color: black; font-weight: 700; text-transform: uppercase;">Categories</div>
+							</div>
                           <div class="sidebar-categories">
-                              <div class="head">Browse Categories</div>
+                              
                               <ul class="main-categories">
 
                                  <% for(let category of categories){%>
@@ -51,7 +54,7 @@
                             %>
 						  <div class="sidebar-filter mt-50">
                             
-							<div class="top-filter-head">Product Filters</div>
+							
                             <%if(locals.brands){%>
 							<div class="common-filter">
 								<div class="head">Brands</div>
@@ -66,7 +69,7 @@
 								</form>
 							</div>
                             <%}%>
-							<div class="common-filter">
+							<!-- <div class="common-filter">
 								<div class="head">Color</div>
 								<form action="#">
 									<ul>
@@ -79,7 +82,7 @@
 										<li class="filter-list"><input class="pixel-radio" type="radio" id="spacegrey" name="color"><label for="spacegrey">Spacegrey<span>(19)</span></label></li>
 									</ul>
 								</form>
-							</div>
+							</div> -->
 							<div class="common-filter">
 								<div class="head">Price</div>
 								<div class="price-range-area">
@@ -130,15 +133,16 @@
 				<!-- End Filter Bar -->
 
 				<!-- Start Best Seller -->
-				<section class="lattest-product-area pb-40 category-list">
+				<section class="lattest-product-area mt-5 category-list">
 					<div class="row" id="searchedProductList">
                     <%
-                    if(locals.products){
+                    if(locals.products?.length > 0){
                         for(let product of products){
                         %>
-                        <!-- single product -->
-                        <div class="col-lg-3 col-6 h-50">
-                            <div class="single-product productdiv">
+						   <!-- single product -->
+						   <div class="col-md-3 col-sm-12">
+
+							<div class="single1-product">
 								<%if(product.effectedDiscount){%>
 									<div class="badge-area-show">
 										<div class="bagde-flag-wrap">
@@ -146,54 +150,79 @@
 										</div>
 									  </div>
 								<%}%>
+								<div class="" style="position: relative;">
+									<a href="/productDetails?id=<%=product._id%>" target="_blank">
+									<div class="overlay-div">
+									<div class="product1-image-container">
+										<img class="img-fluid w-100 product1-image" src="/static/productImages/<%=product.images[0]%>" alt="">
 									
-                                <div class="product-container">
-                                    <div class="product-image-container">
-                                        <a target="_blank" href="/productDetails?id=<%=product._id%>"  ><img class="img-fluid product-image" src="/static/productImages/<%= product.images[0] %>" alt=""></a>
-                                    </div>
-                                    <div class="product-details">
-                                        <h6 class="product-title"><%=product.name%></h6>
-                                        <div class="price">
-											<%if(product.effectedDiscount && product.effectedDiscount>0){%>
-                                            <h6 class="product-price">	&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></h6>
-
-                                            <h6 class="l-through product-original-price">&#8377;<%= product.price%></h6>
-											<%}else{%>
-												<h6 class="product-price">	&#8377;<%=product.price%></h6>
-											<%}%>
-                                        </div>
-                                        <div class="prd-bottom">
-											<% let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false %>
-											
-											<%if(!InCart && product.stock > 0){%>
-                                            <a href="#" class="social-info searchAction easyAddToCart" productId="<%=product._id%>" role="<%= 'addCart' + product._id%>">
-                                                <span class="ti-bag searchAction easyAddToCart" productId="<%=product._id%>"></span>
-                                                <p class="hover-text searchAction easyAddToCart" productId="<%=product._id%>" >add to cart</p>
-                                            </a>
-											<%}else if(product.stock > 0){%>
-												<a href="/api/goToCart" class="social-info">
-													<span class="ti-bag "></span>
-													<p class="hover-text">go to cart</p>
+									</div>
+									<div class="overlay"></div>
+									</div>
+									</a>
+									<div class="prod-actions w-100">
+		
+										<div class="d-flex justify-content-around px-1">
+											<a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
+												
+												<span class="mr-1"> View More </span><i class="mdi mdi-eye"></i>
+											</a>
+											<%
+											 let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
+												
+											if(!InCart && product.stock > 0){
+	
+											%>
+											<a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
+												
+												<span class="mr-1 searchAction text-capital" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
+											</a>
+											<%}else if(InCart){%>
+												<a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
+												
+													<span class="mr-1 text-capital"> GO To Cart </span><i class="mdi mdi-cart "></i>
 												</a>
 											<%}%>
-                                            <!-- <a href="" class="social-info">
-                                                <span class="lnr lnr-heart"></span>
-                                                <p class="hover-text">Wishlist</p>
-                                            </a> -->
-
-                                            <a href="/productDetails?id=<%=product._id%>" target="_blank" class="social-info">
-                                                <span class="lnr lnr-move"></span>
-                                                <p class="hover-text">view more</p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+		
+										</div>
+			
+										
+									</div>   
+									
+								</div>
+		
+								<div class="p-3 product-details">
+									<h6 class="deal-title mb-3"><%=product.name%></h6>
+									<div class="d-flex ">
+										
+										<div class="pricing">
+											<%if(product.effectedDiscount && product.effectedDiscount>0){%>
+												<span class="l-through mr-2">&#8377;<%= product.price%></span>
+												<span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
+												
+											<%}else{%>
+												<span class="product-price">&#8377;<%= product.price%></span>
+											<%}%>
+										</div>
+										<div class="rating"></div>
+									</div>
+								</div>
+							</div>
+							 
+						</div>
                     <%
                     }
-                        }
-                    %>
+                        }else{
+                    %>	<div class="col-lg-12 noresultDiv p-3">
+							<div class="d-flex justify-content-center">
+							<lottie-player src="https://lottie.host/a7470a7f-8508-464a-a71c-9926c8f04ab1/wemUnPijfZ.json" background="##ffffff" speed="1" style="width: 300px; height: 300px" loop  autoplay direction="1" mode="normal"></lottie-player>
+							</div>
+							<div class='noresultHead'>
+							<h3>No results found..!</h3>
+							</div>
+						</div>
+							
+						<%}%>
 					
 
 					</div>
@@ -201,7 +230,7 @@
 				<!-- End Best Seller -->
 
 
-				<!-- Start Filter Bar -->
+				<%if(locals.products?.length > 0){%>
 				<div class=" d-flex  flex-wrap align-items-center justify-content-center mt-2">
 					<input type="hidden" name="" id="totalProductPages" value="<%= totalPages%>">
 					<!-- pagination -->
@@ -218,7 +247,8 @@
 
 					</div>
 				</div>
-				<!-- End Filter Bar -->
+				<%}%>
+				
 			</div>
 		</div>
 	</div>

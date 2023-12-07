@@ -57,7 +57,7 @@ const adminDashboard=asyncErrorHandler( async(req,res, next)=>{
    
     const totalSalesToday=await adminHelpers.calculateTotalSalesToday()
     const totalOrdersToday=await adminHelpers.calculateTotalOrdersToday()
-    const averageOrderValue=await adminHelpers.calculateAverageOrderValue()
+    const averageOrderValue=await adminHelpers.calculateAverageOrderValue() 
     const todaysTOtalDelivery=await adminHelpers.calculateTodaysTotalDelivery()
     const popularProductInfo=await adminHelpers.findMostSoldProducts()
     // const popularProducts=popularProductInfo.mostSoldProducts
@@ -69,6 +69,7 @@ const adminDashboard=asyncErrorHandler( async(req,res, next)=>{
         todaysTOtalDelivery:todaysTOtalDelivery,
         popularProductInfo:popularProductInfo
     }
+    console.log(options)
     res.render('adminDashboard',{admin:true,options:options})
 
 

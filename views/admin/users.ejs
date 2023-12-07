@@ -22,7 +22,7 @@
         </form>
 
         <div class="table-responsive ">
-
+          <%if(locals.users?.length>0){%>
           <table class="table table-hover table-borderless">
             <thead class="border-bottom">
               <tr>
@@ -36,7 +36,7 @@
             <tbody>
               
                 <%
-                if(locals.users){
+                
                     for(let i=0; i< users.length; i++){
                     %>
                 <tr>
@@ -59,13 +59,17 @@
                 </tr>
                 <%
                     }
-                }else{
+                
                 %>
-                <tr>No users are available....</tr>
-                <%}%>
+                
               
             </tbody>
           </table>
+          <%}else{%>
+            <div class="noData">
+              no users yet..!
+            </div>
+            <%}%>
 
           <div id="myModal" class="modal">
             <div class="modal-content " >

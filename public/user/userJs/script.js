@@ -1,54 +1,56 @@
     // global constands
     const modal=document.getElementById('modal')
-    
-    
+
     // Get references to the images and the product preview element
     const thumbnailImages = document.querySelectorAll('.thumbnailImg');
     const productPreview = document.querySelector('.productPreView');
     
-    // Add a click event listener to each thumbnail image
-    thumbnailImages.forEach((thumbnailImg, index) => {
-        thumbnailImg.addEventListener('mouseover', () => {
-            // Get the source (src) of the clicked image
-            const imageSource = thumbnailImg.getAttribute('src');
-    
-            // Update the source (src) of the product preview image
-            productPreview.setAttribute('src', imageSource);
-
-            //image zoome on hover
-
-            var options2 = {
-       
-                fillContainer: true,
-                zoomPosition:'original',
-                offset: {vertical: 0, horizontal: 10},
-               
-            };
+    function imgZoom(){
         
-            // Create a new instance of ImageZoom
-            new ImageZoom(document.getElementById('img-container'), options2);
-    
-            // Optionally, you can also add a fade-in effect, or any other visual enhancements
-            // to improve the user experience when the image changes.
+        // Add a click event listener to each thumbnail image
+        thumbnailImages.forEach((thumbnailImg, index) => {
+            thumbnailImg.addEventListener('mouseover', () => {
+                // Get the source (src) of the clicked image
+                const imageSource = thumbnailImg.getAttribute('src');
+        
+                // Update the source (src) of the product preview image
+                productPreview.setAttribute('src', imageSource);
+
+                //image zoome on hover
+
+                var options2 = {
+        
+                    fillContainer: true,
+                    zoomPosition:'original',
+                    offset: {vertical: 0, horizontal: 10},
+                
+                };
+            
+                // Create a new instance of ImageZoom
+                new ImageZoom(document.getElementById('img-container'), options2);
+        
+                // Optionally, you can also add a fade-in effect, or any other visual enhancements
+                // to improve the user experience when the image changes.
+            });
         });
-    });
 
 
-    //image zoome on hover
+        //image zoome on hover
 
-    var options2 = {
-       
-        fillContainer: true,
-        zoomPosition:'original',
-        offset: {vertical: 0, horizontal: 10},
+        var options2 = {
+        
+            fillContainer: true,
+            zoomPosition:'original',
+            offset: {vertical: 0, horizontal: 10},
+        
+        
+        };
+
+        // Create a new instance of ImageZoom
+        new ImageZoom(document.getElementById('img-container'), options2);
     
-       
-    };
-
-    // Create a new instance of ImageZoom
-    new ImageZoom(document.getElementById('img-container'), options2);
-  
-
+    }
+if(thumbnailImages.length>0) imgZoom()
 
     
     //registration
@@ -70,6 +72,7 @@ function validateForm(){
     const errorFname = document.getElementById('fnameError');
     const errorSname = document.getElementById('lnameError');
 
+    
     
   
     const emailExpr= /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/;
@@ -239,6 +242,7 @@ fetch('/api/cartCount')
 
 document.getElementById('mainContainer').addEventListener('click',(e)=>{
    
+   
 
     if(e.target.classList.contains('productDetails')){
         if(e.target.id=='buyNow'){
@@ -248,7 +252,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     
     // USER PROFILE ACTIONS
     if(e.target.classList.contains('profileAction')){
-
+       
         if(e.target.id=='cancelEdit'){
 
             cancelEdit()
@@ -261,7 +265,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
     
             validateEditUserInfo()
     
-        }else if(e.target.id=='manageAddress'){
+        }else if(e.target.hasAttribute('manageAddress')){
     
             getManageAddress()
     
@@ -278,11 +282,11 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
             removeAddress(e.target.id)
         }else if(e.target.id=='updateAddress'){
             validateAddress(updateAddress)
-        }else if(e.target.id=='changePassword'){
+        }else if(e.target.hasAttribute('changePassword')){
             changePassword()
         }else if(e.target.id=='updatePassword'){
             updatePassword()
-        }else if(e.target.id=='walletIcon' || e.target.id=='wallet'){
+        }else if(e.target.hasAttribute('wallet')){
             showWallet()
         }else if(e.target.id=='addToWallet' || e.target.id=='addMoneyToWallet'){
             addMoneyToWallet()
@@ -357,20 +361,34 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
         }
 
     }else if(e.target.classList.contains('searchAction')){
-
         //SEARCH ACTION
         if(e.target.id=='prevProducts'){
             prevProducts()
         }else if(e.target.id=='nextProducts'){
             
             nextProducts()
-        }else if(e.target.classList.contains('easyAddToCart')){
+        }else if(e.target.classList.contains('easyAddToCart') ||e.target.hasAttribute('easyAddToCart') ){
             const productId=e.target.getAttribute('productId')
             addSingleProductToCart(productId,1)
         }
     }
 
 },true)
+
+function showMessage(message){
+    Swal.fire({
+        position:'bottom',
+        html: `
+            <div class="p-3 ">
+                    ${message}
+            </div>
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: true,
+        
+      });
+  }
+
 
 function handleError(error) {
      

@@ -8,8 +8,8 @@ function showWallet(){
     })
     .then(html=>{
         document.getElementById('profileSettingArea').innerHTML=html
-        document.querySelector('.selected').classList.remove('selected')
-        document.getElementById('addToWallet').classList.add('selected')
+        setSelected('wallet')
+
     })
     .catch(handleError)
 }

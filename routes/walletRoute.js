@@ -7,15 +7,15 @@ const auth=require('../middleware/userAuth')
 const session=require('express-session')
 
 //configuring session
-wallet_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// wallet_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 
 wallet_route.set('views','./views/wallet')
-wallet_route.set('view engine','ejs')
+wallet_route.set('view engine','ejs') 
 
 wallet_route.get('/getWallet',auth.isLogin,checkExist.user,walletController.loadWallet)
 wallet_route.post('/addAmountToWallet',auth.isLogin,walletController.createAddAmount)

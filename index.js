@@ -10,11 +10,14 @@ const orderRoute=require('./routes/orderRoute')
 const walletRoute=require('./routes/walletRoute')
 const errorRoute=require('./routes/errorRoute')
 const CustomError=require('./Utils/CustomError')
-const globalErrorHandler=require('./controller/errorController')
+const globalErrorHandler=require('./controller/errorController') 
+require('./auth');
+// const passport=require('passport')
 
 //cart reservation
 const cron=require('node-cron')
 const tasks=require('./tasks/tasks')
+const session=require('express-session')
 
 
 app.set('view engine','ejs')
@@ -31,10 +34,24 @@ db.on('error', (err) => {
   db.once('open', () => {
     console.log('Connected to MongoDB');
   });
-let y=0
-  
+
+
+
+//configuring session
+app.use(session({
+  secret:process.env.SESSION_SECRET,
+  resave:false,
+  saveUninitialized:true,
+  cookie:{ secure: false }
+}))
+
+
 //seting static files
 app.use('/static',express.static('public'))
+
+
+
+
 
 //passing to appropriate route
 app.use('/admin',adminRoute)

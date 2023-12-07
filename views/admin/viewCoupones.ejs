@@ -19,7 +19,7 @@
                    
                     </p>
                     <div class="table-responsive">
-                    <%if(locals.coupones){%>
+                    <%if(locals.coupones && coupones.length > 0){%>
                       <table class="table table-hover table-borderless" id="">
                         <thead class="border-bottom">
                           <tr>
@@ -78,7 +78,10 @@
                         </tbody>
                       </table>
                       <%}else{%>
-                        No coupone created..!
+                        <div class="noData">
+                          No coupone created..!
+
+                        </div>
 
                         <%}%>
                       <div id="myModal" class="modal">

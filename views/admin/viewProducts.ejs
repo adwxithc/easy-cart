@@ -38,6 +38,7 @@
 
                         
                       <table class="table table-hover table-borderless" id="productTable">
+                        <% if(locals.products && products.length > 0 ){%>
                         <thead class="border-bottom">
                           <tr>
                             <th> # </th>
@@ -55,7 +56,7 @@
 
                           
                             <%
-                            if(locals.products){
+                           
                                 for(let i=0;i< products.length;i++){
                             %>
 
@@ -125,9 +126,9 @@
                             }else{
 
                             %>
-                            <tr>
-                                <p>No products are available..!</p>
-                            </tr>
+                           
+                                <p class="noData">No products are available..!</p>
+                            
 
                             <%}%>
                           

@@ -12,12 +12,8 @@ const ratingSchema=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
     },
-    timeStamp:{
-        type:Date,
-        default:Date.now
-    }
     
-});
+},{ timestamps: { createdAt: 'ratingCreatedAt', updatedAt: 'ratingUpdatedAt' } });
 
 
 const productSchema=mongoose.Schema({

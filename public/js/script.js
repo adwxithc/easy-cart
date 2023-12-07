@@ -42,35 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// $(function(){
-//     $('#resendOtp').on('click',function(e){
-//       e.preventDefault()
-//       $('#resendOtp').css('color','rgba(78, 71, 70, 0.707)')
-//       $('#resendOtp').prop('disabled',true)
-
-//       setTimeout(()=>{
-//         $('#resendOtp').css('color','blue')
-//         $('#resendOtp').prop('disabled',false)
-//         $("#resendInfo").html("")
-//       },30000)
-
-      
-//       $.ajax({
-//         url:'/reSendOtp',
-//         method:"GET",
-//         success:function(res){
-//           $("#resendInfo").html(res.message)
-          
-//         },
-//         error:function(){
-//           $("#resendInfo").html("Some error occured please try again after some time")
-          
-
-//         }
-//       })
-//     })
-//   })
-
   function clearAlert(){
     if(document.getElementById("alertMessage")){
         setTimeout(()=>{

@@ -6,7 +6,10 @@ const auth=require('../middleware/userAuth')
 const session=require('express-session')
 const validateUserInputs=require('../middleware/validateUserInput')
 const checkExist=require('../middleware/checkExist')
+const passport=require('passport')
 
+user_route.use(passport.initialize())
+user_route.use(passport.session())
 
 
 user_route.use(express.urlencoded({extended:true}))
@@ -17,11 +20,22 @@ user_route.set('views','./views/user')
 
 
 //configuring session
-user_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// user_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
+
+user_route.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ], prompt: 'select_account' }
+));
+
+user_route.get( '/auth/google/callback',
+    passport.authenticate( 'google', {
+        successRedirect: '/google-auth-success',
+        failureRedirect: '/google-auth-failure'
+}));
 
 user_route.get('/',auth.isLogout,userController.guest)
 user_route.get('/productDetails',checkExist.hasCart,userController.productDetails)
@@ -52,7 +66,10 @@ user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChange
 // shop
 user_route.get('/shop',checkExist.hasCart,shopController.loadShop)
 user_route.post('/searchProduct',userController.searchProduct)
-user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
+user_route.post('/',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
+
+user_route.get('/google-auth-success',userController.googleAuthSuccess)
+user_route.get('google-auth-failure',userController.googleAuthFailure)
 
 //CONTACT
 

@@ -1,0 +1,55 @@
+<%- include("../../partials/login-register/header.ejs") %>
+
+
+<div class="my-login-page">
+    <section class="h-100">
+        <div class="container h-100">
+            <div class="row justify-content-md-center align-items-center h-100">
+                <div class="card-wrapper">
+                    <div class="brand">
+                        <img src="img/logo.jpg" alt="bootstrap 4 login page">
+                    </div>
+                    <div class="card fat">
+                        <div class="card-body">
+                            <h4 class="card-title">Verify Login</h4>
+                            <%if(locals.message){%>
+                                <div class="text-center alert-danger" id="alertMessage"> 
+                                <%=message%>
+                                </div>
+                                <%}%>
+                            <form method="POST" class="my-login-validation" novalidate action="/verifyOtp" onsubmit="return validateOtp()">
+                                <div class="form-group">
+                                    <label for="otp">Enter otp</label>
+                                    <input id="otp" type="" class="form-control" name="otp" required autofocus onclick="clearError('otpError')">
+                                    <div id="otpError" class="text-danger"></div>
+
+                                    <div class="form-text text-muted">
+                                        <p style=" font-size: medium" class="pt-3"> Please enter the  OTP number  send to your email </p>
+                                        <div class="d-flex justify-content-end"><small><a href="" id="resendOtp">Resend otp</a></small></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-0">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        submit
+                                    </button>
+                                </div>
+                                <div class="d-flex justify-content-center mt-3"><p id="resendInfo"></p></div>
+                            </form>
+                            <input type="hidden" value="<%=expire%>" id="expire">
+                            <div id="timer"></div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        Copyright &copy; 2023 &mdash; Easy Cart
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="/static/user/userJs/login-register/otp.js"></script>
+
+<%- include("../../partials/login-register/footer.ejs") %>
+

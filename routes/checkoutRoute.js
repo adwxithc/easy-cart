@@ -8,11 +8,11 @@ const helperMiddeleware=require('../middleware/helper')
 const session=require('express-session')
 
 //configuring session
-checkout_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// checkout_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 
 checkout_route.set('views','./views/checkout')

@@ -4,7 +4,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     //CHECKING WHETER THE CODE IS IN EDIT BANNER PAGE
     const flag=document.getElementById('editBannerFlag')
     if(flag){
-        bannerImg=flag.value
+
+        convertUrlToFile(flag.value, (file) => {
+           
+            bannerImg=file;
+
+        });
     }
 })
 
@@ -175,7 +180,7 @@ function updateBanner(){
 
             formData.set('bannerBackground',bannerImg)
 
-           
+          
             const url=`/admin/updateBanner?bannerId=${bannerId}`
 
             const success=sendBannerData(formData,url,'PUT',null)

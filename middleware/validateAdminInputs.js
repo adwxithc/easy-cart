@@ -313,12 +313,14 @@ const returnStatus=async(req,res,next)=>{
 const banner=asyncErrorHandler( async(req,res,next)=>{
 
     const {miniTitle,mainTitle,description,link} =req.body
-    const bannerBackground=req.file?.filename
+    const bannerBackground=req.file?.filename 
     if(!miniTitle || !mainTitle || !description || !link || !bannerBackground){
 
+        if(bannerBackground){
         //DELETE NEWLY ADDED IMAGE
-        const url=path.join(__dirname,'..','public','bannerBackground')
+        const url=path.join(__dirname,'..','public','bannerImages',bannerBackground)
         const deleted=adminHelpers.deleteFile(url)
+        }
 
         res.json({success:false,message:'Please provide all informations'})
         return

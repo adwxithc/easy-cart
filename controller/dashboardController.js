@@ -4,15 +4,8 @@ const adminHelpers=require('../helperMethods/adminHelpers')
  const getStats=asyncErrorHandler(async (req,res, next)=>{
 
     const getTotalTransactions=await adminHelpers.getTotalTransactions()
-    if(getTotalTransactions){
-        console.log(getTotalTransactions)
 
-        const transactions={
-            totaltransactions:getTotalTransactions,
-            labels:['WALLET','ONLINE-TRANSFER','COD']
-        }
-        res.json({transactions:transactions})
-    }
+        res.json({transactions:getTotalTransactions})
 
 })
 

@@ -115,8 +115,7 @@ function getManageAddress(){
     .then(data=>{
         
         document.getElementById('profileSettingArea').innerHTML=data
-        document.querySelector('.selected').classList.remove('selected')
-        document.getElementById('manageAddress').classList.add('selected')
+        setSelected('manageAddress')
         
     })
     .catch(handleError)
@@ -467,8 +466,8 @@ function updateAddress(address){
 
 
 function changePassword(){
-    document.querySelector('.selected').classList.remove('selected')
-    document.getElementById('changePassword').classList.add('selected')
+   
+  
     fetch('/changePassword')
     .then(response=>{
 
@@ -477,6 +476,8 @@ function changePassword(){
     })
     .then(html=>{
         document.getElementById('profileSettingArea').innerHTML=html
+        setSelected('changePassword')
+
     })
     .catch(handleError)
 }
@@ -577,4 +578,10 @@ function updatePassword(){
 
         .catch(handleError)
     }
+}
+
+function setSelected(elemId){
+    const selectedElem=document.querySelector('.selected')
+    selectedElem.classList.remove('selected')
+    document.getElementById(elemId).classList.add('selected')
 }

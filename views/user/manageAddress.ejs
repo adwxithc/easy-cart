@@ -12,7 +12,7 @@
             <div>
 
                 <div class="row">
-                    <div class="col-md-6 py-3">
+                    <div class=" col-md-6 py-3">
                         <label for="fname" class="form-label">Name</label>
                         <input type="text" id="fname" placeholder="Name" class="form-control">
                         <div id="fnameError" class="errormsg"></div>
@@ -144,7 +144,15 @@
         
         <!-- <div class="d-flex justify-content-end"><a href="#"><i class="mdi mdi-dots-vertical big"></i></a></div> -->
         <div>
-            <div class="d-flex head"><h6 class="p-1 mr-1"><%=address.name%></h6><h6 class="p-1"><%=address.mobile%></h6></div>
+            <div class="row head">
+                <div class="col-md-6">
+                    <h6 class="p-1 mr-1 "><%=address.name%></h6>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end">
+                    <h6 class="p-1 " style="display: inline;"><%=address.mobile%></h6>
+
+                </div>
+            </div>
         </div>
         <p class="p-1 infos">
             <%= address.area%>, <%= address.locality%>, <%=address.city%>, <%=address.state%>-<span class="text-dark "><%=address.pincode%></span> 

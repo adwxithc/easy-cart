@@ -7,11 +7,11 @@ const session=require('express-session')
 const checkExist=require('../middleware/checkExist')
 
 //configuring session
-order_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// order_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 
 order_route.set('views','./views/order')

@@ -18,6 +18,8 @@
         <%
         for(let order of orderData){
             for(let item of order.items){
+
+                
         %>
        
             <div class=" col-lg-12 mx-auto" id="">
@@ -67,7 +69,10 @@
                                     <div>
                                         <p>Order id:<%=order.orderNumber%></p>
                                     </div>
-                                    <%if(item.orderStatus!=='Canceled' && item.orderStatus!=='Delivered'){%>
+                                    <%if((item.paymentStatus =='pending' && order.paymentMethod =='ONLINE-PAYMENT')){%>
+                                    <span class="text-danger">order Placement failed</span><br>
+
+                                    <%}else if(item.orderStatus!=='Canceled' && item.orderStatus!=='Delivered'){%>
                                     <span class="text-success">Delivery expected with in 3-4 Days:</span><br>
                                     <%}else if(item.orderStatus=='Canceled'){%>
                                     <span class="text-danger">Order Canceled</span><br>

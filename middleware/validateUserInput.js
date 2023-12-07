@@ -308,7 +308,7 @@ const validateChangePassword=(req,res,next)=>{
 
 const validateProductSearchCriteria=asyncErrorHandler( async(req,res,next)=>{
 
-        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body;
+        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body || req.query;
         
 
         let matchCriteria={};
@@ -408,6 +408,8 @@ const otp=(req,res,next)=>{
     try {
         const {otpWithTimestamp}=req.session
         if(otpWithTimestamp){
+            const seconds=Number(req.session?.otpWithTimestamp?.split(':')[1])
+            const expire=(seconds+120)
             const isNotExpired =userHelpers.verifyOTP(req.session.otpWithTimestamp)
             if(isNotExpired){
                 const otp = otpWithTimestamp.split(':')[0];
@@ -416,12 +418,12 @@ const otp=(req,res,next)=>{
                 next()
 
                 }else{
-                    console.log("otp not verified")
-                    res.render('getOtp',{message:"Invalid OTP"})
+                    
+                    res.render('login-register/otp',{message:"Invalid OTP",title:'otp',expire:expire})
                 }
             }else{
                 console.log("otp expired")
-                res.render('getOtp',{message:"OTP has expired please resend OTP"})
+                res.render('login-register/otp',{message:"OTP has expired please resend OTP",title:'otp',expire:expire})
 
             }
         }else{

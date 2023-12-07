@@ -1,0 +1,80 @@
+<%- include("../../partials/login-register/header.ejs") %>
+
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-md-center h-100">
+				<div class="card-wrapper">
+					<div class="brand">
+						<img src="img/logo.jpg" alt="bootstrap 4 login page">
+					</div>
+					<div class="card fat">
+						<div class="card-body">
+							<div class="text-center alert-warning" id="alertMessage"> 
+								<% if(locals.message){ %>
+								  <%=message%>
+				
+								<%}%>
+							  </div>
+							<h4 class="card-title">Register</h4>
+							<form action="/register" class="my-login-validation" method="POST" onsubmit="return validateForm()">
+								<div class="form-group">
+									<label for="fname">First Name</label>
+									<input id="fname" type="text" class="form-control" name="fname"  onclick="clearError('fnameError')">
+                                    <div id="fnameError" class="text-danger"></div>
+
+								</div>
+
+                                <div class="form-group">
+									<label for="lname">Last Name</label>
+									<input id="lname" type="text" class="form-control" name="lname"   onclick="clearError('lnameError')">
+                                    <div id="lnameError" class="text-danger"></div>
+
+								</div>
+
+								<div class="form-group">
+									<label for="email">E-Mail Address</label>
+									<input id="email" type="email" class="form-control" name="email"  onclick="clearError('emailError')">
+                                    <div id="emailError" class="text-danger"></div>
+
+								</div>
+
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input id="password" type="password" class="form-control" name="password" onclick="clearError('passwordError')">
+                                    <div id="passwordError" class="text-danger"></div>
+
+								</div>
+
+                                <div class="form-group">
+									<label for="rePassword">Re-enter Password</label>
+									<input id="rePassword" type="password" class="form-control" name="rePassword" onclick="clearError('rePasswordError')">
+									<div id="rePasswordError" class="text-danger"></div>
+
+								</div>
+                                <%if(locals.refer){%>
+                                    <input type="hidden" name="refer" id="" value="<%=refer%>">
+                                    <%}%>
+
+								
+
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary btn-block">
+										Register
+									</button>
+								</div>
+								<div class="mt-4 text-center">
+									Already have an account? <a href="/login">Login</a>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="footer">
+						Copyright &copy; 2017 &mdash; Easy Cart
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script src="/static/user/userJs/login-register/register-validation.js"></script>
+
+	<%- include("../../partials/login-register/footer.ejs") %>

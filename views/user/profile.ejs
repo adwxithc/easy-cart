@@ -4,78 +4,86 @@
 
  <!--================profile Area =================-->
   <section class="cart_area" style="background-color: rgb(241,243,246);">
-    <div class="container p-0">
-        <div class=" row">
-
-
-            
-        <div class="col-lg-4 ">
-
-             <div class="blog_right_sidebar setPdding ">
-                    <div><img src="/static/assets/profile/profilePic.jpg" alt="" class="profile-image"></div>
-
-                    <div class="d-flex justify-content-center">
-                        <%if(locals.user){%>
-                        <h4><%=user.fname+' '+user.lname%></h4>
-                        <%}%>
-                    </div>
-                    <div>
-
-                        <form data-copy=true id="data-copy">
-                            <label for="referLink">Refer To Others</label>
-                            <div class="d-flex">
-                                
-                                <input type="text" id="refer" style="color: blue; border: 0;" value="http://localhost:3000/register?refer=<%=user.referCode%>" data-click-select-all class="form-control ">
-                                <button type="submit"id='referLink' style="border: 0; border-radius: 2px;"><i class="mdi mdi-content-copy"></i></button>
-                            </div>
-                        </form>
-
-                    </div>
-
-                </div>
-
-                <div class="blog_right_sidebar profileOptionCard mt-2 ">
-
-                    <div class=" d-flex  profileOption  py-3 px-4">
-                        <a href="/api/orders" class="d-flex align-items-center profileMainOption"><i class="mdi mdi-shopping  Icon-lg mr-2"></i> MY ORDERS</a>
-                    </div>
-
-                    <div class=" profileOption py-3 ">
-                        <div class="">
-                            <a class="d-flex align-items-center  profileMainOption px-4"> <i class=" mdi mdi-settings Icon-lg mr-2 "></i>ACCOUNT SETTINGS</a>
-                        </div>
-                        
-                        <div class=" ">
-                            <a href="/profile" class="d-flex align-items-center  p-2 profileSubOption selected px-5">Profile Informations</a>
-                        </div>
-
-                        <div class="">
-                            <a href="#" class="d-flex align-items-center p-2 profileSubOption px-5 profileAction" id="manageAddress">Manage Address</a>
-                        </div>
-                        <div class="">
-                            <a href="#" class="d-flex align-items-center p-2 profileSubOption px-5 profileAction" id="changePassword">Change Password</a>
-                        </div>
-                    </div>
-
-
-                    <div class=" d-flex  profileOption  py-3 px-4">
-                        <a href="#!" class="d-flex align-items-center profileMainOption profileAction" id="wallet"><i class="mdi mdi-wallet Icon-lg mr-2 profileAction" id="walletIcon"></i>WALLET</a>
-                    </div>
-
+    <div class="container " >
+        <div class="row flex-nowrap" >
+            <div class="col-sm-4 col-md-3 col-xl-3 px-sm-2  px-0 bg-white" style="min-height: 100vh;">
+                <div class="d-flex flex-column align-items-center align-items-sm-start  pt-2 text-white min-vh-100">
                     
-                <div class=" d-flex  profileOption py-3">
-                    <a class="d-flex align-items-center profileMainOption px-4" href="/logout"><i class="mdi mdi-logout  Icon-lg mr-2"></i>LOGOUT</a>
+                    <div class="w-100">
+                        <div class="mx-auto" style="max-width: 150px; width:100%;">
+                            <img src="/static/assets/profile/profilePic.jpg" alt="" style="width: 100%; height: 100%;">
+
+                        </div>
+                        <div class="dropdown d-flex justify-content-center w-100 my-3 " >
+                            <a href="#" class="d-flex align-items-center  avathar dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="mdi mdi-account d-md-none"></i>
+                                <span class="d-none d-sm-inline mx-1">
+                                    <%if(locals.user){%>
+                                        <%=user.fname+' '+user.lname%>
+                                    <%}%>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" >
+                               
+                                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                                <li>
+                                    <form data-copy=true id="data-copy">
+                                        <label for="referLink">Refer To Others</label>
+                                        <div class="d-flex">
+                                            
+                                            <input type="text" id="refer" style="color: blue; border: 0;" value="http://localhost:3000/register?refer=<%=user._id%>" data-click-select-all class="form-control ">
+                                            <button type="submit"id='referLink' style="border: 0; border-radius: 2px;"><i class="mdi mdi-content-copy"></i></button>
+                                        </div>
+                                    </form>
+                                </li>
+        
+                            </ul>
+                        </div>
+                    </div>
+                    
+
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu" style="width: 100%;">
+    
+                        <li class="nav-item profileOptions" >
+                            <a href="/api/orders" class="nav-link align-middle p-2 profileOptions">
+                                <i class="mdi mdi-shopping  Icon-lg mr-2"></i> <span class="ms-1 d-none d-sm-inline" style="color: black;">MY ORDERS</span>
+                            </a>
+                        </li>              
+                   
+                
+                        
+    
+                        <li class="profileOptions selected">
+                            <a href="/profile" class="nav-link px-0 align-middle  profileOptions">
+                                <i class=" mdi mdi-account-settings Icon-lg p-2 "></i> <span class="ms-1 d-none d-sm-inline">Profile</span> 
+                            </a>
+                        </li>
+                        <li class="profileOptions profileAction" manageAddress id="manageAddress">
+                            <a href="#" class="nav-link px-0 align-middle profileAction profileOptions" >
+                                <i class=" mdi mdi-account-card-details Icon-lg  p-2 profileAction" manageAddress></i> <span class="ms-1 d-none d-sm-inline profileAction" manageAddress >Manage Address</span> 
+                            </a>
+                        </li>
+    
+                        <li class="profileOptions profileAction" changePassword id="changePassword">
+                            <a href="#" class="nav-link px-0 align-middle profileAction profileOptions" >
+                                <i class=" mdi mdi-key-variant Icon-lg p-2 profileAction" changePassword ></i> <span class="ms-1 d-none d-sm-inline profileAction" changePassword>Change Password</span> 
+                            </a>
+                        </li> 
+                        <li class="profileOptions profileAction" wallet id="wallet">
+                            <a href="#" class="nav-link px-0 align-middle profileAction profileOptions " wallet >
+                                <i class="mdi mdi-wallet Icon-lg p-2 profileAction" wallet ></i> <span class="ms-1 d-none d-sm-inline profileAction" wallet >WALLET</span> 
+                            </a>
+                        </li> 
+                    </ul>
+                    <hr class="">
+
                 </div>
-
             </div>
+            <div class="col-md-9 col-xl-9 px-2 px-md-3" >
 
-
-        </div>
-
-            <div class=" col-lg-8">
-            <div class="blog_right_sidebar" id="profileSettingArea">
-
-          
+                <div class="blog_right_sidebar " id="profileSettingArea" style="min-height: 100vh;">
+                    <div class="profileCard">
+              
                     <div class="d-flex justify-content-between">
                         <h5>Personal Informations</h5> <a href="#" class="profileAction" id="editProfile" >Edit</a>
                     </div>
@@ -104,9 +112,9 @@
                     
                         
                     </div>
-
+    
                     <div class="row">
-
+    
                         <div class="col-md-6 py-3">
                             <label for="modile" class="form-label">Phone Number</label>
                             <input type="text" name="mobile" id="mobile" class="form-control userInfo" value="<%=user.mobile%>" disabled>
@@ -116,26 +124,23 @@
                     </div>
                     
                     <%}%>
-
+    
                     <a href="#" class="darkBtn save profileAction" id="save">SAVE</a>
-
-
+    
+                    </div>
+    
+                </div>
 
             </div>
-
-
-
-
-
         </div>
     </div>
 </section>
 
+<!--RESPONSIVE TEMPLATE AREA -->
 
 
 
-
-
+<!-- RESPONSIVE TEMPLATE END -->
 <!--================end of profileArea =================-->
 
 <!----------------------------------------------------------- response message  modal ---------------------------------------------- -->

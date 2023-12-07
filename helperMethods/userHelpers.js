@@ -3,7 +3,9 @@ const Order=require('../model/orderModel')
 const User=require('../model/userModel')
 const Cart=require('../model/cartModel')
 const Product=require('../model/productModel')
-const Coupone=require('../model/couponeModel')
+const Coupone=require('../model/couponeModel');
+
+const bcrypt =require('bcrypt')
 
 var instance = new Razorpay({
     key_id:process.env.RAZORPAY_KEY_ID,
@@ -11,18 +13,22 @@ var instance = new Razorpay({
   });
 
 const generateRazorpay=(orderId,amount)=>{
-
-  return new Promise((resolve,reject)=>{
-    let options={
-      amount: amount*100,
-      currency: "INR",
-      receipt: orderId,
-    }
-    instance.orders.create(options,function(err,order){
-      
-      resolve(order)
+  try {
+    return new Promise((resolve,reject)=>{
+      let options={
+        amount: amount*100,
+        currency: "INR",
+        receipt: orderId,
+      }
+      instance.orders.create(options,function(err,order){
+        
+        resolve(order)
+      })
     })
-  })
+  } catch (error) {
+    throw error
+  }
+
 
 }
 
@@ -55,8 +61,7 @@ const changepaymentStatus=async(orderId,status,productId)=>{
       }
       
     } catch (error) {
-      console.log(error)
-      
+      throw error
     }
 }
 
@@ -105,11 +110,12 @@ async function addMoneyToWallet(userId, amount, transactionId, description) {
 
         return updatedUser
     } catch (error) {
-        console.error('Error adding money to wallet:', error);
+        throw error
     }
 }
 
 async function debitFromWallet(userId,amount,transactionId,description){
+  try {
     const user=await User.findById(userId)
   
     if(!user.wallet?.balance || user.wallet?.balance<amount){
@@ -137,19 +143,28 @@ async function debitFromWallet(userId,amount,transactionId,description){
 
 
     }
+  } catch (error) {
+    throw error
+  }
+
     
 }
 
 async function releaseProducts(order,cart,userId){
-
-  for(let item of order.items){
-                  
+  try {
+    for(let item of order.items){
+                
       await Product.updateOne({_id:item.product},{$inc:{stock:-item.quantity}})
     
   }
+
   if(cart){
       await Cart.deleteOne({user:userId})//checking the order is made on cart items if so empty the cart
   }
+  } catch (error) {
+    throw error
+  }
+
 
 }
 
@@ -181,48 +196,54 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
   }
   
   async function checkRefundEligible(product,order){
-    let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterCancel
 
-    // IF IT IS A ORDER FOR MULTIPLE PRODUCTS
-    if(order.items.length>1){
-      
+    try {
+      let discountedTotal,productPrice,discountPercentage,totalAmount,totalAmountAfterCancel
 
-       discountedTotal=order.totalAmount
-      const {quantity,price}=product
-       productPrice=quantity*price
-
-       discountPercentage=order.couponeDiscount
-       totalAmount=discountedTotal
-
-       // IF COUPON HAS USED
-       if(discountPercentage>0){
-        totalAmount=discountedTotal / (1 - discountPercentage / 100);
-        totalAmountAfterCancel=totalAmount-productPrice
-
-        //finding the coupone
-        const coupone=await Coupone.findById(order.couponeId)
-
-        //if canceling not effecting minPurchaseAmount
-        if(coupone.minPurchaseAmount<totalAmountAfterCancel){
-          let newDiscountedTotal=totalAmountAfterCancel-((totalAmountAfterCancel*discountPercentage)/100)
-          const refundAmount=discountedTotal-newDiscountedTotal
-          return {eligible:true,amount:refundAmount}
-        }else{
-            return {eligible:false}
-        }
-       }else{
-       
-        return {eligible:true,amount:productPrice}
-       }
-       
-       
-
-       
-    }else{
-
-      
-      return {eligible:true,amount:order.totalAmount}
+      // IF IT IS A ORDER FOR MULTIPLE PRODUCTS
+      if(order.items.length>1){
+        
+  
+         discountedTotal=order.totalAmount
+        const {quantity,price}=product
+         productPrice=quantity*price
+  
+         discountPercentage=order.couponeDiscount
+         totalAmount=discountedTotal
+  
+         // IF COUPON HAS USED
+         if(discountPercentage>0){
+          totalAmount=discountedTotal / (1 - discountPercentage / 100);
+          totalAmountAfterCancel=totalAmount-productPrice
+  
+          //finding the coupone
+          const coupone=await Coupone.findById(order.couponeId)
+  
+          //if canceling not effecting minPurchaseAmount
+          if(coupone.minPurchaseAmount<totalAmountAfterCancel){
+            let newDiscountedTotal=totalAmountAfterCancel-((totalAmountAfterCancel*discountPercentage)/100)
+            const refundAmount=discountedTotal-newDiscountedTotal
+            return {eligible:true,amount:refundAmount}
+          }else{
+              return {eligible:false}
+          }
+         }else{
+         
+          return {eligible:true,amount:productPrice}
+         }
+         
+         
+  
+         
+      }else{
+  
+        
+        return {eligible:true,amount:order.totalAmount}
+      }
+    } catch (error) {
+      throw error
     }
+
 
 
   }
@@ -534,6 +555,31 @@ async function getMostSoldCategories(){
 
 }
 
+const haveStock=async(order,userId)=>{
+  try {
+    for(let item of order.items){
+                
+      const product = await Product.findById(item.product)
+      if(product.stock<item.quantity) return false
+    }
+    return true
+  } catch (error) {
+    throw error
+  }
+}
+
+//creating hashing function with bcrypt
+const securePassword=async(password)=>{
+  try {
+      const hashedPassword=await bcrypt.hash(password,10)
+      return hashedPassword
+      
+  } catch (error) {
+     
+      throw error
+  }
+}
+
 
 
 module.exports={
@@ -549,5 +595,7 @@ module.exports={
     setNewOrderTotal,
     generateInvoice,
     eligibleForReturn,
-    getMostSoldCategories
+    getMostSoldCategories,
+    haveStock,
+    securePassword
 }

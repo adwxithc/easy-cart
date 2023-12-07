@@ -7,11 +7,11 @@ const checkExist=require('../middleware/checkExist')
 const session=require('express-session')
 
 //configuring session
-cart_route.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave:false,
-    saveUninitialized:true
-}))
+// cart_route.use(session({
+//     secret:process.env.SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized:true
+// }))
 
 
 cart_route.set('views','./views/cart')

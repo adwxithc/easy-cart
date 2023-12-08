@@ -139,14 +139,16 @@ const category =asyncErrorHandler( async(req,res,next)=>{
 
 const order=asyncErrorHandler( async(req,res,next)=>{
 
-    const {orderId}=req.body
+    const {orderId}= req.body 
     const exist=await  Order.findOne({customer:req.session.userId,_id:new mongoose.Types.ObjectId(orderId)})
 
     if(exist){
         req.order=exist
         next()
     }else{
-        res.json({message:"This order doesn't exist",canceled:false,success:false})
+        const err=new CustomError(" order doesn't exist",400)
+        next(err)
+        // res.json({message:"This order doesn't exist",canceled:false,success:false})
     }
 
 })
@@ -248,6 +250,50 @@ const user =asyncErrorHandler( async(req, res, next )=>{
 
 })
 
+const orderedProduct=asyncErrorHandler( async(req, res, next)=>{
+
+    const orderId = req.query.orderId || req.body.orderId;
+    const productId = req.query.productId || req.body.productId;
+    
+    const order = await Order.aggregate([
+    {
+        $match: {
+        customer:new mongoose.Types.ObjectId(req.session.userId),
+        _id: new mongoose.Types.ObjectId(orderId)
+        },
+    },
+    {
+        $unwind: '$items'
+    },
+    {
+        $match:{
+        'items.product':new mongoose.Types.ObjectId(productId)
+        }
+    },
+    {
+        $lookup: {
+        from: 'products', 
+        localField: 'items.product',
+        foreignField: '_id',
+        as: 'productDetails',
+        },
+    },
+    {
+        $unwind:'$productDetails'
+    }
+    ]);
+ 
+
+  if(!(order && order.length>0)){
+    const err = new CustomError('unAutherised request',401)
+    next(err)
+  }else{
+    req.order=order[0]
+    next()
+  }
+
+})
+
 
 module.exports={
     coupone,
@@ -264,6 +310,7 @@ module.exports={
     refer,
     hasCart,
     banner,
-    user
+    user,
+    orderedProduct
 
 }

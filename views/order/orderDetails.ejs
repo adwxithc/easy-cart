@@ -82,6 +82,21 @@
                                         <p class="p-1 infos">
                                             <%= orderData.shippingAddress.area%>, <%= orderData.shippingAddress.locality%>, <%=orderData.shippingAddress.city%>, <%=orderData.shippingAddress.state%>-<span class="text-dark "><%=orderData.shippingAddress.pincode%></span> 
                                         </p>
+                                        <p>
+                                
+                                    <%
+                                     const ratingData=item.product?.rating?.find(r=>r.userId?.toString()==user._id.toString())
+                                     if(ratingData && ratingData.review){%>
+                                      <h5>Your review</h5>
+                                
+                                          <%for(let i=0;i < ratingData.value; i++){%>
+                                            <i class="mdi mdi-star text-warning "></i>
+                                          <%}%>
+                                          :<q><%=ratingData.review%></q>
+                                         
+                                    <%}%>
+
+                                        </p>
                                     </div>
                                   </div>
 
@@ -176,6 +191,7 @@
                               </div>
                               </div>
                               <%}%>
+                              <a href="/api/addReview?orderId=<%=orderData._id%>&productId=<%=item.product._id%>" class="font-weight-bold">Rate & Review Product</a>
                             </div>
 
                             </div>

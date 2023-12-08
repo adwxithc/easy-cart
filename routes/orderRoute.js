@@ -26,4 +26,8 @@ order_route.patch('/cancenlWholeOrder',auth.isLogin,checkExist.order,orderContro
 order_route.get('/downloadInvoice',auth.isLogin,checkExist.orderId,orderController.downloadInvoice)
 order_route.patch('/returnOrder',auth.isLogin,checkExist.order,validateUserInput.returnOrder,orderController.returnOrder)
 
+// rating
+order_route.get('/addReview',auth.isLogin,checkExist.orderedProduct,orderController.loadReview)
+order_route.post('/addRating',auth.isLogin,checkExist.orderedProduct,orderController.addRating)
+
 module.exports=order_route

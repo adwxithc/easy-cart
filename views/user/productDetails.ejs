@@ -1,5 +1,5 @@
 <%- include("../partials/userHeader.ejs") %>
-<%if(locals.product){%>
+<%if(locals.productDetails){%>
 <!--================Single Product Area =================-->
 <div class="product_image_area">
     <div class="container">
@@ -8,7 +8,7 @@
             <div class="col-lg-7 row">
 
                 <ul class="col-lg-4 thambUl">
-                    <%for(let img of product.images){%>
+                    <%for(let img of productDetails.images){%>
                     <li class="mb-3 thumbnailImgWrap">
                         <img src="/static/productImages/<%=img%>" alt="product image" class="img-fluid thumbnailImg" >
                     </li>
@@ -16,46 +16,46 @@
                 </ul>
                
                 <div class="single-prd-item col-lg-8 d-flex align-items-center" id="img-container">
-                    <img class="img-fluid productPreView" src="/static/productImages/<%=product.images[0]%>" alt=""  >
+                    <img class="img-fluid productPreView" src="/static/productImages/<%=productDetails.images[0]%>" alt=""  >
                 </div>
 
             </div>
 
             <div class="col-lg-4 offset-lg-1">
                 <div class="s_product_text">
-                    <h3><%=product.name%></h3>
-                    <%if(product.effectedDiscount){%>
+                    <h3><%=productDetails.name%></h3>
+                    <%if(productDetails.effectedDiscount){%>
                    
                            
-                            <h2>&#8377; <%=product.price-((product.price*product.effectedDiscount)/100)%></h2>
+                            <h2>&#8377; <%=productDetails.price-((productDetails.price*productDetails.effectedDiscount)/100)%></h2>
 
-                            <h4><%=product.effectedDiscount%>% off</h4>
-                    <del class="orginalPrice">MRP <%=product.price%></del>
+                            <h4><%=productDetails.effectedDiscount%>% off</h4>
+                    <del class="orginalPrice">MRP <%=productDetails.price%></del>
                     <%}else{%>
-                        <h2>&#8377; <%=product.price%></h2>
+                        <h2>&#8377; <%=productDetails.price%></h2>
                     <%}%>
                     <ul class="list">
                         <li><a class="" href="#"><span>Categorys</span> :
-                            <%for(let category of product.category){%>
+                            <%for(let category of productDetails.categoryData){%>
                              <%=category.name%>
                              <%}%>
                             </a></li>
 
-                        <li><a href="#"><span>Size</span> :   <span class="size"><%=product.size%></span></a></li>
-                        <li><a href="#"><span>Color</span> :   <input type="color" name="" id="" value="<%= product.color %>"></a></li>
+                        <li><a href="#"><span>Size</span> :   <span class="size"><%=productDetails.size%></span></a></li>
+                        <li><a href="#"><span>Color</span> :   <input type="color" name="" id="" value="<%= productDetails.color %>" disabled ></a></li>
                         <li><a href="#"><span>Brand</span> : 
                             
-                              <%=product.brand.name%>  
+                              <%=productDetails.brandData[0].name%>  
                               
                             </a></li>   
-                        <li><a href="#"><span>Material</span> : <%=product.material%></a></li>
+                        <li><a href="#"><span>Material</span> : <%=productDetails.material%></a></li>
 
                         <li>
-                            <%if(product.stock>3){%>
+                            <%if(productDetails.stock>3){%>
                                 <span class="text-warning font-weight-bold">In stock</span>
                                 
-                                <%}else if(product.stock>0){%>
-                                    <span class="text-danger font-weight-bold">Only <%=product.stock%> items left</span>
+                                <%}else if(productDetails.stock>0){%>
+                                    <span class="text-danger font-weight-bold">Only <%=productDetails.stock%> items left</span>
                                 <%}else{%>
                                     <span class="text-danger font-weight-bold">Out of stock</span>
                                 <%}%>
@@ -64,26 +64,26 @@
 
 
                     </ul>
-                    <p><%=product.description%><br><%=product.additionalSpecifications%></p>
+                    <p><%=productDetails.description%><br><%=productDetails.additionalSpecifications%></p>
                     
                     <div class="product_count">
                         <label for="productDetailsquantity">Quantity:</label>
-                        <input type="text" name="qty" id="productDetailsquantity" maxlength="12" value="1" title="Quantity:" class="input-text qty" data="<%=product.stock%>" disabled>
+                        <input type="text" name="qty" id="productDetailsquantity" maxlength="12" value="1" title="Quantity:" class="input-text qty" data="<%=productDetails.stock%>" disabled>
                         <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity)&& (productDetailsquantity< Number(result.getAttribute('data')))) result.value++;return false;"
                          class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
                         <button onclick="var result = document.getElementById('productDetailsquantity'); var productDetailsquantity = result.value; if( !isNaN( productDetailsquantity ) && productDetailsquantity>1 ) result.value--;return false;"
                          class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                     </div>
-                    <input type="hidden" name="" id="ProductId" value="<%=product._id%>">
-                    <input type="hidden" id="price" value='<%=product.price%>' >
+                    <input type="hidden" name="" id="ProductId" value="<%=productDetails._id%>">
+                    <input type="hidden" id="price" value='<%=productDetails.price%>' >
                     <div class="card_area d-flex align-items-center">
                         <%if(inCart){%>
                             <a class="  darkBtn m-1" href="/api/goToCart" id="goToCart">Go to Cart</a>
                         
-                        <%}else if(product.stock>0){%>
+                        <%}else if(productDetails.stock>0){%>
                             <a class="  darkBtn m-1" href="#" id="addToCart">Add to Cart</a>
                             <%}%>
-                            <%if(product.stock>0){%>
+                            <%if(productDetails.stock>0){%>
                         <a class="  yellowBtn m-1 productDetails"  href="#" id="buyNow">Buy Now</a>
                         <%}%>
                         <!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a> -->
@@ -107,10 +107,10 @@
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                  aria-selected="false">Specification</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                  aria-selected="false">Comments</a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
                  aria-selected="false">Reviews</a>
@@ -213,7 +213,7 @@
                             <div class="review_item">
                                 <div class="media">
                                     <div class="d-flex">
-                                        <!-- <img src="img/product/review-1.png" alt=""> -->
+                                        <img src="/static/assets/profile/profilePic.jpg" alt="">
                                     </div>
                                     <div class="media-body">
                                         <h4>Blake Ruiz</h4>
@@ -291,91 +291,70 @@
             </div>
             <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-10">
                         <div class="row total_rate">
-                            <div class="col-6">
+                            <div class="col-md-4">
                                 <div class="box_total">
+                                    <%
+                                    let overallRating='no enought data'
+                                    const ratings = productDetails.rating;
+                                    if(ratings.length>0){
+
+                                        overallRating = ratings.reduce((sum, rating) => sum + rating.value, 0) / ratings.length;
+
+                                    }
+                                    %>
                                     <h5>Overall</h5>
-                                    <h4>4.0</h4>
-                                    <h6>(03 Reviews)</h6>
+                                    <%if(isNaN(overallRating)){%>
+                                        <h6 class="text-warning"><%=overallRating%></h6>
+                                    <%}else{%>
+                                    <h4><%=overallRating.toFixed(1)%></h4>
+                                    <%}%>
+                                    <h6>(<%=ratings.length%> Reviews)</h6>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-4">
                                 <div class="rating_list">
-                                    <h3>Based on 3 Reviews</h3>
+                                    <h3>Based on <%=ratings.length%> Reviews</h3>
                                     <ul class="list">
                                         <li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+                                                 class="fa fa-star"></i><i class="fa fa-star mr-2"></i><%= ratings.filter(v=>v.value==5).length%> vote</a></li>
                                         <li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+                                                 class="fa fa-star"></i><i class="fa fa-star mr-2"></i><%= ratings.filter(v=>v.value==4).length %> vote</a></li>
                                         <li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+                                                 class="fa fa-star"></i><i class="fa fa-star mr-2"></i><%= ratings.filter(v=>v.value==3).length %> vote</a></li>
                                         <li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+                                                 class="fa fa-star"></i><i class="fa fa-star mr-2"></i><%= ratings.filter(v=>v.value==2).length%> vote</a></li>
                                         <li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+                                                 class="fa fa-star"></i><i class="fa fa-star mr-2"></i><%= ratings.filter(v=>v.value==1).length %> vote</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="review_list">
+                            <% for(let rating of  productDetails.rating){%>
                             <div class="review_item">
                                 <div class="media">
                                     <div class="d-flex">
-                                        <!-- <img src="img/product/review-1.png" alt=""> -->
+                                        <img src="/static/assets/profile/profilePic.jpg" alt="" class="profileIcon"> 
                                     </div>
                                     <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
+                                        <%
+                                        const user=productDetails.userInfo.find(user=>user._id.toString()==rating.userId.toString())
+                                        %>
+                                        <h4><%=user.fname +' '+ user.lname%></h4>
+                                        <%for(let i=0;i< rating?.value;i++){%>
                                         <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
+                                        <%}%>
                                     </div>
                                 </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo</p>
+                                <p><%=rating.review%></p>
                             </div>
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <!-- <img src="img/product/review-2.png" alt=""> -->
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo</p>
-                            </div>
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <!-- <img src="img/product/review-3.png" alt=""> -->
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo</p>
-                            </div>
+                            <%}%>
+
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <!-- <div class="col-lg-6">
                         <div class="review_box">
                             <h4>Add a Review</h4>
                             <p>Your Rating:</p>
@@ -413,7 +392,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

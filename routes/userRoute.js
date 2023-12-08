@@ -65,8 +65,8 @@ user_route.post('/updatePassword',auth.isLogin,validateUserInputs.validateChange
 
 // shop
 user_route.get('/shop',checkExist.hasCart,shopController.loadShop)
-user_route.post('/searchProduct',userController.searchProduct)
-user_route.post('/',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
+user_route.post('/search',userController.search)
+user_route.post('/searchProducts',validateUserInputs.validateProductSearchCriteria,checkExist.hasCart,shopController.searchProducts) 
 
 user_route.get('/google-auth-success',userController.googleAuthSuccess)
 user_route.get('google-auth-failure',userController.googleAuthFailure)

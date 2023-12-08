@@ -105,13 +105,47 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
         const cart=req.cart
 
         const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
+        const productDetails=await Product.aggregate([
+            {
+                $match:{
+                    _id:new mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+                $lookup:{
+                    from:'categories',
+                    localField:'category',
+                    foreignField:'_id',
+                    as:'categoryData'
+                }
+            },
+            {
+                $lookup:{
+                    from:'brands',
+                    localField:'brand',
+                    foreignField:'_id',
+                    as:'brandData'
+                }
+            },
+            {
+                $lookup:{
+                    from:'users',
+                    localField:'rating.userId',
+                    foreignField:'_id',
+                    as:'userInfo'
+                }
+            }
+
+            
+        ])
+        console.log('productDetails---------------------------------------',productDetails[0].userInfo)
 
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
 
 
         if(productsWithCategories && productsWithCategories.category){
 
-            res.render('productDetails',{product:productsWithCategories,inCart:inCart,user:req.session?.userId})
+            res.render('productDetails',{product1:productsWithCategories,productDetails:productDetails[0],inCart:inCart,user:req.session?.userId})
 
         }else{
             const err=new CustomError('Invalid request',400)
@@ -121,11 +155,11 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
 
 })
 
-const searchProduct= asyncErrorHandler( async(req,res, next)=>{
-
+const search= asyncErrorHandler( async(req,res, next)=>{
+    
     const key=req.body.searchKey||''
-    const products=await Product.find({name:{$regex:new RegExp(`^${key}`,'i')},status:true})
-    res.render('productShop',{products:products,user:req.session.userId})
+
+    res.redirect(`/shop?key=${key}`)
 
 })
 
@@ -472,7 +506,7 @@ const googleAuthFailure=asyncErrorHandler( async(req, res)=>{
 module.exports={
     guest,
     productDetails,
-    searchProduct,
+    search,
 
     loadLogin,
     verifyLogin,

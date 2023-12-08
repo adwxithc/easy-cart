@@ -14,8 +14,9 @@ function changeLabelColor(radioButton) {
 
 
     const addressElement = document.createElement('label');
-    addressElement.classList.add('addressRadio', 'address', 'd-flex', 'my-3', 'addressOption','opts');
-    addressElement.id = addressData._id;
+    addressElement.classList.add('address', 'Radio', 'address', 'd-flex', 'my-3', 'addressOption','opts');
+    // addressElement.id = addressData._id;
+    addressElement.setAttribute('for',addressData._id)
     const innerHTML=` <div class="flex-grow-0 d-flex  align-items-center p-2" > <input type="radio" name="address" class="addressRadio checkoutActions" id="${addressData._id}" onclick="changeLabelColor(this)"></div>
 
     <div class="addressRadio p-3 flex-grow-1" id="${addressData._id}">

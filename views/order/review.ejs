@@ -1,0 +1,288 @@
+<%- include("../partials/userHeader.ejs") %>
+
+
+<style>
+    .rating {
+
+  border: none;
+  float: left;
+}
+
+.rating > label {
+  color: #90A0A3;
+  float: right;
+}
+
+.rating > label:before {
+  margin: 5px;
+  font-size: 2em;
+  font-family: FontAwesome;
+  content: "\f005";
+  display: inline-block;
+}
+
+.rating > input {
+  display: none;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #F79426;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+  color: #FECE31;
+}
+
+
+.cssbuttons-io-button {
+  background: rgb(255, 166, 0);
+  color: white;
+  font-family: inherit;
+  padding: 0.34em;
+  padding-left: 1.1em;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em rgb(251, 167, 10);
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3.2em;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.cssbuttons-io-button .icon {
+  background: white;
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.1em;
+  width: 2.1em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em rgb(255, 166, 0);
+  right: 0.3em;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button:hover .icon {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button .icon svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: rgb(255, 166, 0);
+}
+
+.cssbuttons-io-button:hover .icon svg {
+  transform: translateX(0.1em);
+}
+
+.cssbuttons-io-button:active .icon {
+  transform: scale(0.95);
+}
+
+</style>
+
+<section class="cart_area">
+
+    <div class="container">
+        <div class="d-flex justify-content-center bg-white p-3 mb-1">
+            <h3>Ratings & Reviews</h3>
+        </div>
+        <div class=" row">
+            <div class="col-md-4">
+                <div class=" project my-2" style="background-color: #fff; padding: 1rem; height: 100%;">
+
+                    <div class="d-flex justify-content-center" >
+                        <h5>What makes a good review</h5>
+                    </div>
+                    <hr style="border-bottom: 1px solid rgba(0, 0, 0, 0.459); ">
+
+                    <div>
+                        <h6>Have you used this product?</h6>
+                        <p>Your review should be about your experience with the product.</p>
+                    </div>
+
+                    <hr style="border-bottom: 1px solid rgba(0, 0, 0, 0.459); ">
+                    <div>
+                        <h6>Why review a product?</h6>
+                        <p>Your valuable feedback will help fellow shoppers decide!</p>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col-md-8">
+
+
+                <div class="blog_right_sidebar  project my-2" style="height: 100%;">
+  
+                    
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <img src="/static/productImages/<%=order.productDetails.images[0]%>" alt="" style="max-width: 200px; max-height: 200px; height: 100%; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="col-lg-8 col-md-6">
+                            <h4 class="text-dark font-weight-bold"><%=order.productDetails.name%></h4>
+                            <p><%=order.productDetails.description%></p>
+
+                        </div>
+                        <div class=" col-12 ">
+                            <form action="" method="POST">
+                                <div class="d-flex  flex-column align-items-center">
+                                    <%
+                                    const ratingData=order.productDetails?.rating?.find(r=>r.userId?.toString()==userId.toString())
+                                    %>
+                                    <!-- RATING STARS -->
+                                    <div>
+                                        <div class="mx-auto rating" onclick="clearError('ratingError')">
+                                            <div class="font-weight-bold text-center">How was the product ? </div>
+                                            <input type="radio" id="star5" name="rating" value="5" <% if (ratingData?.value == 5 ) { %> checked <%}%> >
+                                            <label class="star" for="star5" title="Awesome" aria-hidden="true" ></label>
+                                            <input type="radio" id="star4" name="rating" value="4" <% if(ratingData?.value == 4 ) { %> checked <%}%> >
+                                            <label class="star" for="star4" title="Great" aria-hidden="true"></label>
+                                            <input type="radio" id="star3" name="rating" value="3" <% if(ratingData?.value == 3 ) { %> checked <%}%> >
+                                            <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
+                                            <input type="radio" id="star2" name="rating" value="2" <% if(ratingData?.value == 2 ) { %> checked<%}%> >
+                                            <label class="star" for="star2" title="Good" aria-hidden="true"></label>
+                                            <input type="radio" id="star1" name="rating" value="1" <% if(ratingData?.value == 1 ) { %> checked <%}%> >
+                                            <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+                                        </div>
+                                        <div class="text-danger pl-2" id="ratingError"></div>
+                                    </div>
+                                    <!-- REVIEW TEXT AREA -->
+                                    <div class="w-75">
+                                        <label for="description" class="form-label">feedback</label>
+                                        <textarea class="form-control w-100" id="review" rows="3" onclick="clearError('reviewError')" name="review"><%=ratingData?.review%></textarea>
+                                        <div class="text-danger pl-2" id="reviewError"></div>
+                                    </div>
+
+                                    <input type="hidden" name="orderId" id="orderId" value="<%=order._id%>">
+                                    <input type="hidden" name="productId" id="productId" value="<%=order.productDetails._id%>">
+                                    <!-- SAVE BUTTON -->
+                                    <div class=" w-75 p-2">
+                                        <button id="saveRating" class="cssbuttons-io-button ml-auto">
+                                            save
+                                            <div class="icon">
+                                              <svg
+                                                height="24"
+                                                width="24"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <path d="M0 0h24v24H0z" fill="none"></path>
+                                                <path
+                                                  d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                                  fill="currentColor"
+                                                ></path>
+                                              </svg>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                            </form>
+
+                            
+                        </div>
+                     
+                    
+                    </div>
+
+                   
+                               
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+
+window.onload=function(){
+    document.getElementById('saveRating').addEventListener('click',(e)=>{
+        e.preventDefault()
+
+        const productId=document.getElementById('productId')?.value
+        const orderId=document.getElementById('orderId')?.value
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const review=document.getElementById('review')?.value
+
+
+
+        if(validateRating()){
+            fetch('/api/addRating',{
+                method:'POST',
+                body:JSON.stringify({
+                    productId:productId,
+                    orderId:orderId,
+                    rating:rating,
+                    review:review
+                }),
+                headers:{'Content-Type':'application/json'}
+            })
+            .then(response=>{
+                if(response.ok) return response.json()
+                throw { status: response.status, data: response.json() };
+
+            })
+            .then(data=>{
+                if(data.success) showMessage(data.message)
+
+            })
+            .catch(handleError)
+        }
+
+    })
+}
+
+
+  function validateRating(){
+    let isValid=true
+    const selectedRating = document.querySelector('input[name="rating"]:checked');
+    if(!(selectedRating && selectedRating.value)){
+        document.getElementById('ratingError').innerHTML='*rating cannot be empty'
+        isValid=false
+    }
+    if(!document.getElementById('review').value){
+        document.getElementById('reviewError').innerHTML='*description cannot be empty'
+        isValid=false
+    }
+
+    return isValid
+  }
+
+  function clearError(id){
+    document.getElementById(id).innerHTML=''
+  }
+
+
+
+
+</script>
+
+
+
+<%- include("../partials/userFooter.ejs") %>

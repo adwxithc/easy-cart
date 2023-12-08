@@ -256,6 +256,7 @@ function addNewAddress(newAddress){
                 appendAddressToList(newAddressOption);
 
             }else{
+               
                 const newAddressElement = createAddressElement(data.newAddress);
                 appendAddressToList(newAddressElement);
             }
@@ -287,7 +288,7 @@ function createAddressElement(addressData) {
     <p class="p-1 infos">
         ${ addressData.area}, ${ addressData.locality}, ${addressData.city}, ${addressData.state}-<span class="text-dark ">${addressData.pincode}</span> 
     </p>
-    <div class="d-flex justify-content-end"><a href='/editAddress?id=${addressData._id}' class="px-2 opt-link editAddress" >Edit</a><a href="#" class="px-2 opt-link deletAddress" id="${addressData._id}">Remove</a></div>`
+    <div class="d-flex justify-content-end"><a href='/editAddress?id=${addressData._id}' class="px-2 opt-link editAddress" >Edit</a><a href="#" class="px-2 profileAction opt-link deletAddress" id="${addressData._id}">Remove</a></div>`
   
     addressElement.innerHTML=innerHTML
     return addressElement;

@@ -1403,3 +1403,14 @@ text-decoration: none;
         font-size: 0.3rem;
     }
 }
+
+/* review and ratings */
+
+.profileIcon{
+    object-fit: cover;
+    max-width: 30px;
+    max-height: 30px;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}

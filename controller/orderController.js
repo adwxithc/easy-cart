@@ -8,6 +8,7 @@ const puppeteer=require('puppeteer')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const { aggregate } = require('../model/brandModel')
 const CustomError = require('../Utils/CustomError')
+const { order } = require('../middleware/checkExist')
 
 
 const loadOrders=asyncErrorHandler( async(req,res,next)=>{
@@ -21,7 +22,7 @@ const loadOrders=asyncErrorHandler( async(req,res,next)=>{
         const limit=pagesize//specifies how much data needed
         
         
-        const orderData = await Order.find()
+        const orderData = await Order.find({customer:req.session.userId})
         .sort({updatedAt:-1}).skip(offset).limit(limit)
         .populate({
           path: 'items.product',
@@ -60,11 +61,12 @@ const loadOrderDetails=asyncErrorHandler( async(req,res,next)=>{
       // return
       orderData.items=selectedProduct
       if(orderData){
-        console.log(orderData)
+        
         res.render('orderDetails',{orderData:orderData,user:user})
       }else{
         const err=new CustomError('Order not found',404)
         next(err)
+    
       }
 })
 
@@ -261,6 +263,50 @@ const returnOrder=asyncErrorHandler( async(req,res)=>{
 
 });
 
+const loadReview=asyncErrorHandler( async(req, res, next)=>{
+  
+    const order=req.order
+    res.render('review',{order:order,userId:req.session.userId,user:true})
+});
+
+const addRating=asyncErrorHandler( async(req, res, next)=>{
+    
+    let rated
+    const order = req.order;
+    const ratings = order.productDetails.rating;
+
+    // product rating and review
+    const { rating, review, productId } = req.body;
+
+    //CHECK PRODUCT ALREADY REVIEWED
+    const existingReviewIndex = ratings.findIndex(
+      (r) => r.userId?.equals(new mongoose.Types.ObjectId(req.session.userId))
+    );
+
+    //CREATE NEW REVIEW DATA
+    const newRating = {
+      value: rating,
+      review: review.trim(),
+      userId:req.session.userId
+
+    };
+    //IF ALREADY EXIST UPDATE IT
+    if (existingReviewIndex !== -1) {
+      rated=await Product.updateOne({ _id: productId }, { $set: { [`rating.${existingReviewIndex}`]: newRating } });
+    } else {
+      // ADD NEW
+      rated=await Product.updateOne({ _id: productId }, {$push:{rating:newRating}});
+    }
+
+    //CHECK UPDATED?
+    if(rated.modifiedCount!==1){
+      const err=new CustomError('unable to add review',500)
+      return next(err)
+    }
+    res.json({success:true,message:"Thank you so much. Your review has been saved"})
+
+})
+
 
 module.exports={
     loadOrders,
@@ -270,5 +316,8 @@ module.exports={
     orderItems,
     cancenlWholeOrder,
     downloadInvoice,
-    returnOrder
+    returnOrder,
+
+    loadReview,
+    addRating
 }

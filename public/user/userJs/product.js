@@ -92,7 +92,8 @@ function addProductToCart(productId,quantity){
               return response.text(); // Assume HTML content
             }
         }
-        throw new Error('unable to connect to server')
+        throw { status: response.status, data: response.json() };
+
     })
     .then(data=>{
         if (typeof data === 'object') {
@@ -122,11 +123,7 @@ function addProductToCart(productId,quantity){
         }
 
     })
-    .catch((er)=>{
-        console.log(er.message)
-        // window.location.href='/'
-
-    })
+    .catch(handleError)
 }
 
 
@@ -145,3 +142,5 @@ function changeToGoToCart() {
 
         window.location.href=`/api/checkout?productId=${productId}&quantity=${quantity}`
     }
+
+    

@@ -9,9 +9,16 @@ const { default: mongoose } = require('mongoose')
 //LOAD SHOP PAGE
 const loadShop=asyncErrorHandler( async(req,res, next)=>{
 
+    const key=req.query.key || ''
     const cart=req.cart;
     // GETING ANY FIRST 12 PRODUCTS
     const products=await Product.aggregate([
+        {
+            $match:{
+                status:true,
+                name:{ $regex: new RegExp(`^${key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}`, 'i') }
+            }
+        },
         {
             $limit:12
         },

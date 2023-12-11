@@ -9,6 +9,7 @@ const Banner=require('../model/bannerModel')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const { default: mongoose } = require("mongoose")
 const CustomError = require("../Utils/CustomError")
+const crypto=require('crypto')
 
 const coupone=asyncErrorHandler( async(req,res,next)=>{
 
@@ -267,7 +268,8 @@ const orderedProduct=asyncErrorHandler( async(req, res, next)=>{
     },
     {
         $match:{
-        'items.product':new mongoose.Types.ObjectId(productId)
+        'items.product':new mongoose.Types.ObjectId(productId),
+        'items.orderStatus':'Delivered'
         }
     },
     {
@@ -294,6 +296,37 @@ const orderedProduct=asyncErrorHandler( async(req, res, next)=>{
 
 })
 
+const validToken=asyncErrorHandler(async(req, res, next)=>{
+    
+  const token =req.query.token || req.body.token
+  const email= req.query.email || req.body.email
+  console.log(token,email)
+   
+    const user = await User.findOne({ email });
+
+    if(!user){
+        const err= new CustomError('Invalid user',401)
+        return next(err)
+    }
+    const currentTimestamp=Date.now()/1000
+    
+    //checking the reset password link has not expired 
+    if(currentTimestamp-user.resetPassword?.timestamp<300){
+        
+        const combinedString = `${token}|${user.resetPassword?.timestamp}`;
+    
+        const expectedSignature = crypto.createHash('sha256',process.env.RESET_PASSWORD_SECRET).update(combinedString).digest('hex');
+ 
+        if(expectedSignature==user.resetPassword?.signature){
+        
+            return next()
+        }
+    }
+
+    const err= new CustomError('Invalid or expired verification link',400)
+    next(err)
+})
+
 
 module.exports={
     coupone,
@@ -311,6 +344,7 @@ module.exports={
     hasCart,
     banner,
     user,
-    orderedProduct
+    orderedProduct,
+    validToken
 
 }

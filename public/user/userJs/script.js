@@ -285,6 +285,7 @@ document.getElementById('mainContainer').addEventListener('click',(e)=>{
         }else if(e.target.hasAttribute('changePassword')){
             changePassword()
         }else if(e.target.id=='updatePassword'){
+            
             updatePassword()
         }else if(e.target.hasAttribute('wallet')){
             showWallet()
@@ -409,3 +410,8 @@ function handleError(error) {
       });
     }
   }
+
+
+  function clearError(id){
+    document.getElementById(id).innerHTML=''
+}

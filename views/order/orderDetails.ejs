@@ -191,7 +191,9 @@
                               </div>
                               </div>
                               <%}%>
+                              <%if(item.orderStatus=='Delivered'){%>
                               <a href="/api/addReview?orderId=<%=orderData._id%>&productId=<%=item.product._id%>" class="font-weight-bold">Rate & Review Product</a>
+                              <%}%>
                             </div>
 
                             </div>

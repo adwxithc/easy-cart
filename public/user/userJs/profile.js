@@ -483,67 +483,49 @@ function changePassword(){
     .catch(handleError)
 }
 
-function removePasswordErrorMessage(){
-    document.getElementById('changePasswordDiv').addEventListener('click',(e)=>{
-        
-        if(e.target.id=='cPassword') document.getElementById('cPasswordError').innerHTML='';
-        else if(e.target.id=='nPassword') document.getElementById('nPasswordError').innerHTML='';
-        else if(e.target.id=='rePassword') document.getElementById('rePasswordError').innerHTML='';
-    },true)
-}
 
 function validateChangePassword(data){
-  
-    removePasswordErrorMessage()
 
-    const cPassword=data.get('cPassword')
-    const nPassword=data.get('nPassword')
-    const rePassword=data.get('rePassword')
+   let isValid=true
 
-   
+    const cPassword=data.get('cPassword').trim()
+    const nPassword=data.get('nPassword').trim()
+    const rePassword=data.get('rePassword').trim()
 
     const cPasswordError=document.getElementById('cPasswordError')
     const nPasswordError=document.getElementById('nPasswordError')
     const rePasswordError=document.getElementById('rePasswordError')
 
-    if(cPassword.trim()==''){
-        cPasswordError.innerHTML="your current password can't be null"
-        return false
-    }else if(cPassword.trim().length<6){
+    if(!cPassword || !nPassword || !rePassword){
+        if(cPassword=='') cPasswordError.innerHTML="your current password can't be null"
+        if(nPassword=='') nPasswordError.innerHTML="your new  password can't be null"
+        if(rePassword=='') rePasswordError.innerHTML="your re-entered password can't be null"
+
+        isValid=false
+    }else if(cPassword.length<6){
         cPasswordError.innerHTML="your current password should be in more than 6 character"
-        return false
-    }else if(nPassword.trim()==''){
-        nPasswordError.innerHTML="your new password can't be null"
-        return false
-    }else if(nPassword.trim().length<6){
-        nPasswordError.innerHTML="your new password should be in more than 6 character"
-        return false
-    }else if(rePassword.trim()==''){
-        rePasswordError.innerHTML="your re-entered password can't be null"
-        return false
-    }else if(rePassword.trim().length<6){
-        rePasswordError.innerHTML="your re-entered password should be in more than 6 character"
-        return false
-    }else if(!(rePassword.trim()==nPassword.trim())){
-        nPasswordError.innerHTML="your  entered two new diffrent password"
+        isValid=false
+    }else if(rePassword!==nPassword){
         rePasswordError.innerHTML="your  entered two new diffrent password"
-        return false
-    }else{
-       
-        return true
+        isValid=false
+    }else if(nPassword.length<6){
+        nPasswordError.innerHTML="your new password should be in more than 6 character"
+        isValid=false
     }
+
+    return isValid
 
 }
 
 function updatePassword(){
-   
+  
     const changePasswordForm=document.getElementById('changePasswordForm')
     const formData=new FormData(changePasswordForm)
     
 
     const valid=validateChangePassword(formData)
     if(valid){
-
+       
         fetch('/updatePassword',{
             method:'POST',
             headers: {

@@ -16,15 +16,15 @@
 						<ul class="nav navbar-nav menu_nav ml-auto">
 							<li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
 							<li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
-							<li class="nav-item submenu dropdown">
+							<!-- <li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Blog</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
 									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
 								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
+							</li> -->
+							<!-- <li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Pages</a>
 								<ul class="dropdown-menu">
@@ -32,7 +32,7 @@
 									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
 									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
 								</ul>
-							</li>
+							</li> -->
 							<li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
 
 							<%if(locals.user){%>
@@ -42,7 +42,7 @@
 								 aria-expanded="false" ><span class="d-flex align-items-center setsize"><i class="mdi mdi-account-outline Icon-lg mr-1 "></i><span id="userName"> <%= user.fname %></span> </span></a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/profile"><i class="mdi mdi-account-circle Icon-lg mr-1"></i>My Profile</a></li>
-									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-heart-outline  Icon-lg mr-1"></i> Wishlist</a></li>
+									<!-- <li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="tracking.html "><i class="mdi mdi-heart-outline  Icon-lg mr-1"></i> Wishlist</a></li> -->
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/api/orders"><i class="mdi mdi-shopping  Icon-lg mr-1"></i> Orders</a></li>
 
 									<li class="nav-item"><a class="nav-link d-flex align-items-center text-capitalize " href="/logout"><i class="mdi mdi-logout  Icon-lg mr-1"></i>logout</a></li>
@@ -51,12 +51,12 @@
 
 							<%}else{%>
 
-								<li class="nav-item  d-flex  align-items-center"><a href="/login" class="d-flex  align-items-center"><i class=" mdi mdi-login Icon-lg ml-1"></i></a></li>
+								<li class="nav-item  d-flex  align-items-center" title="login"><a href="/login" class="d-flex  align-items-center" title="login"><i class=" mdi mdi-login Icon-lg ml-1" title="login"></i></a></li>
 								<%}%>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 
-							<li class="nav-item d-flex  align-items-center">
+							<li class="nav-item d-flex  align-items-center" title="cart">
 							
 								<a href="/api/goToCart" class="cart position-relative">
 									<div class="cBadge">3</div>

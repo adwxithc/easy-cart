@@ -52,6 +52,11 @@ user_route.post('/verifyOtp',validateUserInputs.otp,checkExist.refer,userControl
 user_route.get('/reSendOtp',auth.isLogout,userController.reSendOtp)
 user_route.get('/logout',auth.isLogin,userController.logout)
 
+user_route.get('/forgotPassword',userController.loadForgotPassword)
+user_route.post('/forgotPassword',userController.forgotPassword)
+user_route.get('/reset-password',checkExist.validToken,userController.loadResetPassword)
+user_route.post('/resetPassword',checkExist.validToken,userController.resetPassword)
+
 user_route.get('/profile',auth.isLogin,checkExist.user,userController.loadProfile)
 user_route.put('/updateUserInfo',auth.isLogin,validateUserInputs.validateEditedUserInfo,userController.updateUserInfo)
 

@@ -6,11 +6,11 @@
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
-					<h1>Shop Category page</h1>
+					<h1>Shop</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="#">Shop<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Fashon Category</a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="#">Shop</a>
+						
 					</nav>
 				</div>
 			</div>
@@ -20,14 +20,20 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-xl-3 col-lg-4 col-md-5">
+			<div class="col-xl-3 col-lg-4 ">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                       <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
+						
                       <!-- Your Sidebar Content Goes Here -->
                       	<div>
+							<label class="px-4 py-2" for="productSearchKey" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; border-radius: 6px;">
+								<i class="lnr lnr-magnifier"></i>
+
+								<input type="text" class="  product-search" id="productSearchKey" placeholder="Search" style="border: 0;  outline: none;" >
+							</label>
                             <%
                             if(locals.categories){
                             %>
@@ -69,20 +75,7 @@
 								</form>
 							</div>
                             <%}%>
-							<!-- <div class="common-filter">
-								<div class="head">Color</div>
-								<form action="#">
-									<ul>
-										<li class="filter-list"><input class="pixel-radio" type="radio" id="black" name="color"><label for="black">Black<span>(29)</span></label></li>
-										<li class="filter-list"><input class="pixel-radio" type="radio" id="balckleather" name="color"><label for="balckleather">Black
-												Leather<span>(29)</span></label></li>
-										<li class="filter-list"><input class="pixel-radio" type="radio" id="blackred" name="color"><label for="blackred">Black
-												with red<span>(19)</span></label></li>
-										<li class="filter-list"><input class="pixel-radio" type="radio" id="gold" name="color"><label for="gold">Gold<span>(19)</span></label></li>
-										<li class="filter-list"><input class="pixel-radio" type="radio" id="spacegrey" name="color"><label for="spacegrey">Spacegrey<span>(19)</span></label></li>
-									</ul>
-								</form>
-							</div> -->
+							
 							<div class="common-filter">
 								<div class="head">Price</div>
 								<div class="price-range-area">
@@ -101,24 +94,15 @@
 						</div>
 
 						  
-                  
                     </div>
                   </nav>
 
 			</div>
-			<div class="col-xl-9 col-lg-8 col-md-7">
+			<div class="col-xl-9 col-lg-8 ">
 				<!-- Start Filter Bar -->
 				<div class="filterBar d-flex flex-wrap align-items-center">
-					<div class="mr-auto">
-						<div class="box">
-							<form name="search">
-								<input type="text" class="input product-search" name="txt" onmouseout="this.value = ''; this.blur();" id="productSearchKey" placeholder="Search Products">
-							</form>
-							<i class="lnr lnr-magnifier"></i>
-						
-						</div>
-					</div>
-					<div class="">
+					
+					<div class="ml-auto">
 						<select  id="sortBy">
 							<option value="default">Sort By: Feature</option>
 							<option value="price-low-to-high">Price Low to High</option>
@@ -140,7 +124,7 @@
                         for(let product of products){
                         %>
 						   <!-- single product -->
-						   <div class="col-md-3 col-sm-12">
+						   <div class="col-6 col-sm-4 col-md-4 col-lg-3">
 
 							<div class="single1-product">
 								<%if(product.effectedDiscount){%>
@@ -160,12 +144,12 @@
 									<div class="overlay"></div>
 									</div>
 									</a>
-									<div class="prod-actions w-100">
+									<div class="prod-actions w-100 ">
 		
 										<div class="d-flex justify-content-around px-1">
 											<a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
 												
-												<span class="mr-1"> View More </span><i class="mdi mdi-eye"></i>
+												<span class="mr-1 d-none d-sm-block"> View More </span><i class="mdi mdi-eye"></i>
 											</a>
 											<%
 											 let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
@@ -175,12 +159,12 @@
 											%>
 											<a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
 												
-												<span class="mr-1 searchAction text-capital" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
+												<span class="mr-1 searchAction text-capital d-none d-sm-block" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
 											</a>
 											<%}else if(InCart){%>
 												<a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
 												
-													<span class="mr-1 text-capital"> GO To Cart </span><i class="mdi mdi-cart "></i>
+													<span class="mr-1 text-capital d-none d-sm-block"> GO To Cart </span><i class="mdi mdi-cart "></i>
 												</a>
 											<%}%>
 		
@@ -192,19 +176,33 @@
 								</div>
 		
 								<div class="p-3 product-details">
-									<h6 class="deal-title mb-3"><%=product.name%></h6>
-									<div class="d-flex ">
+									<h6 class="deal-title mb-2"><%=product.name%></h6>
+									<div class="row">
 										
-										<div class="pricing">
+										<div class="pricing col-md-6">
 											<%if(product.effectedDiscount && product.effectedDiscount>0){%>
 												<span class="l-through mr-2">&#8377;<%= product.price%></span>
-												<span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
+												<span class="product-price ">&#8377;<%=product.price-(product.price*product.effectedDiscount)/100%></span>
 												
 											<%}else{%>
 												<span class="product-price">&#8377;<%= product.price%></span>
 											<%}%>
 										</div>
-										<div class="rating"></div>
+										<%if(product.rating?.length>0){%>
+										<div class="rating col-md-6">
+											<%
+											const overallRating = product.rating.reduce((sum, r) => sum + r.value, 0) / product.rating.length;
+											const fullStars = Math.floor(overallRating);
+											const hasHalfStar = overallRating - fullStars > 0.4; 
+											for(let i=0;i < fullStars ; i++){ 
+												%>
+												<i class="mdi mdi-star text-warning"></i>
+											<%}
+											if (hasHalfStar) { %>
+													<i class="mdi mdi-star-half text-warning"></i>
+											<% } %>
+										</div>
+										<%}%>
 									</div>
 								</div>
 							</div>
@@ -270,7 +268,7 @@
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
 							<div class="single-related-product d-flex">
-								<!-- <a href="#"><img src="img/r1.jpg" alt=""></a> -->
+								<!-- <a href="#"><img src="/static/productImages/1698145927374-61BIj9a6nSL._UY741_.jpg" alt=""></a> -->
 								<div class="desc">
 									<a href="#" class="title">Black lace Heels</a>
 									<div class="price">

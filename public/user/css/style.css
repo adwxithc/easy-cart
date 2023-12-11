@@ -818,6 +818,7 @@
     width: auto;
     overflow: hidden;
 }
+
 .overlay-div:hover .product1-image{
     transform: scale(1.1);
 }
@@ -831,12 +832,12 @@
 .single1-product .prod-actions {
     position: absolute;
     top: 75%;
-    z-index: 100;
+    z-index: 1;
     display: inline-block;
     text-align: center;
 
-    opacity: 0;
-    visibility: hidden;
+    /* opacity: 0; */
+    /* visibility: hidden; */
 
     transition: all 0.3s ease 0s; }
    
@@ -865,6 +866,13 @@
                 opacity: .5;
                 visibility: visible; }
 
+                @media (min-width:1000px) {
+                    .single1-product .prod-actions{
+                        opacity: 0;
+                        visibility: hidden;
+                    }
+                }
+
 .single1-product{
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
     margin-bottom: 2rem;
@@ -872,8 +880,44 @@
 }
 
 .single1-product .product-details{
-    height: 7rem;
+    height: 6rem;
 }
+
+@media (max-width:850px) {
+    .product1-image-container{
+        height: 250px;
+    }
+
+    .single1-product .product-details{
+        height: 6rem;
+        
+    }
+}
+
+@media (max-width:450px) {
+    .product1-image-container{
+        height: 200px;
+    }
+
+    .popOver-btn-white{
+        padding: 0rem !important;
+    }
+    .popOver-btn-dark{
+        padding: 0 !important;
+    }
+
+
+}
+@media (max-width:350px) {
+    .product1-image-container{
+        height: 150px;
+    }
+
+    .product-details{
+        font-size: 0.8rem;
+    }
+}
+
 
 .single1-product .pricing .l-through {
     text-decoration: line-through;
@@ -884,7 +928,8 @@
     color: #fff;
     /* display: inline; */
     text-decoration: none;
-   
+    text-transform:  uppercase;
+    font-size: 0.7rem;
     padding: 0.5rem;
 }
 
@@ -895,12 +940,14 @@
     color: #000;
      /* display: inline; */
      text-decoration: none;
-  
+     text-transform:  uppercase;
+     font-size: 0.7rem;
      
      padding: 0.5rem;
 }
 .text-capital{
-    text-transform: capitalize !important;
+    text-transform:  uppercase;
+    font-size: 0.7rem;
 }
 
 .popOver-btn-white:hover .mdi-cart{
@@ -966,6 +1013,19 @@
     height: 400px;
     width: auto;
     overflow: hidden;
+}
+
+@media (max-width:1000px) {
+    .category-image-container{
+    height: 300px;
+
+    }
+}
+@media (max-width:750px) {
+    .category-image-container{
+    height: 400px;
+
+    }
 }
 
 

@@ -87,6 +87,10 @@ const userSchema=mongoose.Schema({
     referCode:{
         type:String,
         
+    },
+    resetPassword:{
+        timestamp:String,
+        signature:String
     }
 
 

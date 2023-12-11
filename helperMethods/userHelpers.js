@@ -4,6 +4,10 @@ const User=require('../model/userModel')
 const Cart=require('../model/cartModel')
 const Product=require('../model/productModel')
 const Coupone=require('../model/couponeModel');
+const nodemailer=require('nodemailer')
+
+require('dotenv/config')
+
 
 const bcrypt =require('bcrypt')
 
@@ -581,6 +585,50 @@ const securePassword=async(password)=>{
 }
 
 
+//email verification
+const sendResetPasswordMail=async (name,email,verificationLink)=>{
+  try {
+
+      const transporter=nodemailer.createTransport({
+          host:process.env.SMTP_HOST,
+          port:587,
+          secure:false,
+          requireTLS:true,
+          auth:{
+              user:process.env.SMTP_USER,
+              pass:process.env.SMTP_PASS
+          }
+      });
+      const mailOptions={
+          from:'adwaithjanardhanan5@gmail.com',
+          to:email,
+          subject:'Reset Your Password',
+          
+          html:`<div style="height: 300px;background-color: rgb(214,219,222); text-align: center; padding-top: 10%; margin: 25px;">
+                  <h1>Welcome to <strong>Easy Cart</strong>..!</h1>
+                  <h4 style="color:rgb(0,0,1);">Hello ${name} </h4>
+                  <p>You recently requested to reset your password for your account at Easy Cart. Click the link below to reset it:</p>
+                  <i>${verificationLink}</i>
+              </div>`
+      }
+      transporter.sendMail(mailOptions,(er,info)=>{
+          if(er){
+              throw er
+          }
+          else{
+              console.log("email has been send",info.response)
+              return
+          }
+      })
+      return true
+
+  } catch (error) {
+      throw error
+      
+  }
+}
+
+
 
 module.exports={
     generateRazorpay,
@@ -597,5 +645,6 @@ module.exports={
     eligibleForReturn,
     getMostSoldCategories,
     haveStock,
-    securePassword
+    securePassword,
+    sendResetPasswordMail
 }

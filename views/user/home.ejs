@@ -169,13 +169,13 @@
     </div>
     <div class="carousel-inner">
     <%for(let i=0;i < 2;i++){ 
-        if(!mostSoldCategories[i]) break
+        if(!mostSoldCategories[i*3]) break
  
         %>
       <div class="carousel-item <%if(i==0){%>active" <% }else{ %>"<%}%> >
         <div class="card-wrapper container">
             <div class="row">
-                <%for(let j=i*3 ;j< (i*3)+3;j++ ){
+                <%for(let j=i*3 ;j < (i*3)+3; j++ ){
                     if(!mostSoldCategories[j]) break
                     %>
                 <div class="  col-md-4 col-12" style="width: 18rem;">
@@ -188,7 +188,7 @@
                         </div>
                             
                             <div class="deal-details">
-                                <a href="" style="width: 100%; background-color: #000 ;color: #fff; " class="mx-auto d-flex justify-content-center p-2"><span>Explore</span></a>
+                                <a href="/shop?categoryId=<%=mostSoldCategories[j].categoryDetails[0]._id%>" style="width: 100%; background-color: #000 ;color: #fff; " class="mx-auto d-flex justify-content-center p-2"><span>Explore</span></a>
     
                                 <h6 class="deal-title" style="visibility: hidden;">Sneaker for Sports</h6>
                             </div>
@@ -227,27 +227,7 @@
   </div>
 <!-- End category Area -->
         
-<style>
-    
-  /*  Rollover image styles  */
 
-  .figure img.Sirv.image-hover {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity .2s;
-  }
-  .overlay-div:hover img.Sirv.image-hover {
-    opacity: 1;
-  }
-
-</style>
-
-<script src="https://scripts.sirv.com/sirvjs/v3/sirv.js"></script>
 
 <!-- --------------------------------------------------------------------------- -->
 
@@ -262,86 +242,96 @@
                 <div class="col-lg-6 text-center">
                     <div class="section-title">
                         <h1>Latest Products</h1>
-                        <p>Elevate your style with our latest addition to the collection. Meticulously designed and crafted with the modern man in mind, this garment is a perfect blend of fashion and function. Whether you're heading to the office, out for a casual evening, or stepping into a special event, this item is a versatile choice that will keep you looking sharp.</p>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <%for(product of latestProducts){%>
-                           <!-- single product -->
-                    <div class="col-md-3 col-sm-12">
+                <!-- single product -->
+                <div class="col-6  col-md-6 col-lg-3 ">
 
-                        <div class="single1-product">
-                            <%if(product.effectedDiscount){%>
-                                <div class="badge-area-show">
-                                    <div class="bagde-flag-wrap">
-                                      <a href="#" class="bagde-flag"> <%=product.effectedDiscount%>% off</a>
-                                    </div>
-                                  </div>
-                            <%}%>
-                            <div class="" style="position: relative;">
-                                <a href="/productDetails?id=<%=product._id%>">
-                                <div class="overlay-div">
-                                <div class="product1-image-container figure" style="position: relative;">
-                                    <img class="img-fluid w-100 product1-image" src="/static/productImages/<%=product.images[0]%>" alt="">
-                                    
-                                        <img class="Sirv image-main" src="/static/productImages/<%=product.images[0]%>" data-src="/static/productImages/<%=product.images[0]%>">
-                                        <img class="Sirv image-hover" data-src="/static/productImages/<%=product.images[1]%>" >
-                                    
-                                </div>
-                                <!-- <div class="overlay"></div> -->
-                                </div>
-                                </a>
-                                <div class="prod-actions w-100">
-    
-                                    <div class="d-flex justify-content-around px-1">
-                                        <a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark" target="_blank">
-                                            
-                                            <span class="mr-1"> View More </span><i class="mdi mdi-eye"></i>
-                                        </a>
-                                        <%
-                                         let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
-											
-                                        if(!InCart && product.stock > 0){
-
-                                        %>
-                                        <a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
-                                            
-                                            <span class="mr-1 searchAction text-capital" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
-                                        </a>
-                                        <%}else if(InCart){%>
-                                            <a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
-                                            
-                                                <span class="mr-1 text-capital"> GO To Cart </span><i class="mdi mdi-cart "></i>
-                                            </a>
-                                        <%}%>
-    
-                                    </div>
-        
-                                    
-                                </div>   
-                                
+                <div class="single1-product">
+                    <%if(product.effectedDiscount){%>
+                        <div class="badge-area-show">
+                            <div class="bagde-flag-wrap">
+                                <a href="#" class="bagde-flag"> <%=product.effectedDiscount%>% off</a>
                             </div>
-    
-                            <div class="p-3 product-details">
-                                <h6 class="deal-title mb-3"><%=product.name%></h6>
-                                <div class="d-flex ">
-                                    
-                                    <div class="pricing">
-                                        <%if(product.effectedDiscount && product.effectedDiscount>0){%>
-                                            <span class="l-through mr-2">&#8377;<%= product.price%></span>
-                                            <span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
-                                            
-                                        <%}else{%>
-                                            <span class="product-price">&#8377;<%= product.price%></span>
-                                        <%}%>
-                                    </div>
-                                    <div class="rating"></div>
-                                </div>
                             </div>
+                    <%}%>
+                    <div class="" style="position: relative;">
+                        <a href="/productDetails?id=<%=product._id%>" target="_blank">
+                        <div class="overlay-div">
+                        <div class="product1-image-container">
+                            <img class="img-fluid w-100 product1-image" src="/static/productImages/<%=product.images[0]%>" alt="">
+                        
                         </div>
-                         
+                        <div class="overlay"></div>
+                        </div>
+                        </a>
+                        <div class="prod-actions w-100 ">
+
+                            <div class="d-flex justify-content-around px-1">
+                                <a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
+                                    
+                                    <span class="mr-1 d-none d-sm-block"> View More </span><i class="mdi mdi-eye"></i>
+                                </a>
+                                <%
+                                    let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
+                                    
+                                if(!InCart && product.stock > 0){
+
+                                %>
+                                <a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
+                                    
+                                    <span class="mr-1 searchAction text-capital d-none d-sm-block" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
+                                </a>
+                                <%}else if(InCart){%>
+                                    <a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
+                                    
+                                        <span class="mr-1 text-capital d-none d-sm-block"> GO To Cart </span><i class="mdi mdi-cart "></i>
+                                    </a>
+                                <%}%>
+
+                            </div>
+
+                            
+                        </div>   
+                        
                     </div>
+
+                    <div class="p-3 product-details">
+                        <h6 class="deal-title mb-2"><%=product.name%></h6>
+                        <div class="row">
+                            
+                            <div class="pricing col-md-6">
+                                <%if(product.effectedDiscount && product.effectedDiscount>0){%>
+                                    <span class="l-through mr-2">&#8377;<%= product.price%></span>
+                                    <span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
+                                    
+                                <%}else{%>
+                                    <span class="product-price">&#8377;<%= product.price%></span>
+                                <%}%>
+                            </div>
+                            <%if(product.rating?.length>0){%>
+                            <div class="rating col-md-6">
+                                <%
+                                const overallRating = product.rating.reduce((sum, r) => sum + r.value, 0) / product.rating.length;
+                                const fullStars = Math.floor(overallRating);
+                                const hasHalfStar = overallRating - fullStars > 0.4; 
+                                for(let i=0;i < fullStars ; i++){ 
+                                    %>
+                                    <i class="mdi mdi-star text-warning"></i>
+                                <%}
+                                if (hasHalfStar) { %>
+                                        <i class="mdi mdi-star-half text-warning"></i>
+                                <% } %>
+                            </div>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+                    
+                </div>
                         
                 <%}%>
 
@@ -355,86 +345,98 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6 text-center">
                     <div class="section-title">
-                        <h1>Affordable Men's Fashion Finds</h1>
-                        <p>Discover incredible value in our collection of affordable men's fashion. We believe that looking stylish shouldn't break the bank, and this selection proves just that. Explore a range of well-priced clothing and accessories designed to keep you in vogue without compromising on quality.</p>
+                        <h1>Affordable Fashions</h1>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <%for(product of affordableProducts){%>
 
-                    <!-- single product -->
-                    <div class="col-md-3 col-sm-12">
+                <!-- single product -->
+                <div class="col-6  col-md-6 col-lg-3  ">
 
-                        <div class="single1-product">
-                            <%if(product.effectedDiscount){%>
-                                <div class="badge-area-show">
-                                    <div class="bagde-flag-wrap">
-                                      <a href="#" class="bagde-flag"> <%=product.effectedDiscount%>% off</a>
-                                    </div>
-                                  </div>
-                            <%}%>
-                            <div class="" style="position: relative;">
-                                <a href="/productDetails?id=<%=product._id%>" target="_blank">
-                                <div class="overlay-div">
-                                <div class="product1-image-container">
-                                    <img class="img-fluid w-100 product1-image" src="/static/productImages/<%=product.images[0]%>" alt="">
-                                
-                                </div>
-                                <div class="overlay"></div>
-                                </div>
-                                </a>
-                                <div class="prod-actions w-100">
-    
-                                    <div class="d-flex justify-content-around px-1">
-                                        <a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
-                                            
-                                            <span class="mr-1"> View More </span><i class="mdi mdi-eye"></i>
-                                        </a>
-                                        <%
-                                         let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
-											
-                                        if(!InCart && product.stock > 0){
-
-                                        %>
-                                        <a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
-                                            
-                                            <span class="mr-1 searchAction text-capital" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
-                                        </a>
-                                        <%}else if(InCart){%>
-                                            <a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
-                                            
-                                                <span class="mr-1 text-capital"> GO To Cart </span><i class="mdi mdi-cart "></i>
-                                            </a>
-                                        <%}%>
-    
-                                    </div>
-        
-                                    
-                                </div>   
-                                
+                <div class="single1-product">
+                    <%if(product.effectedDiscount){%>
+                        <div class="badge-area-show">
+                            <div class="bagde-flag-wrap">
+                                <a href="#" class="bagde-flag"> <%=product.effectedDiscount%>% off</a>
                             </div>
-    
-                            <div class="p-3 product-details">
-                                <h6 class="deal-title mb-3"><%=product.name%></h6>
-                                <div class="d-flex ">
-                                    
-                                    <div class="pricing">
-                                        <%if(product.effectedDiscount && product.effectedDiscount>0){%>
-                                            <span class="l-through mr-2">&#8377;<%= product.price%></span>
-                                            <span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
-                                            
-                                        <%}else{%>
-                                            <span class="product-price">&#8377;<%= product.price%></span>
-                                        <%}%>
-                                    </div>
-                                    <div class="rating"></div>
-                                </div>
                             </div>
+                    <%}%>
+                    <div class="" style="position: relative;">
+                        <a href="/productDetails?id=<%=product._id%>" target="_blank">
+                        <div class="overlay-div">
+                        <div class="product1-image-container">
+                            <img class="img-fluid w-100 product1-image" src="/static/productImages/<%=product.images[0]%>" alt="">
+                        
                         </div>
-                         
+                        <div class="overlay"></div>
+                        </div>
+                        </a>
+                        <div class="prod-actions w-100 ">
+
+                            <div class="d-flex justify-content-around px-1">
+                                <a href="/productDetails?id=<%=product._id%>"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-dark">
+                                    
+                                    <span class="mr-1 d-none d-sm-block"> View More </span><i class="mdi mdi-eye"></i>
+                                </a>
+                                <%
+                                    let InCart = locals.cart ? cart.cartItems.some(item => item.product.equals(product._id)) : false
+                                    
+                                if(!InCart && product.stock > 0){
+
+                                %>
+                                <a href="#"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white searchAction" productId="<%=product._id%>" easyAddToCart>
+                                    
+                                    <span class="mr-1 searchAction text-capital d-none d-sm-block" productId="<%=product._id%>" easyAddToCart> Add To Cart </span><i class="mdi mdi-cart searchAction" productId="<%=product._id%>" easyAddToCart></i>
+                                </a>
+                                <%}else if(InCart){%>
+                                    <a href="/api/goToCart"  class="d-flex align-items-center justify-content-center m-1 popOver-btn-white">
+                                    
+                                        <span class="mr-1 text-capital d-none d-sm-block"> GO To Cart </span><i class="mdi mdi-cart "></i>
+                                    </a>
+                                <%}%>
+
+                            </div>
+
+                            
+                        </div>   
+                        
                     </div>
 
+                    <div class="p-3 product-details">
+                        <h6 class="deal-title mb-2"><%=product.name%></h6>
+                        <div class="row">
+                            
+                            <div class="pricing col-md-6">
+                                <%if(product.effectedDiscount && product.effectedDiscount>0){%>
+                                    <span class="l-through mr-2">&#8377;<%= product.price%></span>
+                                    <span class="product-price ">&#8377; <%=product.price-(product.price*product.effectedDiscount)/100%></span>
+                                    
+                                <%}else{%>
+                                    <span class="product-price">&#8377;<%= product.price%></span>
+                                <%}%>
+                            </div>
+                            <%if(product.rating?.length>0){%>
+                            <div class="rating col-md-6">
+                                <%
+                                const overallRating = product.rating.reduce((sum, r) => sum + r.value, 0) / product.rating.length;
+                                const fullStars = Math.floor(overallRating);
+                                const hasHalfStar = overallRating - fullStars > 0.4; 
+                                for(let i=0;i < fullStars ; i++){ 
+                                    %>
+                                    <i class="mdi mdi-star text-warning"></i>
+                                <%}
+                                if (hasHalfStar) { %>
+                                        <i class="mdi mdi-star-half text-warning"></i>
+                                <% } %>
+                            </div>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+                    
+                </div>
 
 
                 <%}%>
@@ -526,7 +528,7 @@
     <div class="container">
         <div class="row">
             <%for(let brand of brands){%>
-            <a class="col single-img" href="#">
+            <a class="col single-img" href="/shop?brandId=<%=brand._id%>">
                 <img class="img-fluid d-block mx-auto" src="/static/brandImages/<%=brand.logo%>" alt="">
             </a>
             <%}%>

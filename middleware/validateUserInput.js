@@ -308,7 +308,7 @@ const validateChangePassword=(req,res,next)=>{
 
 const validateProductSearchCriteria=asyncErrorHandler( async(req,res,next)=>{
 
-        const { name, categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body || req.query;
+        const { name='', categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body ;
         
 
         let matchCriteria={};

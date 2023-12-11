@@ -10,17 +10,25 @@ const { default: mongoose } = require('mongoose')
 const loadShop=asyncErrorHandler( async(req,res, next)=>{
 
     const key=req.query.key || ''
+    const categoryId=req.query.categoryId || ''
+    const brandId= req.query.brandId || ''
     const cart=req.cart;
+    const matchCriteria={status:true}
+
+    if (categoryId) {
+        matchCriteria.category = { $elemMatch: {$eq:new mongoose.Types.ObjectId(categoryId)}};
+    }
+    if(key){
+        matchCriteria.name={ $regex: new RegExp(`^${key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}`, 'i') }
+    }
+    if(brandId){
+        matchCriteria.brand=new mongoose.Types.ObjectId( brandId)
+    }
     // GETING ANY FIRST 12 PRODUCTS
     const products=await Product.aggregate([
+        {$match:matchCriteria},
         {
-            $match:{
-                status:true,
-                name:{ $regex: new RegExp(`^${key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}`, 'i') }
-            }
-        },
-        {
-            $limit:12
+            $limit:12 
         },
     ])
 

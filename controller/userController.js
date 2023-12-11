@@ -15,6 +15,7 @@ const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
 const otpGenerator = require('otp-generator');
 const CustomError = require('../Utils/CustomError')
+const { timeStamp } = require('console')
 
 
 //creating hashing function with bcrypt
@@ -104,7 +105,7 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
         const {id}=req.query
         const cart=req.cart
 
-        const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
+        // const productsWithCategories = await Product.findOne({_id:id}).populate('category','name').populate('brand','name')
         const productDetails=await Product.aggregate([
             {
                 $match:{
@@ -138,14 +139,14 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
 
             
         ])
-        console.log('productDetails---------------------------------------',productDetails[0].userInfo)
+        // console.log('productDetails---------------------------------------',productDetails[0].userInfo)
 
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
 
 
-        if(productsWithCategories && productsWithCategories.category){
+        if(productDetails && productDetails.length>0){
 
-            res.render('productDetails',{product1:productsWithCategories,productDetails:productDetails[0],inCart:inCart,user:req.session?.userId})
+            res.render('productDetails',{productDetails:productDetails[0],inCart:inCart,user:req.session?.userId})
 
         }else{
             const err=new CustomError('Invalid request',400)
@@ -380,6 +381,75 @@ const logout=(req,res,next)=>{
         });
 }
 
+const loadForgotPassword=asyncErrorHandler( async(req, res)=>{
+
+    res.render('login-register/forgotPassword',{title:'Reset Password'})
+})
+
+const forgotPassword=asyncErrorHandler( async(req,res, next)=>{
+    const { email } = req.body;
+
+    // Check if user exists with the given email
+    const user = await User.findOne({ email });
+  
+    if (!user) {
+        return res.status(400).render('login-register/forgotPassword',{title:'Forgot Password',message:'No existing user'})
+    }
+
+    // Generate token and timestamp
+    const token = crypto.randomBytes(16).toString('hex');
+    const timestamp = Date.now()/1000;
+  
+    // Combine token and timestamp
+    const combinedString = `${token}|${timestamp}`;
+   
+    // Encrypt the combined string with SHA256
+    const signature = crypto.createHash('sha256',process.env.RESET_PASSWORD_SECRET).update(combinedString).digest('hex');
+
+    // Create verification link
+    const verificationLink = `${process.env.BASE_URL}/reset-password?token=${token}&email=${email}`;
+  
+    // Send email with verification link
+    const mailSended = await userHelpers.sendResetPasswordMail(user.fname,user.email,verificationLink);
+    
+    if(mailSended){
+        await User.updateOne({_id:user._id},{$set:
+            {
+                'resetPassword.signature':signature,
+                'resetPassword.timestamp':timestamp
+            }
+        })
+        
+        res.render('login-register/login.ejs',{title:'login',message:'A verification mail is sended to you email please verify to reset your password'})
+    }else{
+        const err = new CustomError('verification email sending failed',500)
+        next(err)
+    }
+
+})
+
+const loadResetPassword=asyncErrorHandler( async(req, res, next)=>{
+    const {email, token}=req.query
+    res.render('login-register/resetPassword.ejs',{title:'Reset Password',email:email,token:token})
+})
+
+const resetPassword=asyncErrorHandler( async(req, res, next)=>{
+
+    const {password, rePassword, email, token} =req.body
+    if(!password || !rePassword || password!==rePassword){
+        const err =new CustomError('Invalid request: Passwords must be present and match',400)
+        return next(err)
+    }
+    const sPassword=await securePassword(password)
+    const passwordUpdated= await User.updateOne({email:email},{$set:{password:sPassword}})
+    if(passwordUpdated.modifiedCount==1){
+        res.render('login-register/login',{title:'login',message:'Your password has been successfully changed. Please proceed  login.'})
+    }
+    
+})
+
+
+
 const loadProfile=asyncErrorHandler( async(req,res, next)=>{
 
         const user=req.user
@@ -517,6 +587,10 @@ module.exports={
     reSendOtp,
     otpVerification,
     logout,
+    loadForgotPassword,
+    forgotPassword,
+    loadResetPassword,
+    resetPassword,
 
     loadProfile,
     updateUserInfo,

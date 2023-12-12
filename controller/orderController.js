@@ -4,8 +4,8 @@ const Product=require('../model/productModel')
 const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const { default: mongoose } = require('mongoose')
-const puppeteer=require('puppeteer')
-const pdf = require('html-pdf');
+
+
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const { aggregate } = require('../model/brandModel')
 const CustomError = require('../Utils/CustomError')

@@ -3,9 +3,9 @@ const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const CustomError = require('../Utils/CustomError')
 const loadSalesReport=async(req,res,next)=>{
     try {
-        
+    
 
-        res.render('salesReport')
+        res.render('salesReport') 
 
     } catch (error) {
         next(error)

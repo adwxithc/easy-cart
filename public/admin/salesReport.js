@@ -285,14 +285,14 @@ function barChart(labels,data){
 }
 
 let selectedTime='',selectedPaymentStatus='all',selectedOrderStatus='all'
-function changeSalesDataTimePeriod(time){
-
+function changeSalesDataTimePeriod(time){ 
+ 
         if(selectedTime !== time){
           selectedTime=time
         showSalesData(selectedTime,selectedPaymentStatus,selectedOrderStatus)
         }
 }
-
+ 
 
 
 function filterBySalesPaymentStatus(status){

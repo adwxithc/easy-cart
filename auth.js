@@ -10,10 +10,10 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: `/auth/google/callback`,
     passReqToCallback   : true
-  },
+  },  
   function(request, accessToken, refreshToken, profile, done) {
     
-    findOrCreateGoogleUser(profile, done);
+    findOrCreateGoogleUser(profile, done); 
     
   }
 ));
@@ -28,7 +28,7 @@ passport.deserializeUser((user,done)=>{
 
 
 
-async function findOrCreateGoogleUser(profile, done) {
+async function findOrCreateGoogleUser(profile, done) { 
     try {
       let user = await User.findOne({ email: profile.email });
         const spassword= await userHelpers.securePassword(profile.id)

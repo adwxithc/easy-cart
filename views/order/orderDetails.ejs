@@ -24,7 +24,7 @@
 <%}%>
 
 
-            <div class="col-lg-12 mx-auto">
+            <div class="col-lg-12 ">
               
                 <div class=" my-2 blog_right_sidebar project">
                   
@@ -46,7 +46,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body py-4 px-3">
                               <div class=" mb-4 pb-2 row">
 
                                 <div class="flex-fill col-lg-9 order-lg-1 order-2">
@@ -75,7 +75,7 @@
                                   <div style="width: auto;">
                                     <div><h5>Delivery Address</h5></div>
 
-                                    <div class=" p-3 " id="">
+                                    <div class=" p-md-3 " id="">
                                         <div>
                                             <div class=" head"><span class="p-1 mr-1 text-dark"><%=orderData.shippingAddress.name%></span><span class="p-1 text-dark"><%=orderData.shippingAddress.mobile%></span></div>
                                         </div>
@@ -131,7 +131,7 @@
                                     </div>
            
                                 </div>
-                                <div class="d-flex justify-content-between mt-3">
+                                <div class="d-flex justify-content-between mt-3 progressLabels">
                                   <span>Return Placed</span>
                                   <span>Out For Pick</span>
                                   <span>Returned</span>
@@ -177,7 +177,7 @@
                                   </div>
          
                               </div>
-                              <div class="d-flex justify-content-between mt-3">
+                              <div class="d-flex justify-content-between mt-3 progressLabels" >
                                 <span>Placed</span>
                                 <span>Pending</span>
                                 <span>Processing</span>
@@ -192,7 +192,7 @@
                               </div>
                               <%}%>
                               <%if(item.orderStatus=='Delivered'){%>
-                              <a href="/api/addReview?orderId=<%=orderData._id%>&productId=<%=item.product._id%>" class="font-weight-bold">Rate & Review Product</a>
+                              <a href="/api/addReview?orderId=<%=orderData._id%>&productId=<%=item.product._id%>" class="font-weight-bold reviewLink">Rate & Review Product</a>
                               <%}%>
                             </div>
 

@@ -1,0 +1,95 @@
+<%- include('../partials/header.ejs') -%>
+
+<section class="signUpSection">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col">
+          <div class="card card-registration my-4">
+            <div class="text-center alert-warning" id="alertMessage"> 
+                <% if(locals.message){ %>
+                  <%=message%>
+
+                <%}%>
+              </div>
+            <div class="row g-0 signUpBackground">
+              <!-- <div class="col-xl-6 d-none d-xl-block">
+                <img src="bck.jpg"
+                  alt="Sample photo" class="img-fluid"
+                  style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+              </div> -->
+              <div class="col-xl-6">
+                <form action="/register" method="POST" onsubmit="return validateForm()">
+                <div class="card-body p-md-5 text-black">
+                  <h3 class="mb-5 text-uppercase">Sign Up</h3>
+  
+                  <div class="row">
+                    
+                    <div class="col-md-6 mb-4">
+                      <div id="fnameError" class="text-danger"></div>
+                      <div class="form-outline">
+                        <input type="text" id="fname" class="form-control form-control-lg" name="fname"/>
+                        <label class="form-label" for="fname">First name</label>
+                        
+                      </div>
+                      
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div id="lnameError" class="text-danger"></div>
+                      <div class="form-outline">
+                        <input type="text" id="lname" class="form-control form-control-lg" name="lname"/>
+                        <label class="form-label" for="lname">Last Name</label>
+                        
+                      </div>
+                      
+                    </div>
+                  </div>
+  
+                  <div id="emailError" class="text-danger"></div>
+                  <div class="form-outline mb-4">
+                    <input type="email" id="email" class="form-control form-control-lg" name="email"/>
+                    <label class="form-label" for="email">Email</label>
+                  </div>
+                  
+
+                    
+
+                  <div id="passwordError" class="text-danger"></div>
+                  <div class="form-outline mb-4">
+                    <input type="password" id="password" class="form-control form-control-lg" name="password"/>
+                    <label class="form-label" for="password">Password</label>
+                    
+
+                  </div>
+                  
+
+                  <div id="rePasswordError" class="text-danger"></div>
+                  <div class="form-outline mb-4">
+                    <input type="password" id="rePassword" class="form-control form-control-lg" name="rePassword"/>
+                    <label class="form-label" for="rePassword">Re-enter Password</label>
+                   
+
+                  </div>
+                 <%if(locals.refer){%>
+                  <input type="hidden" name="refer" id="" value="<%=refer%>">
+                  <%}%>
+                  <div class="d-flex justify-content-center pt-3">
+                    <button type="submit" class="btn btn-dark btn-lg ms-2">Submit form</button>
+                  </div>
+  
+
+  
+                </div>
+                </form>
+              </div>
+
+       
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <%- include('../partials/footer.ejs') -%>

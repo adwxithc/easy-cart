@@ -1,5 +1,9 @@
 fetch('/admin/getStats')
 .then(response=>{
+  if(response.status==401){
+    window.location.href='/admin'
+    return
+  }
     if(response.ok) return response.json()
     throw { status: response.status, data: response.json() };
 })
@@ -69,7 +73,7 @@ function showTransactionStats(stats){
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000";
       
-          var text = `\u20B9 ${totalSum}`, 
+          var text = `\u20B9 ${totalSum.toFixed(2)}`, 
               textX = Math.round((width - ctx.measureText(text).width) / 2),
               textY = height / 2.4;
       
@@ -104,11 +108,15 @@ function showTransactionStats(stats){
 if(document.getElementById('listedUsers')){
     fetch('/admin/getBasicInfos')
     .then(response=>{
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })
     .then(data=>{
-        console.log(data)
+        
         if(data){
             document.getElementById('listedUsers').innerHTML=data.userCount
             document.getElementById('monthlyOrders').innerHTML=data.totalOrdersThisMonth

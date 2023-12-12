@@ -13,6 +13,10 @@ function addOffer(){
           body:new URLSearchParams(offerFormData).toString(),
        })
        .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
        })
@@ -54,6 +58,10 @@ function updateOffer(){
     
            })
            .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
            })
@@ -123,6 +131,10 @@ function listUnlistOffer(offerId){
         body:JSON.stringify({offerId:offerId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })
@@ -219,6 +231,10 @@ function applayOfferToProduct(offerId,productId){
             body:JSON.stringify({offerId:offerId,productId:productId})
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok)  return response.json()
             throw { status: response.status, data: response.json() };
         })
@@ -255,6 +271,10 @@ function applayOfferToCategory(offerId,categoryId){
         body:JSON.stringify({offerId:offerId,categoryId:categoryId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok)  return response.json()
         throw { status: response.status, data: response.json() };
     })
@@ -310,6 +330,10 @@ function setCategoryPageAfterSettingOffer(categoryId,data){
 function getOffers(id,type){
     fetch('/admin/getOffers')
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -339,6 +363,10 @@ function removeCategoryOffer(categoryId){
         body:JSON.stringify({categoryId:categoryId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

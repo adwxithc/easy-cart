@@ -81,6 +81,10 @@ function findProducts(name,categories,brands,priceRange,page,sort){
         body:JSON.stringify({ name:name, categories:categories, brands:brands,priceRange:priceRange,page:page,sort:sort})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         
         if(response.ok) return response.json() 
         throw { status: response.status, data: response.json() };
@@ -151,7 +155,9 @@ function displaySearchresult(products,cart){
 
             //SETTING OFFER BADGE
             let offer=''
+            let rating=''
             let price=`<span class="product-price">&#8377;${ product.price}</span>`
+            
             if(product.effectedDiscount && product.effectedDiscount > 0){
                 offer=`<div class="badge-area-show">
                             <div class="bagde-flag-wrap">
@@ -162,7 +168,18 @@ function displaySearchresult(products,cart){
                         price=`<span class="l-through mr-2">&#8377;${ product.price}</span>
                         <span class="product-price ">&#8377; ${product.price-(product.price*product.effectedDiscount)/100}</span>`
             }
-        
+            if(product.rating?.length>0){
+                const overallRating = product.rating.reduce((sum, r) => sum + r.value, 0) / product.rating.length;
+                    const fullStars = Math.floor(overallRating);
+                    const hasHalfStar = overallRating - fullStars > 0.4; 
+                    for(let i=0;i < fullStars ; i++){ 
+                        rating+=`<i class="mdi mdi-star text-warning"></i>`
+                    }
+                    if (hasHalfStar) { 
+                        rating+=`<i class="mdi mdi-star-half text-warning"></i>`
+                    }
+            }
+        	
             productDiv.innerHTML= ` <div class="single1-product">
            ${offer}
             <div class="" style="position: relative;">
@@ -200,7 +217,9 @@ function displaySearchresult(products,cart){
                     <div class="pricing">
                        ${price}
                     </div>
-                    <div class="rating"></div>
+                    <div class="rating">
+                    ${rating}
+                    </div>
                 </div>
             </div>
         </div>`
@@ -286,6 +305,10 @@ function addSingleProductToCart(productId,quantity){
         body:JSON.stringify(addToCartData)
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         
         if(response.ok){
             const contentType = response.headers.get("content-type");

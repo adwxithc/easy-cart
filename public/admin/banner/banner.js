@@ -238,6 +238,10 @@ function sendBannerData(formData,url,method,cb){
             body:formData
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
         })
@@ -307,6 +311,10 @@ function updateBannerStatus(bannerId){
         method:'PUT',
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })
@@ -343,6 +351,10 @@ function deleteBanner(bannerId){
         body:JSON.stringify({bannerId:bannerId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

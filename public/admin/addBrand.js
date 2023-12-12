@@ -1,6 +1,12 @@
 function getAddBrand(){
     fetch('/admin/loadAddBrand')
     .then(response =>{
+        
+        if(response.status==401){
+            
+            window.location.href='/admin'
+            return
+        }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -134,6 +140,11 @@ function postBrand(){
             body:formData
         })
         .then(response=>{
+            if(response.status==401){
+            
+                window.location.href='/admin'
+                return
+            }
             if(!response.ok) throw { status: response.status, data: response.json() };
             return response.json()
         })

@@ -5,6 +5,7 @@ const userHelpers=require('../helperMethods/userHelpers')
 const crypto=require('crypto')
 const { default: mongoose } = require('mongoose')
 const puppeteer=require('puppeteer')
+const pdf = require('html-pdf');
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const { aggregate } = require('../model/brandModel')
 const CustomError = require('../Utils/CustomError')
@@ -207,27 +208,21 @@ const cancenlWholeOrder=asyncErrorHandler( async(req,res, next)=>{
     res.json({canceled:true,message:'Your order has been successfully canceled. We appreciate your understanding.'})
 
 });
-
-const downloadInvoice=asyncErrorHandler( async(req,res)=>{
   
-    const oredr=req.order;
-    const invoiceHTML= userHelpers.generateInvoice(oredr)
-    
-    // Launch Puppeteer and generate a PDF
-    const browser = await puppeteer.launch({ headless: 'new' });
-    const page = await browser.newPage();
-    await page.setContent(invoiceHTML);
-    const pdfBuffer = await page.pdf({ format: 'A4' });
+const downloadInvoice=asyncErrorHandler( async(req,res)=>{
+  const order = req.order;
+  const invoiceHTML = userHelpers.generateInvoice(order);
 
-    // Close the Puppeteer browser
-    await browser.close();
-
-    // Send the PDF as a response
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=invoice_${req.query.orderId}.pdf`);
-    res.send(pdfBuffer);
-    
-
+  pdf.create(invoiceHTML).toBuffer((err, buffer) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=invoice_${req.query.orderId}.pdf`);
+      res.send(buffer);
+    }
+  });
 });
 
 //RETURN ORDER

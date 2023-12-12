@@ -4,7 +4,7 @@ const isLogin=(req,res,next)=>{
             next()
         }else{
 
-            res.redirect('/login');
+            res.redirect('/login?unautherised=true');
         }
         
     } catch (error) {

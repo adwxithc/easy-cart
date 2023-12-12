@@ -580,7 +580,7 @@
         }
 
 
-
+   
 
 
 .progress{
@@ -619,6 +619,22 @@
     position: relative;
 }
 
+@media (max-width:750px) {
+    .progressLabels{
+        font-size: 0.4rem;
+    }
+    .progress-stage{
+       
+        height: 0.8rem; 
+        width: 0.8rem; 
+        position: absolute;
+         bottom: -100%; 
+    }
+
+    .reviewLink{
+        font-size: 0.7rem;
+    }
+}
       /* ------------------------------------------------progrss bar eds---------------------------- */
 
 

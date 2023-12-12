@@ -15,6 +15,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                 fetch(pageUrl)
                 .then(response => {
+                    if(response.status==401){
+                        window.location.href='/admin'
+                        return
+                      }
                     if (!response.ok) {
                         throw { status: response.status, data: response.json() };
                     }
@@ -51,6 +55,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                 fetch(pageUrl)
                     .then(response => {
+                        if(response.status==401){
+                            window.location.href='/admin'
+                            return
+                          }
                         if (!response.ok) {
                             throw { status: response.status, data: response.json() };
                         }
@@ -91,6 +99,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                 
                     fetch(pageUrl)
                         .then(response => {
+                            if(response.status==401){
+                                window.location.href='/admin'
+                                return
+                              }
                             if (!response.ok) {
                                 throw { status: response.status, data: response.json() };
                             }
@@ -124,6 +136,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
             fetch(pageUrl)
                 .then(response => {
+                    if(response.status==401){
+                        window.location.href='/admin'
+                        return
+                      }
                     if (!response.ok) {
                         throw { status: response.status, data: response.json() };
                     }
@@ -380,6 +396,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                                 })
                                 .then(response => {
+                                    if(response.status==401){
+                                        window.location.href='/admin'
+                                        return
+                                      }
                                     if(response.ok) return response.json()
                                     throw { status: response.status, data: response.json() };
                                 })
@@ -421,6 +441,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
             //loading products
             fetch('/admin/viewProducts')
             .then(response=>{
+                if(response.status==401){
+                    window.location.href='/admin'
+                    return
+                  }
                 if(!response.ok){
                     throw { status: response.status, data: response.json() };
                 }
@@ -662,6 +686,14 @@ document.getElementById('pageContent').addEventListener('click',(e)=>{
 function loadPage(url,callBacks){
     fetch(url)
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })

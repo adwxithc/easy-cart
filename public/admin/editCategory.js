@@ -10,7 +10,7 @@ function postUpdation(){
                 id:(document.getElementById("Cid").value)
                 
             }
-            console.log(obj)
+            
             const jsonData=JSON.stringify(obj)
             try {
                 const response =await fetch('/admin/editCategory',{
@@ -20,9 +20,12 @@ function postUpdation(){
                     },
                     body:jsonData
                 })
-                if(response.ok){
+                if(response.status==401){
+                    window.location.href='/admin'
+                    return
+                  }else if(response.ok){
+
                     const data=await response.json()
-       
                     showMessage(data.message)
 
 

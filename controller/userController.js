@@ -73,7 +73,25 @@ const sendverifyMail=async (name,email,otp)=>{
 
 //rendering the site for all
 const guest= asyncErrorHandler (async(req,res,next)=>{
-
+        const mostPopularProducts = await Product.aggregate([
+        {
+          $unwind: '$rating', // Unwind the rating array to have one document per rating
+        },
+        {
+          $group: {
+            _id: '$_id',
+            averageRating: { $avg: '$rating.value' }, // Calculate the average rating for each product
+            product: { $first: '$$ROOT' }, // Store the product details for later use
+          },
+        },
+        {
+          $sort: { averageRating: -1 }, // Sort by average rating in descending order
+        },
+        {
+          $limit: 8, // Limit the result to 8 products
+        },
+        ]);
+    
         //GETTING BANNER DATAS
         const banners=await Banner.aggregate([
             {
@@ -95,7 +113,7 @@ const guest= asyncErrorHandler (async(req,res,next)=>{
 
         //GETTING AFFORDABLE PRODUCTS DATAS
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners,mostSoldCategories:mostSoldCategories,brands:brands})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners,mostSoldCategories:mostSoldCategories,brands:brands,mostPopularProducts:mostPopularProducts})
 
 });
 
@@ -139,7 +157,7 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
 
             
         ])
-        // console.log('productDetails---------------------------------------',productDetails[0].userInfo)
+        
 
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
 
@@ -167,6 +185,7 @@ const search= asyncErrorHandler( async(req,res, next)=>{
 
 const loadLogin=(req,res,next)=>{
 
+    if(req.query.unautherised) res.status(401)
     res.render('login-register/login',{title:'login'});  
  
 }
@@ -174,7 +193,7 @@ const loadLogin=(req,res,next)=>{
 const verifyLogin= asyncErrorHandler (async(req,res, next)=>{
 
         const {email, password}=req.body;
-
+ 
         const userData=await User.findOne({email:email})
         if(userData){
             const hashedPassword=userData.password

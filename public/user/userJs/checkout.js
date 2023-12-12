@@ -230,6 +230,10 @@ function confirmOrder(paymentMethod){
     body:JSON.stringify(confirmData)
   })
   .then(response=>{
+    if(response.status==401){
+      window.location.href='/login'
+      return
+  }
     if(response.ok) return response.json()
     throw { status: response.status, data: response.json() };
   })
@@ -290,6 +294,10 @@ function verifyPayment(payment,order,cart){
     body:JSON.stringify({payment:payment,order:order,cart:cart})
   })
   .then(response=>{
+    if(response.status==401){
+      window.location.href='/login'
+      return
+  }
     if(response.ok) return response.json()
     throw { status: response.status, data: response.json() };
   })
@@ -361,6 +369,10 @@ async function applyCoupone(){
       body:JSON.stringify({couponeCode:couponeCode,total:total})
     })
     .then(response=>{
+      if(response.status==401){
+        window.location.href='/login'
+        return
+    }
       if(response.ok){
         const contentType = response.headers.get("content-type");
 

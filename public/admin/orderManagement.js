@@ -4,6 +4,10 @@ let currentPage
 function listOrders(){
     fetch('/admin/listOrders')
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -62,6 +66,10 @@ function fetchDataForOrderPage(Page){
     // Make a GET request to the server
     fetch(url)
     .then(response => {
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if (!response.ok) {
             throw { status: response.status, data: response.json() };
         }
@@ -84,6 +92,10 @@ function viewOrder(orderId){
  
     fetch(`/admin/viewOrder?orderId=${orderId}`)
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -116,6 +128,10 @@ function updateOrderStatusByAdmin(elem){
             headers:{'Content-Type':'application/json'}
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
         })
@@ -174,6 +190,10 @@ function updateReturnStatus(elem){
             headers:{'Content-Type':'application/json'}
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
         })

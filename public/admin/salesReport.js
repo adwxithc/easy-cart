@@ -1,6 +1,10 @@
 function loadSalesReport(){
     fetch('/admin/salesReport')
     .then(response=>{
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -41,6 +45,10 @@ function getSalesReport(timePeriod){
    
     fetch(`/admin/getSalesReport?timePeriod=${timePeriod}`)
     .then(response=>{
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })
@@ -318,6 +326,10 @@ function showSalesData(time,paymentStatus,orderStatus){
   
   fetch(`/admin/getSalesData?timePeriod=${time}&paymentStatus=${paymentStatus}&orderStatus=${orderStatus}`)
   .then(response=>{
+    if(response.status==401){
+      window.location.href='/admin'
+      return
+    }
     if(response.ok) return response.json()
     throw { status: response.status, data: response.json() };
   })
@@ -330,7 +342,8 @@ function showSalesData(time,paymentStatus,orderStatus){
 
 function setSalesData(data){
   let i=1
-  document.getElementById('salesTableBody').innerHTML=``
+
+  if(data.length>0) document.getElementById('salesTableBody').innerHTML=''
     for(let item of data){
       const salesStatus=item.paymentStatus=='received'?'Credit':'Debit'
       const row=document.createElement('tr')

@@ -20,7 +20,7 @@ cart_route.set('view engine','ejs')
 
 cart_route.post('/add-to-cart',auth.isLogin,checkExist.product,validateUserInput.validateCartInputs,cartController.addToCart)
 cart_route.get('/goToCart',auth.isLogin,cartController.goToCart)
-cart_route.get('/cartCount',auth.isLogin,cartController.cartCount)
+cart_route.get('/cartCount',cartController.cartCount)
 cart_route.delete('/removeFromCart',auth.isLogin,cartController.removeFromCart)
 cart_route.patch('/updateCart',auth.isLogin,validateUserInput.validateCartItemCount,cartController.updateCartItemCount)
 

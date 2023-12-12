@@ -1,6 +1,10 @@
 function viewBrands(){
     fetch('/admin/loadviewBrands')
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -72,6 +76,10 @@ function brandPagination(){
             // Make a GET request to the server
             fetch(url)
             .then(response => {
+                if(response.status==401){
+                    window.location.href='/admin'
+                    return
+                  }
                 if (!response.ok) {
                     throw { status: response.status, data: response.json() };
                 }
@@ -121,6 +129,10 @@ function brandOperations(){
                         body:JSON.stringify({id:brandId})
                     })
                     .then(response=>{
+                        if(response.status==401){
+                            window.location.href='/admin'
+                            return
+                          }
                         if(response.ok) return response.json()
                         throw { status: response.status, data: response.json() };
                     })
@@ -140,6 +152,10 @@ function brandOperations(){
                     const id=e.target.getAttribute('brandId')
                     fetch(`/admin/editBrand?id=${id}`)
                     .then(response=>{
+                        if(response.status==401){
+                            window.location.href='/admin'
+                            return
+                          }
                         if(response.ok) return response.text()
                         throw { status: response.status, data: response.json() };
                     })
@@ -315,6 +331,10 @@ function updateBrand(){
             body:formData
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
         })

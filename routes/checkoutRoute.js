@@ -12,7 +12,7 @@ const session=require('express-session')
 //     secret:process.env.SESSION_SECRET,
 //     resave:false,
 //     saveUninitialized:true
-// }))
+// })) 
 
 
 checkout_route.set('views','./views/checkout')

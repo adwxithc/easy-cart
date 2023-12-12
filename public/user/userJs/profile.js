@@ -33,6 +33,10 @@ function updateUserInfo(data){
         body:JSON.stringify(data)
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
        
         throw { status: response.status, data: response.json() };
@@ -108,6 +112,10 @@ function getManageAddress(){
    
     fetch('/manageAddress')
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
 
@@ -240,6 +248,10 @@ function addNewAddress(newAddress){
 
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
 
@@ -336,6 +348,10 @@ function deletAddress(id){
         body:JSON.stringify({id:id})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
 
@@ -453,6 +469,10 @@ function updateAddress(address){
         body:JSON.stringify(address)
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
 
@@ -471,7 +491,10 @@ function changePassword(){
   
     fetch('/changePassword')
     .then(response=>{
-
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
     })
@@ -534,6 +557,10 @@ function updatePassword(){
               body: new URLSearchParams(formData).toString(),
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/login'
+                return
+            }
             if(response.ok){ 
                
                 const contentType = response.headers.get("content-type");

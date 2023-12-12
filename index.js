@@ -13,7 +13,7 @@ const errorRoute=require('./routes/errorRoute')
 const CustomError=require('./Utils/CustomError')
 const globalErrorHandler=require('./controller/errorController') 
 require('./auth');
-// const passport=require('passport')
+const passport=require('passport')
 
 //cart reservation
 const cron=require('node-cron')
@@ -46,6 +46,8 @@ app.use(session({
   cookie:{ secure: false }
 }))
 
+app.use(passport.initialize())
+app.use(passport.session())
 
 //seting static files
 app.use('/static',express.static('public'))

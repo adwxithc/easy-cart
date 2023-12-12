@@ -329,6 +329,7 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Invoice</title>
+          
           <style>
             body {
               font-family: 'Arial', sans-serif;
@@ -478,7 +479,19 @@ async function findProducts(matchCriteria,skip,limit,sortCriteria){
         
           </div>
         
-        
+          <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+          <script>
+            window.onload = function () {
+
+                const element = document.body; // You can specify any HTML element here
+
+                html2pdf(element);
+
+                setTimeout(function () {
+                    window.history.back();
+                }, 1600);
+            };
+        </script>
         </body>
         </html>
 

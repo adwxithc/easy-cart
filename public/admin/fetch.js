@@ -141,6 +141,7 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                         return
                       }
                     if (!response.ok) {
+                        
                         throw { status: response.status, data: response.json() };
                     }
                     return response.text();
@@ -431,7 +432,9 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     
 
                 })
-                .catch(handleError);
+                .catch((er)=>{
+                    console.log(er)
+                });
                 
 
 

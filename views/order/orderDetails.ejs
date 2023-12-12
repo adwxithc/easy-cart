@@ -204,7 +204,7 @@
                                 <h5 class="mb-0"> <a href="/productDetails?id=<%=item.product._id%>">View Details</a> </h5>
                                 <%if(item.orderStatus!='Canceled' && item.orderStatus!='Delivered'){%>
                                 <h5 class="fw-normal mb-0" id="cancelOrderH5"><a href="#!" id="cancelOrder" class="orderAction" >Cancel</a></h5>
-                                <%}else if(item.orderStatus=='Delivered'){%>
+                                <%}else if(item.orderStatus=='Delivered' && item.returnStatus!='returned'){%>
                                 <h5 class="fw-normal mb-0" id="returnOrderH5"><a href="#!" id="returnOrder" class="orderAction" productId="<%=orderData.items[0].product._id%>" orderId="<%=orderData._id%>">Return</a></h5>
 
                                 <%}%>

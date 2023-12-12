@@ -424,17 +424,11 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                                 })
                                 .catch(handleError);
                             }
-
-                        
                     })
-                
-                    
                     
 
                 })
-                .catch((er)=>{
-                    console.log(er)
-                });
+                .catch(handleError);
                 
 
 
@@ -460,8 +454,6 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
                     //calling searchProduct support function
                     searchProduct()
 
-                    
-               
                 viewProduct()//this function is present in view product.js
                    
 

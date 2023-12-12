@@ -212,17 +212,17 @@ const cancenlWholeOrder=asyncErrorHandler( async(req,res, next)=>{
 const downloadInvoice=asyncErrorHandler( async(req,res)=>{
   const order = req.order;
   const invoiceHTML = userHelpers.generateInvoice(order);
-
-  pdf.create(invoiceHTML).toBuffer((err, buffer) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=invoice_${req.query.orderId}.pdf`);
-      res.send(buffer);
-    }
-  });
+res.send(invoiceHTML)
+  // pdf.create(invoiceHTML).toBuffer((err, buffer) => {
+  //   if (err) {
+  //     console.error(err);
+  //     res.status(500).send('Internal Server Error');
+  //   } else {
+  //     res.setHeader('Content-Type', 'application/pdf');
+  //     res.setHeader('Content-Disposition', `attachment; filename=invoice_${req.query.orderId}.pdf`);
+  //     res.send(buffer);
+  //   }
+  // });
 });
 
 //RETURN ORDER

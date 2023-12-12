@@ -23,7 +23,7 @@ const session=require('express-session')
 app.set('view engine','ejs')
 
 
-const PORT=process.env.PORT
+const PORT=process.env.PORT || 4000
 
 //connecting to mongodb
 mongoose.connect(process.env.MONGODB_URL_LOCAL)

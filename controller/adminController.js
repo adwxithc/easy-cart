@@ -166,8 +166,9 @@ const searchUser=asyncErrorHandler( async(req,res, next)=>{
 const addProduct=asyncErrorHandler( async(req,res, next)=>{
 
         const categories=await Category.find({status:true})
+        console.log('-----------------------------------------------------',categories)
         const brands=await Brand.find({status:true})
-        res.render('addProduct',{categories,brands})
+        res.render('addProduct',{categories:categories,brands:brands})
 })
 
 const insertProduct=asyncErrorHandler( async(req,res)=>{

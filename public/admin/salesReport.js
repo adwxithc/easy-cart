@@ -1,19 +1,4 @@
-function loadSalesReport(){
-    fetch('/admin/salesReport')
-    .then(response=>{
-      if(response.status==401){
-        window.location.href='/admin'
-        return
-      }
-        if(response.ok) return response.text()
-        throw { status: response.status, data: response.json() };
-    })
-    .then(html=>{
-        pageContent.innerHTML=html
-        getSalesReport('week')
-    })
-    .catch(handleError)
-}
+
 
 function downloadTableInExcel() {
   // Get the table data as an array of objects
@@ -299,13 +284,16 @@ function barChart(labels,data){
   }
 }
 
-let selectedTime='all',selectedPaymentStatus='all',selectedOrderStatus='all'
+let selectedTime='',selectedPaymentStatus='all',selectedOrderStatus='all'
 function changeSalesDataTimePeriod(time){
+
         if(selectedTime !== time){
           selectedTime=time
         showSalesData(selectedTime,selectedPaymentStatus,selectedOrderStatus)
         }
 }
+
+
 
 function filterBySalesPaymentStatus(status){
       if(selectedPaymentStatus !== status){
@@ -382,4 +370,22 @@ function setActive(elem){
 function setChoose(elem){
   document.querySelector('.choose').classList.remove('choose')
   elem.classList.add('choose')
+}
+
+function loadSalesReport(){
+  fetch('/admin/salesReport')
+  .then(response=>{
+    if(response.status==401){
+      window.location.href='/admin'
+      return
+    }
+      if(response.ok) return response.text()
+      throw { status: response.status, data: response.json() };
+  })
+  .then(html=>{
+      pageContent.innerHTML=html
+      getSalesReport('week')
+      changeSalesDataTimePeriod('week')
+  })
+  .catch(handleError)
 }

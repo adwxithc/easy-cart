@@ -1,7 +1,9 @@
 const reportHelper=require('../helperMethods/reportHelper')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const CustomError = require('../Utils/CustomError')
 const loadSalesReport=async(req,res,next)=>{
     try {
+        
 
         res.render('salesReport')
 
@@ -43,11 +45,15 @@ const getSalesData=asyncErrorHandler( async(req,res, next)=>{
  
     const {timePeriod,paymentStatus,orderStatus}=req.query
     if(!['week','month','year','all'].includes(timePeriod)){
-        res.status(404).json({message:'invalid timePeriod'})
+        const err = new CustomError('invalid timePeriod',400)
+        next(err)
+
     }else if(!['refunded','received','pending','all'].includes(paymentStatus)){
-        res.status(404).json({message:'invalid paymentStatus'})
+        const err = new CustomError('invalid paymentStatus',400)
+        next(err)
     }else if(!['Pending', 'Processing', 'Shipped', 'Delivered','Canceled','all'].includes(orderStatus)){
-        res.status(404).json({message:'invalid orderStatus'})
+        const err = new CustomError('invalid orderStatus',400)
+        next(err)
     }else{
         const sales=await reportHelper.salesReport(timePeriod,paymentStatus,orderStatus)
     res.json({sales:sales})

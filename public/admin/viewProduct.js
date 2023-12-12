@@ -34,6 +34,10 @@ function viewProduct(){
                             body:JSON.stringify({productId:productId})
                         })
                         .then(response=>{
+                            if(response.status==401){
+                                window.location.href='/admin'
+                                return
+                              }
                             if(response.ok){
                                 return response.json()
                             }
@@ -78,6 +82,10 @@ function viewProduct(){
 
                 fetch(`/admin/editProduct?id=${productId}`)
                 .then(response=>{
+                    if(response.status==401){
+                        window.location.href='/admin'
+                        return
+                      }
                     if(response.ok){
                         return response.text()
                     }
@@ -110,6 +118,10 @@ function viewProduct(){
             
             fetch(`/admin/viewMoreProductInfo?productId=${productId}`)
             .then(response=>{
+                if(response.status==401){
+                    window.location.href='/admin'
+                    return
+                  }
                 if(response.ok){
                     return response.text()
                 }
@@ -187,6 +199,10 @@ function fetchDataForPage(Page){
     // Make a GET request to the server
     fetch(url)
     .then(response => {
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if (!response.ok) {
             throw { status: response.status, data: response.json() };
         }
@@ -225,6 +241,10 @@ function searchProduct(){
         
         fetch(`/admin/searchProduct?field=${field}&key=${key}`)
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(!response.ok){
                 throw { status: response.status, data: response.json() };
             }
@@ -266,6 +286,10 @@ function removeProductOffer(productId){
         body:JSON.stringify({productId:productId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

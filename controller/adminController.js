@@ -15,7 +15,8 @@ const CustomError = require('../Utils/CustomError')
 
 const loadLogin=(req,res, next)=>{
     try {
-        res.render('adminLogin')
+        if(req.query.unautherised) res.status(401)
+        res.render('login',{admin:false,style:true})
 
     } catch (error) {
        next(error)
@@ -25,7 +26,7 @@ const loadLogin=(req,res, next)=>{
 const verifyLogin=asyncErrorHandler( async(req,res, next)=>{
 
         const email=req.body.email
-        const password=req.body.password
+        const password=req.body.password 
         if(email&&password){
         const adminData=await Admin.findOne({email:email})
         if(adminData){
@@ -36,14 +37,14 @@ const verifyLogin=asyncErrorHandler( async(req,res, next)=>{
                 res.redirect('/admin/adminDashboard')
 
             }else{
-                res.render('adminLogin',{message:"invalid email or password combination"})
+                res.render('login',{message:"invalid email or password combination",admin:false,style:true})
             }
 
         }else{
-            res.render('adminLogin',{message:"invalid email or password combination"})
+            res.render('login',{message:"invalid email or password combination",admin:false,style:true})
         }
     }else{
-        res.render('adminLogin',{message:"Please enter all the fields"})
+        res.render('login',{message:"Please enter all the fields",admin:false,style:true})
 
     }
 

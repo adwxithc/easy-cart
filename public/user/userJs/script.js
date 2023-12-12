@@ -225,6 +225,10 @@ function updateCartBadge(numberOfItemsInCart){
 
 fetch('/api/cartCount')
 .then(response=>{
+    if(response.status==401){
+        window.location.href='/login'
+        return
+    }
     if(response.ok) return response.json()
     throw new Error('unable to get cart item count')
 })

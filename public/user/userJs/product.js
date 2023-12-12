@@ -82,6 +82,10 @@ function addProductToCart(productId,quantity){
         body:JSON.stringify(addToCartData)
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         
         if(response.ok){
             const contentType = response.headers.get("content-type");

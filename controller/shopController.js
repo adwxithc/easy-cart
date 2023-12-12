@@ -40,7 +40,7 @@ const loadShop=asyncErrorHandler( async(req,res, next)=>{
     const categories=await Category.find({status:true},{name:1})
     const brands=await Brands.find({status:true},{name:1})
     
-    res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart,page:1})
+    res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart,page:1,user:true})
 
 });
 

@@ -54,6 +54,10 @@ function pagination(){
             // Make a GET request to the server
             fetch(url)
             .then(response => {
+                if(response.status==401){
+                    window.location.href='/admin'
+                    return
+                  }
                 if (!response.ok) {
                     throw { status: response.status, data: response.json() };
                 }
@@ -128,6 +132,10 @@ function blockOrUnblockUser(){
             body:jsonData
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+              }
             if(response.ok)return response.json()
             throw { status: response.status, data: response.json() };
 
@@ -167,7 +175,10 @@ function searchUser(){
       
       fetch(`/admin/searchUser?key=${searchKey}`)
       .then(response =>{
-        console.log(response)
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
         if(!response.ok){
             throw { status: response.status, data: response.json() };
         }

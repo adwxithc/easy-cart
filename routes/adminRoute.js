@@ -9,6 +9,7 @@ const couponeController=require('../controller/couponeController')
 const checkExist=require('../middleware/checkExist')
 const offerController=require('../controller/offerController')
 const bannerController=require('../controller/bannerController')
+const auth=require('../middleware/adminAuth')
 
 const session=require('express-session')
 const multer=require('multer')
@@ -77,109 +78,105 @@ admin_route.use(express.json())
 
 //routing
 
-admin_route.get('/',adminController.loadLogin);
-admin_route.post('/',adminController.verifyLogin);
+admin_route.get('/',auth.isLogout ,adminController.loadLogin);
+admin_route.post('/',auth.isLogout ,adminController.verifyLogin);
 admin_route.post('/logout',adminController.logout)
 
 //admin dashboard
-admin_route.get('/adminDashboard',adminController.adminDashboard);
-admin_route.get('/getStats',dashboardController.getStats)
-admin_route.get('/getBasicInfos',dashboardController.getBasicInfos)
+admin_route.get('/adminDashboard',auth.isLogin,adminController.adminDashboard);
+admin_route.get('/getStats',auth.isLogin,dashboardController.getStats)
+admin_route.get('/getBasicInfos',auth.isLogin,dashboardController.getBasicInfos)
 
 
 
 //users
-admin_route.get('/loadUsers',adminController.loadUsers);
-admin_route.patch('/blockOrUnblockUser',adminController.blockOrUnblockUser);
-admin_route.get('/searchUser',adminController.searchUser);
+admin_route.get('/loadUsers',auth.isLogin,adminController.loadUsers);
+admin_route.patch('/blockOrUnblockUser',auth.isLogin,adminController.blockOrUnblockUser);
+admin_route.get('/searchUser',auth.isLogin,adminController.searchUser);
 
 
 
 //product
-admin_route.get('/addProduct',adminController.addProduct);
-admin_route.post('/addProduct',update.array('images',4),adminController.insertProduct);
-admin_route.get('/viewProducts',adminController.loadProducts);
-admin_route.patch('/changeProductStatus',adminController.changeProductStatus);
-admin_route.get('/viewMoreProductInfo',adminController.viewMoreProductInfo);
-admin_route.get('/searchProduct',adminController.searchProduct);
-admin_route.get('/editProduct',adminController.loadEditProduct);
-admin_route.put('/updateProduct',update.array('images',4),validateAdminInputs.validateProductDatas,adminController.updateProductInfo);
+admin_route.get('/addProduct',auth.isLogin,adminController.addProduct);
+admin_route.post('/addProduct',auth.isLogin,update.array('images',4),adminController.insertProduct);
+admin_route.get('/viewProducts',auth.isLogin,adminController.loadProducts);
+admin_route.patch('/changeProductStatus',auth.isLogin,adminController.changeProductStatus);
+admin_route.get('/viewMoreProductInfo',auth.isLogin,adminController.viewMoreProductInfo);
+admin_route.get('/searchProduct',auth.isLogin,adminController.searchProduct);
+admin_route.get('/editProduct',auth.isLogin,adminController.loadEditProduct);
+admin_route.put('/updateProduct',auth.isLogin,update.array('images',4),validateAdminInputs.validateProductDatas,adminController.updateProductInfo);
 
 
 
 
 //category
-admin_route.get('/viewCategory',adminController.loadViewCategory);
-admin_route.get('/categorySearch',adminController.categorySearch);
-admin_route.post('/listOrUnlistCategory',adminController.listOrUnlistCategory);
-admin_route.get('/loadeditCategory',adminController.loadeditCategory);
-admin_route.put("/editCategory",adminController.editCategory);
-admin_route.get('/addCategory',adminController.addCategory);
-admin_route.post('/addCategory',adminController.insertCategory); 
+admin_route.get('/viewCategory',auth.isLogin,adminController.loadViewCategory);
+admin_route.get('/categorySearch',auth.isLogin,adminController.categorySearch);
+admin_route.post('/listOrUnlistCategory',auth.isLogin,adminController.listOrUnlistCategory);
+admin_route.get('/loadeditCategory',auth.isLogin,adminController.loadeditCategory);
+admin_route.put("/editCategory",auth.isLogin,adminController.editCategory);
+admin_route.get('/addCategory',auth.isLogin,adminController.addCategory);
+admin_route.post('/addCategory',auth.isLogin,adminController.insertCategory); 
 
 
 //brand
-admin_route.get('/loadAddBrand',adminController.loadAddBrand);
-admin_route.post('/addBrand',updateLogo.single('logo'),validateAdminInputs.validateBrandData,adminController.addBrand)
-admin_route.get('/loadviewBrands',adminController.loadviewBrands);
-admin_route.patch('/listUnlistBrand',adminController.listUnlistBrand)
-admin_route.get('/editBrand',adminController.loadeditBrand);
-admin_route.put('/updateBrand',updateLogo.single('logo'),validateAdminInputs.validateUpdatedBrandData,adminController.updateBrand)
+admin_route.get('/loadAddBrand',auth.isLogin,adminController.loadAddBrand);
+admin_route.post('/addBrand',auth.isLogin,updateLogo.single('logo'),validateAdminInputs.validateBrandData,adminController.addBrand)
+admin_route.get('/loadviewBrands',auth.isLogin,adminController.loadviewBrands);
+admin_route.patch('/listUnlistBrand',auth.isLogin,adminController.listUnlistBrand)
+admin_route.get('/editBrand',auth.isLogin,adminController.loadeditBrand);
+admin_route.put('/updateBrand',auth.isLogin,updateLogo.single('logo'),validateAdminInputs.validateUpdatedBrandData,adminController.updateBrand)
 
 
 //order management
-admin_route.get('/listOrders',adminController.listOrders);
-admin_route.get('/viewOrder',adminController.viewOrder)
-admin_route.patch('/updateOrderStatus',checkExist.orderForAdmin,validateAdminInputs.orderUpdation,adminController.updateOrderStatus)
-admin_route.patch('/updateReturnStatus',checkExist.orderForAdmin,validateAdminInputs.returnStatus,adminController.updateReturnStatus)
+admin_route.get('/listOrders',auth.isLogin,adminController.listOrders);
+admin_route.get('/viewOrder',auth.isLogin,adminController.viewOrder)
+admin_route.patch('/updateOrderStatus',auth.isLogin,checkExist.orderForAdmin,validateAdminInputs.orderUpdation,adminController.updateOrderStatus)
+admin_route.patch('/updateReturnStatus',auth.isLogin,checkExist.orderForAdmin,validateAdminInputs.returnStatus,adminController.updateReturnStatus)
 
 
 //sales report
-admin_route.get('/salesReport',reportController.loadSalesReport)
+admin_route.get('/salesReport',auth.isLogin,reportController.loadSalesReport)
 
-admin_route.get('/getSalesReport',validateAdminInputs.sanitiseSalesReportParam,reportController.getSalesReport)
-admin_route.get('/getSalesData',reportController.getSalesData)
+admin_route.get('/getSalesReport',auth.isLogin,validateAdminInputs.sanitiseSalesReportParam,reportController.getSalesReport)
+admin_route.get('/getSalesData',auth.isLogin,reportController.getSalesData)
 
 //coupone
-admin_route.get('/getAddCoupone',couponeController.loadAddcoupone)
-admin_route.post('/addCoupone',validateAdminInputs.validateCoupone,couponeController.addCoupone)
-admin_route.get('/viewCoupones',couponeController.loadViewCoupones)
-admin_route.get('/editCoupone',couponeController.loadEditCoupone)
-admin_route.post('/updateCoupone',checkExist.coupone,validateAdminInputs.validateCoupone,couponeController.updateCoupone)
-admin_route.patch('/listUnlistCoupone',checkExist.coupone,couponeController.listUnlistCoupone)
+admin_route.get('/getAddCoupone',auth.isLogin,couponeController.loadAddcoupone)
+admin_route.post('/addCoupone',auth.isLogin,validateAdminInputs.validateCoupone,couponeController.addCoupone)
+admin_route.get('/viewCoupones',auth.isLogin,couponeController.loadViewCoupones)
+admin_route.get('/editCoupone',auth.isLogin,couponeController.loadEditCoupone)
+admin_route.post('/updateCoupone',auth.isLogin,checkExist.coupone,validateAdminInputs.validateCoupone,couponeController.updateCoupone)
+admin_route.patch('/listUnlistCoupone',auth.isLogin,checkExist.coupone,couponeController.listUnlistCoupone)
 
 //offer
 
-admin_route.get('/getAddOffer',offerController.loadAddOffer)
-admin_route.post('/addOffer',validateAdminInputs.validateOfferData,offerController.addOffer)
-admin_route.get('/viewOffers',offerController.loadViewOffers)
-admin_route.get('/editOffer',offerController.loadEditOffer)
-admin_route.post('/updateOffer',checkExist.offer,validateAdminInputs.validateOfferData,offerController.updateOffer)
-admin_route.patch('/listUnlistOffer',checkExist.offer,offerController.listUnlistOffer)
-admin_route.get('/getOffers',offerController.getOffers)
-admin_route.patch('/applyOfferToProduct',checkExist.offer,checkExist.singleProduct,offerController.applyOfferToProduct)
-admin_route.patch('/removeOffer',checkExist.singleProduct,offerController.removeOffer)
-admin_route.patch('/applyOfferToCategory',checkExist.offer,checkExist.category,offerController.applyOfferToCategory)
-admin_route.patch('/removeCategoryOffer',checkExist.category,offerController.removeCategoryOffer)
+admin_route.get('/getAddOffer',auth.isLogin,offerController.loadAddOffer)
+admin_route.post('/addOffer',auth.isLogin,validateAdminInputs.validateOfferData,offerController.addOffer)
+admin_route.get('/viewOffers',auth.isLogin,offerController.loadViewOffers)
+admin_route.get('/editOffer',auth.isLogin,offerController.loadEditOffer)
+admin_route.post('/updateOffer',auth.isLogin,checkExist.offer,validateAdminInputs.validateOfferData,offerController.updateOffer)
+admin_route.patch('/listUnlistOffer',auth.isLogin,checkExist.offer,offerController.listUnlistOffer)
+admin_route.get('/getOffers',auth.isLogin,offerController.getOffers)
+admin_route.patch('/applyOfferToProduct',auth.isLogin,checkExist.offer,checkExist.singleProduct,offerController.applyOfferToProduct)
+admin_route.patch('/removeOffer',auth.isLogin,checkExist.singleProduct,offerController.removeOffer)
+admin_route.patch('/applyOfferToCategory',auth.isLogin,checkExist.offer,checkExist.category,offerController.applyOfferToCategory)
+admin_route.patch('/removeCategoryOffer',auth.isLogin,checkExist.category,offerController.removeCategoryOffer)
 
 
 //banner
-admin_route.get('/banner',bannerController.loadBanner)
-admin_route.get('/addBanner',bannerController.loadAddBanner)
-admin_route.post('/addBanner',updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.addBanner)
-admin_route.put('/updateBannerStatus',checkExist.banner,bannerController.updateBannerStatus)
-admin_route.get('/editBanner',checkExist.banner,bannerController.loadEditBanner)
-admin_route.put('/updateBanner',checkExist.banner,updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.updateBanner)
-admin_route.delete('/deleteBanner',checkExist.banner,bannerController.deleteBanner)
+admin_route.get('/banner',auth.isLogin,bannerController.loadBanner)
+admin_route.get('/addBanner',auth.isLogin,bannerController.loadAddBanner)
+admin_route.post('/addBanner',auth.isLogin,updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.addBanner)
+admin_route.put('/updateBannerStatus',auth.isLogin,checkExist.banner,bannerController.updateBannerStatus)
+admin_route.get('/editBanner',auth.isLogin,checkExist.banner,bannerController.loadEditBanner)
+admin_route.put('/updateBanner',auth.isLogin,checkExist.banner,updateBannerImage.single('bannerBackground'),validateAdminInputs.banner,bannerController.updateBanner)
+admin_route.delete('/deleteBanner',auth.isLogin,checkExist.banner,bannerController.deleteBanner)
 
 //errors
 admin_route.get('/404',adminController.error404);
 admin_route.get('/500',adminController.error500);
 
 
-//  admin_route.use('*',(req,res)=>{
-//     res.status(404).render('errors/404') 
-
-//  })
 
 module.exports=admin_route

@@ -47,6 +47,10 @@ function removeFromCart(productId){
 
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok){
             const contentType = response.headers.get("content-type");
 
@@ -163,6 +167,10 @@ function updateCart(productId){
         body:JSON.stringify({ productId:productId,quantity:diff,operation:op})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

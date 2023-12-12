@@ -2,6 +2,10 @@ function showWallet(){
    
     fetch('/api/getWallet')
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.text()
         throw { status: response.status, data: response.json() };
 
@@ -26,6 +30,10 @@ function addMoneyToWallet(){
             body:JSON.stringify({amount:amount})
         })
         .then(response=>{
+            if(response.status==401){
+                window.location.href='/login'
+                return
+            }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
         })
@@ -76,6 +84,10 @@ function verifyAmount(payment,order){
         body:JSON.stringify({payment:payment,order:order})
       })
       .then(response=>{
+        if(response.status==401){
+            window.location.href='/login'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
       })

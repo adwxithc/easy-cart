@@ -31,6 +31,11 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
         }
     })
     .then(response =>{
+        if(response.status==401){
+            
+            window.location.href='/admin'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

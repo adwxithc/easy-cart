@@ -58,6 +58,10 @@ updatepagination()
         // Make a GET request to the server
         fetch(url)
         .then(response => {
+          if(response.status==401){
+            window.location.href='/admin'
+            return
+          }
             if (!response.ok) {
               throw { status: response.status, data: response.json() };
             }
@@ -132,6 +136,10 @@ statusButtons.forEach(button => {
       body: JSON.stringify({ categoryID: categoryID })
     })
     .then(response => {
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
       if (response.ok) return response.json();
      
       throw { status: response.status, data: response.json() };
@@ -192,7 +200,11 @@ function loadeditCategory(){
   function editCategory(id){
     fetch(`/admin/loadeditCategory?id=${id}`)
     .then(response =>{
-      if(!response){
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
+      if(!response.ok){
         throw { status: response.status, data: response.json() };
       }
       const contentType = response.headers.get("content-type");
@@ -242,6 +254,10 @@ function categorySearch(){
     
     fetch(`/admin/categorySearch?key=${searchKey}`)
     .then(response =>{
+      if(response.status==401){
+        window.location.href='/admin'
+        return
+      }
       
       if(!response.ok){
         throw { status: response.status, data: response.json() };

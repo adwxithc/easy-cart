@@ -13,6 +13,10 @@ function addCoupone(){
 
        })
        .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
        })
@@ -117,6 +121,10 @@ function updateCoupone(){
     
            })
            .then(response=>{
+            if(response.status==401){
+                window.location.href='/admin'
+                return
+            }
             if(response.ok) return response.json()
             throw { status: response.status, data: response.json() };
            })
@@ -155,6 +163,10 @@ function listUnlistCoupone(couponeId){
         body:JSON.stringify({couponeId:couponeId})
     })
     .then(response=>{
+        if(response.status==401){
+            window.location.href='/admin'
+            return
+        }
         if(response.ok) return response.json()
         throw { status: response.status, data: response.json() };
     })

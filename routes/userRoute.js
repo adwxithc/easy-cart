@@ -25,7 +25,7 @@ user_route.set('views','./views/user')
 //     resave:false,
 //     saveUninitialized:true
 // }))
-
+require('../auth')
 user_route.get('/auth/google',
   passport.authenticate('google', { scope:
       [ 'email', 'profile' ], prompt: 'select_account' }

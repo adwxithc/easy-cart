@@ -64,11 +64,12 @@ starTimer()
         })
         .then(data => {
           // Handle successful response
-          alert(data.expire)
-          alert(data.message)
+          
+          
           if(data.expire){
+           
             clearInterval(timerInterval)
-            expire=data.expire
+            document.getElementById('expire').value=data.expire
             starTimer()
           }
           

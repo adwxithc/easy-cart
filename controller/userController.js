@@ -541,7 +541,7 @@ const deleteAddress=asyncErrorHandler( async(req,res, next)=>{
 
 const changePassword=(req, res, next)=>{
     try {
-        res.render('changepassword')
+        res.render('changePassword')
         
     } catch (error) {
         next(error)

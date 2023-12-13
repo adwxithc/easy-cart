@@ -6,7 +6,7 @@ const User=require('./model/userModel')
 const userHelpers=require('./helperMethods/userHelpers')
 
 
-passport.use(()=>{console.log('-----------in google strategy',process.env.GOOGLE_CLIENT_ID)},new GoogleStrategy({
+passport.use(new GoogleStrategy({
     clientID:process.env.GOOGLE_CLIENT_ID,
     clientSecret:process.env.GOOGLE_CLIENT_SECRET,
     callbackURL:'/auth/google/callback',

@@ -311,7 +311,8 @@ const validateProductSearchCriteria=asyncErrorHandler( async(req,res,next)=>{
         const { name='', categories, brands, priceRange={}, page=1, pageSize=12,sort='default'} = req.body ;
         
 
-        let matchCriteria={};
+        let matchCriteria={status:true};
+
         // Validate input parameters here
         if(name){
          matchCriteria.name = { $regex: new RegExp(`^${name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}`, 'i') };

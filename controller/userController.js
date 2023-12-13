@@ -10,6 +10,7 @@ const crypto=require('crypto')
 const mongoose=require('mongoose')
 const Banner=require('../model/bannerModel')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
+const DiscountCoupone=require('../model/couponeModel')
 
 const nodemailer=require('nodemailer')
 const bcrypt=require('bcrypt')
@@ -73,24 +74,25 @@ const sendverifyMail=async (name,email,otp)=>{
 
 //rendering the site for all
 const guest= asyncErrorHandler (async(req,res,next)=>{
-        const mostPopularProducts = await Product.aggregate([
+        const currentDate = new Date();
+        const expiringAndMostDiscountedCoupon = await DiscountCoupone.aggregate([
         {
-          $unwind: '$rating', // Unwind the rating array to have one document per rating
+          $match: {
+            expireDate: { $gt: currentDate }, // Coupons with expireDate greater than current date
+            status: true // Active coupons
+          }
         },
         {
-          $group: {
-            _id: '$_id',
-            averageRating: { $avg: '$rating.value' }, // Calculate the average rating for each product
-            product: { $first: '$$ROOT' }, // Store the product details for later use
-          },
+          $sort: {
+            expireDate: 1, // Sort by ascending expireDate
+            couponeDiscount: -1 // Then sort by descending couponeDiscount
+          }
         },
         {
-          $sort: { averageRating: -1 }, // Sort by average rating in descending order
-        },
-        {
-          $limit: 8, // Limit the result to 8 products
-        },
-        ]);
+          $limit: 1 // Limit the result to the first document (top result after sorting)
+        }
+      ]);
+      
     
         //GETTING BANNER DATAS
         const banners=await Banner.aggregate([
@@ -113,7 +115,7 @@ const guest= asyncErrorHandler (async(req,res,next)=>{
 
         //GETTING AFFORDABLE PRODUCTS DATAS
         const affordableProducts=await Product.find({status:true}).sort({ price: 1 }).limit(8)
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners,mostSoldCategories:mostSoldCategories,brands:brands,mostPopularProducts:mostPopularProducts})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:false,banners:banners,mostSoldCategories:mostSoldCategories,brands:brands,expiringAndMostDiscountedCoupon:expiringAndMostDiscountedCoupon[0]})
 
 });
 
@@ -222,6 +224,24 @@ const userHome=asyncErrorHandler( async(req,res, next)=>{
 
 
         const id=req.session?.userId
+        const currentDate = new Date();
+        const expiringAndMostDiscountedCoupon = await DiscountCoupone.aggregate([
+        {
+          $match: {
+            expireDate: { $gt: currentDate }, // Coupons with expireDate greater than current date
+            status: true // Active coupons
+          }
+        },
+        {
+          $sort: {
+            expireDate: 1, // Sort by ascending expireDate
+            couponeDiscount: -1 // Then sort by descending couponeDiscount
+          }
+        },
+        {
+          $limit: 1 // Limit the result to the first document (top result after sorting)
+        }
+      ]);
         const mostSoldCategories=await userHelpers.getMostSoldCategories()
         
         const brands=await Brand.find({status:true})
@@ -247,7 +267,7 @@ const userHome=asyncErrorHandler( async(req,res, next)=>{
             }
         ])
 
-        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0],banners:banners,mostSoldCategories:mostSoldCategories,brands:brands})
+        res.render('home',{latestProducts:latestProducts,affordableProducts:affordableProducts,user:id,cart:cart[0],banners:banners,mostSoldCategories:mostSoldCategories,brands:brands,expiringAndMostDiscountedCoupon:expiringAndMostDiscountedCoupon})
 
 })
 

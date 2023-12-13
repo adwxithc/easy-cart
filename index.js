@@ -12,8 +12,8 @@ const walletRoute=require('./routes/walletRoute')
 const errorRoute=require('./routes/errorRoute')
 const CustomError=require('./Utils/CustomError')
 const globalErrorHandler=require('./controller/errorController') 
-require('./auth');
-const passport=require('passport')
+// require('./auth');
+// const passport=require('passport')
 
 //cart reservation
 const cron=require('node-cron')
@@ -50,8 +50,6 @@ app.use(session({
 
 //seting static files
 app.use('/static',express.static('public'))
-
-
 
 
 

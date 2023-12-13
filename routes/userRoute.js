@@ -8,7 +8,8 @@ const validateUserInputs=require('../middleware/validateUserInput')
 const checkExist=require('../middleware/checkExist')
 const passport=require('passport')
 
-
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 user_route.use(express.urlencoded({extended:true}))

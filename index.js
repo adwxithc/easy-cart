@@ -46,8 +46,7 @@ app.use(session({
   cookie:{ secure: false }
 }))
 
-app.use(passport.initialize())
-app.use(passport.session())
+
 
 //seting static files
 app.use('/static',express.static('public'))

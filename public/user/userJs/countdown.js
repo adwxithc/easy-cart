@@ -38,4 +38,8 @@ function initializeClock(id, endtime) {
 }
 
 var deadline = new Date(Date.parse(new Date()) + 30 * 24 * 60 * 60 * 1000);
-initializeClock('clockdiv', deadline);
+const couponeExpire=document.getElementById('couponeExpire')
+if(couponeExpire){
+  
+initializeClock('clockdiv', couponeExpire.value);
+}

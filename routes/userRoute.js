@@ -7,6 +7,8 @@ const session=require('express-session')
 const validateUserInputs=require('../middleware/validateUserInput')
 const checkExist=require('../middleware/checkExist')
 const passport=require('passport')
+require('./auth');
+
 
 user_route.use(passport.initialize())
 user_route.use(passport.session())

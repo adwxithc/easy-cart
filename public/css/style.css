@@ -37,7 +37,38 @@
     }
 }
 
-/* view category  */
+/*  category  */
+#categoryCropImg{
+  max-width: 600px;
+  max-height: 600px ;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom:1rem ;
+}
+.category-img{
+  max-width: 400px;
+  max-height: 400px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom:1rem ;
+  
+}
+
+.cropCategory{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  cursor: pointer;
+  color: yellow;
+  display: none;
+}
+
+.banner-image-preview:hover .cropCategory {
+  display: block;
+}
 
   /* Define a custom CSS class to limit the maximum width  */
   .description-limit {

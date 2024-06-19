@@ -8,12 +8,12 @@
                 <input type="hidden" value="<%=categoryData._id %>" name="id" id="Cid">
             <div class="form-group mt-4">
                 <label for="categoryName">Category Name</label>
-                <input type="text" class="form-control" id="ctegoryName" placeholder="Category Name" name="categoryName" value="<%=categoryData.name %>">
+                <input type="text" class="form-control" id="ctegoryName" placeholder="Category Name" name="name" value="<%=categoryData.name %>">
             </div>
 
             <div class="form-group mt-4">
                 <label for="categoryDescription">Description</label>
-                <textarea class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" name="categoryDescription" >  <%=categoryData.description %> </textarea>
+                <textarea class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" name="description" >  <%=categoryData.description %> </textarea>
             </div>
 
 
@@ -22,6 +22,37 @@
     </div>
 
     <input type="submit" class="btn btn-primary mr-2" value="Submit">
+
+    <div class="d-flex flex-column align-items-center">
+        <div class="form-group py-4 mr-3 col-2">
+            <label for="img-upload" >Upload Category Image</label>
+            <input type="file" class="form-control"  id="update-Image" name="categoryImg">
+            <div id="imgError" class="error"></div>
+        </div>
+        <div id='category-image-preview' class="banner-image-preview" >
+            <i class="mdi mdi-crop cropCategory" id="crop-category-img" title="crop image"></i>
+            <img src="/static/categoryImages/<%= locals.categoryData.image %> " alt="" class="category-img" id="category-img">
+        </div>
+    </div>
     <%}%>
-            
+    <div>
+       
+    </div>
+
 </form>
+<!-- Modal HTML structure -->
+<div id="ImgCrop" class="img-modal">
+  
+    <div  class="img-modal-content">
+      <span class="img-close" id="imgCropClose" style="font-size: large;">&times;</span>
+      <div id="" style="max-height: 30rem; max-width: 30rem; height: 100%; width: 100%;">
+        <img src="" alt="" class="categoryCropImg" id="categoryCropImg">
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <input type="button" name="" id="saveCropedImg" class="saveCrop " value="Save">
+    </div>
+
+    </div>
+</div>
+

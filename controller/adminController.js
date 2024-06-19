@@ -12,6 +12,8 @@ const crypto=require('crypto')
 const offerHelper=require('../helperMethods/offer')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const CustomError = require('../Utils/CustomError')
+const path = require('path')
+
 
 const loadLogin=(req,res, next)=>{
     try {
@@ -513,7 +515,7 @@ const loadViewCategory=asyncErrorHandler( async(req,res, next)=>{
     
     const categories = await Category.aggregate([
         {
-            $sort: { lastModified: -1 }
+            $sort: { updatedAt: -1 }
         },
         {
             $skip: offset
@@ -639,32 +641,42 @@ const loadeditCategory=asyncErrorHandler( async(req,res, next)=>{
 
 const editCategory=asyncErrorHandler( async(req,res, next)=>{
 
-    const categoryName=req.body.categoryName
-    const categoryDescription=req.body.categoryDescription
-    const id=req.body.id
-    
-    if(categoryName&&categoryDescription){
-        
-        
-        const categoryData =await Category.findById(id)
-        if(categoryData){
-            const update=await Category.updateOne({_id:id},{$set:{name:categoryName,description:categoryDescription,lastModified:Date.now()}})
-            if(update){
-                res.json({"message":"Category Updated"})
+   
+    const {
+        categoryName,
+        categoryDescription,
+        id,
 
-            }else{
-                const err=new CustomError("category Updation Failed",500)
-                next(err)
+    } =req.body
+    console.log(req.file.filename,'req.file.filename');
+
+    const categoryData =await Category.findById(id)
+    if(categoryData){
+        if(categoryData.image){
+            const oldImagePath=path.join(__dirname, '..', 'public/categoryImages', categoryData.image);
+            
+            try {
+                
+                fs.unlinkSync(oldImagePath);
+            } catch (error) {
+                console.log('old image deletion failed',error);
             }
+        }
+        const update=await Category.updateOne({_id:id},{$set:{name:categoryName,description:categoryDescription,image:req?.file?.filename}})
+        if(update){
+            res.json({"message":"Category Updated"})
 
         }else{
-            const err=new CustomError("category doesn't exist",400)
+            const err=new CustomError("category Updation Failed",500)
             next(err)
         }
-        
+
     }else{
-        res.json({"message":"Please fill all the fealds"})
+        const err=new CustomError("category doesn't exist",400)
+        next(err)
     }
+        
+
 
 })
 
@@ -672,7 +684,7 @@ const editCategory=asyncErrorHandler( async(req,res, next)=>{
 
 const addCategory=(req,res, next)=>{
     try {
-        res.render('addCategory')
+        res.render('addCategory',{admin:true})
     } catch (error) {
         next(error)
     }
@@ -682,33 +694,34 @@ const addCategory=(req,res, next)=>{
 
 const insertCategory=asyncErrorHandler( async(req,res, next)=>{
 
-        const name=req.body.categoryName
-        const description=req.body.categoryDescription
+    const {name, description}= req.body
 
-        if(name&&description){
-            const check=await Category.findOne({name:req.body.categoryName})
+    
+
+            const check=await Category.findOne({name:name})
             
             if(!check){
                 const categor=new Category({
                     name:name,
                     description:description,
+                    image:req.file.filename
 
                 })
                 const categoryData=await categor.save()
                 if(categoryData){
-                    res.json({"message":"New Catrgory Created","success":true})
+                    res.json({message:"New Catrgory Created",success:true})
+
                 }else{
                     const err=new CustomError("Unable To Add New Catrgory",500)
                     next(err)
                 }
 
             }else{
+              
                 res.json({"message":"This category already exists"})
             }
         
-    }else{
-        res.json({"message":"Please enter  name and description of the category"})
-    }
+
 
 })
 

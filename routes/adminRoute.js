@@ -70,6 +70,19 @@ const bannerStorage=multer.diskStorage({
 })
 const updateBannerImage=multer({storage:bannerStorage})
 
+//seting up storage engine of banner image
+const categoryStorage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,path.join(__dirname,'../public/categoryImages'))
+
+    },
+    filename:function(req,file,cb){
+        const name=Date.now()+'-'+file.originalname
+        cb(null,name)
+    }
+})
+const updateCategoryImage=multer({storage:categoryStorage})
+
 
 //parsing user req data
 admin_route.use(express.urlencoded({extended:true}))
@@ -106,7 +119,7 @@ admin_route.get('/searchProduct',auth.isLogin,adminController.searchProduct);
 admin_route.get('/editProduct',auth.isLogin,adminController.loadEditProduct);
 admin_route.put('/updateProduct',auth.isLogin,update.array('images',4),validateAdminInputs.validateProductDatas,adminController.updateProductInfo);
 
-
+ 
 
 
 //category
@@ -114,9 +127,9 @@ admin_route.get('/viewCategory',auth.isLogin,adminController.loadViewCategory);
 admin_route.get('/categorySearch',auth.isLogin,adminController.categorySearch);
 admin_route.post('/listOrUnlistCategory',auth.isLogin,adminController.listOrUnlistCategory);
 admin_route.get('/loadeditCategory',auth.isLogin,adminController.loadeditCategory);
-admin_route.put("/editCategory",auth.isLogin,adminController.editCategory);
+admin_route.put("/editCategory",auth.isLogin,updateCategoryImage.single('categoryImg'),adminController.editCategory);
 admin_route.get('/addCategory',auth.isLogin,adminController.addCategory);
-admin_route.post('/addCategory',auth.isLogin,adminController.insertCategory); 
+admin_route.post('/addCategory',auth.isLogin,updateCategoryImage.single('categoryImg'),adminController.insertCategory); 
 
 
 //brand

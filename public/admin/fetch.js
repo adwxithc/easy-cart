@@ -10,37 +10,39 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
         if(e.target.id=='view-categoryAnchor'){
 
             // view category
+            loadPage('/admin/viewCategory',[viewCategory])
 
-                const pageUrl = '/admin/viewCategory';
 
-                fetch(pageUrl)
-                .then(response => {
-                    if(response.status==401){
-                        window.location.href='/admin'
-                        return
-                      }
-                    if (!response.ok) {
-                        throw { status: response.status, data: response.json() };
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    // Update the pageContent div with the loaded HTML
-                    pageContent.innerHTML = html;
+                // const pageUrl = '/admin/viewCategory';
 
-                    const scriptSrc='/static/admin/viewCategoryPagination.js'
-                    const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
+                // fetch(pageUrl)
+                // .then(response => {
+                //     if(response.status==401){
+                //         window.location.href='/admin'
+                //         return
+                //       }
+                //     if (!response.ok) {
+                //         throw { status: response.status, data: response.json() };
+                //     }
+                //     return response.text();
+                // })
+                // .then(html => {
+                //     // Update the pageContent div with the loaded HTML
+                //     pageContent.innerHTML = html;
 
-                    if(scriptexist){
-                        scriptexist.parentNode.removeChild(scriptexist);
-                    }
+                //     const scriptSrc='/static/admin/viewCategoryPagination.js'
+                //     const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
 
-                    const script2=document.createElement('script');
-                    script2.src=scriptSrc;
-                    document.body.appendChild(script2); 
+                //     if(scriptexist){
+                //         scriptexist.parentNode.removeChild(scriptexist);
+                //     }
 
-                })
-                .catch(handleError);
+                //     const script2=document.createElement('script');
+                //     script2.src=scriptSrc;
+                //     document.body.appendChild(script2); 
+
+                // })
+                // .catch(handleError);
 
         //if closed  
     
@@ -48,42 +50,42 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
         
             // add category
-
+            // loadPage('/admin/addCategory')
                 
                 // Specify the URL of the page you want to load
-                const pageUrl = '/admin/addCategory';
+                // const pageUrl = '/admin/addCategory';
 
-                fetch(pageUrl)
-                    .then(response => {
-                        if(response.status==401){
-                            window.location.href='/admin'
-                            return
-                          }
-                        if (!response.ok) {
-                            throw { status: response.status, data: response.json() };
-                        }
-                        return response.text();
-                    })
-                    .then(html => {
-                        // Update the pageContent div with the loaded HTML
-                        pageContent.innerHTML = html;
+                // fetch(pageUrl)
+                //     .then(response => {
+                //         if(response.status==401){
+                //             window.location.href='/admin'
+                //             return
+                //           }
+                //         if (!response.ok) {
+                //             throw { status: response.status, data: response.json() };
+                //         }
+                //         return response.text();
+                //     })
+                //     .then(html => {
+                //         // Update the pageContent div with the loaded HTML
+                //         pageContent.innerHTML = html;
 
 
-                        const scriptSrc='/static/admin/addCategoryPost.js'
-                        const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
+                //         const scriptSrc='/static/admin/addCategoryPost.js'
+                //         const scriptexist=document.querySelector(`script[src="${scriptSrc}"]`)
 
-                        if(scriptexist){
-                            scriptexist.parentNode.removeChild(scriptexist);
-                        }
+                //         if(scriptexist){
+                //             scriptexist.parentNode.removeChild(scriptexist);
+                //         }
 
-                        const script=document.createElement('script');
-                        script.src=scriptSrc;
-                        document.body.appendChild(script);
+                //         const script=document.createElement('script');
+                //         script.src=scriptSrc;
+                //         document.body.appendChild(script);
                         
                         
 
-                    })
-                    .catch(handleError);
+                //     })
+                //     .catch(handleError);
             
 
 
@@ -417,10 +419,10 @@ document.getElementById('sideNavBar').addEventListener("click",(e)=>{
 
                                     showMessage(data.message)
 
-                                    document.getElementById('addProductForm').scrollIntoView({
-                                        behavior: 'smooth', // You can use 'auto' for instant scrolling
-                                        block: 'start' // Scroll to the top of the form
-                                    });
+                                    // document.getElementById('addProductForm').scrollIntoView({
+                                    //     behavior: 'smooth', // You can use 'auto' for instant scrolling
+                                    //     block: 'start' // Scroll to the top of the form
+                                    // });
                                 })
                                 .catch(handleError);
                             }
@@ -728,7 +730,7 @@ function showMessage(message){
 
 
   function handleError(error) {
-     
+    
     if (error instanceof TypeError && error.message === 'Failed to fetch') {
       console.error('Network error: Unable to reach the server.');
       // Optionally show a user-friendly message to the user

@@ -12,8 +12,7 @@ const walletRoute=require('./routes/walletRoute')
 const errorRoute=require('./routes/errorRoute')
 const CustomError=require('./Utils/CustomError')
 const globalErrorHandler=require('./controller/errorController') 
-// require('./auth');
-// const passport=require('passport')
+
 
 //cart reservation
 const cron=require('node-cron')
@@ -26,15 +25,7 @@ app.set('view engine','ejs')
 
 const PORT=process.env.PORT || 4000
 
-//connecting to mongodb
-// mongoose.connect(process.env.MONGODB_URL_LOCAL)
-// const db = mongoose.connection;
-// db.on('error', (err) => {
-//     console.error('MongoDB connection error:', err);
-//   });
-//   db.once('open', () => {
-//     console.log('Connected to MongoDB');
-//   });
+
 connectToMongoDB()
 
 

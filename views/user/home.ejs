@@ -458,8 +458,8 @@
                 <div class="row clock_sec clockdiv" id="clockdiv">
                     <div class="col-lg-12">
                         <h1>Exclusive Hot Deal Ends Soon!</h1>
-                        <p><%= expiringAndMostDiscountedCoupon.couponeCode  %> coupon with <%= expiringAndMostDiscountedCoupon.couponeDiscount %> % discount will expire soon</p>
-                        <input type="hidden" name="" id="couponeExpire" value="<%= expiringAndMostDiscountedCoupon.expireDate%>">
+                        <p><%= expiringAndMostDiscountedCoupon?.couponeCode  %> coupon with <%= expiringAndMostDiscountedCoupon?.couponeDiscount %> % discount will expire soon</p>
+                        <input type="hidden" name="" id="couponeExpire" value="<%= expiringAndMostDiscountedCoupon?.expireDate%>">
                     </div>
                     <div class="col-lg-12">
                         <div class="row clock-wrap">

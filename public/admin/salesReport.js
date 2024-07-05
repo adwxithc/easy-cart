@@ -42,6 +42,7 @@ function getSalesReport(timePeriod){
         areaChart(labeles,data.statistics)
         barChart(data.categories,data.categoryqty)
         setAverageOrderValueAndCounts(data.currentSales,data.lastSales)
+        
         showSalesData('all','all','all')
         
     })
@@ -99,16 +100,17 @@ function areaChart(labels, data) {
   }
   
 
-  function setAverageOrderValueAndCounts(current,previous){
+  async function setAverageOrderValueAndCounts(current,previous){
+   
+    const setTotalSalesPeomise =setTotalSales(current.totalOrderAmount,previous.totalOrderAmount)
+    const setAverageOrderPromise = setAverageOrder(current.averageOrderValue,previous.averageOrderValue)
     
-
-    setTotalSales(current.totalOrderAmount,previous.totalOrderAmount)
-    setTotalOrder(current.totalOrders,previous.totalOrders)
-    setAverageOrder(current.averageOrderValue,previous.averageOrderValue)
+    const setTotalOrderPromise = setTotalOrder(current.totalOrders,previous.totalOrders)
+    await Promise.all([setTotalSalesPeomise,setAverageOrderPromise,setTotalOrderPromise])
 
   }
 
-  function setTotalSales(current,previous){
+  async function setTotalSales(current,previous){
 
     // Extract AOV values from the results
     const currentTotalSales = current ? current : 0;
@@ -141,12 +143,12 @@ function areaChart(labels, data) {
     }
   }
 
-  function setTotalOrder(current,previous){
-
+  async function setTotalOrder(current,previous){
+  
     // Extract AOV values from the results
     const currentTotalOrder = current ? current : 0;
     const previousTotalOrder = previous ? previous : 0;
-    console.log(currentTotalOrder,previousTotalOrder)
+
     let potentialGrowth;
     if(previousTotalOrder>0){
     // Calculate potential growth
@@ -176,7 +178,7 @@ function areaChart(labels, data) {
     }
   }
 
-  function setAverageOrder(current,previous){
+  async function setAverageOrder(current,previous){
 
     // Extract AOV values from the results
     const currentAverageOrder = current ? current : 0;

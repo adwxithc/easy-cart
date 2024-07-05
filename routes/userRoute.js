@@ -7,7 +7,6 @@ const session=require('express-session')
 const validateUserInputs=require('../middleware/validateUserInput')
 const checkExist=require('../middleware/checkExist')
 const passport=require('passport')
-require('../auth');
 
 
 user_route.use(passport.initialize())
@@ -23,10 +22,10 @@ user_route.set('views','./views/user')
 
 //configuring session
 // user_route.use(session({
-//     secret:process.env.SESSION_SECRET,
+//     secret:process.env.SESSION_SECRET, 
 //     resave:false,
 //     saveUninitialized:true
-// }))
+// })) 
 require('../auth')
 user_route.get('/auth/google',
   passport.authenticate('google', { scope:

@@ -5,50 +5,43 @@
     const thumbnailImages = document.querySelectorAll('.thumbnailImg');
     const productPreview = document.querySelector('.productPreView');
     
-    function imgZoom(){
-        
-        // Add a click event listener to each thumbnail image
-        thumbnailImages.forEach((thumbnailImg, index) => {
+    function imgZoom() { 
+        // Select all thumbnail images
+        const thumbnailImages = document.querySelectorAll('.thumbnailImg');
+        // Select the product preview image element
+        const productPreview = document.getElementById('product-preview');
+        // Select the container for the zoomed image
+        const imgContainer = document.getElementById('img-container');
+    
+        // Define the options for ImageZoom
+        const options2 = { 
+          
+            offset: { vertical: 0, horizontal: 10 },
+            zoomPosition: 'original',
+            zoomLensStyle: 'opacity: 0.4; background-color: white;', // Customize the zoom lens style
+        };
+    
+        // Function to initialize ImageZoom
+        const initImageZoom = (src) => {
+            // Clear previous instance if exists
+            imgContainer.innerHTML = `<img class="img-fluid productPreView"  id="product-preview" src="${src}" />`;
+            new ImageZoom(imgContainer, options2);
+        };
+    
+        // Initialize ImageZoom for the first time with the initial product preview source
+        initImageZoom(productPreview.getAttribute('src'));
+    
+        // Add a mouseover event listener to each thumbnail image
+        thumbnailImages.forEach((thumbnailImg) => {
             thumbnailImg.addEventListener('mouseover', () => {
-                // Get the source (src) of the clicked image
+                // Get the source (src) of the hovered image
                 const imageSource = thumbnailImg.getAttribute('src');
-        
                 // Update the source (src) of the product preview image
                 productPreview.setAttribute('src', imageSource);
-
-                //image zoome on hover
-
-                var options2 = {
-        
-                    fillContainer: true,
-                    zoomPosition:'original',
-                    offset: {vertical: 0, horizontal: 10},
-                
-                };
-            
-                // Create a new instance of ImageZoom
-                new ImageZoom(document.getElementById('img-container'), options2);
-        
-                // Optionally, you can also add a fade-in effect, or any other visual enhancements
-                // to improve the user experience when the image changes.
+                // Reinitialize ImageZoom with the new image source
+                initImageZoom(imageSource);
             });
         });
-
-
-        //image zoome on hover
-
-        var options2 = {
-        
-            fillContainer: true,
-            zoomPosition:'original',
-            offset: {vertical: 0, horizontal: 10},
-        
-        
-        };
-
-        // Create a new instance of ImageZoom
-        new ImageZoom(document.getElementById('img-container'), options2);
-    
     }
 if(thumbnailImages.length>0) imgZoom()
 

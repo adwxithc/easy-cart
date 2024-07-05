@@ -456,11 +456,12 @@ const searchProduct=asyncErrorHandler( async(req,res, next)=>{
 //load edit product
 const loadEditProduct=asyncErrorHandler( async(req,res, next)=>{
 
-    const id=req.query.id
+    const id=req.query.id 
     
-    const productData=await Product.findById(id)
-    const categories=await Category.find()
-    const brands=await Brand.find()
+    const productDataPromise= Product.findById(id)
+    const categoriesPromise= Category.find()
+    const brandsPromise= Brand.find()
+    const [productData,categories,brands] = await Promise.all([productDataPromise,categoriesPromise,brandsPromise])
     if(productData){ 
         
         res.render('editProduct',{productData:productData,categories:categories,brands:brands})

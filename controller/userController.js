@@ -17,6 +17,7 @@ const bcrypt=require('bcrypt')
 const otpGenerator = require('otp-generator');
 const CustomError = require('../Utils/CustomError')
 const { timeStamp } = require('console')
+const { log } = require('console')
 
 
 //creating hashing function with bcrypt
@@ -160,7 +161,7 @@ const productDetails=asyncErrorHandler( async(req,res,next)=>{
             
         ])
         
-
+console.log(productDetails[0].brandData,productDetails[0].brandData.categoryData);
         const inCart=cart?.cartItems.find(item=>item.product.equals(id))
 
 
@@ -492,7 +493,7 @@ const resetPassword=asyncErrorHandler( async(req, res, next)=>{
 const loadProfile=asyncErrorHandler( async(req,res, next)=>{
 
         const user=req.user
-        res.render('profile',{user:user})
+        res.render('profile',{user:user,baseURl:process.env.BASE_URL})
         
 });
 
@@ -596,7 +597,7 @@ const updatePassword=asyncErrorHandler( async(req,res, next)=>{
 
 const loadContact=async(req,res, next)=>{
     try {
-        res.render('contact')
+        res.render('contact',{loc:'contact'})
     } catch (error) {
         next(error)
     }

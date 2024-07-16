@@ -108,7 +108,6 @@ admin_route.put('/updateProduct',auth.isLogin,update.array('images',4),validateA
 
 
 
-
 //category
 admin_route.get('/viewCategory',auth.isLogin,adminController.loadViewCategory);
 admin_route.get('/categorySearch',auth.isLogin,adminController.categorySearch);

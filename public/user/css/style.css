@@ -9,10 +9,10 @@
     
 }
 .productPreView{
-    object-fit: contain;
+    object-fit: cover;
     max-height: 35rem;
     width: auto;
-    margin: 0 auto;
+   
 }
 #img-container{
     max-height: 35rem;
@@ -95,6 +95,15 @@
 .setsize{
     font-size: 0.9rem;
 }
+/* ----------------------------------------truncatet text-------------------------- */
+.text-container {
+    overflow: hidden;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 8;
+}
+
+
 
 
 /* ------------------------------------------modal---------------------------------------- */

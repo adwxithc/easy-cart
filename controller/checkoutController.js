@@ -1,7 +1,7 @@
 const User=require('../model/userModel')
 const Address=require('../model/addressModel')
 const Product=require('../model/productModel')
-const Cart=require('../model/cartModel')
+const Cart=require('../model/cartModel') 
 const Order=require('../model/orderModel')
 const userHelpers=require('../helperMethods/userHelpers')
 const { default: mongoose } = require('mongoose')
@@ -9,7 +9,7 @@ const crypto=require('crypto')
 const Coupone = require('../model/couponeModel')
 const asyncErrorHandler=require('../Utils/asyncErrorHandler')
 const CustomError = require('../Utils/CustomError')
-
+ 
 
 const checkout=asyncErrorHandler( async(req,res, next)=>{
 

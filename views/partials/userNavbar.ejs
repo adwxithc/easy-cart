@@ -14,26 +14,12 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
-							<!-- <li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Blog</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-								</ul>
-							</li> -->
-							<!-- <li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Pages</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
-									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-								</ul>
-							</li> -->
-							<li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+							
+
+							<li class="nav-item <%= (locals?.loc !== 'shop' && locals?.loc!=='contact') ? 'active' : '' %>"><a class="nav-link" href="/">Home</a></li>
+							<li class="nav-item <%= locals?.loc === 'shop' ? 'active' : '' %> "><a class="nav-link" href="/shop">Shop</a></li>
+							
+							<li class="nav-item <%= locals?.loc === 'contact' ? 'active' : '' %>"><a class="nav-link" href="/contact">Contact</a></li>
 
 							<%if(locals.user){%>
 								
@@ -53,20 +39,22 @@
 
 								<li class="nav-item  d-flex  align-items-center" title="login"><a href="/login" class="d-flex  align-items-center" title="login"><i class=" mdi mdi-login Icon-lg ml-1" title="login"></i></a></li>
 								<%}%>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-
-							<li class="nav-item d-flex  align-items-center" title="cart">
+								<li class="nav-item d-flex  align-items-center  justify-content-begin  m-0 " title="cart">
 							
-								<a href="/api/goToCart" class="cart position-relative">
-									<div class="cBadge">3</div>
-									<i class="mdi mdi-cart Icon-lg"></i>
-										
-									</a>
+									<a href="/api/goToCart" class="cart position-relative">
+										<div class="cBadge">3</div>
+										<i class="mdi mdi-cart Icon-lg"></i>
+											
+										</a>
+									
+									
+									
+								</li>
 								
-								
-								
-							</li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right  ">
+
+							
 
 							
 							<li class="nav-item">

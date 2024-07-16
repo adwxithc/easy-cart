@@ -1,76 +1,44 @@
-<%- include('../partials/header.ejs') -%>
 
 
 
- <form class="forms-sample"  method="POST" id="addCategory">             
+ <form class="forms-sample"  method="POST" id="addCategoryForm" >
     <div class="grid-margin stretch-card">
         <div class="card">
         <div class="card-body">
-
-
             <h4 class="card-title">Add Category</h4>
             <p class="card-description" id="adCategoryalert"></p>
 
-              
+            
             <div class="form-group mt-4">
-                <label for="name">Category Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Category Name" name="name">
-                <div class="error" id="nameError"></div>
+                <label for="categoryName">Category Name</label>
+                <input type="text" class="form-control" id="ctegoryName" placeholder="Category Name" name="categoryName">
             </div>
 
             <div class="form-group mt-4">
                 <label for="categoryDescription">Description</label>
-                <textarea class="form-control" id="description" rows="4" placeholder="Category Description" name="description"></textarea>
-                <div class="error" id="descriptionError"></div>
-
+                <textarea class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" name="categoryDescription"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Add One</button>
 
-            <div class="d-flex flex-column align-items-center">
-                <div class="form-group py-4 mr-3 col-2">
-                    <label for="img-upload" >Upload Category Image</label>
-                    <input type="file" class="form-control"  id="img-upload" name="categoryImg">
-                    <div id="imgError" class="error"></div>
-                </div>
-                <div id='category-image-preview' class="banner-image-preview" style="display: none;">
-                    <i class="mdi mdi-crop cropCategory" id="crop-category-img" title="crop image"></i>
-                    <img src="" alt="" class="category-img" id="category-img">
-                </div>
-            </div>
         </div>
         </div>
     </div>
 
-<%=locals.  message%>
+
+
+
+            
+
+
+
+
+
+            <input type="submit" class="btn btn-primary mr-2" value="Submit">
+            
+            
+            
+
 </form>
-<!-- Modal HTML structure -->
-<div id="ImgCrop" class="img-modal">
-  
-    <div  class="img-modal-content">
-      <span class="img-close" id="imgCropClose" style="font-size: large;">&times;</span>
-      <div id="" style="max-height: 30rem; max-width: 30rem; height: 100%; width: 100%;">
-        <img src="" alt="" class="categoryCropImg" id="categoryCropImg">
-    </div>
-    
-    <div class="d-flex justify-content-center">
-        <input type="button" name="" id="saveCropedImg" class="saveCrop " value="Save">
-    </div>
-
-    </div>
-</div>
-
-    <script>
-      
-
-
-
-    </script> 
-
-    <%- include('../partials/footer.ejs') %>  
-            
-            
-
 
 
 

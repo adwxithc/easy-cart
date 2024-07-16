@@ -6,7 +6,7 @@ const Category=require('../model/categoryModel')
 
 
 async function findProductLargestOffer(productId) {
-    try {
+    try { 
        
         const result = await Product.aggregate([
             {

@@ -2,19 +2,19 @@ const express=require('express')
 const cart_route=express()
 const cartController=require('../controller/cartController')
 const validateUserInput=require('../middleware/validateUserInput')
-const auth=require('../middleware/userAuth')
-const checkExist=require('../middleware/checkExist')
-const session=require('express-session')
-
+const auth=require('../middleware/userAuth') 
+const checkExist=require('../middleware/checkExist')  
+const session=require('express-session') 
+  
 //configuring session
-// cart_route.use(session({
-//     secret:process.env.SESSION_SECRET,
-//     resave:false,
+// cart_route.use(session({ 
+//     secret:process.env.SESSION_SECRET, 
+//     resave:false,  
 //     saveUninitialized:true
 // }))
 
 
-cart_route.set('views','./views/cart')
+cart_route.set('views','./views/cart') 
 cart_route.set('view engine','ejs')
 
 

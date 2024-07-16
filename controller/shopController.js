@@ -25,22 +25,22 @@ const loadShop=asyncErrorHandler( async(req,res, next)=>{
         matchCriteria.brand=new mongoose.Types.ObjectId( brandId)
     }
     // GETING ANY FIRST 12 PRODUCTS
-    const products=await Product.aggregate([
+    const products=await Product.aggregate([ 
         {$match:matchCriteria},
         {
-            $limit:12 
-        },
+            $limit:12  
+        },  
     ])
-
+ 
     //FIND TOTAL PAGE FOR PAGINATION
     const totalProducts = await Product.countDocuments();
     const totalPages=Math.ceil(totalProducts/12)
 
-    //GETTING FILTERING DETAILS
+    //GETTING FILTERING DETAILS  
     const categories=await Category.find({status:true},{name:1})
     const brands=await Brands.find({status:true},{name:1})
     
-    res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart,page:1,user:true})
+    res.render('shop',{products:products,categories:categories,brands:brands,totalPages:totalPages,cart:cart,page:1,user:true,loc:'shop'})
 
 });
 

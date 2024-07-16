@@ -90,7 +90,7 @@ function validateEditUserInfo(){
         emailError.innerHTML="Invalid email format";
         clearAfterThreeSec(emailError)
     }else if(!mobileRegx.test(mobile.value.trim()) && mobile.value.trim()!=''){
-        mobileError.innerHTML="Invalid mobile number format"
+        mobileError.innerHTML="Invalid mobile number format "
         clearAfterThreeSec(mobileError)
     }else{
         updateUserInfo({
@@ -145,10 +145,22 @@ function removeErrorMessage(){
     })
 }
 
+const resetError =()=>{
+    document.getElementById('fnameError').innerHTML='';
+    document.getElementById('mobileError').innerHTML='';
+    document.getElementById('pinError').innerHTML='';
+    document.getElementById('localityError').innerHTML='';
+    document.getElementById('areaError').innerHTML='';
+    document.getElementById('CDTError').innerHTML='';
+    document.getElementById('stateError').innerHTML='';
+   
+    document.getElementById('altPhoneError').innerHTML='';
+}
+
 
 
 function validateAddress(cb){
-    removeErrorMessage()
+    resetError()
     const pinRegx=/^\d{6}$/;
     const phoneRegx=/^[6789]\d{9}$/;
     const nameRegx=/^[A-Za-z\s'-]+$/;
@@ -223,6 +235,7 @@ function validateAddress(cb){
         altPhoneError.innerHTML='Invalid phone number format'
 
     }else{
+        
         cb({
             fname:fname.value,
             mobile:mobile.value,

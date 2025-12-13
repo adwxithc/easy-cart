@@ -1,5 +1,5 @@
 <%- include('../partials/header.ejs') -%>
-<input type="hidden" name="" id="editBannerFlag" value="/static/bannerImages/<%=banner.bannerBackground%>" bannerId="<%=banner._id%>">
+<input type="hidden" name="" id="editBannerFlag" value="<%=banner.bannerBackground%>" bannerId="<%=banner._id%>">
 
 <form class="forms-sample"  method="POST" id="bannerForm" >
 <div class="grid-margin stretch-card">
@@ -39,7 +39,7 @@
                 </div>
                 <div id='banner-image-preview' class="banner-image-preview" >
                     <i class="mdi mdi-crop cropBanner" id="crop-banner-img"></i>
-                    <img src="/static/bannerImages/<%=banner.bannerBackground%>" alt="" class="banner-img" id="banner-img">
+                    <img src="<%=banner.bannerBackground%>" alt="" class="banner-img" id="banner-img">
                 </div>
             </div>
 

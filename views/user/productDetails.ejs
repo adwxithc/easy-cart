@@ -10,14 +10,14 @@
                 <ul class="col-lg-4 thambUl">
                     <%for(let img of productDetails.images){%>
                     <li class="mb-3 thumbnailImgWrap">
-                        <img src="/static/productImages/<%=img%>" alt="product image" class="img-fluid thumbnailImg" >
+                        <img src="<%=img%>" alt="product image" class="img-fluid thumbnailImg" >
                     </li>
                     <%}%>
                 </ul>
                
                 <div class="single-prd-item col-lg-8 d-flex align-items-center" id="img-container">
                     
-                    <img class="img-fluid productPreView" id="product-preview" src="/static/productImages/<%=productDetails.images[0]%>" alt=""  >
+                    <img class="img-fluid productPreView" id="product-preview" src="<%=productDetails.images[0]%>" alt=""  >
                 </div>
 
             </div>

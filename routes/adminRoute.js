@@ -10,64 +10,54 @@ const checkExist=require('../middleware/checkExist')
 const offerController=require('../controller/offerController')
 const bannerController=require('../controller/bannerController')
 const auth=require('../middleware/adminAuth')
-
-const session=require('express-session')
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+// const session=require('express-session')
+const cloudinary = require('../config/cloudinary');
 const multer=require('multer')
-
+const { v4: uuidv4 } = require('uuid');
 
 //configuring view engin
 admin_route.set('views','./views/admin')
 admin_route.set('view engine','ejs')
 
 
-//configuring session
-// admin_route.use(session({
-//     secret:process.env.SESSION_SECRET,
-//     resave:false,
-//     saveUninitialized:true
-// }))
 
-//
-//seting up storage engine for product images
-const storage=multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'../public/productImages'))
-
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'products', // Folder in Cloudinary
+      public_id: (req, file) => uuidv4(), // Unique identifier for the file
     },
-    filename:function(req,file,cb){
-        const name=Date.now()+'-'+file.originalname
-        cb(null,name)
-    }
-})
+  });
+
+
+
+
 
 const update=multer({storage:storage})
 
 
-//seting up storage engine of brand logo
-const brandStorage=multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'../public/brandImages'))
 
-    },
-    filename:function(req,file,cb){
-        const name=Date.now()+'-'+file.originalname
-        cb(null,name)
-    }
-})
+
+const brandStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'brand', // Folder in Cloudinary
+    public_id: (req, file) => uuidv4(), // Unique identifier for the file
+  },
+});
 const updateLogo=multer({storage:brandStorage})
 
 
-//seting up storage engine of banner image
-const bannerStorage=multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'../public/bannerImages'))
-
+const bannerStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'banners', // Folder in Cloudinary
+      public_id: (req, file) => uuidv4(), // Unique identifier for the file
     },
-    filename:function(req,file,cb){
-        const name=Date.now()+'-'+file.originalname
-        cb(null,name)
-    }
-})
+  });
+
+
 const updateBannerImage=multer({storage:bannerStorage})
 
 

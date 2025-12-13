@@ -74,9 +74,10 @@ const updateBanner=asyncErrorHandler( async(req,res, next)=>{
         );
     
     if(updated){
-        const url=path.join(__dirname,'..','public','bannerImages',banner.bannerBackground)
-        console.log(url)
-        adminHelpers.deleteFile(url)
+        const parts = banner.bannerBackground.split('/');
+        const public_id = parts.at(-2) + '/' + parts.at(-1).split('.')[0];
+        
+        await adminHelpers.deleteFile(public_id)
 
         res.json({success:true,message:'Banner Updated'})
     }else{

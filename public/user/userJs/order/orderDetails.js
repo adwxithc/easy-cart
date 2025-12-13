@@ -214,7 +214,7 @@ window.onload = function() {
           containerDiv.innerHTML=`
           <div class="col-lg-4 pr-auto">
                 <div class='imgContainerDiv'>
-                <a href='/productDetails?id=${item.product._id}' target='_blank'><img src="/static/productImages/${item.product.images[0]}" alt="" class='itemImage'></a>
+                <a href='/productDetails?id=${item.product._id}' target='_blank'><img src="${item.product.images[0]}" alt="" class='itemImage'></a>
                 </div>
               </div>
               <div class="col-lg-8">

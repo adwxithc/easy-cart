@@ -10,7 +10,7 @@ const validateProductDatas=asyncErrorHandler( async(req,res,next)=>{
 
         const images=[]
         for(let image of req.files){
-            images.push(image.filename)
+            images.push(image.path)
         }
 
         const productData=req.body
@@ -52,7 +52,7 @@ const validateBrandData =asyncErrorHandler( async(req,res,next)=>{
 
     const name=req.body.name
     const description=req.body.description
-    const logo=req.file?.filename
+    const logo=req.file?.path
     
     
     if(name&& description&& logo){
@@ -87,7 +87,7 @@ const validateBrandData =asyncErrorHandler( async(req,res,next)=>{
 
     const name=req.body.name;
     const description=req.body.description
-    const logo=req.file?.filename
+    const logo=req.file?.path
     const id=req.body.id
 
     if(name&&description){
@@ -313,7 +313,7 @@ const returnStatus=async(req,res,next)=>{
 const banner=asyncErrorHandler( async(req,res,next)=>{
 
     const {miniTitle,mainTitle,description,link} =req.body
-    const bannerBackground=req.file?.filename 
+    const bannerBackground=req.file?.path 
     if(!miniTitle || !mainTitle || !description || !link || !bannerBackground){
 
         if(bannerBackground){

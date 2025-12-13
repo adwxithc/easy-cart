@@ -93,11 +93,11 @@ function viewProduct(){
                 })
                 .then(html=>{
                     pageContent.innerHTML=html;
-                    const imageBasePath = '/static/productImages/';
+                    
                     const existingImages = document.getElementById('imagesArr').value.split(',').filter(Boolean);
                 
                     // Convert image names to URLs
-                    const existingImageURLs = existingImages.map(imageName => `${imageBasePath}${imageName}`);
+                    const existingImageURLs = existingImages.map(imageName => `${imageName}`);
                 
                     imageEditor(existingImageURLs); //this function is located at => public\admin\editProductFunction.js
                     

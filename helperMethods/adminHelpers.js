@@ -2,6 +2,7 @@ const Order = require('../model/orderModel');
 const Product=require('../model/productModel');
 const User=require('../model/userModel')
 const Coupone = require("../model/couponeModel")
+const cloudinary = require('../config/cloudinary');
 const fs=require('fs')
 const path=require('path')
 
@@ -447,17 +448,19 @@ async function doesCouponeCodeTake(couponeCode,id){
 }
 
 
-function deleteFile(url){
+function deleteFile(public_id){
 
-  fs.unlink(url,(err)=>{
-      if(err){
-       
-        throw err
-      }else{
-          console.log("old image removed")
-          return true
+  const promise = new Promise((resolve, reject)=>{
+    cloudinary.uploader.destroy(public_id, (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+          resolve(result)
       }
   })
+  
+});
+return promise
 }
 
  

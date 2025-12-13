@@ -22,7 +22,7 @@
                 <div class="">
                     <a href="/productDetails?id=<%=cartItem.product._id%>">
                     <div class="cartImg">
-                        <img src="/static/productImages/<%=cartItem.product.images[0]%>" alt="post">
+                        <img src="<%=cartItem.product.images[0]%>" alt="post">
                     </div>
                     </a>
                     <input type="hidden" name="" id="old<%=cartItem.product._id%>" value="<%=cartItem.quantity%>">

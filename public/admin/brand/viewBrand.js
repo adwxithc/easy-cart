@@ -136,7 +136,7 @@ function brandOperations(){
                         if(response.ok) return response.json()
                         throw { status: response.status, data: response.json() };
                     })
-                    .then(data=>{
+                    .then(data=>{ 
 
                         showMessage(data.message)
 
@@ -163,7 +163,7 @@ function brandOperations(){
                         pageContent.innerHTML = html;
                         const logoName=document.getElementById('logo').value;
 
-                        const existingImageURL=`/static/brandImages/${logoName}`
+                        const existingImageURL=`${logoName}`
                         editBrandlogo(existingImageURL)
                         updateBrand()
                     })

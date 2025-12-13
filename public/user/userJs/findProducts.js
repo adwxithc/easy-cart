@@ -186,7 +186,7 @@ function displaySearchresult(products,cart){
                 <a href="/productDetails?id=${product._id}" target="_blank">
                 <div class="overlay-div">
                 <div class="product1-image-container">
-                    <img class="img-fluid w-100 product1-image" src="/static/productImages/${product.images[0]}" alt="">
+                    <img class="img-fluid w-100 product1-image" src="${product.images[0]}" alt="">
                 
                 </div>
                 <div class="overlay"></div>
